@@ -44,20 +44,20 @@ class Game {
     this.character.name = 'square';
   }
   update = () => {
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT) || this.game.input.keyboard.isDown(Phaser.Keyboard.A))
     {
         this.character.x -= this.SPEED;
     }
-    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
+    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT) || this.game.input.keyboard.isDown(Phaser.Keyboard.D))
     {
         this.character.x += this.SPEED;
     }
   
-    if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP))
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP) || this.game.input.keyboard.isDown(Phaser.Keyboard.W))
     {
         this.character.y -= this.SPEED;
     }
-    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN))
+    else if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN) || this.game.input.keyboard.isDown(Phaser.Keyboard.S))
     {
         this.character.y += this.SPEED;
     }
