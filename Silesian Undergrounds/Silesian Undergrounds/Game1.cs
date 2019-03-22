@@ -1,6 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+
+using Silesian_Undergrounds.Engine.Player;
+using Silesian_Undergrounds.Engine.Common;
 
 namespace Silesian_Undergrounds
 {
@@ -11,7 +15,11 @@ namespace Silesian_Undergrounds
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+
+        Player player;
+        List<Gameobject> gameobjects = new List<Gameobject>();
+        List<Gameobject> toDelete = new List<Gameobject>();
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -63,7 +71,9 @@ namespace Silesian_Undergrounds
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            DeleteScheduledObjects();
+
+            // check collision for player
 
             base.Update(gameTime);
         }
@@ -79,6 +89,19 @@ namespace Silesian_Undergrounds
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+        }
+
+        public void ScheduleDeletionOfObject(Gameobject obj)
+        {
+            toDelete.Add(obj);
+        }
+
+        private void DeleteScheduledObjects()
+        {
+            foreach (var obj in toDelete)
+                gameobjects.Remove(obj);
+
+            toDelete.Clear();
         }
     }
 }

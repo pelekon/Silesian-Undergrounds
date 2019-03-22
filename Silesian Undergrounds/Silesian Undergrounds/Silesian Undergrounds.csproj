@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\Common\Gameobject.cs" />
+    <Compile Include="Engine\Common\PickableItem.cs" />
     <Compile Include="Engine\Player\Player.cs" />
     <Compile Include="Engine\Scene\Scene.cs" />
     <Compile Include="Game1.cs" />
