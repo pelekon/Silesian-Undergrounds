@@ -27,7 +27,8 @@ namespace Silesian_Undergrounds
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            Window.AllowAltF4 = true;
+            
             base.Initialize();
         }
 
