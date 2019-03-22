@@ -8,6 +8,7 @@ namespace Silesian_Undergrounds.Engine.Common
         Texture2D texure;
         Vector2 position;
         float rotation;
+        float speed;
 
         void AddForce(float forceX, float forceY)
         {
