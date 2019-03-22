@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
     class Gameobject
     {
+        Texture2D texure;
+        Vector2 position;
+        float rotation;
+
+        void AddForce(float forceX, float forceY)
+        {
+            position.X += forceX;
+            position.Y += forceY;
+        }
     }
 }
