@@ -13,14 +13,11 @@ namespace Silesian_Undergrounds.Engine.Player
     class Player : Gameobject
     {
 
+        public Player(Texture2D texture, Vector2 position, Vector2 size) : base(texture, position, size) { }
+
         public virtual void Update(GameTime gameTime)
         {
             Move();
-        }
-
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle);
         }
 
         public void Collision(List<Gameobject> gameobjects)

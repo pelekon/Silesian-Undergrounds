@@ -52,11 +52,7 @@ namespace Silesian_Undergrounds
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            player = new Gameobject(this.Content.Load<Texture2D>("character"))
-            {
-                position = new Vector2(0, 0),
-                size = new Vector2(50, 50)
-            };
+            player = new Player(this.Content.Load<Texture2D>("character"), new Vector2(0, 0), new Vector2(50, 50));
 
             pickableItemTexture = Content.Load<Texture2D>("coal");
             SpawnPickableItems();
@@ -84,6 +80,7 @@ namespace Silesian_Undergrounds
             DeleteScheduledObjects();
 
             player.Update(gameTime);
+            player.Collision(gameobjects);
 
             // check collision for player
 
@@ -99,8 +96,11 @@ namespace Silesian_Undergrounds
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             player.Draw(spriteBatch);
+
+            foreach (var obj in gameobjects)
+                obj.Draw(spriteBatch);
+
             spriteBatch.End();
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
@@ -116,19 +116,45 @@ namespace Silesian_Undergrounds
                 gameobjects.Remove(obj);
 
             toDelete.Clear();
+
+            if (gameobjects.Count == 0)
+                SpawnPickableItems();
         }
 
         private void SpawnPickableItems()
         {
             Random rng = new Random();
 
+            List<Vector2> takenPositions = new List<Vector2>();
+
             for (int i = 0; i < 10; ++i)
             {
-                int x = rng.Next(50, 600);
-                int y = rng.Next(50, 600);
+                int x = rng.Next(60, 400);
+                int y = rng.Next(60, 400);
 
-                gameobjects.Add(new Gameobject(pickableItemTexture, new Vector2(x, y)));
+                while (IsPositionTaken(takenPositions, x, y))
+                {
+                    x = rng.Next(60, 400);
+                    y = rng.Next(60, 400);
+                }
+
+                takenPositions.Add(new Vector2(x, y));
+
+                gameobjects.Add(new PickableItem(pickableItemTexture, new Vector2(x, y), new Vector2(25, 25), this));
             }
+        }
+
+        private bool IsPositionTaken(List<Vector2> list, int x, int y)
+        {
+            bool isTaken = false;
+
+            foreach(var pos in list)
+            {
+                if ((pos.X >= x - 15 && pos.X <= x + 15) || (pos.Y >= y - 15 && pos.Y <= y + 15))
+                    isTaken = true;
+            }
+
+            return isTaken;
         }
     }
 }
