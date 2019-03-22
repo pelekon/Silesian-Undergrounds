@@ -9,10 +9,8 @@ namespace Silesian_Undergrounds.Engine.Common
     {
         Game1 game;
 
-        public PickableItem(Texture2D texture, Vector2 position, Game1 g)
+        public PickableItem(Texture2D texture, Vector2 position, Game1 g) : base(texture, position)
         {
-            this.texture = texture;
-            this.position = position;
             game = g;
         }
 
