@@ -3,13 +3,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
-    class Gameobject
+    public class Gameobject
     {
         public Texture2D texture;
-        protected Vector2 position;
+        public Vector2 position;
         float rotation;
         float speed;
         public Vector2 size;
+
+        public Gameobject(Texture2D texture, Vector2 position)
+        {
+            this.texture = texture;
+            this.position = position;
+        }
 
         public Rectangle Rectangle
         {

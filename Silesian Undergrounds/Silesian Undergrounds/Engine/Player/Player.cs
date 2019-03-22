@@ -12,10 +12,6 @@ namespace Silesian_Undergrounds.Engine.Player
 {
     class Player : Gameobject
     {
-        public Player(Texture2D texture)
-        {
-            this.texture = texture;
-        }
 
         public virtual void Update(GameTime gameTime)
         {

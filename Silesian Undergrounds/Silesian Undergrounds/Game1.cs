@@ -49,6 +49,11 @@ namespace Silesian_Undergrounds
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            player = new Gameobject(this.Content.Load<Texture2D>("character"))
+            {
+                position = new Vector2(0, 0),
+                size = new Vector2(50, 50)
+            };
             // TODO: use this.Content to load your game content here
         }
 
@@ -73,6 +78,8 @@ namespace Silesian_Undergrounds
 
             DeleteScheduledObjects();
 
+            player.Update(gameTime);
+
             // check collision for player
 
             base.Update(gameTime);
@@ -85,7 +92,9 @@ namespace Silesian_Undergrounds
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            spriteBatch.Begin();
+            player.Draw(spriteBatch);
+            spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
