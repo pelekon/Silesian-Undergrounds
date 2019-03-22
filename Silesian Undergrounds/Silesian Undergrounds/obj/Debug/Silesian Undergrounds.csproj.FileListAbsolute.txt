@@ -1,0 +1,19 @@
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\MonoGame.Framework.dll.config
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\x86\SDL2.dll
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\x64\SDL2.dll
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\x86\soft_oal.dll
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\x64\soft_oal.dll
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\x86\libSDL2-2.0.so.0
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\x64\libSDL2-2.0.so.0
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\x86\libopenal.so.1
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\x64\libopenal.so.1
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\libSDL2-2.0.0.dylib
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\libopenal.1.dylib
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\Silesian Undergrounds.exe
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\Silesian Undergrounds.pdb
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\bin\DesktopGL\AnyCPU\Debug\MonoGame.Framework.dll
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\obj\Debug\Silesian Undergrounds.csprojAssemblyReference.cache
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\obj\Debug\Silesian Undergrounds.csproj.CoreCompileInputs.cache
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\obj\Debug\Silesian Undergrounds.csproj.CopyComplete
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\obj\Debug\Silesian Undergrounds.exe
+C:\Users\209356\Desktop\gry\Silesian Undergrounds\Silesian Undergrounds\obj\Debug\Silesian Undergrounds.pdb
