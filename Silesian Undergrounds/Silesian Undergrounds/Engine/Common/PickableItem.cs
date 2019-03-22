@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Silesian_Undergrounds.Engine.Player;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
-    class PickableItem : Gameobject
+    public class PickableItem : Gameobject
     {
         Game1 game;
 
-        public PickableItem(Game1 g)
+        public PickableItem(Texture2D texture, Vector2 position, Game1 g)
         {
-
+            this.texture = texture;
+            this.position = position;
+            game = g;
         }
 
         public override void NotifyCollision(Gameobject obj)

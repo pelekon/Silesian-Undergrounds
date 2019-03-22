@@ -31,9 +31,6 @@ namespace Silesian_Undergrounds.Engine.Common
             position.Y += forceY;
         }
 
-        public void NotifyCollision(Gameobject gameobject)
-        {
-
-        }
+        public virtual void NotifyCollision(Gameobject gameobject) { }
     }
 }

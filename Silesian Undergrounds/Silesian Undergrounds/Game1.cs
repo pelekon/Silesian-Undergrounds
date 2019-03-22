@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System;
 
 using Silesian_Undergrounds.Engine.Player;
 using Silesian_Undergrounds.Engine.Common;
@@ -19,6 +20,8 @@ namespace Silesian_Undergrounds
         Player player;
         List<Gameobject> gameobjects = new List<Gameobject>();
         List<Gameobject> toDelete = new List<Gameobject>();
+
+        Texture2D pickableItemTexture;
 
         public Game1()
         {
@@ -54,7 +57,9 @@ namespace Silesian_Undergrounds
                 position = new Vector2(0, 0),
                 size = new Vector2(50, 50)
             };
-            // TODO: use this.Content to load your game content here
+
+            pickableItemTexture = Content.Load<Texture2D>("coal");
+            SpawnPickableItems();
         }
 
         /// <summary>
@@ -111,6 +116,19 @@ namespace Silesian_Undergrounds
                 gameobjects.Remove(obj);
 
             toDelete.Clear();
+        }
+
+        private void SpawnPickableItems()
+        {
+            Random rng = new Random();
+
+            for (int i = 0; i < 10; ++i)
+            {
+                int x = rng.Next(50, 600);
+                int y = rng.Next(50, 600);
+
+                gameobjects.Add(new Gameobject(pickableItemTexture, new Vector2(x, y)));
+            }
         }
     }
 }
