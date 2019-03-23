@@ -3,16 +3,44 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
-    class Gameobject
+    public class Gameobject
     {
-        Texture2D texure;
-        Vector2 position;
+        public Texture2D texture;
+        public Vector2 position;
         float rotation;
+        float speed;
+        public Vector2 size;
 
-        void AddForce(float forceX, float forceY)
+        public Gameobject(Texture2D texture, Vector2 position, Vector2 size)
         {
-            position.X += forceX;
-            position.Y += forceY;
+            this.texture = texture;
+            this.position = position;
+            this.size = size;
+
+            speed = 2.0f;
         }
+
+        public Rectangle Rectangle
+        {
+            get
+            {
+                return new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+            }
+        }
+
+        protected void AddForce(float forceX, float forceY)
+        {
+            position.X += forceX * speed;
+            position.Y += forceY * speed;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle);
+        }
+
+        // TODO: Remove this and split collisions to 2 sparate components:
+        // Collision Box and Collider
+        public virtual void NotifyCollision(Gameobject gameobject) { }
     }
 }
