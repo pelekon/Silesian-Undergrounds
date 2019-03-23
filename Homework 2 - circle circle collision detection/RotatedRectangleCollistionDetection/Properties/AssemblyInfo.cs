@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Silesian Undergrounds")]
-[assembly: AssemblyProduct("Silesian Undergrounds")]
+[assembly: AssemblyTitle("RotatedRectangleCollistionDetection")]
+[assembly: AssemblyProduct("RotatedRectangleCollistionDetection")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1bd52684-eeca-4fac-a17a-a9afdee29c50")]
+[assembly: Guid("ad84187b-bff3-4891-b70b-0d398ea11e01")]
 
 // Version information for an assembly consists of the following four values:
 //

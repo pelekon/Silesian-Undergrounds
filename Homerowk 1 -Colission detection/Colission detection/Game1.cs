@@ -1,17 +1,25 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Colission_detection.Models;
+using Colission_detection.Sprites;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 
-namespace Silesian_Undergrounds
+namespace Colission_detection
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
     public class Game1 : Game
-    {
+    { 
+        private List<Sprite> _sprites;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+        public bool isBackgroundGreenColor = true;
+        Color backgroundColor = Color.LawnGreen;
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -26,9 +34,8 @@ namespace Silesian_Undergrounds
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            Window.AllowAltF4 = true;
-            
+     
+
             base.Initialize();
         }
 
@@ -41,7 +48,29 @@ namespace Silesian_Undergrounds
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            // the player is also the rectangle ;)
+            var playerTexture = Content.Load<Texture2D>("trog_top");
+            var obstacleTexture = Content.Load<Texture2D>("floor");
+
+            // initialize all sprites in the 'game'
+            _sprites = new List<Sprite>()
+            {
+                new GamePawn(playerTexture, new Input()
+                  {
+                    Left = Keys.Left,
+                    Right = Keys.Right,
+                    Up = Keys.Up,
+                    Down = Keys.Down,
+                  }, 5)
+                        {
+                          Position = new Vector2(300, 100),
+                          TextureColor = Color.Green
+                        },
+                new Obstacle(obstacleTexture)
+                        {
+                            Position = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2, GraphicsDevice.Viewport.Bounds.Height / 2)
+        }
+              };
         }
 
         /// <summary>
@@ -60,8 +89,10 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+          
+            foreach (var sprite in _sprites)
+                sprite.Update(gameTime, _sprites, this);
+           
 
             // TODO: Add your update logic here
 
@@ -74,9 +105,18 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            this.backgroundColor = this.isBackgroundGreenColor ? Color.LawnGreen : Color.Red;
+            GraphicsDevice.Clear(backgroundColor);
+
+            spriteBatch.Begin();
+           
+            foreach (var sprite in _sprites)
+                sprite.Draw(spriteBatch);
+
+            // draw obstacle in the center of the window
+            //spriteBatch.Draw(textureSecondRectangle, screenCenter, null, Color.White, 0f, textureCenter, 1f, SpriteEffects.None, 1f);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

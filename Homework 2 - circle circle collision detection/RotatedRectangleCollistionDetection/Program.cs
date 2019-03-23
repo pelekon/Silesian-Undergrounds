@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Silesian_Undergrounds
+namespace RotatedRectangleCollistionDetection
 {
     /// <summary>
     /// The main class.
