@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Silesian_Undergrounds.Engine.Scene;
+
 namespace Silesian_Undergrounds
 {
     /// <summary>
@@ -11,6 +13,8 @@ namespace Silesian_Undergrounds
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        Scene scene;
         
         public Game1()
         {
