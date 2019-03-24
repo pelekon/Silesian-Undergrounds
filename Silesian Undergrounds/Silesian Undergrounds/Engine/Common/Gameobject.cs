@@ -39,6 +39,8 @@ namespace Silesian_Undergrounds.Engine.Common
             spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle);
         }
 
+        public virtual void Update(GameTime gameTime) { }
+
         // TODO: Remove this and split collisions to 2 sparate components:
         // Collision Box and Collider
         public virtual void NotifyCollision(Gameobject gameobject) { }
