@@ -6,11 +6,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Silesian_Undergrounds.Engine.Player
 {
-    class Player : Gameobject
+    public class Player : Gameobject
     {
         public Player(Texture2D texture, Vector2 position, Vector2 size) : base(texture, position, size) { }
 
-        public virtual void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             Move();
         }

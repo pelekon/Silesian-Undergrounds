@@ -2,6 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Silesian_Undergrounds.Engine.Scene;
+using Silesian_Undergrounds.Engine.Common;
+
 namespace Silesian_Undergrounds
 {
     /// <summary>
@@ -11,6 +14,8 @@ namespace Silesian_Undergrounds
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        Scene scene;
         
         public Game1()
         {
@@ -28,7 +33,14 @@ namespace Silesian_Undergrounds
         {
             // TODO: Add your initialization logic here
             Window.AllowAltF4 = true;
-            
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            graphics.ToggleFullScreen();
+            graphics.ApplyChanges();
+            TextureMgr.Instance.SetCurrentContentMgr(Content);
+            scene = SceneMgr.LoadScene("test");
+            if (scene == null)
+                scene = new Scene();
             base.Initialize();
         }
 
@@ -64,7 +76,7 @@ namespace Silesian_Undergrounds
                 Exit();
 
             // TODO: Add your update logic here
-
+            scene.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -78,6 +90,7 @@ namespace Silesian_Undergrounds
 
             // TODO: Add your drawing code here
 
+            scene.Draw(gameTime, spriteBatch);
             base.Draw(gameTime);
         }
     }
