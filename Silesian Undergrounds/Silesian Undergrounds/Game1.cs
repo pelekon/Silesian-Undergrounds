@@ -35,17 +35,17 @@ namespace Silesian_Undergrounds
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            Window.AllowAltF4 = true;
+            //Window.AllowAltF4 = true;
             //graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             //graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            graphics.PreferredBackBufferWidth = 500;
-            graphics.PreferredBackBufferHeight = 500;
+            //graphics.PreferredBackBufferWidth = 500;
+            //graphics.PreferredBackBufferHeight = 500;
             //graphics.ToggleFullScreen();
-            graphics.ApplyChanges();
-            TextureMgr.Instance.SetCurrentContentMgr(Content);
-            scene = SceneMgr.LoadScene("test");
-            if (scene == null)
-                scene = new Scene();
+            //graphics.ApplyChanges();
+            //TextureMgr.Instance.SetCurrentContentMgr(Content);
+           // scene = SceneMgr.LoadScene("test");
+           // if (scene == null)
+           //     scene = new Scene();
             base.Initialize();
         }
 
@@ -59,7 +59,7 @@ namespace Silesian_Undergrounds
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Instantiates our player at the position X = 100, Y = 100;
-            player = new Player(null, new Vector2(100, 100), new Vector2(100, 100));
+            player = new Player(new Vector2(100, 100), new Vector2(100, 100));
             //Loads our player's content
             player.LoadContent(Content);
 
@@ -86,7 +86,7 @@ namespace Silesian_Undergrounds
                 Exit();
 
             // TODO: Add your update logic here
-            scene.Update(gameTime);
+            //scene.Update(gameTime);
             // update our player sprite
             player.Update(gameTime);
             base.Update(gameTime);
@@ -106,7 +106,7 @@ namespace Silesian_Undergrounds
             player.Draw(spriteBatch);
             spriteBatch.End();
 
-            scene.Draw(gameTime, spriteBatch);
+            //scene.Draw(gameTime, spriteBatch);
             base.Draw(gameTime);
         }
     }

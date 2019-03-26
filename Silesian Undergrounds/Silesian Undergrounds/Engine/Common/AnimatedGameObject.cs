@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +44,7 @@ namespace Silesian_Undergrounds.Engine.Common
         #endregion
 
         #region Methods
-        public AnimatedGameObject(Texture2D texture, Vector2 position, Vector2 size) : base(texture, position, size)
+        public AnimatedGameObject(Vector2 position, Vector2 size) : base(null, position, size)
         {
             speed = 50f;
         }
@@ -67,8 +68,9 @@ namespace Silesian_Undergrounds.Engine.Common
             //Makes sure we won't start a new annimation unless it differs from our current animation
             if (currentAnimation != name && currentDirection == movementDirection.standstill)
             {
+                Debug.WriteLine("Current animation is: " + name);
                 currentAnimation = name;
-                FramesPerSecond = 0;
+                numberFrames = 0;
             }
         }
 
@@ -103,6 +105,12 @@ namespace Silesian_Undergrounds.Engine.Common
                 }
             }
         }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, position + animOffsets[currentAnimation], animationDic[currentAnimation][numberFrames], Color.White);
+        }
+
         // callback called every time animation is finished
         public abstract void AnimationDone(string animation);
         #endregion

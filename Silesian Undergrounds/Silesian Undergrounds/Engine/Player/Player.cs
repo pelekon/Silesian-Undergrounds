@@ -14,7 +14,7 @@ namespace Silesian_Undergrounds.Engine.Player
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
 
-        public Player(Texture2D texture, Vector2 position, Vector2 size) : base(texture, position, size)
+        public Player(Vector2 position, Vector2 size) : base(position, size)
         {
             FramesPerSecond = 10;
 
@@ -129,18 +129,21 @@ namespace Silesian_Undergrounds.Engine.Player
                 }
                 if (currentAnimation.Contains("Left"))
                 {
+                    Debug.WriteLine("AttackLefts!");
                     PlayAnimation("AttackLeft");
                     attacking = true;
                     currentDirection = movementDirection.left;
                 }
                 if (currentAnimation.Contains("Right"))
                 {
+                    Debug.WriteLine("AttackRight!");
                     PlayAnimation("AttackRight");
                     attacking = true;
                     currentDirection = movementDirection.right;
                 }
                 if (currentAnimation.Contains("Up"))
                 {
+                    Debug.WriteLine("AttackUp!");
                     PlayAnimation("AttackUp");
                     attacking = true;
                     currentDirection = movementDirection.up;
@@ -150,18 +153,22 @@ namespace Silesian_Undergrounds.Engine.Player
             {
                 if (currentAnimation.Contains("Left"))
                 {
+                    Debug.WriteLine("IdleLeft!");
                     PlayAnimation("IdleLeft");
                 }
                 if (currentAnimation.Contains("Right"))
                 {
+                    Debug.WriteLine("IdleRight!");
                     PlayAnimation("IdleRight");
                 }
                 if (currentAnimation.Contains("Up"))
                 {
+                    Debug.WriteLine("IdleUp!");
                     PlayAnimation("IdleUp");
                 }
                 if (currentAnimation.Contains("Down"))
                 {
+                    Debug.WriteLine("IdleDown!");
                     PlayAnimation("IdleDown");
                 }
             }
@@ -173,6 +180,7 @@ namespace Silesian_Undergrounds.Engine.Player
         {
             if (animation.Contains("Attack"))
             {
+                Debug.WriteLine("Attack!");
                 attacking = false;
             }
         }

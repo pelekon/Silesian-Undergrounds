@@ -24,7 +24,7 @@ namespace Silesian_Undergrounds.Engine.Common
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle);
         }
