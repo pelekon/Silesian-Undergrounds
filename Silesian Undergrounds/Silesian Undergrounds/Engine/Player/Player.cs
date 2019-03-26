@@ -16,21 +16,32 @@ namespace Silesian_Undergrounds.Engine.Player
 
         public Player(Vector2 position, Vector2 size) : base(position, size)
         {
-            FramesPerSecond = 10;
+            FramesPerSecond = 5;
 
             //Adds all the players animations
-            AddAnimation(12, 0, 0, "Down", 50, 50, new Vector2(0, 0));
-            AddAnimation(1, 0, 0, "IdleDown", 50, 50, new Vector2(0, 0));
-            AddAnimation(12, 50, 0, "Up", 50, 50, new Vector2(0, 0));
-            AddAnimation(1, 50, 0, "IdleUp", 50, 50, new Vector2(0, 0));
-            AddAnimation(8, 100, 0, "Left", 50, 50, new Vector2(0, 0));
-            AddAnimation(1, 100, 0, "IdleLeft", 50, 50, new Vector2(0, 0));
-            AddAnimation(8, 100, 8, "Right", 50, 50, new Vector2(0, 0));
-            AddAnimation(1, 100, 8, "IdleRight", 50, 50, new Vector2(0, 0));
-            AddAnimation(9, 150, 0, "AttackDown", 70, 80, new Vector2(0, 0));
-            AddAnimation(9, 230, 0, "AttackUp", 70, 80, new Vector2(-13, -27));
-            AddAnimation(9, 310, 0, "AttackLeft", 70, 70, new Vector2(-30, -5));
-            AddAnimation(9, 380, 0, "AttackRight", 70, 70, new Vector2(+15, -5));
+            // AddAnimation(int frames, int yPos, int xStartFrame, string name, int width, int height, Vector2 offset)
+            // frames - number of frames of animation 
+            // y position is a position from left right cornder
+            // xStart frame is the x - sum of all widths
+            // 80x80
+            
+            AddAnimation(5, 25, 313, "Down", 22, 22, new Vector2(0, 0));
+            AddAnimation(1, 25, 313, "IdleDown", 22, 22, new Vector2(0, 0));
+
+            //margins abovw and to the right/left are 25
+            AddAnimation(5, 25, 25, "Up", 22, 22, new Vector2(0, 0));
+            AddAnimation(1, 25, 25, "IdleUp", 22, 22, new Vector2(0, 0));
+
+            AddAnimation(5, 25, 169, "Left", 22, 22, new Vector2(0, 0));
+            AddAnimation(1, 25, 169, "IdleLeft", 22, 22, new Vector2(0, 0));
+
+            AddAnimation(5, 25, 169, "Right", 22, 22, new Vector2(0, 0));
+            AddAnimation(1, 25, 169, "IdleRight", 22, 22, new Vector2(0, 0));
+
+            //AddAnimation(9, 150, 0, "AttackDown", 70, 80, new Vector2(0, 0));
+           // AddAnimation(9, 230, 0, "AttackUp", 70, 80, new Vector2(-13, -27));
+           // AddAnimation(9, 310, 0, "AttackLeft", 70, 70, new Vector2(-30, -5));
+           // AddAnimation(9, 380, 0, "AttackRight", 70, 70, new Vector2(+15, -5));
             //Plays our start animation
             PlayAnimation("IdleDown");
         }
@@ -38,7 +49,7 @@ namespace Silesian_Undergrounds.Engine.Player
         // Loads content related to the player
         public void LoadContent(ContentManager content)
         {
-            texture = content.Load<Texture2D>("playerSheet");
+            texture = content.Load<Texture2D>("minerCharacter");
         }
 
 
@@ -118,60 +129,60 @@ namespace Silesian_Undergrounds.Engine.Player
 
                 }
             }
-            if (keyState.IsKeyDown(Keys.Space))
-            {
-                if (currentAnimation.Contains("Down"))
-                {
-                    Debug.WriteLine("Space down!");
-                    PlayAnimation("AttackDown");
-                    attacking = true;
-                    currentDirection = movementDirection.down;
-                }
-                if (currentAnimation.Contains("Left"))
-                {
-                    Debug.WriteLine("AttackLefts!");
-                    PlayAnimation("AttackLeft");
-                    attacking = true;
-                    currentDirection = movementDirection.left;
-                }
-                if (currentAnimation.Contains("Right"))
-                {
-                    Debug.WriteLine("AttackRight!");
-                    PlayAnimation("AttackRight");
-                    attacking = true;
-                    currentDirection = movementDirection.right;
-                }
-                if (currentAnimation.Contains("Up"))
-                {
-                    Debug.WriteLine("AttackUp!");
-                    PlayAnimation("AttackUp");
-                    attacking = true;
-                    currentDirection = movementDirection.up;
-                }
-            }
-            else if (!attacking)
-            {
-                if (currentAnimation.Contains("Left"))
-                {
-                    Debug.WriteLine("IdleLeft!");
-                    PlayAnimation("IdleLeft");
-                }
-                if (currentAnimation.Contains("Right"))
-                {
-                    Debug.WriteLine("IdleRight!");
-                    PlayAnimation("IdleRight");
-                }
-                if (currentAnimation.Contains("Up"))
-                {
-                    Debug.WriteLine("IdleUp!");
-                    PlayAnimation("IdleUp");
-                }
-                if (currentAnimation.Contains("Down"))
-                {
-                    Debug.WriteLine("IdleDown!");
-                    PlayAnimation("IdleDown");
-                }
-            }
+            //if (keyState.IsKeyDown(Keys.Space))
+            //{
+            //    if (currentAnimation.Contains("Down"))
+            //    {
+            //        Debug.WriteLine("Space down!");
+            //        PlayAnimation("AttackDown");
+            //        attacking = true;
+            //        currentDirection = movementDirection.down;
+            //    }
+            //    if (currentAnimation.Contains("Left"))
+            //    {
+            //        Debug.WriteLine("AttackLefts!");
+            //        PlayAnimation("AttackLeft");
+            //        attacking = true;
+            //        currentDirection = movementDirection.left;
+            //    }
+            //    if (currentAnimation.Contains("Right"))
+            //    {
+            //        Debug.WriteLine("AttackRight!");
+            //        PlayAnimation("AttackRight");
+            //        attacking = true;
+            //        currentDirection = movementDirection.right;
+            //    }
+            //    if (currentAnimation.Contains("Up"))
+            //    {
+            //        Debug.WriteLine("AttackUp!");
+            //        PlayAnimation("AttackUp");
+            //        attacking = true;
+            //        currentDirection = movementDirection.up;
+            //    }
+            //}
+            //else if (!attacking)
+            //{
+            //    if (currentAnimation.Contains("Left"))
+            //    {
+            //        Debug.WriteLine("IdleLeft!");
+            //        PlayAnimation("IdleLeft");
+            //    }
+            //    if (currentAnimation.Contains("Right"))
+            //    {
+            //        Debug.WriteLine("IdleRight!");
+            //        PlayAnimation("IdleRight");
+            //    }
+            //    if (currentAnimation.Contains("Up"))
+            //    {
+            //        Debug.WriteLine("IdleUp!");
+            //        PlayAnimation("IdleUp");
+            //    }
+            //    if (currentAnimation.Contains("Down"))
+            //    {
+            //        Debug.WriteLine("IdleDown!");
+            //        PlayAnimation("IdleDown");
+            //    }
+            //}
             currentDirection = movementDirection.standstill;
 
         }

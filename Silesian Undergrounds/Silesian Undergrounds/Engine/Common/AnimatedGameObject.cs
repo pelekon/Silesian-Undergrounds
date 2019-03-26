@@ -56,7 +56,10 @@ namespace Silesian_Undergrounds.Engine.Common
 
             for (int i = 0; i < frames; i++)
             {
-                Rectangles[i] = new Rectangle((i + xStartFrame) * width, yPos, width, height);
+                //new Rectangle(x, y, width, height);
+                //new Rectangle(xStartFrame, yPos, width, height)
+                // 
+                Rectangles[i] = new Rectangle(xStartFrame, yPos + (i* (height + (2 * yPos))), width, height);
             }
             animationDic.Add(name, Rectangles);
             animOffsets.Add(name, offset);
