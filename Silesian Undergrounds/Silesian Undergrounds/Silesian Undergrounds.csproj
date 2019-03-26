@@ -45,6 +45,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Engine\Common\AnimatedGameObject.cs" />
     <Compile Include="Engine\Common\Gameobject.cs" />
     <Compile Include="Engine\Common\TextureMgr.cs" />
     <Compile Include="Engine\Player\Player.cs" />
@@ -123,6 +124,9 @@
     <None Include="Data\Tileset.tsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\playerSheet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

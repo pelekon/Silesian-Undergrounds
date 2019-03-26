@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Player;
 
 namespace Silesian_Undergrounds
 {
@@ -16,7 +17,9 @@ namespace Silesian_Undergrounds
         SpriteBatch spriteBatch;
 
         Scene scene;
-        
+        // player object
+        Player player;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -33,9 +36,11 @@ namespace Silesian_Undergrounds
         {
             // TODO: Add your initialization logic here
             Window.AllowAltF4 = true;
-            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            graphics.ToggleFullScreen();
+            //graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            //graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            graphics.PreferredBackBufferWidth = 500;
+            graphics.PreferredBackBufferHeight = 500;
+            //graphics.ToggleFullScreen();
             graphics.ApplyChanges();
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             scene = SceneMgr.LoadScene("test");
@@ -52,6 +57,11 @@ namespace Silesian_Undergrounds
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            //Instantiates our player at the position X = 100, Y = 100;
+            player = new Player(null, new Vector2(100, 100), new Vector2(100, 100));
+            //Loads our player's content
+            player.LoadContent(Content);
 
             // TODO: use this.Content to load your game content here
         }
@@ -77,6 +87,8 @@ namespace Silesian_Undergrounds
 
             // TODO: Add your update logic here
             scene.Update(gameTime);
+            // update our player sprite
+            player.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -89,6 +101,10 @@ namespace Silesian_Undergrounds
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            //Draws our player on the screen
+            player.Draw(spriteBatch);
+            spriteBatch.End();
 
             scene.Draw(gameTime, spriteBatch);
             base.Draw(gameTime);
