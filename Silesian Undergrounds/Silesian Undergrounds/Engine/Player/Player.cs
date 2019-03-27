@@ -32,13 +32,13 @@ namespace Silesian_Undergrounds.Engine.Player
             AddAnimation(5, 25, 25, "Up", 22, 22, new Vector2(0, 0));
             AddAnimation(1, 25, 25, "IdleUp", 22, 22, new Vector2(0, 0));
 
-            AddAnimation(5, 25, 169, "Left", 22, 22, new Vector2(0, 0));
-            AddAnimation(1, 25, 169, "IdleLeft", 22, 22, new Vector2(0, 0));
+            AddAnimation(5,25, 385, "Left", 22, 22, new Vector2(0, 0));
+            AddAnimation(1,25, 385, "IdleLeft", 22, 22, new Vector2(0, 0));
 
             AddAnimation(5, 25, 169, "Right", 22, 22, new Vector2(0, 0));
             AddAnimation(1, 25, 169, "IdleRight", 22, 22, new Vector2(0, 0));
            
-            //AddAnimation(5, 385, 313, "AttackDown", 22, 22, new Vector2(0, 0));
+            AddAnimation(5, 385, 313, "AttackDown", 22, 22, new Vector2(0, 0));
             
            // AddAnimation(9, 230, 0, "AttackUp", 70, 80, new Vector2(-13, -27));
            // AddAnimation(9, 310, 0, "AttackLeft", 70, 70, new Vector2(-30, -5));
@@ -130,61 +130,61 @@ namespace Silesian_Undergrounds.Engine.Player
 
                 }
             }
-          //  if (keyState.IsKeyDown(Keys.Space))
-           // {
-              //  if (currentAnimation.Contains("Down"))
-               // {
-               //     Debug.WriteLine("Space down!");
-               //     PlayAnimation("AttackDown");
-               //     attacking = true;
-               //     currentDirection = movementDirection.down;
-               // }
-                //    if (currentAnimation.Contains("Left"))
-                //    {
-                //        Debug.WriteLine("AttackLefts!");
-                //        PlayAnimation("AttackLeft");
-                //        attacking = true;
-                //        currentDirection = movementDirection.left;
-                //    }
-                //    if (currentAnimation.Contains("Right"))
-                //    {
-                //        Debug.WriteLine("AttackRight!");
-                //        PlayAnimation("AttackRight");
-                //        attacking = true;
-                //        currentDirection = movementDirection.right;
-                //    }
-                //    if (currentAnimation.Contains("Up"))
-                //    {
-                //        Debug.WriteLine("AttackUp!");
-                //        PlayAnimation("AttackUp");
-                //        attacking = true;
-                //        currentDirection = movementDirection.up;
-                //    }
-                //}
-                //else if (!attacking)
-                //{
-                    //    if (currentAnimation.Contains("Left"))
-                    //    {
-                    //        Debug.WriteLine("IdleLeft!");
-                    //        PlayAnimation("IdleLeft");
-                    //    }
-                    //    if (currentAnimation.Contains("Right"))
-                    //    {
-                    //        Debug.WriteLine("IdleRight!");
-                    //        PlayAnimation("IdleRight");
-                    //    }
-                    //    if (currentAnimation.Contains("Up"))
-                    //    {
-                    //        Debug.WriteLine("IdleUp!");
-                    //        PlayAnimation("IdleUp");
-                    //    }
-                       // if (currentAnimation.Contains("Down"))
-                       // {
-                        //    Debug.WriteLine("IdleDown!");
-                       //     PlayAnimation("IdleDown");
-                       // }
-               // }
-         //   }
+         // //  if (keyState.IsKeyDown(Keys.Space))
+         //  // {
+         //     //  if (currentAnimation.Contains("Down"))
+         //      // {
+         //      //     Debug.WriteLine("Space down!");
+         //      //     PlayAnimation("AttackDown");
+         //      //     attacking = true;
+         //      //     currentDirection = movementDirection.down;
+         //      // }
+         //       //    if (currentAnimation.Contains("Left"))
+         //       //    {
+         //       //        Debug.WriteLine("AttackLefts!");
+         //       //        PlayAnimation("AttackLeft");
+         //       //        attacking = true;
+         //       //        currentDirection = movementDirection.left;
+         //       //    }
+         //       //    if (currentAnimation.Contains("Right"))
+         //       //    {
+         //       //        Debug.WriteLine("AttackRight!");
+         //       //        PlayAnimation("AttackRight");
+         //       //        attacking = true;
+         //       //        currentDirection = movementDirection.right;
+         //       //    }
+         //       //    if (currentAnimation.Contains("Up"))
+         //       //    {
+         //       //        Debug.WriteLine("AttackUp!");
+         //       //        PlayAnimation("AttackUp");
+         //       //        attacking = true;
+         //       //        currentDirection = movementDirection.up;
+         //       //    }
+         //       //}
+         //       //else if (!attacking)
+         //       //{
+         //           //    if (currentAnimation.Contains("Left"))
+         //           //    {
+         //           //        Debug.WriteLine("IdleLeft!");
+         //           //        PlayAnimation("IdleLeft");
+         //           //    }
+         //           //    if (currentAnimation.Contains("Right"))
+         //           //    {
+         //           //        Debug.WriteLine("IdleRight!");
+         //           //        PlayAnimation("IdleRight");
+         //           //    }
+         //           //    if (currentAnimation.Contains("Up"))
+         //           //    {
+         //           //        Debug.WriteLine("IdleUp!");
+         //           //        PlayAnimation("IdleUp");
+         //           //    }
+         //              // if (currentAnimation.Contains("Down"))
+         //              // {
+         //               //    Debug.WriteLine("IdleDown!");
+         //              //     PlayAnimation("IdleDown");
+         //              // }
+         //      // }
+         ////   }
             currentDirection = movementDirection.standstill;
 
         }
