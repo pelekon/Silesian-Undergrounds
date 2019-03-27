@@ -9,27 +9,30 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
-    public static class SceneMgr
+    public class sceneMgr
     {
         private static Scene currentScene;
         public static Scene GetCurrentScene() { return currentScene; }
 
-        public static Scene LoadScene(String sceneName)
+        private static TileMapRenderer renderer = new TileMapRenderer();
+
+        public static Scene LoadScene(String sceneName, int tileSize)
         {
-            string path = "Data/" + sceneName + ".json";
+            string path = "Data\\" + sceneName + ".json";
             if (!File.Exists(path))
                 return null;
 
             Scene scene = new Scene();
 
-            if (!LoadSceneFile(path, scene))
+            if (!LoadSceneFile(path, scene, tileSize))
                 return null;
 
             currentScene = scene;
+
             return scene;
         }
 
-        private static bool LoadSceneFile(String sceneName, Scene scene)
+        private static bool LoadSceneFile(String sceneName, Scene scene, int tileSize)
         {
             var file = File.OpenRead(sceneName);
             JsonValue json = JsonValue.Load(file);
@@ -101,11 +104,17 @@ namespace Silesian_Undergrounds.Engine.Scene
                 int width = layer["width"];
 
                 JsonArray tilesData = layer["data"] as JsonArray;
+
                 Texture2D[][] tab = BuildTableWithTiles(tilesData, width, height, textures);
+
                 tileMap.Add(id, tab);
             }
 
-            // @TODO: forward tileMap dictonary to tile map renderer
+            renderer.GenerateTileMap(tileMap,tileSize);
+
+            foreach (Tile tile in renderer.Tiles)
+                scene.AddObject(tile);
+
 
             file.Close();
             tileFile.Close();
@@ -118,11 +127,13 @@ namespace Silesian_Undergrounds.Engine.Scene
             for (int i = 0; i < width; ++i)
                 table[i] = new Texture2D[height];
 
+            int counter = 0;
             for(int w = 0; w < width; ++w)
             {
                 for(int h = 0; h < height; ++h)
                 {
-                    int resId = tiles[w + h];
+                    int resId = tiles[counter];
+                    counter++;
                     if (resId == 0)
                         continue;
                     string name = "";

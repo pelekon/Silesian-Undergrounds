@@ -50,6 +50,8 @@
     <Compile Include="Engine\Player\Player.cs" />
     <Compile Include="Engine\Scene\Scene.cs" />
     <Compile Include="Engine\Scene\SceneMgr.cs" />
+    <Compile Include="Engine\Scene\Tile.cs" />
+    <Compile Include="Engine\Scene\TileMapRenderer.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

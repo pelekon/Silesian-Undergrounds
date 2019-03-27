@@ -8,7 +8,7 @@ namespace Silesian_Undergrounds.Engine.Player
 {
     public class Player : Gameobject
     {
-        public Player(Texture2D texture, Vector2 position, Vector2 size) : base(texture, position, size) { }
+        public Player(Texture2D texture, Vector3 position, Vector2 size) : base(texture, position, size) { }
 
         public override void Update(GameTime gameTime)
         {
