@@ -24,7 +24,7 @@ namespace Silesian_Undergrounds.Engine.Player
             // y position is a position from left right cornder
             // xStart frame is the x - sum of all widths
             // 80x80
-            
+
             AddAnimation(5, 25, 313, "Down", 22, 22, new Vector2(0, 0));
             AddAnimation(1, 25, 313, "IdleDown", 22, 22, new Vector2(0, 0));
 
@@ -32,17 +32,11 @@ namespace Silesian_Undergrounds.Engine.Player
             AddAnimation(5, 25, 25, "Up", 22, 22, new Vector2(0, 0));
             AddAnimation(1, 25, 25, "IdleUp", 22, 22, new Vector2(0, 0));
 
-            AddAnimation(5,25, 385, "Left", 22, 22, new Vector2(0, 0));
-            AddAnimation(1,25, 385, "IdleLeft", 22, 22, new Vector2(0, 0));
+            AddAnimation(5, 25, 385, "Left", 22, 22, new Vector2(0, 0));
+            AddAnimation(1, 25, 385, "IdleLeft", 22, 22, new Vector2(0, 0));
 
             AddAnimation(5, 25, 169, "Right", 22, 22, new Vector2(0, 0));
             AddAnimation(1, 25, 169, "IdleRight", 22, 22, new Vector2(0, 0));
-           
-            AddAnimation(5, 385, 313, "AttackDown", 22, 22, new Vector2(0, 0));
-            
-           // AddAnimation(9, 230, 0, "AttackUp", 70, 80, new Vector2(-13, -27));
-           // AddAnimation(9, 310, 0, "AttackLeft", 70, 70, new Vector2(-30, -5));
-           // AddAnimation(9, 380, 0, "AttackRight", 70, 70, new Vector2(+15, -5));
             //Plays our start animation
             PlayAnimation("IdleDown");
         }
@@ -56,20 +50,18 @@ namespace Silesian_Undergrounds.Engine.Player
 
         public override void Update(GameTime gameTime)
         {
-            //Move();
-            //Makes the player stop moving when no key is pressed
             sDirection = Vector2.Zero;
 
-            //Handles the users input
+        
             HandleInput(Keyboard.GetState());
 
-            //Calculates how many seconds that has passed since last iteration of Update
+         
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            //Applies our speed to our direction
+           
             sDirection *= speed;
 
-            //Makes the movement framerate independent by multiplying with deltaTime
+       
             position += (sDirection * deltaTime);
 
             base.Update(gameTime);
@@ -95,8 +87,6 @@ namespace Silesian_Undergrounds.Engine.Player
             {
                 if (keyState.IsKeyDown(Keys.W))
                 {
-                    Debug.WriteLine("Key up!");
-                    //Move char Up
                     sDirection += new Vector2(0, -1);
                     PlayAnimation("Up");
                     currentDirection = movementDirection.up;
@@ -104,17 +94,13 @@ namespace Silesian_Undergrounds.Engine.Player
                 }
                 if (keyState.IsKeyDown(Keys.A))
                 {
-                    //Move char Left
-                    Debug.WriteLine("Key Left!");
                     sDirection += new Vector2(-1, 0);
                     PlayAnimation("Left");
                     currentDirection = movementDirection.left;
 
                 }
                 if (keyState.IsKeyDown(Keys.S))
-                {
-                    //Move char Down
-                    Debug.WriteLine("Key Down!");
+                { 
                     sDirection += new Vector2(0, 1);
                     PlayAnimation("Down");
                     currentDirection = movementDirection.down;
@@ -122,71 +108,16 @@ namespace Silesian_Undergrounds.Engine.Player
                 }
                 if (keyState.IsKeyDown(Keys.D))
                 {
-                    //Move char Right
-                    Debug.WriteLine("Key Right!");
                     sDirection += new Vector2(1, 0);
                     PlayAnimation("Right");
                     currentDirection = movementDirection.right;
 
                 }
             }
-         // //  if (keyState.IsKeyDown(Keys.Space))
-         //  // {
-         //     //  if (currentAnimation.Contains("Down"))
-         //      // {
-         //      //     Debug.WriteLine("Space down!");
-         //      //     PlayAnimation("AttackDown");
-         //      //     attacking = true;
-         //      //     currentDirection = movementDirection.down;
-         //      // }
-         //       //    if (currentAnimation.Contains("Left"))
-         //       //    {
-         //       //        Debug.WriteLine("AttackLefts!");
-         //       //        PlayAnimation("AttackLeft");
-         //       //        attacking = true;
-         //       //        currentDirection = movementDirection.left;
-         //       //    }
-         //       //    if (currentAnimation.Contains("Right"))
-         //       //    {
-         //       //        Debug.WriteLine("AttackRight!");
-         //       //        PlayAnimation("AttackRight");
-         //       //        attacking = true;
-         //       //        currentDirection = movementDirection.right;
-         //       //    }
-         //       //    if (currentAnimation.Contains("Up"))
-         //       //    {
-         //       //        Debug.WriteLine("AttackUp!");
-         //       //        PlayAnimation("AttackUp");
-         //       //        attacking = true;
-         //       //        currentDirection = movementDirection.up;
-         //       //    }
-         //       //}
-         //       //else if (!attacking)
-         //       //{
-         //           //    if (currentAnimation.Contains("Left"))
-         //           //    {
-         //           //        Debug.WriteLine("IdleLeft!");
-         //           //        PlayAnimation("IdleLeft");
-         //           //    }
-         //           //    if (currentAnimation.Contains("Right"))
-         //           //    {
-         //           //        Debug.WriteLine("IdleRight!");
-         //           //        PlayAnimation("IdleRight");
-         //           //    }
-         //           //    if (currentAnimation.Contains("Up"))
-         //           //    {
-         //           //        Debug.WriteLine("IdleUp!");
-         //           //        PlayAnimation("IdleUp");
-         //           //    }
-         //              // if (currentAnimation.Contains("Down"))
-         //              // {
-         //               //    Debug.WriteLine("IdleDown!");
-         //              //     PlayAnimation("IdleDown");
-         //              // }
-         //      // }
-         ////   }
-            currentDirection = movementDirection.standstill;
+      
 
+        currentDirection = movementDirection.standstill;
+            
         }
 
         public override void AnimationDone(string animation)

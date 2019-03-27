@@ -38,7 +38,7 @@ namespace Silesian_Undergrounds
             Window.AllowAltF4 = true;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-           //graphics.ToggleFullScreen();
+            //graphics.ToggleFullScreen();
             graphics.ApplyChanges();
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             scene = SceneMgr.LoadScene("test");
