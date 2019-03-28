@@ -15,7 +15,7 @@ namespace Silesian_Undergrounds
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        sceneMgr sceneMgr;
         Scene scene;
         // player object
         Player player;
@@ -41,9 +41,13 @@ namespace Silesian_Undergrounds
             //graphics.ToggleFullScreen();
             graphics.ApplyChanges();
             TextureMgr.Instance.SetCurrentContentMgr(Content);
-            scene = SceneMgr.LoadScene("test");
+
+            sceneMgr = new sceneMgr();
+            scene = sceneMgr.LoadScene("test", 64);
+
             if (scene == null)
                 scene = new Scene();
+
             base.Initialize();
         }
 
@@ -103,8 +107,8 @@ namespace Silesian_Undergrounds
             //Draws our player on the screen
             player.Draw(spriteBatch);
             spriteBatch.End();
-
             scene.Draw(gameTime, spriteBatch);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

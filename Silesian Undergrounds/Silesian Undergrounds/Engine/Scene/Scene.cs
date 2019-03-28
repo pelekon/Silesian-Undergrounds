@@ -69,12 +69,8 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
-
             foreach (var obj in gameobjects)
                 obj.Draw(spriteBatch);
-
-            spriteBatch.End();
         }
     }
 }

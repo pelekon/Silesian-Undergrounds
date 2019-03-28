@@ -7,9 +7,12 @@ namespace Silesian_Undergrounds.Engine.Common
     {
         public Texture2D texture;
         public Vector2 position;
+        //public Vector3 position;
+        //float rotation;
+        //float speed;
         public Vector2 size;
 
-        public Gameobject(Texture2D texture, Vector2 position, Vector2 size)
+        public Gameobject(Texture2D texture, Vector3 position, Vector2 size)
         {
             this.texture = texture;
             this.position = position;
