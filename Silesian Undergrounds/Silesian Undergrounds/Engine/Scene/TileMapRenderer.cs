@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 namespace Silesian_Undergrounds.Engine.Scene {
     class TileMapRenderer {
         private List<Tile> tiles = new List<Tile>();
@@ -37,8 +37,12 @@ namespace Silesian_Undergrounds.Engine.Scene {
                 {
                     for (int y = 0; y < array[x].GetLength(0); y++)
                     {
-                        tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key)); //roboczo, żeby generować tile gdzie jest 1 i puste gdzie 0
 
+                        if (array[y][x] == null)
+                            continue;
+
+                        tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                    
                         width = (x + 1) * size;
                         height = (y + 1) * size;
 
