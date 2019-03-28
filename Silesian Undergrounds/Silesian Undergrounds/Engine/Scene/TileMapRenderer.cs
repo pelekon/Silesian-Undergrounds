@@ -37,7 +37,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
                 {
                     for (int y = 0; y < array[x].GetLength(0); y++)
                     {
-                        tiles.Add(new Tile(array[y][x], new Vector3(x * size, y * size, item.Key), new Vector2(size, size))); //roboczo, żeby generować tile gdzie jest 1 i puste gdzie 0
+                        tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key)); //roboczo, żeby generować tile gdzie jest 1 i puste gdzie 0
 
                         width = (x + 1) * size;
                         height = (y + 1) * size;

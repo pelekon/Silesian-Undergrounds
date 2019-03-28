@@ -61,7 +61,7 @@ namespace Silesian_Undergrounds
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Instantiates our player at the position X = 100, Y = 100;
-            player = new Player(new Vector3(100, 100,1), new Vector2(128, 128));
+            player = new Player(new Vector2(100, 100), new Vector2(128, 128), 1);
             //Loads our player's content
             player.LoadContent(Content);
             scene.AddPlayer(player);
