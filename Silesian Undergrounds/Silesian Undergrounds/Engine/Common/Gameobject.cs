@@ -6,16 +6,18 @@ namespace Silesian_Undergrounds.Engine.Common
     public class Gameobject
     {
         public Texture2D texture;
-        public Vector3 position;
+        public Vector2 position;
+        int layer;
         float rotation;
         float speed;
         public Vector2 size;
 
-        public Gameobject(Texture2D texture, Vector3 position, Vector2 size)
+        public Gameobject(Texture2D texture, Vector2 position, Vector2 size, int layer)
         {
             this.texture = texture;
             this.position = position;
             this.size = size;
+            this.layer = layer;
         }
 
         public Rectangle Rectangle

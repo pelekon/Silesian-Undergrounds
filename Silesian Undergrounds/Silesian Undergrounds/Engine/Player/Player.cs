@@ -14,7 +14,7 @@ namespace Silesian_Undergrounds.Engine.Player
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
 
-        public Player(Vector3 position, Vector2 size) : base(position, size)
+        public Player(Vector2 position, Vector2 size, int layer) : base(position, size, layer)
         {
             FramesPerSecond = 10;
 
@@ -60,9 +60,7 @@ namespace Silesian_Undergrounds.Engine.Player
            
             sDirection *= speed;
 
-       
-            position.X += (sDirection * deltaTime).X;
-            position.Y += (sDirection * deltaTime).Y;
+            position += (sDirection * deltaTime);
 
             base.Update(gameTime);
 

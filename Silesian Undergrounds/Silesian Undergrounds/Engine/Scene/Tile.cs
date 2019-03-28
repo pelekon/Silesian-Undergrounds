@@ -8,14 +8,16 @@ namespace Silesian_Undergrounds.Engine.Scene {
     class Tile : Gameobject{
 
         private Texture2D texture2D;
-        private Vector3 position; // X & Y + Z as layer depth
+        private Vector2 position;
+        private int layer;
         private Vector2 size;
 
-        public Tile(Texture2D texture2D, Vector3 position, Vector2 size):base(texture2D, position, size)
+        public Tile(Texture2D texture2D, Vector2 position, Vector2 size, int layer):base(texture2D, position, size, layer)
         {
             this.texture2D = texture2D;
             this.position = position;
             this.size = size;
+            this.layer = layer;
         }
 
         public Rectangle Rectangle
@@ -29,7 +31,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture: texture2D, destinationRectangle: Rectangle, layerDepth: position.Z);
+            spriteBatch.Draw(texture: texture2D, destinationRectangle: Rectangle, layerDepth: layer);
         }
 
     }
