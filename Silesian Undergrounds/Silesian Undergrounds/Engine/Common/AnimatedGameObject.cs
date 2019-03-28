@@ -44,7 +44,7 @@ namespace Silesian_Undergrounds.Engine.Common
         #endregion
 
         #region Methods
-        public AnimatedGameObject(Vector2 position, Vector2 size) : base(null, position, size)
+        public AnimatedGameObject(Vector3 position, Vector2 size) : base(null, position, size)
         {
             speed = 50f;
         }
@@ -111,7 +111,9 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position + animOffsets[currentAnimation], animationDic[currentAnimation][numberFrames], Color.White);
+            position.X += animOffsets[currentAnimation].X;
+            position.Y += animOffsets[currentAnimation].Y;
+            spriteBatch.Draw(texture, new Vector2(position.X, position.Y), animationDic[currentAnimation][numberFrames], Color.White);
         }
 
         // callback called every time animation is finished

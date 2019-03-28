@@ -14,7 +14,7 @@ namespace Silesian_Undergrounds.Engine.Player
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
 
-        public Player(Vector2 position, Vector2 size) : base(position, size)
+        public Player(Vector3 position, Vector2 size) : base(position, size)
         {
             FramesPerSecond = 10;
 
@@ -47,7 +47,6 @@ namespace Silesian_Undergrounds.Engine.Player
             texture = content.Load<Texture2D>("minerCharacter");
         }
 
-
         public override void Update(GameTime gameTime)
         {
             sDirection = Vector2.Zero;
@@ -62,7 +61,8 @@ namespace Silesian_Undergrounds.Engine.Player
             sDirection *= speed;
 
        
-            position += (sDirection * deltaTime);
+            position.X += (sDirection * deltaTime).X;
+            position.Y += (sDirection * deltaTime).Y;
 
             base.Update(gameTime);
 

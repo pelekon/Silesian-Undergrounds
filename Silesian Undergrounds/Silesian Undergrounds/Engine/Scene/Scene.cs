@@ -35,6 +35,11 @@ namespace Silesian_Undergrounds.Engine.Scene
             objectsToAdd.Add(obj);
         }
 
+        public void AddPlayer(Player.Player player)
+        {
+            this.player = player;
+        }
+
         public void DeleteObject(Gameobject obj)
         {
             objectsToDelete.Add(obj);
@@ -71,6 +76,8 @@ namespace Silesian_Undergrounds.Engine.Scene
         {
             foreach (var obj in gameobjects)
                 obj.Draw(spriteBatch);
+
+            player.Draw(spriteBatch);
         }
     }
 }
