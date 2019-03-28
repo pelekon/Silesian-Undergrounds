@@ -61,9 +61,10 @@ namespace Silesian_Undergrounds
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Instantiates our player at the position X = 100, Y = 100;
-            player = new Player(new Vector2(100, 100), new Vector2(100, 100));
+            player = new Player(new Vector3(100, 100,1), new Vector2(128, 128));
             //Loads our player's content
             player.LoadContent(Content);
+            scene.AddPlayer(player);
 
             // TODO: use this.Content to load your game content here
         }
@@ -103,10 +104,7 @@ namespace Silesian_Undergrounds
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
-            //Draws our player on the screen
-            player.Draw(spriteBatch);
-            spriteBatch.End();
+            spriteBatch.Begin();            
             scene.Draw(gameTime, spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
