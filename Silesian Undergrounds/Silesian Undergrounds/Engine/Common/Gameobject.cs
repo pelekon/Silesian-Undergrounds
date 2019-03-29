@@ -8,8 +8,8 @@ namespace Silesian_Undergrounds.Engine.Common
         public Texture2D texture;
         public Vector2 position;
         protected int layer;
-        float rotation;
-        float speed;
+        public float rotation { get; protected set; }
+        public float speed { get; protected set; }
         public Vector2 size;
 
         public Gameobject(Texture2D texture, Vector2 position, Vector2 size, int layer)

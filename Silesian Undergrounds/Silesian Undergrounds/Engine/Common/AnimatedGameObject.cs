@@ -13,8 +13,6 @@ namespace Silesian_Undergrounds.Engine.Common
     {
 
         #region AnimationVariables
-        public float rotation;
-        public float speed;
         // eum telling in which direction the animatedGO is moving
         public enum movementDirection { standstill, left, right, up, down }
         protected movementDirection currentDirection = movementDirection.standstill;
