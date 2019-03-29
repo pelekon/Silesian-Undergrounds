@@ -77,13 +77,6 @@ namespace Silesian_Undergrounds.Engine.Common
             }
         }
 
-        // causes movement
-        protected void AddForce(float forceX, float forceY)
-        {
-            position.X += forceX * speed;
-            position.Y += forceY * speed;
-        }
-
         // determines when we have to change frames
         public override void Update(GameTime gameTime)
         {

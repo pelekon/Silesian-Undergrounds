@@ -28,6 +28,13 @@ namespace Silesian_Undergrounds.Engine.Common
             }
         }
 
+        // causes movement
+        public void AddForce(float forceX, float forceY)
+        {
+            position.X += forceX * speed;
+            position.Y += forceY * speed;
+        }
+
         public virtual void Update(GameTime gameTime) { }
 
         public virtual void Draw(SpriteBatch spriteBatch)
