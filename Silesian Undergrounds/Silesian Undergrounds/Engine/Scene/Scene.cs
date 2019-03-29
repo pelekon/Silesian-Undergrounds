@@ -20,6 +20,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             objectsToDelete = new List<Gameobject>();
             objectsToAdd = new List<Gameobject>();
             // player = new Player.Player(); TODO: Pass data by constructor to create player object
+            isPaused = false;
         }
 
         // Scene variables
