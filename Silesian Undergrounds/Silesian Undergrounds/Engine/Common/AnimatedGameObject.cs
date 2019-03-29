@@ -85,7 +85,7 @@ namespace Silesian_Undergrounds.Engine.Common
         }
 
         // determines when we have to change frames
-        public virtual void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             //Adds time that has elapsed since our last draw
             timeSinceLastFrameChange += gameTime.ElapsedGameTime.TotalSeconds;

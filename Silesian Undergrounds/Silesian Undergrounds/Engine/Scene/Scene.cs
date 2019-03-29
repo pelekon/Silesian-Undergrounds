@@ -69,10 +69,9 @@ namespace Silesian_Undergrounds.Engine.Scene
             // Operation of add or remove from gameobjects list has to appear before updating gameobjects
             AddObjects();
             DeleteObjects();
-            
 
-            //foreach (var obj in gameobjects)
-            //obj.Update(gameTime);
+            foreach (var obj in gameobjects)
+                obj.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

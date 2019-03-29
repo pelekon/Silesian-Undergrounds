@@ -28,6 +28,8 @@ namespace Silesian_Undergrounds.Engine.Common
             }
         }
 
+        public virtual void Update(GameTime gameTime) { }
+
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle);
