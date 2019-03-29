@@ -122,7 +122,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\test.json" />
+    <None Include="Data\test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Data\Tileset.tsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
