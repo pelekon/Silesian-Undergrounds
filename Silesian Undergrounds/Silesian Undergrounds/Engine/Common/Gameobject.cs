@@ -7,7 +7,7 @@ namespace Silesian_Undergrounds.Engine.Common
     {
         public Texture2D texture;
         public Vector2 position;
-        int layer;
+        protected int layer;
         float rotation;
         float speed;
         public Vector2 size;

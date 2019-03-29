@@ -86,7 +86,10 @@ namespace Silesian_Undergrounds
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+                scene.OpenPauseMenu();
+
+            if (scene.isPaused)
+                return;
 
             // TODO: Add your update logic here
             scene.Update(gameTime);

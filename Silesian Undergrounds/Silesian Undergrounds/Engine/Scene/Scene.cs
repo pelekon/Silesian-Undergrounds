@@ -28,6 +28,8 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         private List<Gameobject> objectsToDelete;
         private List<Gameobject> objectsToAdd;
+
+        public bool isPaused { get; private set; }
         
         // Methods
         public void AddObject(Gameobject obj)
@@ -78,6 +80,16 @@ namespace Silesian_Undergrounds.Engine.Scene
                 obj.Draw(spriteBatch);
 
             player.Draw(spriteBatch);
+        }
+
+        public void OpenPauseMenu()
+        {
+
+        }
+
+        public void PauseGame()
+        {
+            isPaused = true;
         }
     }
 }
