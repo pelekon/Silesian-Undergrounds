@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
+using Silesian_Undergrounds.Engine.Scene;
 
 namespace Silesian_Undergrounds.Engine.Player
 {
@@ -14,10 +15,12 @@ namespace Silesian_Undergrounds.Engine.Player
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
 
+        private Vector2 previousPosition;
+
         public Player(Vector2 position, Vector2 size, int layer) : base(position, size, layer)
         {
             FramesPerSecond = 10;
-
+            previousPosition = position;
             //Adds all the players animations
             // AddAnimation(int frames, int yPos, int xStartFrame, string name, int width, int height, Vector2 offset)
             // frames - number of frames of animation 
@@ -56,8 +59,8 @@ namespace Silesian_Undergrounds.Engine.Player
 
          
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            previousPosition = position;
 
-           
             sDirection *= speed;
 
             position += (sDirection * deltaTime);
@@ -75,8 +78,127 @@ namespace Silesian_Undergrounds.Engine.Player
                 if (TouchingBottom(gameobject) || TouchingLeftSide(gameobject) || TouchingRightSide(gameobject) || TouchingTop(gameobject))
                 {
                     gameobject.NotifyCollision(this);
-                }
+
+                    if (gameobject is Tile && gameobject.layer == 1)
+                    {
+
+                        if (gameobject.Rectangle.Intersects(this.Rectangle))
+                        {
+                            Vector2 temp = previousPosition;
+
+                            Gameobject left = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(-1, 0) * this.size), 1);
+                            Gameobject right = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(1, 0) * this.size), 1);
+                            Gameobject top = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(0, -1) * this.size), 1);
+                            Gameobject bottom = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(0, 1) * this.size), 1);
+
+                            if (left != null)
+                            {
+                                if (Keyboard.GetState().IsKeyDown(Keys.S) && Keyboard.GetState().IsKeyDown(Keys.A))
+                                    temp = previousPosition + new Vector2(0, 1);
+
+                                if (Keyboard.GetState().IsKeyDown(Keys.W) && Keyboard.GetState().IsKeyDown(Keys.A))
+                                    temp = previousPosition + new Vector2(0, -1);
+                            }
+
+                            if (top != null)
+                            {
+                                if (Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.W))
+                                    temp = previousPosition + new Vector2(-1, 0);
+
+                                if (Keyboard.GetState().IsKeyDown(Keys.D) && Keyboard.GetState().IsKeyDown(Keys.W))
+                                    temp = previousPosition + new Vector2(1, 0);
+
+                                if (Keyboard.GetState().IsKeyDown(Keys.W) && Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.S))
+                                    temp = previousPosition;
+                            }
+
+                            if (right != null)
+                            {
+                                if (Keyboard.GetState().IsKeyDown(Keys.W) && Keyboard.GetState().IsKeyDown(Keys.D))
+                                    temp = previousPosition + new Vector2(0, -1);
+
+                                if (Keyboard.GetState().IsKeyDown(Keys.S) && Keyboard.GetState().IsKeyDown(Keys.D))
+                                    temp = previousPosition + new Vector2(0, 1);
+                            }
+
+                            if (bottom != null)
+                            {
+                                if (Keyboard.GetState().IsKeyDown(Keys.D) && Keyboard.GetState().IsKeyDown(Keys.S))
+                                    temp = previousPosition + new Vector2(1, 0);
+
+                                if (Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.S))
+                                    temp = previousPosition + new Vector2(-1, 0);
+                            }
+
+                            if (left != null && top != null)
+                            {
+                                if (TouchingBottom(top) && !TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.A)))
+                                    if (left.position.X + 1 <= System.Math.Round(this.position.X) && left.position.Y + size.Y >= System.Math.Round(this.position.Y))
+                                        temp = previousPosition + new Vector2(-1, 0);
+
+                                if (!TouchingBottom(top) && TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.W)))
+                                    if (top.position.X >= System.Math.Round(this.position.X) && top.position.Y + size.Y <= System.Math.Round(this.position.Y))
+                                        temp = previousPosition + new Vector2(0, -1);
+
+                                if (TouchingBottom(top) && TouchingRightSide(left))
+                                    temp = previousPosition + new Vector2(1, 1);
+                            }
+
+                            if (right != null && top != null)
+                            {
+                                if (TouchingBottom(top) && !TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.D)))
+                                    if (right.position.X - 1 >= System.Math.Round(this.position.X) && right.position.Y + size.Y >= System.Math.Round(this.position.Y))
+                                        temp = previousPosition + new Vector2(1, 0);
+
+                                if (!TouchingBottom(top) && TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.W)))
+                                    if (top.position.X <= System.Math.Round(this.position.X) && top.position.Y + size.Y + 1 <= System.Math.Round(this.position.Y))
+                                        temp = previousPosition + new Vector2(0, -1);
+
+                                if (TouchingBottom(top) && TouchingLeftSide(right))
+
+                                    temp = previousPosition + new Vector2(-1, 1);
+                            }
+
+                            if (right != null && bottom != null)
+                            {
+                                if (TouchingTop(bottom) && !TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.D)))
+                                    if (right.position.X - 1 >= System.Math.Round(this.position.X) && right.position.Y + size.Y <= System.Math.Round(this.position.Y))
+                                        temp = previousPosition + new Vector2(1, 0);
+
+                                if (!TouchingTop(bottom) && TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.S)))
+                                    if (bottom.position.X <= System.Math.Round(this.position.X) && bottom.position.Y + size.Y + 1 >= System.Math.Round(this.position.Y))
+                                        temp = previousPosition + new Vector2(0, 1);
+
+                                if (TouchingTop(bottom) && TouchingLeftSide(right))
+                                    temp = previousPosition + new Vector2(-1, -1);
+                            }
+
+                            if (left != null && bottom != null)
+                            {
+                                if (TouchingTop(bottom) && !TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.A)))
+                                    if (left.position.X + 1 <= System.Math.Round(this.position.X) && left.position.Y + size.Y <= System.Math.Round(this.position.Y))
+                                        temp = previousPosition + new Vector2(-1, 0);
+
+                                if (!TouchingTop(bottom) && TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.S)))
+                                    if (bottom.position.X >= System.Math.Round(this.position.X) && bottom.position.Y + size.Y + 1 >= System.Math.Round(this.position.Y))
+                                        temp = previousPosition + new Vector2(0, 1);
+
+                                if (TouchingTop(bottom) && TouchingRightSide(left))
+                                    temp = previousPosition + new Vector2(1, -1);
+                            }
+                            this.position = temp;
+                            }
+                        }
+                    }
             }
+        }
+
+        private Gameobject GetGameobjectAtPosition(List<Gameobject> gameobjects, Vector2 position, int layer)
+        {
+            foreach (Gameobject gam in gameobjects)
+                if (gam.position == position && gam.layer == layer)
+                    return gam;
+            return null;
         }
 
         private void HandleInput(KeyboardState keyState)
