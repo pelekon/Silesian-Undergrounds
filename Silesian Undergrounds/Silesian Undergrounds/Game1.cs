@@ -43,7 +43,7 @@ namespace Silesian_Undergrounds
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
             sceneMgr = new sceneMgr();
-            scene = sceneMgr.LoadScene("test", 64);
+            scene = sceneMgr.LoadScene("warstwy", 64);
 
             if (scene == null)
                 scene = new Scene();
@@ -61,7 +61,7 @@ namespace Silesian_Undergrounds
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Instantiates our player at the position X = 100, Y = 100;
-            player = new Player(new Vector2(100, 100), new Vector2(128, 128), 1);
+            player = new Player(new Vector2(100, 100), new Vector2(64, 64), 1);
             //Loads our player's content
             player.LoadContent(Content);
             scene.AddPlayer(player);
@@ -95,6 +95,7 @@ namespace Silesian_Undergrounds
             scene.Update(gameTime);
             // update our player sprite
             player.Update(gameTime);
+            player.Collision(scene.Gameobjects);
             base.Update(gameTime);
         }
 

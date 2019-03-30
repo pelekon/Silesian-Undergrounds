@@ -64,6 +64,14 @@ namespace Silesian_Undergrounds.Engine.Scene
             objectsToDelete.Clear();
         }
 
+        public List<Gameobject> Gameobjects
+        {
+            get
+            {
+                return gameobjects;
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
             // Operation of add or remove from gameobjects list has to appear before updating gameobjects

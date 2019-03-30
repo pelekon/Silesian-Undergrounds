@@ -7,7 +7,7 @@ namespace Silesian_Undergrounds.Engine.Common
     {
         public Texture2D texture;
         public Vector2 position;
-        protected int layer;
+        public int layer;
         public float rotation { get; protected set; }
         public float speed { get; protected set; }
         public Vector2 size;
@@ -33,6 +33,11 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             position.X += forceX * speed;
             position.Y += forceY * speed;
+        }
+
+        public Vector2 GetTileWhereStanding()
+        {
+            return new Vector2((float)System.Math.Round(this.position.X / size.X) * size.X, (float)System.Math.Round(this.position.Y / size.Y) * size.Y);
         }
 
         public virtual void Update(GameTime gameTime) { }
