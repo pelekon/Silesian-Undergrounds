@@ -17,7 +17,7 @@ namespace Silesian_Undergrounds.Engine.Player
 
         private Vector2 previousPosition;
 
-        public Player(Vector2 position, Vector2 size, int layer) : base(position, size, layer)
+        public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
         {
             FramesPerSecond = 10;
             previousPosition = position;

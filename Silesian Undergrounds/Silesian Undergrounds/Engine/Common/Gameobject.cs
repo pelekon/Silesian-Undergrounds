@@ -11,13 +11,15 @@ namespace Silesian_Undergrounds.Engine.Common
         public float rotation { get; protected set; }
         public float speed { get; protected set; }
         public Vector2 size;
+        public Vector2? scale;
 
-        public Gameobject(Texture2D texture, Vector2 position, Vector2 size, int layer)
+        public Gameobject(Texture2D texture, Vector2 position, Vector2 size, int layer, Vector2? scale = null)
         {
             this.texture = texture;
             this.position = position;
             this.size = size;
             this.layer = layer;
+            this.scale = scale;
         }
 
         public Rectangle Rectangle
@@ -44,7 +46,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle);
+           spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, scale: scale);
         }
 
         // TODO: Remove this and split collisions to 2 sparate components:

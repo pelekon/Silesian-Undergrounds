@@ -9,20 +9,20 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
-    public class sceneMgr
+    public class SceneManager
     {
         private static Scene currentScene;
         public static Scene GetCurrentScene() { return currentScene; }
 
         private static TileMapRenderer renderer = new TileMapRenderer();
 
-        public static Scene LoadScene(String sceneName, int tileSize)
+        public static Scene LoadScene(String sceneName, int tileSize, Player.Player player)
         {
             string path = "Data\\" + sceneName + ".json";
             if (!File.Exists(path))
                 return null;
 
-            Scene scene = new Scene();
+            Scene scene = new Scene(player);
 
             if (!LoadSceneFile(path, scene, tileSize))
                 return null;

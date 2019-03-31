@@ -14,8 +14,21 @@ namespace Silesian_Undergrounds.Engine.Scene
 {
     public class Scene
     {
-        public Scene()
+
+        #region SCENE_VARIABLES
+
+        private List<Gameobject> gameobjects;
+        private Player.Player player;
+        private List<Gameobject> objectsToDelete;
+        private List<Gameobject> objectsToAdd;
+  
+        public bool isPaused { get; private set; }
+
+        #endregion
+
+        public Scene(Player.Player player)
         {
+            this.player = player;
             gameobjects = new List<Gameobject>();
             objectsToDelete = new List<Gameobject>();
             objectsToAdd = new List<Gameobject>();
@@ -23,24 +36,20 @@ namespace Silesian_Undergrounds.Engine.Scene
             isPaused = false;
         }
 
-        // Scene variables
-        private List<Gameobject> gameobjects;
-        private Player.Player player;
+        public List<Gameobject> Gameobjects
+        {
+            get
+            {
+                return gameobjects;
+            }
+        }
 
-        private List<Gameobject> objectsToDelete;
-        private List<Gameobject> objectsToAdd;
 
-        public bool isPaused { get; private set; }
-        
-        // Methods
+        #region SCENE_OBJECTS_MANAGMENT_METHODS
+
         public void AddObject(Gameobject obj)
         {
             objectsToAdd.Add(obj);
-        }
-
-        public void AddPlayer(Player.Player player)
-        {
-            this.player = player;
         }
 
         public void DeleteObject(Gameobject obj)
@@ -64,13 +73,9 @@ namespace Silesian_Undergrounds.Engine.Scene
             objectsToDelete.Clear();
         }
 
-        public List<Gameobject> Gameobjects
-        {
-            get
-            {
-                return gameobjects;
-            }
-        }
+        #endregion
+
+
 
         public void Update(GameTime gameTime)
         {

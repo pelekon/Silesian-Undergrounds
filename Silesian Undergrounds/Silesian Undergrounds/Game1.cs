@@ -15,7 +15,7 @@ namespace Silesian_Undergrounds
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        sceneMgr sceneMgr;
+        SceneManager sceneMgr;
         Scene scene;
         // player object
         Player player;
@@ -42,11 +42,11 @@ namespace Silesian_Undergrounds
             graphics.ApplyChanges();
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
-            sceneMgr = new sceneMgr();
-            scene = sceneMgr.LoadScene("warstwy", 64);
-
-            if (scene == null)
-                scene = new Scene();
+            sceneMgr = new SceneManager();
+            scene = SceneManager.LoadScene("warstwy", 64, player);
+            //Instantiates our player at the position X = 100, Y = 100;, scale - the vector resizing the texture (here 2.times)
+            player = new Player(new Vector2(100, 100), new Vector2(255, 255), 1, new Vector2(2f, 2f));
+            scene = new Scene(player);
 
             base.Initialize();
         }
@@ -60,11 +60,8 @@ namespace Silesian_Undergrounds
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            //Instantiates our player at the position X = 100, Y = 100;
-            player = new Player(new Vector2(100, 100), new Vector2(64, 64), 1);
             //Loads our player's content
             player.LoadContent(Content);
-            scene.AddPlayer(player);
 
             // TODO: use this.Content to load your game content here
         }
