@@ -46,16 +46,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\Common\AnimatedGameObject.cs" />
-    <Compile Include="Engine\Common\Gameobject.cs" />
+    <Compile Include="Engine\Common\GameObject.cs" />
     <Compile Include="Engine\Common\TextureMgr.cs" />
     <Compile Include="Engine\Player\Player.cs" />
     <Compile Include="Engine\Scene\Scene.cs" />
     <Compile Include="Engine\Scene\SceneMgr.cs" />
     <Compile Include="Engine\Scene\Tile.cs" />
     <Compile Include="Engine\Scene\TileMapRenderer.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="Engine\Common\Controls\Button.cs" />
+    <Compile Include="States\Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="States\MenuWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

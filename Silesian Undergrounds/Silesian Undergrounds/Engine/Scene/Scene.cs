@@ -17,10 +17,10 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         #region SCENE_VARIABLES
 
-        private List<Gameobject> gameobjects;
+        private List<GameObject> gameobjects;
         private Player.Player player;
-        private List<Gameobject> objectsToDelete;
-        private List<Gameobject> objectsToAdd;
+        private List<GameObject> objectsToDelete;
+        private List<GameObject> objectsToAdd;
   
         public bool isPaused { get; private set; }
 
@@ -29,14 +29,14 @@ namespace Silesian_Undergrounds.Engine.Scene
         public Scene(Player.Player player)
         {
             this.player = player;
-            gameobjects = new List<Gameobject>();
-            objectsToDelete = new List<Gameobject>();
-            objectsToAdd = new List<Gameobject>();
+            gameobjects = new List<GameObject>();
+            objectsToDelete = new List<GameObject>();
+            objectsToAdd = new List<GameObject>();
             // player = new Player.Player(); TODO: Pass data by constructor to create player object
             isPaused = false;
         }
 
-        public List<Gameobject> Gameobjects
+        public List<GameObject> Gameobjects
         {
             get
             {
@@ -47,12 +47,12 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
 
-        public void AddObject(Gameobject obj)
+        public void AddObject(GameObject obj)
         {
             objectsToAdd.Add(obj);
         }
 
-        public void DeleteObject(Gameobject obj)
+        public void DeleteObject(GameObject obj)
         {
             objectsToDelete.Add(obj);
         }

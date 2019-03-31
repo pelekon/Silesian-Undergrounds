@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Player;
+using Silesian_Undergrounds.States.Controls;
 
 namespace Silesian_Undergrounds
 {
@@ -19,6 +20,7 @@ namespace Silesian_Undergrounds
         Scene scene;
         // player object
         Player player;
+        Button button; 
 
         public Game1()
         {
@@ -35,7 +37,16 @@ namespace Silesian_Undergrounds
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            Window.AllowAltF4 = true;
+            // Window.AllowAltF4 = true;
+            
+
+
+
+            // temporary?
+            IsMouseVisible = true;
+
+
+
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             //graphics.ToggleFullScreen();
@@ -62,6 +73,19 @@ namespace Silesian_Undergrounds
 
             //Loads our player's content
             player.LoadContent(Content);
+
+
+
+
+            // temporary
+            Texture2D ButtonTextureClicked = Content.Load<Texture2D>("box_lit");
+            Texture2D ButtonTextureNotClicked = Content.Load<Texture2D>("box");
+            this.button = new Button("Some text", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2(500, 500), new Vector2(200, 200));
+
+            scene.AddObject(this.button);
+
+
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -92,6 +116,11 @@ namespace Silesian_Undergrounds
             scene.Update(gameTime);
             // update our player sprite
             player.Update(gameTime);
+
+            // temporary
+           // button.Update(gameTime);
+
+
             player.Collision(scene.Gameobjects);
             base.Update(gameTime);
         }
@@ -107,6 +136,7 @@ namespace Silesian_Undergrounds
             // TODO: Add your drawing code here
             spriteBatch.Begin();            
             scene.Draw(gameTime, spriteBatch);
+           // button.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }

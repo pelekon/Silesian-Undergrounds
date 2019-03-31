@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Common;
 
 namespace Silesian_Undergrounds.Engine.Scene {
-    class Tile : Gameobject
+    class Tile : GameObject
     {
         public Tile(Texture2D texture2D, Vector2 position, Vector2 size, int layer) : base(texture2D, position, size, layer)
         {

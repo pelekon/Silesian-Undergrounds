@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
-    public abstract class AnimatedGameObject : Gameobject
+    public abstract class AnimatedGameObject : GameObject
     {
 
         #region AnimationVariables
