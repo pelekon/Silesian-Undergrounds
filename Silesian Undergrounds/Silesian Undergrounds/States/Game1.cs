@@ -80,7 +80,8 @@ namespace Silesian_Undergrounds
             // temporary
             Texture2D ButtonTextureClicked = Content.Load<Texture2D>("box_lit");
             Texture2D ButtonTextureNotClicked = Content.Load<Texture2D>("box");
-            this.button = new Button("Some text", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2(500, 500), new Vector2(200, 200));
+            SpriteFont buttonFont = Content.Load<SpriteFont>("File");
+            this.button = new Button("Some text", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2(500, 500), new Vector2(200, 200), buttonFont);
 
             scene.AddObject(this.button);
 
