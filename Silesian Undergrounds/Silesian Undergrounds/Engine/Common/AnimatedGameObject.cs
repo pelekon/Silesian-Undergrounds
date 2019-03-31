@@ -54,9 +54,6 @@ namespace Silesian_Undergrounds.Engine.Common
 
             for (int i = 0; i < frames; i++)
             {
-                //new Rectangle(x, y, width, height);
-                //new Rectangle(xStartFrame, yPos, width, height)
-                // 
                 Rectangles[i] = new Rectangle(xStartFrame, yPos + (i* (height + (2 * yPos))), width, height);
             }
             animationDic.Add(name, Rectangles);
@@ -75,24 +72,19 @@ namespace Silesian_Undergrounds.Engine.Common
             }
         }
 
-        // determines when we have to change frames
         public override void Update(GameTime gameTime)
         {
-            //Adds time that has elapsed since our last draw
             timeSinceLastFrameChange += gameTime.ElapsedGameTime.TotalSeconds;
 
-            //We need to change our image if our timeElapsed is greater than our timeToUpdate(calculated by our framerate)
             if (timeSinceLastFrameChange > timeToUpdateFrame)
             {
-                //Resets the timer in a way, so that we keep our desired FPS
                 timeSinceLastFrameChange -= timeToUpdateFrame;
 
-                //Adds one to our frameIndex
                 if (numberFrames < animationDic[currentAnimation].Length - 1)
                 {
                     numberFrames++;
                 }
-                else //Restarts the animation
+                else 
                 {
                     AnimationDone(currentAnimation);
                     numberFrames = 0;

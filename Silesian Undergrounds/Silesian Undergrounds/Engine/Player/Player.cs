@@ -242,11 +242,26 @@ namespace Silesian_Undergrounds.Engine.Player
 
         public override void AnimationDone(string animation)
         {
-            if (animation.Contains("Attack"))
-            {
-                Debug.WriteLine("Attack!");
-                attacking = false;
-            }
+           if (animation.Contains("Attack"))
+           {
+               Debug.WriteLine("Attack!");
+               attacking = false;
+           } else if(IsAnimationMovement(animation))
+           {
+                currentAnimation = "Idle" + animation;
+                Debug.WriteLine(currentAnimation);
+           }
+           
+
+        }
+
+        // determines if current animation is up/donw/right/left
+        private bool IsAnimationMovement(string animation)
+        {
+            // we all love Clean Code <3 
+            if((animation.Contains("Up") || animation.Contains("Left") || animation.Contains("Down") || animation.Contains("Right")) && !animation.Contains("Idle")) return true;
+           
+            return false;
         }
 
         private void Move()
