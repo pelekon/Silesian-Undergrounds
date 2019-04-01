@@ -3,9 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Diagnostics;
+
+using Silesian_Undergrounds.Engine.Common;
 namespace Silesian_Undergrounds.Engine.Scene {
     class TileMapRenderer {
         private List<Tile> tiles = new List<Tile>();
+        private List<Gameobject> pickableItems = new List<Gameobject>();
         private int width, height;
 
         public List<Tile> Tiles
@@ -13,6 +16,14 @@ namespace Silesian_Undergrounds.Engine.Scene {
             get
             {
                 return tiles;
+            }
+        }
+
+        public List<Gameobject> Pickable
+        {
+            get
+            {
+                return pickableItems;
             }
         }
 
@@ -41,8 +52,11 @@ namespace Silesian_Undergrounds.Engine.Scene {
                         if (array[y][x] == null)
                             continue;
 
-                        tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
-                    
+                        if (item.Key == 3)
+                            pickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                        else
+                            tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+
                         width = (x + 1) * size;
                         height = (y + 1) * size;
 

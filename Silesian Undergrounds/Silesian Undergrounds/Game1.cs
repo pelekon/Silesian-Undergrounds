@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Player;
+using Silesian_Undergrounds.Engine.HUD;
 
 namespace Silesian_Undergrounds
 {
@@ -15,10 +16,15 @@ namespace Silesian_Undergrounds
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteBatch HUDspriteBatch;
         SceneManager sceneMgr;
         Scene scene;
         // player object
         Player player;
+
+        private static int TileSize = 64;
+
+        public GameHUD gameHUD = new GameHUD(TileSize);
 
         public Game1()
         {
@@ -43,10 +49,11 @@ namespace Silesian_Undergrounds
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
             sceneMgr = new SceneManager();
-            scene = SceneManager.LoadScene("warstwy", 64, player);
+
             //Instantiates our player at the position X = 100, Y = 100;, scale - the vector resizing the texture (here 2.times)
-            player = new Player(new Vector2(100, 100), new Vector2(255, 255), 1, new Vector2(2f, 2f));
-            scene = new Scene(player);
+            player = new Player(new Vector2(200, 100), new Vector2(TileSize, TileSize), 1, new Vector2(2.5f, 2.5f));
+
+            scene = SceneManager.LoadScene("drop", TileSize, player);
 
             base.Initialize();
         }
@@ -59,9 +66,12 @@ namespace Silesian_Undergrounds
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            HUDspriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Loads our player's content
             player.LoadContent(Content);
+
+            gameHUD.Load(content: Content);
 
             // TODO: use this.Content to load your game content here
         }
@@ -108,6 +118,7 @@ namespace Silesian_Undergrounds
             spriteBatch.Begin();            
             scene.Draw(gameTime, spriteBatch);
             spriteBatch.End();
+            gameHUD.Draw(HUDspriteBatch);
             base.Draw(gameTime);
         }
     }
