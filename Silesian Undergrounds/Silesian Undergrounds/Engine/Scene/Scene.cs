@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.Player;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -18,7 +17,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         #region SCENE_VARIABLES
 
         private List<Gameobject> gameobjects;
-        private Player.Player player;
+        private Player player;
         private List<Gameobject> objectsToDelete;
         private List<Gameobject> objectsToAdd;
   
@@ -26,7 +25,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         #endregion
 
-        public Scene(Player.Player player)
+        public Scene(Player player)
         {
             this.player = player;
             gameobjects = new List<Gameobject>();

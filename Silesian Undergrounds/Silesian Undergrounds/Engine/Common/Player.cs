@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,7 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Scene;
 
-namespace Silesian_Undergrounds.Engine.Player
+namespace Silesian_Undergrounds.Engine.Common
 {
     public class Player : AnimatedGameObject
     {

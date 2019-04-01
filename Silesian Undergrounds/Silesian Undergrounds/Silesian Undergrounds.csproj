@@ -48,7 +48,8 @@
     <Compile Include="Engine\Common\AnimatedGameObject.cs" />
     <Compile Include="Engine\Common\Gameobject.cs" />
     <Compile Include="Engine\Common\TextureMgr.cs" />
-    <Compile Include="Engine\Player\Player.cs" />
+    <Compile Include="Engine\Common\Player.cs" />
+    <Compile Include="Engine\Scene\Camera.cs" />
     <Compile Include="Engine\Scene\Scene.cs" />
     <Compile Include="Engine\Scene\SceneMgr.cs" />
     <Compile Include="Engine\Scene\Tile.cs" />
