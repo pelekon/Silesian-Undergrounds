@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.IO;
+using Silesian_Undergrounds.Engine.Enum;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -59,5 +60,25 @@ namespace Silesian_Undergrounds.Engine.Common
             foreach (var txt in list)
                 LoadIfNeeded(txt);
         }
+
+        public OreEnum RandType(Random random)
+        {
+            int randed = random.Next(1, 100);
+            if (randed > 40 && randed <= 70)
+                return OreEnum.Coal;
+            else if (randed > 70 && randed <= 90)
+                return OreEnum.Silver;
+            else if (randed > 90)
+                return OreEnum.Gold;
+            else
+                return OreEnum.None;
+        }
+
+        public Texture2D LoadTexture2DByName(string name)
+        {
+            return this.contentMgr.Load<Texture2D>(name);
+        }
+
+
     }
 }

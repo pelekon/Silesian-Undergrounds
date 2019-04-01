@@ -27,7 +27,18 @@ Dynamiczne generowanie znajdziek
 Specjalny pokój, jeden na poziom, w którym można znaleźć losowy przedmiot podnoszący statystyki
 Ukryte pokoje do których dostęp jest uzyskiwany po rozwiązaniu zagadki, możliwe dodatkowe przedmioty
 System walki, mechanika hack and slash. Atak, unik ataku przeciwnika, ponowny atak lub ucieczka.
-  
+ 
+ 
+## Tilemapa i warstwy
+
+- Warstwa 1:
+	bloki z którymi gracz koliduje
+
+- Warstwa 2:
+	bloki tła
+
+- Warstwa 3:
+	poprzez umieszczenie testury X (czerwony) z Tileset2 oznaczamy miejsca, w których mogą pojawić się przedmioty do podniesienia
   
 ## Grafika  
 PH  
