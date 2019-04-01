@@ -31,7 +31,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         private Matrix CalculateCameraPosition()
         {
-            Matrix playerPosition = Matrix.CreateTranslation(-_player.position.X - (_player.texture.Width / 2), -_player.position.Y - (_player.texture.Height / 2), 0);
+            Matrix playerPosition = Matrix.CreateTranslation(-_player.position.X - (_player.Rectangle.Width / 2), -_player.position.Y - (_player.Rectangle.Height / 2), 0);
             Matrix screenCenterTransform = Matrix.CreateTranslation(ResolutionMgr.GameWidth / 2, ResolutionMgr.GameHeight / 2, 0);
             return playerPosition * screenCenterTransform;
         }
