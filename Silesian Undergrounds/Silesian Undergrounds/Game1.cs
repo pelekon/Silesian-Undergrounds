@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.Player;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds
 {
@@ -17,8 +17,6 @@ namespace Silesian_Undergrounds
         SpriteBatch spriteBatch;
         SceneManager sceneMgr;
         Scene scene;
-        // player object
-        Player player;
 
         public Game1()
         {
@@ -37,16 +35,15 @@ namespace Silesian_Undergrounds
             // TODO: Add your initialization logic here
             Window.AllowAltF4 = true;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            ResolutionMgr.GameWidth = GraphicsDevice.DisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            ResolutionMgr.GameHeight = GraphicsDevice.DisplayMode.Height;
             //graphics.ToggleFullScreen();
             graphics.ApplyChanges();
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
             sceneMgr = new SceneManager();
-            scene = SceneManager.LoadScene("warstwy", 64, player);
-            //Instantiates our player at the position X = 100, Y = 100;, scale - the vector resizing the texture (here 2.times)
-            player = new Player(new Vector2(100, 100), new Vector2(255, 255), 1, new Vector2(2f, 2f));
-            scene = new Scene(player);
+            scene = SceneManager.LoadScene("camera", 64);
 
             base.Initialize();
         }
@@ -59,9 +56,6 @@ namespace Silesian_Undergrounds
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            //Loads our player's content
-            player.LoadContent(Content);
 
             // TODO: use this.Content to load your game content here
         }
@@ -90,9 +84,6 @@ namespace Silesian_Undergrounds
 
             // TODO: Add your update logic here
             scene.Update(gameTime);
-            // update our player sprite
-            player.Update(gameTime);
-            player.Collision(scene.Gameobjects);
             base.Update(gameTime);
         }
 
@@ -102,10 +93,10 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();            
+            spriteBatch.Begin(transformMatrix: scene.camera.Transform);            
             scene.Draw(gameTime, spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);

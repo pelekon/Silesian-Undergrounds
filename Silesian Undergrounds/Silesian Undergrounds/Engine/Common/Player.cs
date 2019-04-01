@@ -43,12 +43,6 @@ namespace Silesian_Undergrounds.Engine.Common
             PlayAnimation("IdleDown");
         }
 
-        // Loads content related to the player
-        public void LoadContent(ContentManager content)
-        {
-            texture = content.Load<Texture2D>("minerCharacter");
-        }
-
         public override void Update(GameTime gameTime)
         {
             sDirection = Vector2.Zero;

@@ -16,13 +16,13 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         private static TileMapRenderer renderer = new TileMapRenderer();
 
-        public static Scene LoadScene(String sceneName, int tileSize, Player player)
+        public static Scene LoadScene(String sceneName, int tileSize)
         {
             string path = "Data\\" + sceneName + ".json";
             if (!File.Exists(path))
                 return null;
 
-            Scene scene = new Scene(player);
+            Scene scene = new Scene();
 
             if (!LoadSceneFile(path, scene, tileSize))
                 return null;

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Silesian_Undergrounds.Engine.Utils;
+
 using Silesian_Undergrounds.Engine.Common;
 
 namespace Silesian_Undergrounds.Engine.Scene
@@ -13,20 +15,25 @@ namespace Silesian_Undergrounds.Engine.Scene
     public class Camera
     {
         private readonly Player _player;
-        public Vector2 position { get; private set; }
+
+        public Matrix Transform { get; private set; }
 
         public Camera(Player player)
         {
             _player = player;
-            position = new Vector2(_player.position.X, _player.position.Y);
+            Transform = CalculateCameraPosition();
         }
 
         public void Update(GameTime gameTime)
         {
-            if (position != _player.position)
-            {
+            Transform = CalculateCameraPosition();
+        }
 
-            }
+        private Matrix CalculateCameraPosition()
+        {
+            Matrix playerPosition = Matrix.CreateTranslation(-_player.position.X - (_player.texture.Width / 2), -_player.position.Y - (_player.texture.Height / 2), 0);
+            Matrix screenCenterTransform = Matrix.CreateTranslation(ResolutionMgr.GameWidth / 2, ResolutionMgr.GameHeight / 2, 0);
+            return playerPosition * screenCenterTransform;
         }
     }
 }
