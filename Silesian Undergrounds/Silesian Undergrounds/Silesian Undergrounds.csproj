@@ -49,6 +49,7 @@
     <Compile Include="Engine\Common\GameObject.cs" />
     <Compile Include="Engine\Common\PickableItem.cs" />
     <Compile Include="Engine\Common\TextureMgr.cs" />
+    <Compile Include="Engine\Enum\GameState.cs" />
     <Compile Include="Engine\Enum\OreEnum.cs" />
     <Compile Include="Engine\HUD\GameHUD.cs" />
     <Compile Include="Engine\Item\Ore.cs" />
@@ -59,11 +60,11 @@
     <Compile Include="Engine\Scene\Tile.cs" />
     <Compile Include="Engine\Scene\TileMapRenderer.cs" />
     <Compile Include="Engine\Common\Controls\Button.cs" />
-    <Compile Include="States\Game1.cs" />
+    <Compile Include="Game1.cs" />
     <Compile Include="Engine\Utils\ResolutionMgr.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="States\MenuWindow.cs" />
+    <Compile Include="Views\MenuWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

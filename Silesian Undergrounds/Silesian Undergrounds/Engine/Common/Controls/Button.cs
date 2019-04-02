@@ -15,13 +15,14 @@ namespace Silesian_Undergrounds.States.Controls
     {
 
         public string Text { get; }
+        
         private Func<Game1, Boolean> Callback;
         private Texture2D ButtonNotClickedTexture;
         private Texture2D ButtonHoveringTexture;
         private SpriteFont ButtonTextFont;
         private Game1 Game;
+        
 
-        // public GameObject(Texture2D texture, Vector2 position, Vector2 size, int layer, Vector2? scale = null)
         public Button(string text, Texture2D buttonNotClicked, Texture2D buttonClicked, Vector2 Position, Vector2 Size, SpriteFont ButtonTextFont, Vector2? scale = null) : base(texture: buttonNotClicked,position: Position, size: Size, scale: scale)
         {
             this.Text = text;
@@ -35,11 +36,6 @@ namespace Silesian_Undergrounds.States.Controls
             this.Callback = callback;
         }
 
-        public void SetGame(Game1 game)
-        {
-            this.Game = game;
-        }
-
         public override void Update(GameTime gameTime)
         {
             MouseState mouseState = Mouse.GetState();
@@ -47,6 +43,11 @@ namespace Silesian_Undergrounds.States.Controls
             this.texture = IsMouseInsideButton() ? ButtonHoveringTexture : ButtonNotClickedTexture;
 
             if (IsMouseButtonClicked() && Callback != null) Callback.Invoke(Game);
+        }
+
+        public void SetGame(Game1 game)
+        {
+            this.Game = game;
         }
 
         private Boolean IsMouseButtonClicked()

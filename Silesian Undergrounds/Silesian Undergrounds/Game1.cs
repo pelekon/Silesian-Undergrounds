@@ -9,7 +9,7 @@ using System;
 using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.HUD;
-
+using Silesian_Undergrounds.Engine.Enum;
 
 namespace Silesian_Undergrounds
 {
@@ -22,18 +22,9 @@ namespace Silesian_Undergrounds
         SpriteBatch spriteBatch;
         SpriteBatch HUDspriteBatch;
         SceneManager sceneMgr;
+        Views.MenuWindow menuWindow;
         Scene scene;
-
-        // player object
-        //Player player;
-        Button buttonStartGame;
-        Button buttonOptions;
-        Button buttonQuit;
-
-        public enum GameState { InGame, InMenu, InMenuSettings };
         private GameState CurrentState = GameState.InMenu;
-
-        //TODO: make some sort of GameStateManager ;>
         public GameHUD gameHUD = new GameHUD(ResolutionMgr.TileSize);
 
 
@@ -71,6 +62,8 @@ namespace Silesian_Undergrounds
             sceneMgr = new SceneManager();
             scene = SceneManager.LoadScene("camera", 64);
 
+            menuWindow = new Views.MenuWindow(this);
+
             base.Initialize();
         }
 
@@ -87,45 +80,8 @@ namespace Silesian_Undergrounds
             HUDspriteBatch = new SpriteBatch(GraphicsDevice);
             gameHUD.Load(content: Content);
 
+            menuWindow.LoadContent(Content);
 
-
-            // menu state initialization
-            Texture2D ButtonTextureClicked = Content.Load<Texture2D>("box_lit");
-            Texture2D ButtonTextureNotClicked = Content.Load<Texture2D>("box");
-            SpriteFont buttonFont = Content.Load<SpriteFont>("File");
-
-            int height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            int padding = 100;
-
-            this.buttonStartGame = new Button("New game", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width)/2, 0 + padding), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
-            this.buttonOptions = new Button("Settings", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, (0 + 2*padding + ButtonTextureClicked.Height)), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
-            this.buttonQuit = new Button("Quit", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, 0 + 3 * padding + 2 * ButtonTextureClicked.Height), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
-
-            Func<Game1, Boolean> callbackQuitGame = g =>
-            {
-                Debug.WriteLine("Quiting the game!");
-                g.Exit();
-                return true;
-            };
-
-            Func<Game1, Boolean> callbackStartGame = g =>
-            {
-                Debug.WriteLine("Changing the game state!");
-                g.changeGameState(GameState.InGame);
-                return true;
-            };
-
-            this.buttonQuit.SetGame(this);
-            this.buttonQuit.SetOnClickCallback(callbackQuitGame);
-
-            this.buttonStartGame.SetGame(this);
-            this.buttonStartGame.SetOnClickCallback(callbackStartGame);
-
-
-
-         
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -160,15 +116,8 @@ namespace Silesian_Undergrounds
             }
             else if(CurrentState == GameState.InMenu)
             {
-               buttonOptions.Update(gameTime);
-               buttonStartGame.Update(gameTime);
-               buttonQuit.Update(gameTime);
+                menuWindow.Update(gameTime);
             }
-
-            // temporary
-           // buttonStartGame.Update(gameTime);
-
-
 
 
             base.Update(gameTime);
@@ -194,14 +143,12 @@ namespace Silesian_Undergrounds
             } else if(CurrentState == GameState.InMenu)
             {
                 spriteBatch.Begin();
-                buttonQuit.Draw(spriteBatch);
-                buttonOptions.Draw(spriteBatch);
-                buttonStartGame.Draw(spriteBatch);
+                menuWindow.Draw(spriteBatch);
                 spriteBatch.End();
             }
 
 
-           // buttonStartGame.Draw(spriteBatch);
+     
 
             
          
