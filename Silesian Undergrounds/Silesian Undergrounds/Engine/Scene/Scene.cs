@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.Player;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -16,26 +16,33 @@ namespace Silesian_Undergrounds.Engine.Scene
     {
 
         #region SCENE_VARIABLES
-
         private List<GameObject> gameobjects;
-        private Player.Player player;
+        public Player player;
         private List<GameObject> objectsToDelete;
         private List<GameObject> objectsToAdd;
-  
+        public Camera camera { get; private set; }
+
+
         public bool isPaused { get; private set; }
 
         #endregion
 
-        public Scene(Player.Player player)
+        public Scene()
         {
-            this.player = player;
+            // Inittialize variables
             gameobjects = new List<GameObject>();
             objectsToDelete = new List<GameObject>();
             objectsToAdd = new List<GameObject>();
-            // player = new Player.Player(); TODO: Pass data by constructor to create player object
             isPaused = false;
-        }
+            player = new Player(new Vector2(100, 100), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2f, 2f));
 
+
+            TextureMgr.Instance.LoadIfNeeded("minerCharacter");
+            player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
+            gameobjects.Add(player);
+
+            camera = new Camera(player);
+        }
         public List<GameObject> Gameobjects
         {
             get
@@ -43,6 +50,8 @@ namespace Silesian_Undergrounds.Engine.Scene
                 return gameobjects;
             }
         }
+
+
 
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
@@ -85,12 +94,26 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             foreach (var obj in gameobjects)
                 obj.Update(gameTime);
+
+            camera.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (var obj in gameobjects)
-                obj.Draw(spriteBatch);
+            {
+                if (obj is Player)
+                    continue;
+
+                if (obj.layer != 3)
+                {
+                    obj.Draw(spriteBatch);
+                }
+            }
+
+            foreach (var obj in gameobjects)
+                if (obj.layer == 3)
+                    obj.Draw(spriteBatch);
 
             player.Draw(spriteBatch);
         }
@@ -106,3 +129,4 @@ namespace Silesian_Undergrounds.Engine.Scene
         }
     }
 }
+

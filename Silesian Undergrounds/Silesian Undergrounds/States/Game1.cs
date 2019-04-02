@@ -1,14 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.Player;
 using Silesian_Undergrounds.States.Controls;
 using System.Runtime.CompilerServices;
 using System;
 using System.Diagnostics;
+using Silesian_Undergrounds.Engine.Utils;
+using Silesian_Undergrounds.Engine.HUD;
+
 
 namespace Silesian_Undergrounds
 {
@@ -19,10 +20,12 @@ namespace Silesian_Undergrounds
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteBatch HUDspriteBatch;
         SceneManager sceneMgr;
         Scene scene;
+
         // player object
-        Player player;
+        //Player player;
         Button buttonStartGame;
         Button buttonOptions;
         Button buttonQuit;
@@ -31,6 +34,8 @@ namespace Silesian_Undergrounds
         private GameState CurrentState = GameState.InMenu;
 
         //TODO: make some sort of GameStateManager ;>
+        public GameHUD gameHUD = new GameHUD(ResolutionMgr.TileSize);
+
 
         public Game1()
         {
@@ -46,24 +51,25 @@ namespace Silesian_Undergrounds
         /// </summary>
         protected override void Initialize()
         {
-            // window options initialization 
+            // window options initialization
 
             // TODO: Add your initialization logic here
             // Window.AllowAltF4 = true;
             // temporary?
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            ResolutionMgr.GameWidth = GraphicsDevice.DisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            ResolutionMgr.GameHeight = GraphicsDevice.DisplayMode.Height;
             //graphics.ToggleFullScreen();
+            
+
             graphics.ApplyChanges();
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
             // Game state initialization
             sceneMgr = new SceneManager();
-            scene = SceneManager.LoadScene("warstwy", 64, player);
-            //Instantiates our player at the position X = 100, Y = 100;, scale - the vector resizing the texture (here 2.times)
-            player = new Player(new Vector2(100, 100), new Vector2(255, 255), 1, new Vector2(2f, 2f));
-            scene = new Scene(player);
+            scene = SceneManager.LoadScene("camera", 64);
 
             base.Initialize();
         }
@@ -77,9 +83,9 @@ namespace Silesian_Undergrounds
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            //Loads our player's content
-            player.LoadContent(Content);
 
+            HUDspriteBatch = new SpriteBatch(GraphicsDevice);
+            gameHUD.Load(content: Content);
 
 
 
@@ -117,6 +123,8 @@ namespace Silesian_Undergrounds
             this.buttonStartGame.SetOnClickCallback(callbackStartGame);
 
 
+
+         
             // TODO: use this.Content to load your game content here
         }
 
@@ -149,8 +157,7 @@ namespace Silesian_Undergrounds
                 // TODO: Add your update logic here
                 scene.Update(gameTime);
                 // update our player sprite
-                player.Update(gameTime);
-            } 
+            }
             else if(CurrentState == GameState.InMenu)
             {
                buttonOptions.Update(gameTime);
@@ -162,7 +169,8 @@ namespace Silesian_Undergrounds
            // buttonStartGame.Update(gameTime);
 
 
-            player.Collision(scene.Gameobjects);
+
+
             base.Update(gameTime);
         }
 
@@ -172,23 +180,31 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin(); 
+           
             if(CurrentState == GameState.InGame)
             {
+                spriteBatch.Begin(transformMatrix: scene.camera.Transform);
                 scene.Draw(gameTime, spriteBatch);
+                scene.Draw(gameTime, spriteBatch);
+                spriteBatch.End();
+                gameHUD.Draw(HUDspriteBatch);
             } else if(CurrentState == GameState.InMenu)
             {
+                spriteBatch.Begin();
                 buttonQuit.Draw(spriteBatch);
                 buttonOptions.Draw(spriteBatch);
                 buttonStartGame.Draw(spriteBatch);
+                spriteBatch.End();
             }
-            
-           
+
+
            // buttonStartGame.Draw(spriteBatch);
-            spriteBatch.End();
+
+            
+         
             base.Draw(gameTime);
         }
 

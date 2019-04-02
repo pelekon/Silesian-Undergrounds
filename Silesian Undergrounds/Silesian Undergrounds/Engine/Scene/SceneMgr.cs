@@ -5,6 +5,8 @@ using System.Xml;
 using System.Collections.Generic;
 
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.Item;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Scene
@@ -16,13 +18,13 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         private static TileMapRenderer renderer = new TileMapRenderer();
 
-        public static Scene LoadScene(String sceneName, int tileSize, Player.Player player)
+        public static Scene LoadScene(String sceneName, int tileSize)
         {
             string path = "Data\\" + sceneName + ".json";
             if (!File.Exists(path))
                 return null;
 
-            Scene scene = new Scene(player);
+            Scene scene = new Scene();
 
             if (!LoadSceneFile(path, scene, tileSize))
                 return null;
@@ -114,6 +116,23 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             foreach (Tile tile in renderer.Tiles)
                 scene.AddObject(tile);
+
+            Random random = new Random();
+
+            foreach (Tile pickableObject in renderer.Pickable)
+            {
+                OreEnum type = TextureMgr.Instance.RandType(random);
+
+                if (type == OreEnum.None)
+                    continue;
+
+                if (type == OreEnum.Coal)
+                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("coal"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
+                else if (type == OreEnum.Silver)
+                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("silver"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
+                else if (type == OreEnum.Gold)
+                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("gold"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
+            }
 
 
             file.Close();

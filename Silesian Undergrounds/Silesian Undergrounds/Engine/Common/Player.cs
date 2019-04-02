@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,7 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Scene;
 
-namespace Silesian_Undergrounds.Engine.Player
+namespace Silesian_Undergrounds.Engine.Common
 {
     public class Player : AnimatedGameObject
     {
@@ -16,6 +15,9 @@ namespace Silesian_Undergrounds.Engine.Player
         bool attacking = false;
 
         private Vector2 previousPosition;
+        // @TODO: refactor this
+        public static int moneyAmount;
+        public static int keyAmount;
 
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
         {
@@ -42,12 +44,6 @@ namespace Silesian_Undergrounds.Engine.Player
             AddAnimation(1, 25, 169, "IdleRight", 22, 22, new Vector2(0, 0));
             //Plays our start animation
             PlayAnimation("IdleDown");
-        }
-
-        // Loads content related to the player
-        public void LoadContent(ContentManager content)
-        {
-            texture = content.Load<Texture2D>("minerCharacter");
         }
 
         public override void Update(GameTime gameTime)
@@ -199,6 +195,25 @@ namespace Silesian_Undergrounds.Engine.Player
                 if (gam.position == position && gam.layer == layer)
                     return gam;
             return null;
+        }
+
+        public void Initialize()
+        {
+            moneyAmount = 0;
+            keyAmount = 0;
+        }
+
+        public void AddMoney(int moneyToAdd)
+        {
+            moneyAmount += moneyToAdd;
+        }
+
+        public void RemoveMoney(int moneyToRemove)
+        {
+            if (moneyToRemove > moneyAmount)
+                moneyAmount = 0;
+            else
+                moneyAmount -= moneyToRemove;
         }
 
         private void HandleInput(KeyboardState keyState)

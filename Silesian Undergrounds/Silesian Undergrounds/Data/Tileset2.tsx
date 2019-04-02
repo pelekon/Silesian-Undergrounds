@@ -8,6 +8,6 @@
   <image width="64" height="64" source="kolejne.png"/>
  </tile>
  <tile id="2">
-  <image width="64" height="64" source="zielone.png"/>
+  <image width="64" height="64" source="x.png"/>
  </tile>
 </tileset>
