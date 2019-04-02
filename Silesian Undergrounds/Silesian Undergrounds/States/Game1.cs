@@ -6,6 +6,8 @@ using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Player;
 using Silesian_Undergrounds.States.Controls;
+using System.Runtime.CompilerServices;
+using System;
 
 namespace Silesian_Undergrounds
 {
@@ -91,6 +93,15 @@ namespace Silesian_Undergrounds
             this.buttonMenu = new Button("Menu", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width)/2, 0 + padding), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
             this.buttonOptions = new Button("Settings", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, (0 + 2*padding + ButtonTextureClicked.Height)), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
             this.buttonQuit = new Button("Quit", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, 0 + 3 * padding + 2 * ButtonTextureClicked.Height), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
+
+            Func<Game, Boolean> callback = g =>
+            {
+                g.Exit();
+                return true;
+            };
+            this.buttonQuit.SetGame(this);
+            this.buttonQuit.SetOnClickCallback(callback);
+
             scene.AddObject(this.buttonMenu);
             scene.AddObject(this.buttonOptions);
             scene.AddObject(this.buttonQuit);

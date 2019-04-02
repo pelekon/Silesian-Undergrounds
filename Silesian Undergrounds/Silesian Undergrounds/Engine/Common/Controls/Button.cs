@@ -15,10 +15,11 @@ namespace Silesian_Undergrounds.States.Controls
     {
 
         public string Text { get; }
-        private Func<Button, Boolean> Callback;
+        private Func<Game, Boolean> Callback;
         private Texture2D ButtonNotClickedTexture;
         private Texture2D ButtonHoveringTexture;
         private SpriteFont ButtonTextFont;
+        private Game Game;
 
         // public GameObject(Texture2D texture, Vector2 position, Vector2 size, int layer, Vector2? scale = null)
         public Button(string text, Texture2D buttonNotClicked, Texture2D buttonClicked, Vector2 Position, Vector2 Size, SpriteFont ButtonTextFont, Vector2? scale = null) : base(texture: buttonNotClicked,position: Position, size: Size, scale: scale)
@@ -29,18 +30,31 @@ namespace Silesian_Undergrounds.States.Controls
             this.ButtonTextFont = ButtonTextFont;
         }
 
-        public void SetOnClickCallback(Func<Button, Boolean> callback)
+        public void SetOnClickCallback(Func<Game, Boolean> callback)
         {
             this.Callback = callback;
+        }
+
+        public void SetGame(Game game)
+        {
+            this.Game = game;
         }
 
         public override void Update(GameTime gameTime)
         {
             MouseState mouseState = Mouse.GetState();
-            //&& mouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed
+
             this.texture = IsMouseInsideButton() ? ButtonHoveringTexture : ButtonNotClickedTexture;
+
+            if (IsMouseButtonClicked()) Callback.Invoke(Game);
         }
 
+        private Boolean IsMouseButtonClicked()
+        {
+            MouseState mouseState = Mouse.GetState();
+
+            return IsMouseInsideButton() && mouseState.LeftButton == ButtonState.Pressed;
+        }
 
         private Boolean IsMouseInsideButton()
         {
@@ -52,11 +66,11 @@ namespace Silesian_Undergrounds.States.Controls
                    mouseState.Y < size.Y + position.Y &&
                    mouseState.Y > size.Y)
             {
-                Debug.WriteLine("Inside the buttonMenu!");
+                //Debug.WriteLine("Inside the buttonMenu!");
                 return true;
             }
 
-            Debug.WriteLine("Outside the buttonMenu!");
+            //Debug.WriteLine("Outside the buttonMenu!");
             return false;
         }
 
