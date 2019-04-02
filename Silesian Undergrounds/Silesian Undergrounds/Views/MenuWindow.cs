@@ -21,7 +21,7 @@ namespace Silesian_Undergrounds.Views
         private Texture2D ButtonTextureClicked;
         private Texture2D ButtonTextureNotClicked;
         private Game1 game;
-        //private Texture2D BackgroundTexture;
+        private Texture2D BackgroundTexture;
         #endregion
 
         #region CONSTRUCTOR
@@ -39,12 +39,13 @@ namespace Silesian_Undergrounds.Views
         {
             this.ButtonTextureClicked = content.Load<Texture2D>("box");
             this.ButtonTextureNotClicked = content.Load<Texture2D>("box_lit");
-            //this.BackgroundTexture = content.Load<Texture2D>("background.png");
+            this.BackgroundTexture = content.Load<Texture2D>("background");
             SpriteFont buttonFont = content.Load<SpriteFont>("File");
 
             int height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             int padding = 100;
+
 
             Button btnQuit = new Button("Quit", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, 0 + 3 * padding + 2 * ButtonTextureClicked.Height), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
             Button btnSettings = new Button("Settings", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, (0 + 2 * padding + ButtonTextureClicked.Height)), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
@@ -74,7 +75,6 @@ namespace Silesian_Undergrounds.Views
             btnNewGame.SetOnClickCallback(callbackStartGame);
         }
 
-
         public void Update(GameTime gameTime)
         {
             foreach(Button btn in MenuControls)
@@ -83,8 +83,11 @@ namespace Silesian_Undergrounds.Views
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            Rectangle mainFrame = new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+            spriteBatch.Draw(texture: this.BackgroundTexture, destinationRectangle: mainFrame, scale: new Vector2(0f, 0f), color: Color.White);
+
             foreach (Button btn in MenuControls)
-                btn.Draw(spriteBatch);
+              btn.Draw(spriteBatch);
         }
 
     }
