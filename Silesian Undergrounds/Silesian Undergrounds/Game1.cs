@@ -20,9 +20,7 @@ namespace Silesian_Undergrounds
         SceneManager sceneMgr;
         Scene scene;
 
-        private static int TileSize = 64;
-
-        public GameHUD gameHUD = new GameHUD(TileSize);
+        public GameHUD gameHUD = new GameHUD(ResolutionMgr.TileSize);
 
         public Game1()
         {

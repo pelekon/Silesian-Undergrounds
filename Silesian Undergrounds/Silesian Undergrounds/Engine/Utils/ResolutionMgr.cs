@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 namespace Silesian_Undergrounds.Engine.Utils
 {
     public static class ResolutionMgr
-    { 
+    {
         public static int GameHeight;
         public static int GameWidth;
+
+        public static readonly int TileSize = 64;
     }
 }

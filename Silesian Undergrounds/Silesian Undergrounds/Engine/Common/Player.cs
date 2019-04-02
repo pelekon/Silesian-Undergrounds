@@ -15,6 +15,7 @@ namespace Silesian_Undergrounds.Engine.Common
         bool attacking = false;
 
         private Vector2 previousPosition;
+        // @TODO: refactor this
         public static int moneyAmount;
         public static int keyAmount;
 
