@@ -60,19 +60,15 @@ namespace Silesian_Undergrounds.States.Controls
         {
             MouseState mouseState = Mouse.GetState();
 
-            
-            if (mouseState.X < position.X + size.X &&
-                   mouseState.X > size.X &&
-                   mouseState.Y < size.Y + position.Y &&
-                   mouseState.Y > size.Y)
-            {
-                //Debug.WriteLine("Inside the buttonStartGame!");
-                return true;
-            }
+            // get current Mouse bounds
+            Rectangle mouseBounds = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+            if(mouseBounds.Intersects(this.Rectangle)) return true;
 
-            //Debug.WriteLine("Outside the buttonStartGame!");
+
             return false;
         }
+
+       
 
         public override void Draw(SpriteBatch spriteBatch)
         {

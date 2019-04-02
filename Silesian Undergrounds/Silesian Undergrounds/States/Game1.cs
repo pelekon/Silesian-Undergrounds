@@ -153,9 +153,9 @@ namespace Silesian_Undergrounds
             } 
             else if(CurrentState == GameState.InMenu)
             {
-               // buttonOptions.Update(gameTime);
-                buttonStartGame.Update(gameTime);
-               // buttonQuit.Update(gameTime);
+               buttonOptions.Update(gameTime);
+               buttonStartGame.Update(gameTime);
+               buttonQuit.Update(gameTime);
             }
 
             // temporary
@@ -181,8 +181,8 @@ namespace Silesian_Undergrounds
                 scene.Draw(gameTime, spriteBatch);
             } else if(CurrentState == GameState.InMenu)
             {
-                //  buttonQuit.Draw(spriteBatch);
-                // buttonOptions.Draw(spriteBatch);
+                buttonQuit.Draw(spriteBatch);
+                buttonOptions.Draw(spriteBatch);
                 buttonStartGame.Draw(spriteBatch);
             }
             
