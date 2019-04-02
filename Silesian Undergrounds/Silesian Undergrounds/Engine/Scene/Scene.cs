@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.Player;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -18,32 +18,31 @@ namespace Silesian_Undergrounds.Engine.Scene
         #region SCENE_VARIABLES
 
         private List<Gameobject> gameobjects;
-        private Player.Player player;
+        public Player player;
         private List<Gameobject> objectsToDelete;
         private List<Gameobject> objectsToAdd;
+        public Camera camera { get; private set; }
   
         public bool isPaused { get; private set; }
 
         #endregion
 
-        public Scene(Player.Player player)
+        public Scene()
         {
-            this.player = player;
+            // Inittialize variables
             gameobjects = new List<Gameobject>();
             objectsToDelete = new List<Gameobject>();
             objectsToAdd = new List<Gameobject>();
-            // player = new Player.Player(); TODO: Pass data by constructor to create player object
             isPaused = false;
-        }
+            player = new Player(new Vector2(100, 100), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2f, 2f));
 
-        public List<Gameobject> Gameobjects
-        {
-            get
-            {
-                return gameobjects;
-            }
-        }
 
+            TextureMgr.Instance.LoadIfNeeded("minerCharacter");
+            player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
+            gameobjects.Add(player);
+    
+            camera = new Camera(player);
+        }
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
 
@@ -85,13 +84,22 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             foreach (var obj in gameobjects)
                 obj.Update(gameTime);
+
+            camera.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (var obj in gameobjects)
+            {
+                if (obj is Player)
+                    continue;
+
                 if (obj.layer != 3)
+                {
                     obj.Draw(spriteBatch);
+                }
+            }     
 
             foreach (var obj in gameobjects)
                 if (obj.layer == 3)

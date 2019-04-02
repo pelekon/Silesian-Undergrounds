@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,7 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Scene;
 
-namespace Silesian_Undergrounds.Engine.Player
+namespace Silesian_Undergrounds.Engine.Common
 {
     public class Player : AnimatedGameObject
     {
@@ -16,6 +15,7 @@ namespace Silesian_Undergrounds.Engine.Player
         bool attacking = false;
 
         private Vector2 previousPosition;
+        // @TODO: refactor this
         public static int moneyAmount;
         public static int keyAmount;
 
@@ -44,12 +44,6 @@ namespace Silesian_Undergrounds.Engine.Player
             AddAnimation(1, 25, 169, "IdleRight", 22, 22, new Vector2(0, 0));
             //Plays our start animation
             PlayAnimation("IdleDown");
-        }
-
-        // Loads content related to the player
-        public void LoadContent(ContentManager content)
-        {
-            texture = content.Load<Texture2D>("minerCharacter");
         }
 
         public override void Update(GameTime gameTime)

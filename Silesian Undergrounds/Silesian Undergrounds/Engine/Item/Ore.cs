@@ -9,7 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Enum;
-namespace Silesian_Undergrounds.Engine.Item {
+
+namespace Silesian_Undergrounds.Engine.Item
+{
     class Ore : PickableItem {
 
         public OreEnum type;
@@ -36,9 +38,9 @@ namespace Silesian_Undergrounds.Engine.Item {
 
         public override void NotifyCollision(Gameobject obj)
         {
-            if (obj is Player.Player)
+            if (obj is Player)
             {
-                Player.Player pl = (Player.Player)obj;
+                Player pl = (Player)obj;
                 pl.AddMoney(this.value);
                 this.scene.DeleteObject(this);
             }

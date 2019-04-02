@@ -52,11 +52,13 @@
     <Compile Include="Engine\Enum\OreEnum.cs" />
     <Compile Include="Engine\HUD\GameHUD.cs" />
     <Compile Include="Engine\Item\Ore.cs" />
-    <Compile Include="Engine\Player\Player.cs" />
+    <Compile Include="Engine\Common\Player.cs" />
+    <Compile Include="Engine\Scene\Camera.cs" />
     <Compile Include="Engine\Scene\Scene.cs" />
     <Compile Include="Engine\Scene\SceneMgr.cs" />
     <Compile Include="Engine\Scene\Tile.cs" />
     <Compile Include="Engine\Scene\TileMapRenderer.cs" />
+    <Compile Include="Engine\Utils\ResolutionMgr.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -126,6 +128,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\camera.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Data\test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
