@@ -15,11 +15,11 @@ namespace Silesian_Undergrounds.States.Controls
     {
 
         public string Text { get; }
-        private Func<Game, Boolean> Callback;
+        private Func<Game1, Boolean> Callback;
         private Texture2D ButtonNotClickedTexture;
         private Texture2D ButtonHoveringTexture;
         private SpriteFont ButtonTextFont;
-        private Game Game;
+        private Game1 Game;
 
         // public GameObject(Texture2D texture, Vector2 position, Vector2 size, int layer, Vector2? scale = null)
         public Button(string text, Texture2D buttonNotClicked, Texture2D buttonClicked, Vector2 Position, Vector2 Size, SpriteFont ButtonTextFont, Vector2? scale = null) : base(texture: buttonNotClicked,position: Position, size: Size, scale: scale)
@@ -30,12 +30,12 @@ namespace Silesian_Undergrounds.States.Controls
             this.ButtonTextFont = ButtonTextFont;
         }
 
-        public void SetOnClickCallback(Func<Game, Boolean> callback)
+        public void SetOnClickCallback(Func<Game1, Boolean> callback)
         {
             this.Callback = callback;
         }
 
-        public void SetGame(Game game)
+        public void SetGame(Game1 game)
         {
             this.Game = game;
         }
@@ -46,7 +46,7 @@ namespace Silesian_Undergrounds.States.Controls
 
             this.texture = IsMouseInsideButton() ? ButtonHoveringTexture : ButtonNotClickedTexture;
 
-            if (IsMouseButtonClicked()) Callback.Invoke(Game);
+            if (IsMouseButtonClicked() && Callback != null) Callback.Invoke(Game);
         }
 
         private Boolean IsMouseButtonClicked()
@@ -66,11 +66,11 @@ namespace Silesian_Undergrounds.States.Controls
                    mouseState.Y < size.Y + position.Y &&
                    mouseState.Y > size.Y)
             {
-                //Debug.WriteLine("Inside the buttonMenu!");
+                //Debug.WriteLine("Inside the buttonStartGame!");
                 return true;
             }
 
-            //Debug.WriteLine("Outside the buttonMenu!");
+            //Debug.WriteLine("Outside the buttonStartGame!");
             return false;
         }
 

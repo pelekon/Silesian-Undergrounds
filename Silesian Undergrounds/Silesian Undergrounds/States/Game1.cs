@@ -8,6 +8,7 @@ using Silesian_Undergrounds.Engine.Player;
 using Silesian_Undergrounds.States.Controls;
 using System.Runtime.CompilerServices;
 using System;
+using System.Diagnostics;
 
 namespace Silesian_Undergrounds
 {
@@ -22,9 +23,14 @@ namespace Silesian_Undergrounds
         Scene scene;
         // player object
         Player player;
-        Button buttonMenu;
+        Button buttonStartGame;
         Button buttonOptions;
         Button buttonQuit;
+
+        public enum GameState { InGame, InMenu, InMenuSettings };
+        private GameState CurrentState = GameState.InMenu;
+
+        //TODO: make some sort of GameStateManager ;>
 
         public Game1()
         {
@@ -40,23 +46,19 @@ namespace Silesian_Undergrounds
         /// </summary>
         protected override void Initialize()
         {
+            // window options initialization 
+
             // TODO: Add your initialization logic here
             // Window.AllowAltF4 = true;
-            
-
-
-
             // temporary?
             IsMouseVisible = true;
-
-
-
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             //graphics.ToggleFullScreen();
             graphics.ApplyChanges();
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
+            // Game state initialization
             sceneMgr = new SceneManager();
             scene = SceneManager.LoadScene("warstwy", 64, player);
             //Instantiates our player at the position X = 100, Y = 100;, scale - the vector resizing the texture (here 2.times)
@@ -81,7 +83,7 @@ namespace Silesian_Undergrounds
 
 
 
-            // temporary
+            // menu state initialization
             Texture2D ButtonTextureClicked = Content.Load<Texture2D>("box_lit");
             Texture2D ButtonTextureNotClicked = Content.Load<Texture2D>("box");
             SpriteFont buttonFont = Content.Load<SpriteFont>("File");
@@ -90,23 +92,29 @@ namespace Silesian_Undergrounds
             int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             int padding = 100;
 
-            this.buttonMenu = new Button("Menu", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width)/2, 0 + padding), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
+            this.buttonStartGame = new Button("New game", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width)/2, 0 + padding), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
             this.buttonOptions = new Button("Settings", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, (0 + 2*padding + ButtonTextureClicked.Height)), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
             this.buttonQuit = new Button("Quit", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, 0 + 3 * padding + 2 * ButtonTextureClicked.Height), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
 
-            Func<Game, Boolean> callback = g =>
+            Func<Game1, Boolean> callbackQuitGame = g =>
             {
+                Debug.WriteLine("Quiting the game!");
                 g.Exit();
                 return true;
             };
+
+            Func<Game1, Boolean> callbackStartGame = g =>
+            {
+                Debug.WriteLine("Changing the game state!");
+                g.changeGameState(GameState.InGame);
+                return true;
+            };
+
             this.buttonQuit.SetGame(this);
-            this.buttonQuit.SetOnClickCallback(callback);
+            this.buttonQuit.SetOnClickCallback(callbackQuitGame);
 
-            scene.AddObject(this.buttonMenu);
-            scene.AddObject(this.buttonOptions);
-            scene.AddObject(this.buttonQuit);
-
-
+            this.buttonStartGame.SetGame(this);
+            this.buttonStartGame.SetOnClickCallback(callbackStartGame);
 
 
             // TODO: use this.Content to load your game content here
@@ -134,13 +142,24 @@ namespace Silesian_Undergrounds
             if (scene.isPaused)
                 return;
 
-            // TODO: Add your update logic here
-            scene.Update(gameTime);
-            // update our player sprite
-            player.Update(gameTime);
+            if (CurrentState == GameState.InGame)
+            {
+                GraphicsDevice.Clear(Color.AliceBlue);
+
+                // TODO: Add your update logic here
+                scene.Update(gameTime);
+                // update our player sprite
+                player.Update(gameTime);
+            } 
+            else if(CurrentState == GameState.InMenu)
+            {
+               // buttonOptions.Update(gameTime);
+                buttonStartGame.Update(gameTime);
+               // buttonQuit.Update(gameTime);
+            }
 
             // temporary
-           // buttonMenu.Update(gameTime);
+           // buttonStartGame.Update(gameTime);
 
 
             player.Collision(scene.Gameobjects);
@@ -156,11 +175,29 @@ namespace Silesian_Undergrounds
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();            
-            scene.Draw(gameTime, spriteBatch);
-           // buttonMenu.Draw(spriteBatch);
+            spriteBatch.Begin(); 
+            if(CurrentState == GameState.InGame)
+            {
+                scene.Draw(gameTime, spriteBatch);
+            } else if(CurrentState == GameState.InMenu)
+            {
+                //  buttonQuit.Draw(spriteBatch);
+                // buttonOptions.Draw(spriteBatch);
+                buttonStartGame.Draw(spriteBatch);
+            }
+            
+           
+           // buttonStartGame.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
+
+        #region CUSTOM_METHODS
+
+        public void changeGameState(GameState newState)
+        {
+            this.CurrentState = newState;
+        }
+        #endregion
     }
 }
