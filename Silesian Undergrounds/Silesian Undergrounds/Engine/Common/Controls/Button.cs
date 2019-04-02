@@ -21,7 +21,7 @@ namespace Silesian_Undergrounds.States.Controls
         private SpriteFont ButtonTextFont;
 
         // public GameObject(Texture2D texture, Vector2 position, Vector2 size, int layer, Vector2? scale = null)
-        public Button(string text, Texture2D buttonNotClicked, Texture2D buttonClicked, Vector2 Position, Vector2 Size, SpriteFont ButtonTextFont) : base(texture: buttonNotClicked,position: Position, size: Size)
+        public Button(string text, Texture2D buttonNotClicked, Texture2D buttonClicked, Vector2 Position, Vector2 Size, SpriteFont ButtonTextFont, Vector2? scale = null) : base(texture: buttonNotClicked,position: Position, size: Size, scale: scale)
         {
             this.Text = text;
             this.ButtonHoveringTexture = buttonClicked;
@@ -52,11 +52,11 @@ namespace Silesian_Undergrounds.States.Controls
                    mouseState.Y < size.Y + position.Y &&
                    mouseState.Y > size.Y)
             {
-                Debug.WriteLine("Inside the button!");
+                Debug.WriteLine("Inside the buttonMenu!");
                 return true;
             }
 
-            Debug.WriteLine("Outside the button!");
+            Debug.WriteLine("Outside the buttonMenu!");
             return false;
         }
 
@@ -91,7 +91,7 @@ namespace Silesian_Undergrounds.States.Controls
             SpriteEffects spriteEffects = new SpriteEffects();
 
            
-            spriteBatch.DrawString(ButtonTextFont, Text, position, Color.White, rotation, spriteOrigin, scale, spriteEffects, spriteLayer);
+            spriteBatch.DrawString(ButtonTextFont, Text, position, Color.Black, rotation, spriteOrigin, scale, spriteEffects, spriteLayer);
         }
 
 

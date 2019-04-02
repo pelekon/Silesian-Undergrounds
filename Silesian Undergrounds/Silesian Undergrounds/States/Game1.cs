@@ -20,7 +20,9 @@ namespace Silesian_Undergrounds
         Scene scene;
         // player object
         Player player;
-        Button button; 
+        Button buttonMenu;
+        Button buttonOptions;
+        Button buttonQuit;
 
         public Game1()
         {
@@ -81,9 +83,17 @@ namespace Silesian_Undergrounds
             Texture2D ButtonTextureClicked = Content.Load<Texture2D>("box_lit");
             Texture2D ButtonTextureNotClicked = Content.Load<Texture2D>("box");
             SpriteFont buttonFont = Content.Load<SpriteFont>("File");
-            this.button = new Button("Some text", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2(500, 500), new Vector2(200, 200), buttonFont);
 
-            scene.AddObject(this.button);
+            int height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            int padding = 100;
+
+            this.buttonMenu = new Button("Menu", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width)/2, 0 + padding), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
+            this.buttonOptions = new Button("Settings", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, (0 + 2*padding + ButtonTextureClicked.Height)), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
+            this.buttonQuit = new Button("Quit", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, 0 + 3 * padding + 2 * ButtonTextureClicked.Height), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
+            scene.AddObject(this.buttonMenu);
+            scene.AddObject(this.buttonOptions);
+            scene.AddObject(this.buttonQuit);
 
 
 
@@ -119,7 +129,7 @@ namespace Silesian_Undergrounds
             player.Update(gameTime);
 
             // temporary
-           // button.Update(gameTime);
+           // buttonMenu.Update(gameTime);
 
 
             player.Collision(scene.Gameobjects);
@@ -137,7 +147,7 @@ namespace Silesian_Undergrounds
             // TODO: Add your drawing code here
             spriteBatch.Begin();            
             scene.Draw(gameTime, spriteBatch);
-           // button.Draw(spriteBatch);
+           // buttonMenu.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
