@@ -47,7 +47,11 @@
   <ItemGroup>
     <Compile Include="Engine\Common\AnimatedGameObject.cs" />
     <Compile Include="Engine\Common\Gameobject.cs" />
+    <Compile Include="Engine\Common\PickableItem.cs" />
     <Compile Include="Engine\Common\TextureMgr.cs" />
+    <Compile Include="Engine\Enum\OreEnum.cs" />
+    <Compile Include="Engine\HUD\GameHUD.cs" />
+    <Compile Include="Engine\Item\Ore.cs" />
     <Compile Include="Engine\Common\Player.cs" />
     <Compile Include="Engine\Scene\Camera.cs" />
     <Compile Include="Engine\Scene\Scene.cs" />

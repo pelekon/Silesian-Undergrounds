@@ -95,8 +95,15 @@ namespace Silesian_Undergrounds.Engine.Scene
                 if (obj is Player)
                     continue;
 
-                obj.Draw(spriteBatch);
-            }
+                if (obj.layer != 3)
+                {
+                    obj.Draw(spriteBatch);
+                }
+            }     
+
+            foreach (var obj in gameobjects)
+                if (obj.layer == 3)
+                    obj.Draw(spriteBatch);
 
             player.Draw(spriteBatch);
         }

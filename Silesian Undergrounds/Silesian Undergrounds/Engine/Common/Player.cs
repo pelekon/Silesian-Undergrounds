@@ -15,6 +15,8 @@ namespace Silesian_Undergrounds.Engine.Common
         bool attacking = false;
 
         private Vector2 previousPosition;
+        public static int moneyAmount;
+        public static int keyAmount;
 
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
         {
@@ -192,6 +194,25 @@ namespace Silesian_Undergrounds.Engine.Common
                 if (gam.position == position && gam.layer == layer)
                     return gam;
             return null;
+        }
+
+        public void Initialize()
+        {
+            moneyAmount = 0;
+            keyAmount = 0;
+        }
+
+        public void AddMoney(int moneyToAdd)
+        {
+            moneyAmount += moneyToAdd;
+        }
+
+        public void RemoveMoney(int moneyToRemove)
+        {
+            if (moneyToRemove > moneyAmount)
+                moneyAmount = 0;
+            else
+                moneyAmount -= moneyToRemove;
         }
 
         private void HandleInput(KeyboardState keyState)
