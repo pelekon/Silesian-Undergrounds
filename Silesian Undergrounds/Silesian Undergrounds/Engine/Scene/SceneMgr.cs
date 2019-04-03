@@ -1,54 +1,61 @@
 ﻿using System;
 using System.IO;
-using System.Json;
 using System.Xml;
 using System.Collections.Generic;
 
 using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
-    public static class SceneMgr
+    public class SceneManager
     {
-        private static Scene currentScene;
-        public static Scene GetCurrentScene() { return currentScene; }
+        private SceneManager() {}
 
-        public static Scene LoadScene(String sceneName)
+        #region SCENE_MANAGER_VARIABLES
+        private static Scene _currentScene;
+        public static Scene GetCurrentScene() { return _currentScene; }
+        private static readonly TileMapRenderer Renderer = new TileMapRenderer();
+        private const string JsonFileExtension = ".json", DataDirectory = "Data";
+        #endregion
+
+        public static Scene LoadScene(string sceneName, int tileSize)
         {
-            string path = "Data/" + sceneName + ".json";
-            if (!File.Exists(path))
-                return null;
+            var fileName = sceneName + JsonFileExtension;
+            var path = Path.Combine(DataDirectory, fileName);
 
-            Scene scene = new Scene();
+            if (!File.Exists(path)) return null;
 
-            if (!LoadSceneFile(path, scene))
-                return null;
+            var scene = new Scene();
 
-            currentScene = scene;
+            if (!LoadSceneFile(path, scene, tileSize)) return null;
+
+            _currentScene = scene;
             return scene;
         }
 
-        private static bool LoadSceneFile(String sceneName, Scene scene)
+
+
+        private static bool LoadSceneFile(string filePath, Scene scene, int tileSize)
         {
-            var file = File.OpenRead(sceneName);
-            JsonValue json = JsonValue.Load(file);
-
-            if (!json.ContainsKey("height") || !json.ContainsKey("width") || !json.ContainsKey("infinite") || !json.ContainsKey("layers")
-                || !json.ContainsKey("tileheight") || !json.ContainsKey("tilesets"))
+            SceneFile sceneFile;
+            using (var file = File.OpenText(filePath))
             {
-                file.Close();
-                return false;
+                try  { sceneFile = (SceneFile)new JsonSerializer().Deserialize(file, typeof(SceneFile)); }
+                catch (Newtonsoft.Json.JsonSerializationException e)
+                {
+                    #if DEBUG
+                        Console.WriteLine(e.Message);
+                    #endif
+                    return false;
+                }
+                
             }
+            if (sceneFile.TileSets.Count < 1) return false;
+            var tileSetFile = Path.Combine(DataDirectory, sceneFile.TileSets[0].Source);
 
-            JsonValue tileSet = json["tilesets"][0];
-            string tileSetFile = "Data/" + tileSet["source"];
-
-            if (!File.Exists(tileSetFile))
-            {
-                file.Close();
-                return false;
-            }
+            if (!File.Exists(tileSetFile)) return false;
 
             // Read tileset file to get resources before build of tile map
             var tileFile = File.OpenRead(tileSetFile);
@@ -62,7 +69,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             {
                 if (isDataNodeComplete)
                 {
-                    textures.Add(data.id, data.resource);
+                    textures.Add(data.Id, data.Resource);
                     data = new TileSetData();
                     isDataNodeComplete = false;
                 }
@@ -72,12 +79,12 @@ namespace Silesian_Undergrounds.Engine.Scene
                     case "tile":
                         string strId = tiles.GetAttribute("id");
                         int id = Convert.ToInt32(strId);
-                        data.id = id + 1;
+                        data.Id = id + 1;
                         break;
                     case "image":
                         string source = tiles.GetAttribute("source");
                         source = source.Replace(".png", "");
-                        data.resource = source;
+                        data.Resource = source;
                         isDataNodeComplete = true;
                         break;
                 }
@@ -92,41 +99,41 @@ namespace Silesian_Undergrounds.Engine.Scene
             TextureMgr.Instance.LoadIfNeeded(textures.Values);
 
             Dictionary<int, Texture2D[][]> tileMap = new Dictionary<int, Texture2D[][]>();
-            JsonArray layers = json["layers"] as JsonArray;
 
-            foreach (var layer in layers)
+            foreach (var layer in sceneFile.Layers)
             {
-                int id = layer["id"];
-                int height = layer["height"];
-                int width = layer["width"];
+                var tab = BuildTableWithTiles(layer.Data, layer.Width, layer.Height, textures);
 
-                JsonArray tilesData = layer["data"] as JsonArray;
-                Texture2D[][] tab = BuildTableWithTiles(tilesData, width, height, textures);
-                tileMap.Add(id, tab);
+                tileMap.Add(layer.Id, tab);
             }
 
-            // @TODO: forward tileMap dictonary to tile map renderer
+            Renderer.GenerateTileMap(tileMap,tileSize);
 
-            file.Close();
+            foreach (Tile tile in Renderer.Tiles)
+                scene.AddObject(tile);
+
+            TextureMgr.Instance.GenerateItems(scene, Renderer.Pickable);
+
             tileFile.Close();
             return true;
         }
 
-        private static Texture2D[][] BuildTableWithTiles(JsonArray tiles, int width, int height, Dictionary<int, string> textures)
+        private static Texture2D[][] BuildTableWithTiles(IReadOnlyList<int> tiles, int width, int height, Dictionary<int, string> textures)
         {
             Texture2D[][] table = new Texture2D[width][];
             for (int i = 0; i < width; ++i)
                 table[i] = new Texture2D[height];
 
+            int counter = 0;
             for(int w = 0; w < width; ++w)
             {
                 for(int h = 0; h < height; ++h)
                 {
-                    int resId = tiles[w + h];
+                    int resId = tiles[counter];
+                    counter++;
                     if (resId == 0)
                         continue;
-                    string name = "";
-                    textures.TryGetValue(resId, out name);
+                    textures.TryGetValue(resId, out var name);
                     table[w][h] = TextureMgr.Instance.GetTexture(name);
                 }
             }
@@ -135,9 +142,9 @@ namespace Silesian_Undergrounds.Engine.Scene
         }
     }
 
-    class TileSetData
+    internal class TileSetData
     {
-        public int id;
-        public string resource;
+        public int Id;
+        public string Resource;
     }
 }

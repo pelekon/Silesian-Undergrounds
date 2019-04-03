@@ -8,28 +8,44 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.Player;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
     public class Scene
     {
+
+        #region SCENE_VARIABLES
+
+        private List<Gameobject> gameobjects;
+        public Player player;
+        private List<Gameobject> objectsToDelete;
+        private List<Gameobject> objectsToAdd;
+        public Camera camera { get; private set; }
+  
+        public bool isPaused { get; private set; }
+
+        #endregion
+
         public Scene()
         {
+            // Inittialize variables
             gameobjects = new List<Gameobject>();
             objectsToDelete = new List<Gameobject>();
             objectsToAdd = new List<Gameobject>();
-            // player = new Player.Player(); TODO: Pass data by constructor to create player object
+            isPaused = false;
+            player = new Player(new Vector2(100, 100), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
+
+
+            TextureMgr.Instance.LoadIfNeeded("minerCharacter");
+            player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
+            gameobjects.Add(player);
+    
+            camera = new Camera(player);
         }
 
-        // Scene variables
-        private List<Gameobject> gameobjects;
-        private Player.Player player;
+        #region SCENE_OBJECTS_MANAGMENT_METHODS
 
-        private List<Gameobject> objectsToDelete;
-        private List<Gameobject> objectsToAdd;
-        
-        // Methods
         public void AddObject(Gameobject obj)
         {
             objectsToAdd.Add(obj);
@@ -56,6 +72,10 @@ namespace Silesian_Undergrounds.Engine.Scene
             objectsToDelete.Clear();
         }
 
+        #endregion
+
+
+
         public void Update(GameTime gameTime)
         {
             // Operation of add or remove from gameobjects list has to appear before updating gameobjects
@@ -64,16 +84,39 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             foreach (var obj in gameobjects)
                 obj.Update(gameTime);
+
+            camera.Update(gameTime);
+            player.Collision(this.gameobjects);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
+            foreach (var obj in gameobjects)
+            {
+                if (obj is Player)
+                    continue;
+
+                if (obj.layer != 3)
+                {
+                    obj.Draw(spriteBatch);
+                }
+            }     
 
             foreach (var obj in gameobjects)
-                obj.Draw(spriteBatch);
+                if (obj.layer == 3)
+                    obj.Draw(spriteBatch);
 
-            spriteBatch.End();
+            player.Draw(spriteBatch);
+        }
+
+        public void OpenPauseMenu()
+        {
+
+        }
+
+        public void PauseGame()
+        {
+            isPaused = true;
         }
     }
 }

@@ -7,17 +7,19 @@ namespace Silesian_Undergrounds.Engine.Common
     {
         public Texture2D texture;
         public Vector2 position;
-        float rotation;
-        float speed;
+        public int layer;
+        public float rotation { get; protected set; }
+        public float speed { get; protected set; }
         public Vector2 size;
+        public Vector2? scale;
 
-        public Gameobject(Texture2D texture, Vector2 position, Vector2 size)
+        public Gameobject(Texture2D texture, Vector2 position, Vector2 size, int layer, Vector2? scale = null)
         {
             this.texture = texture;
             this.position = position;
             this.size = size;
-
-            speed = 2.0f;
+            this.layer = layer;
+            this.scale = scale;
         }
 
         public Rectangle Rectangle
@@ -28,18 +30,24 @@ namespace Silesian_Undergrounds.Engine.Common
             }
         }
 
-        protected void AddForce(float forceX, float forceY)
+        // causes movement
+        public void AddForce(float forceX, float forceY)
         {
             position.X += forceX * speed;
             position.Y += forceY * speed;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public Vector2 GetTileWhereStanding()
         {
-            spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle);
+            return new Vector2((float)System.Math.Round(this.position.X / size.X) * size.X, (float)System.Math.Round(this.position.Y / size.Y) * size.Y);
         }
 
         public virtual void Update(GameTime gameTime) { }
+
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+           spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, scale: scale);
+        }
 
         // TODO: Remove this and split collisions to 2 sparate components:
         // Collision Box and Collider
