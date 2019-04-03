@@ -126,12 +126,14 @@ namespace Silesian_Undergrounds.Engine.Scene
                 if (type == OreEnum.None)
                     continue;
 
+                int textureNumber = random.Next(1, 3);
+
                 if (type == OreEnum.Coal)
-                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("coal"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
+                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("Items/Ores/coal/coal"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
                 else if (type == OreEnum.Silver)
-                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("silver"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
+                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("Items/Ores/silver/silver_" + textureNumber), pickableObject.position, pickableObject.size / 2, 3, scene, type));
                 else if (type == OreEnum.Gold)
-                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("gold"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
+                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("Items/Ores/gold/gold_" + textureNumber), pickableObject.position, pickableObject.size / 2, 3, scene, type));
             }
 
 

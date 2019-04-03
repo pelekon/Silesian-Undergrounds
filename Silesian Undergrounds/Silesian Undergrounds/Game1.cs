@@ -47,7 +47,7 @@ namespace Silesian_Undergrounds
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
             sceneMgr = new SceneManager();
-            scene = SceneManager.LoadScene("camera", 64);
+            scene = SceneManager.LoadScene("drop", 64);
 
             base.Initialize();
         }

@@ -25,8 +25,8 @@ namespace Silesian_Undergrounds.Engine.HUD {
 
         public void Load(ContentManager content)
         {
-            font = content.Load<SpriteFont>("font");
-            coalImage = content.Load<Texture2D>("gold");
+            font = content.Load<SpriteFont>("Fonts/font");
+            coalImage = content.Load<Texture2D>("Items/Ores/gold/gold_1");
         }
 
         public void Draw(SpriteBatch spriteBatch)

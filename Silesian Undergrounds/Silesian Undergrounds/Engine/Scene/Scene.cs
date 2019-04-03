@@ -86,6 +86,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 obj.Update(gameTime);
 
             camera.Update(gameTime);
+            player.Collision(this.gameobjects);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
