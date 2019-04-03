@@ -2,7 +2,6 @@
     public enum OreEnum {
         Coal,
         Silver,
-        Gold,
-        None
+        Gold
     }
 }

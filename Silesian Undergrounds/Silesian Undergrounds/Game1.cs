@@ -59,7 +59,7 @@ namespace Silesian_Undergrounds
 
             // Game state initialization
             sceneMgr = new SceneManager();
-            scene = SceneManager.LoadScene("camera", 64);
+            scene = SceneManager.LoadScene("drop", 64);
 
             menuWindow = new Views.MenuWindow(this);
 
