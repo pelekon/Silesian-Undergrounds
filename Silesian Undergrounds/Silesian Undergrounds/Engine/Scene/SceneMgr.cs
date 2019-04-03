@@ -53,7 +53,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 
             }
             if (sceneFile.TileSets.Count < 1) return false;
-            var tileSetFile = "Data/" + sceneFile.TileSets[0].Source;
+            var tileSetFile = Path.Combine(DataDirectory, sceneFile.TileSets[0].Source);
 
             if (!File.Exists(tileSetFile)) return false;
 
