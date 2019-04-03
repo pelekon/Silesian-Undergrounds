@@ -46,7 +46,6 @@ namespace Silesian_Undergrounds
 
             // TODO: Add your initialization logic here
             // Window.AllowAltF4 = true;
-            // temporary?
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             ResolutionMgr.GameWidth = GraphicsDevice.DisplayMode.Width;

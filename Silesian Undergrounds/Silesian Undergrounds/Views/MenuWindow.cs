@@ -14,13 +14,17 @@ namespace Silesian_Undergrounds.Views
     class MenuWindow
     {
 
+        #region CONSTANTS
+        public const int X_start_origin = 0;
+        public const int Y_start_origin = 0;
+        #endregion
+
         #region PROPERTIES
 
         private List<Button> MenuControls;
         private Game1 Game;
         private Texture2D ButtonTextureClicked;
         private Texture2D ButtonTextureNotClicked;
-        private Game1 game;
         private Texture2D BackgroundTexture;
         #endregion
 
@@ -47,9 +51,9 @@ namespace Silesian_Undergrounds.Views
             int padding = 100;
 
 
-            Button btnQuit = new Button("Quit", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, 0 + 3 * padding + 2 * ButtonTextureClicked.Height), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
-            Button btnSettings = new Button("Settings", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, (0 + 2 * padding + ButtonTextureClicked.Height)), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
-            Button btnNewGame = new Button("New game", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, 0 + padding), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
+            Button btnQuit = new Button("Quit", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, 3 * padding + 2 * ButtonTextureClicked.Height), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
+            Button btnSettings = new Button("Settings", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, (2 * padding + ButtonTextureClicked.Height)), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
+            Button btnNewGame = new Button("New game", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2,  padding), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);
 
             MenuControls.Add(btnNewGame);
             MenuControls.Add(btnSettings);
@@ -83,7 +87,7 @@ namespace Silesian_Undergrounds.Views
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle mainFrame = new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+            Rectangle mainFrame = new Rectangle(X_start_origin, Y_start_origin, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
             spriteBatch.Draw(texture: this.BackgroundTexture, destinationRectangle: mainFrame, scale: new Vector2(0f, 0f), color: Color.White);
 
             foreach (Button btn in MenuControls)
