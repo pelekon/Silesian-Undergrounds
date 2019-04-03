@@ -17,7 +17,6 @@ namespace Silesian_Undergrounds
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteBatch HUDspriteBatch;
-        SceneManager sceneMgr;
         Scene scene;
 
         public GameHUD gameHUD = new GameHUD(ResolutionMgr.TileSize);
@@ -46,7 +45,6 @@ namespace Silesian_Undergrounds
             graphics.ApplyChanges();
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
-            sceneMgr = new SceneManager();
             scene = SceneManager.LoadScene("drop", 64);
 
             base.Initialize();
