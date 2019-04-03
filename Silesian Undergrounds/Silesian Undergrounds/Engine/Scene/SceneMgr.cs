@@ -5,8 +5,6 @@ using System.Xml;
 using System.Collections.Generic;
 
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.Enum;
-using Silesian_Undergrounds.Engine.Item;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Scene
@@ -117,23 +115,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             foreach (Tile tile in renderer.Tiles)
                 scene.AddObject(tile);
 
-            Random random = new Random();
-
-            foreach (Tile pickableObject in renderer.Pickable)
-            {
-                OreEnum type = TextureMgr.Instance.RandType(random);
-
-                if (type == OreEnum.None)
-                    continue;
-
-                if (type == OreEnum.Coal)
-                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("coal"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
-                else if (type == OreEnum.Silver)
-                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("silver"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
-                else if (type == OreEnum.Gold)
-                    scene.AddObject(new Ore(TextureMgr.Instance.LoadTexture2DByName("gold"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
-            }
-
+            TextureMgr.Instance.GenerateItems(scene, renderer.Pickable);
 
             file.Close();
             tileFile.Close();
