@@ -142,7 +142,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         }
     }
 
-    class TileSetData
+    internal class TileSetData
     {
         public int Id;
         public string Resource;
