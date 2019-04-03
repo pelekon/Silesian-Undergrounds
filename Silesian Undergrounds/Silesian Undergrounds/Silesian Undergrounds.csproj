@@ -58,6 +58,7 @@
     <Compile Include="Engine\Common\Player.cs" />
     <Compile Include="Engine\Scene\Camera.cs" />
     <Compile Include="Engine\Scene\Scene.cs" />
+    <Compile Include="Engine\Scene\SceneFile.cs" />
     <Compile Include="Engine\Scene\SceneMgr.cs" />
     <Compile Include="Engine\Scene\Tile.cs" />
     <Compile Include="Engine\Scene\TileMapRenderer.cs" />
@@ -126,8 +127,6 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Json">
-      <Version>4.6.0-preview3.19128.7</Version>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.1</Version>
     </PackageReference>
