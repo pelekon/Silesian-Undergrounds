@@ -61,9 +61,9 @@ namespace Silesian_Undergrounds.Engine.Scene
 
     public class TileSet
     {
-        [JsonProperty("source")]
+        [JsonProperty("source", Required = Required.Always)]
         public string Source { get; set; }
-        [JsonProperty("firstgid")]
+        [JsonProperty("firstgid", Required = Required.Always)]
         public int FirstGId { get; set; }
     }
 }
