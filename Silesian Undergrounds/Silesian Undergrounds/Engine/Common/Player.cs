@@ -216,6 +216,21 @@ namespace Silesian_Undergrounds.Engine.Common
                 moneyAmount -= moneyToRemove;
         }
 
+        public void AddKey(int numberKeysToAdd)
+        {
+            Debug.WriteLine("Current nu mber of keys is " + keyAmount);
+
+            keyAmount += numberKeysToAdd;
+        }
+
+        public void RemoveKey(int numberKeysToRemove)
+        {
+            if (numberKeysToRemove > keyAmount)
+                keyAmount = 0;
+            else
+                keyAmount -= numberKeysToRemove;
+        }
+
         private void HandleInput(KeyboardState keyState)
         {
             if (!attacking)

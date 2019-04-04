@@ -15,6 +15,7 @@ namespace Silesian_Undergrounds.Engine.HUD {
 
         SpriteFont font;
         Texture2D coalImage;
+        Texture2D keyImage;
         Color tintColor = Color.White;
         private int size;
 
@@ -27,13 +28,24 @@ namespace Silesian_Undergrounds.Engine.HUD {
         {
             font = content.Load<SpriteFont>("Fonts/font");
             coalImage = content.Load<Texture2D>("Items/Ores/gold/gold_1");
+            keyImage = content.Load<Texture2D>("Items/Keys/key_1");
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
-            spriteBatch.DrawString(font, " : " + Player.moneyAmount.ToString() + " $", Vector2.Zero + new Vector2(this.size, this.size / 4), tintColor);
+
+            string moneyString = " : " + Player.moneyAmount.ToString() + " $";
+
+            spriteBatch.DrawString(font, moneyString, Vector2.Zero + new Vector2(this.size, this.size / 4), tintColor);
             spriteBatch.Draw(coalImage, new Rectangle((int)Vector2.Zero.X, (int)Vector2.Zero.Y + this.size / 4, this.size, this.size), tintColor);
+            // draw keys counter
+            //  measure font which was drawn sd
+            Vector2 moneyStringSize = font.MeasureString(moneyString);
+
+            spriteBatch.DrawString(font, " : " + Player.keyAmount.ToString(), new Vector2(this.size + coalImage.Width, this.size / 4), tintColor);
+            spriteBatch.Draw(keyImage, new Rectangle(coalImage.Width + (int)moneyStringSize.Y, (int)Vector2.Zero.Y + this.size / 4, this.size, this.size), tintColor);
+
             spriteBatch.End();
         }
     }
