@@ -38,6 +38,7 @@ namespace Silesian_Undergrounds.Engine.HUD {
             string moneyString = " : " + Player.moneyAmount.ToString() + " $";
 
             spriteBatch.DrawString(font, moneyString, Vector2.Zero + new Vector2(this.size, this.size / 4), tintColor);
+
             spriteBatch.Draw(coalImage, new Rectangle((int)Vector2.Zero.X, (int)Vector2.Zero.Y + this.size / 4, this.size, this.size), tintColor);
             // draw keys counter
             //  measure font which was drawn sd

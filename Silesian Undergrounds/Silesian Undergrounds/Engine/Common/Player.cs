@@ -218,8 +218,6 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void AddKey(int numberKeysToAdd)
         {
-            Debug.WriteLine("Current nu mber of keys is " + keyAmount);
-
             keyAmount += numberKeysToAdd;
         }
 
