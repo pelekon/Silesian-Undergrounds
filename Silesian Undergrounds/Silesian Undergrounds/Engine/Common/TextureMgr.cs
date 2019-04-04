@@ -88,7 +88,7 @@ namespace Silesian_Undergrounds.Engine.Common
                 return PickableEnum.Key;
         }
 
-        public void GenerateItems(Scene.Scene scene, List<Gameobject> pickableItems)
+        public void GenerateItems(Scene.Scene scene, List<GameObject> pickableItems)
         {
             Random random = new Random();
 

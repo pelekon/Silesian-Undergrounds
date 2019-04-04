@@ -8,7 +8,7 @@ using Silesian_Undergrounds.Engine.Common;
 namespace Silesian_Undergrounds.Engine.Scene {
     class TileMapRenderer {
         private List<Tile> tiles = new List<Tile>();
-        private List<Gameobject> pickableItems = new List<Gameobject>();
+        private List<GameObject> pickableItems = new List<GameObject>();
         private int width, height;
 
         public List<Tile> Tiles
@@ -19,7 +19,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
             }
         }
 
-        public List<Gameobject> Pickable
+        public List<GameObject> Pickable
         {
             get
             {

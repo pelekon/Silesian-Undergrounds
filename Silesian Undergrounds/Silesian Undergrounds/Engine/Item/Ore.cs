@@ -35,7 +35,7 @@ namespace Silesian_Undergrounds.Engine.Item
                 this.value = 0;
         }
 
-        public override void NotifyCollision(Gameobject obj)
+        public override void NotifyCollision(GameObject obj)
         {
             if (obj is Player)
             {

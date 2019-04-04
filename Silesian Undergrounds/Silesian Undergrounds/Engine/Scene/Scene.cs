@@ -16,13 +16,13 @@ namespace Silesian_Undergrounds.Engine.Scene
     {
 
         #region SCENE_VARIABLES
-
-        private List<Gameobject> gameobjects;
+        private List<GameObject> gameObjects;
         public Player player;
-        private List<Gameobject> objectsToDelete;
-        private List<Gameobject> objectsToAdd;
+        private List<GameObject> objectsToDelete;
+        private List<GameObject> objectsToAdd;
         public Camera camera { get; private set; }
-  
+
+
         public bool isPaused { get; private set; }
 
         #endregion
@@ -30,28 +30,30 @@ namespace Silesian_Undergrounds.Engine.Scene
         public Scene()
         {
             // Inittialize variables
-            gameobjects = new List<Gameobject>();
-            objectsToDelete = new List<Gameobject>();
-            objectsToAdd = new List<Gameobject>();
+            gameObjects = new List<GameObject>();
+            objectsToDelete = new List<GameObject>();
+            objectsToAdd = new List<GameObject>();
             isPaused = false;
             player = new Player(new Vector2(100, 100), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
 
 
             TextureMgr.Instance.LoadIfNeeded("minerCharacter");
             player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
-            gameobjects.Add(player);
-    
+            gameObjects.Add(player);
+
             camera = new Camera(player);
         }
+        public List<GameObject> GameObjects { get; private set; }
+
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
 
-        public void AddObject(Gameobject obj)
+        public void AddObject(GameObject obj)
         {
             objectsToAdd.Add(obj);
         }
 
-        public void DeleteObject(Gameobject obj)
+        public void DeleteObject(GameObject obj)
         {
             objectsToDelete.Add(obj);
         }
@@ -59,7 +61,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         private void AddObjects()
         {
             foreach (var obj in objectsToAdd)
-                gameobjects.Add(obj);
+                gameObjects.Add(obj);
 
             objectsToAdd.Clear();
         }
@@ -67,7 +69,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         private void DeleteObjects()
         {
             foreach (var obj in objectsToDelete)
-                gameobjects.Remove(obj);
+                gameObjects.Remove(obj);
 
             objectsToDelete.Clear();
         }
@@ -78,20 +80,20 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Update(GameTime gameTime)
         {
-            // Operation of add or remove from gameobjects list has to appear before updating gameobjects
+            // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
             DeleteObjects();
 
-            foreach (var obj in gameobjects)
+            foreach (var obj in gameObjects)
                 obj.Update(gameTime);
 
             camera.Update(gameTime);
-            player.Collision(this.gameobjects);
+            player.Collision(this.gameObjects);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            foreach (var obj in gameobjects)
+            foreach (var obj in gameObjects)
             {
                 if (obj is Player)
                     continue;
@@ -100,9 +102,9 @@ namespace Silesian_Undergrounds.Engine.Scene
                 {
                     obj.Draw(spriteBatch);
                 }
-            }     
+            }
 
-            foreach (var obj in gameobjects)
+            foreach (var obj in gameObjects)
                 if (obj.layer == 3)
                     obj.Draw(spriteBatch);
 
@@ -120,3 +122,4 @@ namespace Silesian_Undergrounds.Engine.Scene
         }
     }
 }
+

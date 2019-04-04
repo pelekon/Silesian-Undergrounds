@@ -67,9 +67,9 @@ namespace Silesian_Undergrounds.Engine.Common
 
         // TODO: Remove this and split collisions to 2 sparate components:
         // Collision Box and Collider
-        public void Collision(List<Gameobject> gameobjects)
+        public void Collision(List<GameObject> gameobjects)
         {
-            foreach (Gameobject gameobject in gameobjects)
+            foreach (GameObject gameobject in gameobjects)
             {
                 if (TouchingBottom(gameobject) || TouchingLeftSide(gameobject) || TouchingRightSide(gameobject) || TouchingTop(gameobject))
                 {
@@ -82,10 +82,10 @@ namespace Silesian_Undergrounds.Engine.Common
                         {
                             Vector2 temp = previousPosition;
 
-                            Gameobject left = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(-1, 0) * this.size), 1);
-                            Gameobject right = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(1, 0) * this.size), 1);
-                            Gameobject top = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(0, -1) * this.size), 1);
-                            Gameobject bottom = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(0, 1) * this.size), 1);
+                            GameObject left = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(-1, 0) * this.size), 1);
+                            GameObject right = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(1, 0) * this.size), 1);
+                            GameObject top = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(0, -1) * this.size), 1);
+                            GameObject bottom = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(0, 1) * this.size), 1);
 
                             if (left != null)
                             {
@@ -189,9 +189,9 @@ namespace Silesian_Undergrounds.Engine.Common
             }
         }
 
-        private Gameobject GetGameobjectAtPosition(List<Gameobject> gameobjects, Vector2 position, int layer)
+        private GameObject GetGameobjectAtPosition(List<GameObject> gameobjects, Vector2 position, int layer)
         {
-            foreach (Gameobject gam in gameobjects)
+            foreach (GameObject gam in gameobjects)
                 if (gam.position == position && gam.layer == layer)
                     return gam;
             return null;
@@ -295,7 +295,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         #region RectangleCollisionDetection
 
-        private bool TouchingLeftSide(Gameobject gameobjects)
+        private bool TouchingLeftSide(GameObject gameobjects)
         {
             return this.Rectangle.Right > gameobjects.Rectangle.Left &&
               this.Rectangle.Left < gameobjects.Rectangle.Left &&
@@ -303,7 +303,7 @@ namespace Silesian_Undergrounds.Engine.Common
               this.Rectangle.Top < gameobjects.Rectangle.Bottom;
         }
 
-        private bool TouchingRightSide(Gameobject gameobjects)
+        private bool TouchingRightSide(GameObject gameobjects)
         {
             return this.Rectangle.Left < gameobjects.Rectangle.Right &&
               this.Rectangle.Right > gameobjects.Rectangle.Right &&
@@ -311,7 +311,7 @@ namespace Silesian_Undergrounds.Engine.Common
               this.Rectangle.Top < gameobjects.Rectangle.Bottom;
         }
 
-        private bool TouchingTop(Gameobject gameobjects)
+        private bool TouchingTop(GameObject gameobjects)
         {
             return this.Rectangle.Bottom > gameobjects.Rectangle.Top &&
               this.Rectangle.Top < gameobjects.Rectangle.Top &&
@@ -319,7 +319,7 @@ namespace Silesian_Undergrounds.Engine.Common
               this.Rectangle.Left < gameobjects.Rectangle.Right;
         }
 
-        private bool TouchingBottom(Gameobject gameobjects)
+        private bool TouchingBottom(GameObject gameobjects)
         {
             return this.Rectangle.Top < gameobjects.Rectangle.Bottom &&
               this.Rectangle.Bottom > gameobjects.Rectangle.Bottom &&
