@@ -267,6 +267,12 @@
 /processorParam:TextureFormat=Color
 /build:minerCharacter.png
 
+#begin PickUpShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:PickUpShader.fx
+
 #begin playerSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
