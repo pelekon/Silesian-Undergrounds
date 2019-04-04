@@ -78,6 +78,7 @@ namespace Silesian_Undergrounds
             TextureMgr.Instance.LoadIfNeeded("box");
             TextureMgr.Instance.LoadIfNeeded("box_lit");
             TextureMgr.Instance.LoadIfNeeded("background");
+            Drawer.Initialize(spriteBatch,Content);
 
             menuWindow.LoadContent(Content);
 
@@ -128,22 +129,29 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            Drawer.UpdateGameTime(gameTime);
             GraphicsDevice.Clear(Color.Black);
-
             // TODO: Add your drawing code here
 
-            if(CurrentState == GameState.InGame)
+            switch (CurrentState)
             {
-                spriteBatch.Begin(transformMatrix: scene.camera.Transform);
-                scene.Draw(gameTime, spriteBatch);
-                scene.Draw(gameTime, spriteBatch);
-                spriteBatch.End();
-                gameHUD.Draw(HUDspriteBatch);
-            } else if(CurrentState == GameState.InMenu)
-            {
-                spriteBatch.Begin();
-                menuWindow.Draw(spriteBatch);
-                spriteBatch.End();
+                case GameState.InGame:
+                {
+
+                    scene.Draw();
+                    gameHUD.Draw(HUDspriteBatch);
+                    break;
+                }
+                case GameState.InMenu:
+                {
+
+                    spriteBatch.Begin();
+                    menuWindow.Draw(spriteBatch);
+                    spriteBatch.End();
+                    break;
+                }
+                case GameState.InMenuSettings:
+                    break;
             }
 
 

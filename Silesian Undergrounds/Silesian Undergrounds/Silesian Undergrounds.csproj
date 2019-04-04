@@ -63,6 +63,7 @@
     <Compile Include="Engine\Scene\SceneMgr.cs" />
     <Compile Include="Engine\Scene\Tile.cs" />
     <Compile Include="Engine\Scene\TileMapRenderer.cs" />
+    <Compile Include="Engine\Scene\Drawer.cs" />
     <Compile Include="Engine\UI\Button.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Engine\Utils\ResolutionMgr.cs" />
@@ -75,6 +76,7 @@
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -153,10 +155,14 @@
     <None Include="Data\layers.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Content\PickUpShader.fx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\playerSheet.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
