@@ -107,13 +107,12 @@ namespace Silesian_Undergrounds.Engine.Scene
                 player.Draw(spriteBatch);
 
             }, transformMatrix: camera.Transform);
-
-            Drawer.Shaders.DrawPickUpEffect((spriteBatch, gameTime) =>
+            Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
             {
                 foreach (var obj in gameObjects)
                     if (obj.layer == 3)
                         obj.Draw(spriteBatch);
-            }, transformMatrix: camera.Transform);
+            }, transformMatrix: camera.Transform, lightSource: player.position);
         }
 
         public void OpenPauseMenu()
