@@ -71,6 +71,7 @@ namespace Silesian_Undergrounds
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Drawer.Initialize(spriteBatch, Content);
 
             HUDspriteBatch = new SpriteBatch(GraphicsDevice);
             gameHUD.Load(content: Content);
@@ -78,7 +79,6 @@ namespace Silesian_Undergrounds
             TextureMgr.Instance.LoadIfNeeded("box");
             TextureMgr.Instance.LoadIfNeeded("box_lit");
             TextureMgr.Instance.LoadIfNeeded("background");
-            Drawer.Initialize(spriteBatch,Content);
 
             menuWindow.LoadContent(Content);
 

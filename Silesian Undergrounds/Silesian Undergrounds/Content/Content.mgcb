@@ -63,6 +63,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Font.spritefont
 
+#begin GrayScaleShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:GrayScaleShader.fx
+
 #begin Items/Chests/chest_1.png
 /importer:TextureImporter
 /processor:TextureProcessor

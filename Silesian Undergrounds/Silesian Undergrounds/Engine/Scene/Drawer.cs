@@ -13,11 +13,19 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public static class Shaders
         {
-            private static Effect _pickUpEffect;
+            private static Effect _pickUpEffect, _grayScaleEffect;
 
-            public static void DrawPickUpEffect(Action<SpriteBatch, GameTime> drawer, Matrix transformMatrix)
+            public static void DrawPickUpEffect(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
             {
+                _pickUpEffect.Parameters["gameTime"].SetValue((float)_gameTime.TotalGameTime.TotalMilliseconds);
                 _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _pickUpEffect);
+                drawer.Invoke(_spriteBatch, _gameTime);
+                _spriteBatch.End();
+            }
+
+            public static void DrawGrayScaleEffect(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
+            {
+                _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _grayScaleEffect);
                 drawer.Invoke(_spriteBatch, _gameTime);
                 _spriteBatch.End();
             }
@@ -25,6 +33,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             internal static void LoadShaders(ContentManager content)
             {
                 _pickUpEffect = content.Load<Effect>("PickUpShader");
+                _grayScaleEffect = content.Load<Effect>("GrayScaleShader");
             }
 
         }

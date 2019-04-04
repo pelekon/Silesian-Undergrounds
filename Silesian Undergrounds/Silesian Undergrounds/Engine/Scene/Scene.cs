@@ -101,9 +101,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                         continue;
 
                     if (obj.layer != 3)
-                    {
                         obj.Draw(spriteBatch);
-                    }
                 }
 
                 player.Draw(spriteBatch);
