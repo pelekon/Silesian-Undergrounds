@@ -43,15 +43,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             camera = new Camera(player);
         }
-        public List<GameObject> Gameobjects
-        {
-            get
-            {
-                return gameObjects;
-            }
-        }
-
-
+        public List<GameObject> GameObjects { get; private set; }
 
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
@@ -96,7 +88,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 obj.Update(gameTime);
 
             camera.Update(gameTime);
-            player.Collision(this.gameobjects);
+            player.Collision(this.gameObjects);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

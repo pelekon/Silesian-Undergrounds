@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.States.Controls;
+using Silesian_Undergrounds.Engine.Common;
 
 namespace Silesian_Undergrounds.Views
 {
@@ -15,8 +16,9 @@ namespace Silesian_Undergrounds.Views
     {
 
         #region CONSTANTS
-        public const int X_start_origin = 0;
-        public const int Y_start_origin = 0;
+        private const int X_start_origin = 0;
+        private const int Y_start_origin = 0;
+        private static readonly int padding = 100;
         #endregion
 
         #region PROPERTIES
@@ -41,14 +43,13 @@ namespace Silesian_Undergrounds.Views
 
         public void LoadContent(Microsoft.Xna.Framework.Content.ContentManager content)
         {
-            this.ButtonTextureClicked = content.Load<Texture2D>("box");
-            this.ButtonTextureNotClicked = content.Load<Texture2D>("box_lit");
-            this.BackgroundTexture = content.Load<Texture2D>("background");
+            this.ButtonTextureClicked = TextureMgr.Instance.GetTexture("box");
+            this.ButtonTextureNotClicked = TextureMgr.Instance.GetTexture("box_lit");
+            this.BackgroundTexture = TextureMgr.Instance.GetTexture("background");
             SpriteFont buttonFont = content.Load<SpriteFont>("File");
 
             int height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            int padding = 100;
 
 
             Button btnQuit = new Button("Quit", ButtonTextureNotClicked, ButtonTextureClicked, new Vector2((width - ButtonTextureClicked.Width) / 2, 3 * padding + 2 * ButtonTextureClicked.Height), new Vector2(ButtonTextureClicked.Width, ButtonTextureClicked.Height), buttonFont);

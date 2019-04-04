@@ -75,9 +75,12 @@ namespace Silesian_Undergrounds
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-
             HUDspriteBatch = new SpriteBatch(GraphicsDevice);
             gameHUD.Load(content: Content);
+
+            TextureMgr.Instance.LoadIfNeeded("box");
+            TextureMgr.Instance.LoadIfNeeded("box_lit");
+            TextureMgr.Instance.LoadIfNeeded("background");
 
             menuWindow.LoadContent(Content);
 
@@ -101,8 +104,8 @@ namespace Silesian_Undergrounds
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 scene.OpenPauseMenu();
-
-            if (scene.isPaused)
+          
+           if (scene.isPaused)
                 return;
 
             if (CurrentState == GameState.InGame)
