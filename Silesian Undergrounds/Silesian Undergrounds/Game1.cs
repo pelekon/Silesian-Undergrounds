@@ -21,7 +21,6 @@ namespace Silesian_Undergrounds
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteBatch HUDspriteBatch;
-        SceneManager sceneMgr;
         Views.MenuWindow menuWindow;
         Scene scene;
         private GameState CurrentState = GameState.InMenu;
@@ -52,13 +51,11 @@ namespace Silesian_Undergrounds
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             ResolutionMgr.GameHeight = GraphicsDevice.DisplayMode.Height;
             //graphics.ToggleFullScreen();
-            
+
 
             graphics.ApplyChanges();
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
-            // Game state initialization
-            sceneMgr = new SceneManager();
             scene = SceneManager.LoadScene("drop", 64);
 
             menuWindow = new Views.MenuWindow(this);
@@ -104,7 +101,7 @@ namespace Silesian_Undergrounds
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 scene.OpenPauseMenu();
-          
+
            if (scene.isPaused)
                 return;
 
@@ -134,7 +131,7 @@ namespace Silesian_Undergrounds
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-           
+
             if(CurrentState == GameState.InGame)
             {
                 spriteBatch.Begin(transformMatrix: scene.camera.Transform);
@@ -150,10 +147,10 @@ namespace Silesian_Undergrounds
             }
 
 
-     
 
-            
-         
+
+
+
             base.Draw(gameTime);
         }
 
