@@ -49,11 +49,13 @@
     <Compile Include="Engine\Common\GameObject.cs" />
     <Compile Include="Engine\Common\PickableItem.cs" />
     <Compile Include="Engine\Common\TextureMgr.cs" />
+    <Compile Include="Engine\Enum\FoodEnum.cs" />
     <Compile Include="Engine\Enum\GameState.cs" />
     <Compile Include="Engine\Enum\OreEnum.cs" />
     <Compile Include="Engine\Enum\PickableEnum.cs" />
     <Compile Include="Engine\HUD\GameHUD.cs" />
     <Compile Include="Engine\Item\Chest.cs" />
+    <Compile Include="Engine\Item\Food.cs" />
     <Compile Include="Engine\Item\Key.cs" />
     <Compile Include="Engine\Item\Ore.cs" />
     <Compile Include="Engine\Common\Player.cs" />

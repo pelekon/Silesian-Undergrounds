@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Xml;
-using System.Collections.Generic;
-
-using Silesian_Undergrounds.Engine.Common;
+﻿using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Scene;
