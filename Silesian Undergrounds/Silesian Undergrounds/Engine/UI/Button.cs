@@ -50,24 +50,7 @@ namespace Silesian_Undergrounds.States.Controls
             this.Game = game;
         }
 
-        private Boolean IsMouseButtonClicked()
-        {
-            MouseState mouseState = Mouse.GetState();
-
-            return IsMouseInsideButton() && mouseState.LeftButton == ButtonState.Pressed;
-        }
-
-        private Boolean IsMouseInsideButton()
-        {
-            MouseState mouseState = Mouse.GetState();
-
-            // get current Mouse bounds
-            Rectangle mouseBounds = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-            if(mouseBounds.Intersects(this.Rectangle)) return true;
-
-
-            return false;
-        }
+        
 
        
 

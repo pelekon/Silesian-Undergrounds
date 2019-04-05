@@ -41,9 +41,7 @@ namespace Silesian_Undergrounds
         /// </summary>
         protected override void Initialize()
         {
-            // window options initialization
-
-            // TODO: Add your initialization logic here
+            #region GRAPHIC_SETTINGS_INIT
             // Window.AllowAltF4 = true;
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
@@ -51,9 +49,10 @@ namespace Silesian_Undergrounds
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
             ResolutionMgr.GameHeight = GraphicsDevice.DisplayMode.Height;
             //graphics.ToggleFullScreen();
-
-
             graphics.ApplyChanges();
+            #endregion
+
+
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
             scene = SceneManager.LoadScene("drop", 64);
@@ -135,7 +134,6 @@ namespace Silesian_Undergrounds
             if(CurrentState == GameState.InGame)
             {
                 spriteBatch.Begin(transformMatrix: scene.camera.Transform);
-                scene.Draw(gameTime, spriteBatch);
                 scene.Draw(gameTime, spriteBatch);
                 spriteBatch.End();
                 gameHUD.Draw(HUDspriteBatch);
