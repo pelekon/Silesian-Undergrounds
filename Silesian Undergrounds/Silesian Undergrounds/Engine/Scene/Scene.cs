@@ -91,24 +91,33 @@ namespace Silesian_Undergrounds.Engine.Scene
             player.Collision(this.gameObjects);
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw()
         {
-            foreach (var obj in gameObjects)
+            Drawer.Shaders.DrawGrayScaleEffect((spriteBatch, gameTime) =>
             {
-                if (obj is Player)
-                    continue;
-
-                if (obj.layer != 3)
+                foreach (var obj in gameObjects)
                 {
-                    obj.Draw(spriteBatch);
+                    if (obj is Player)
+                        continue;
+
+                    if (obj.layer != 3)
+                        obj.Draw(spriteBatch);
                 }
-            }
-
-            foreach (var obj in gameObjects)
-                if (obj.layer == 3)
-                    obj.Draw(spriteBatch);
-
-            player.Draw(spriteBatch);
+            }, transformMatrix: camera.Transform);
+            Drawer.Draw((spriteBatch, gameTime) =>
+            {
+                
+                foreach (var obj in gameObjects)
+                    if (obj.layer == 3)
+                        obj.Draw(spriteBatch);
+                player.Draw(spriteBatch);
+            }, transformMatrix: camera.Transform);
+            Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
+            {
+                foreach (var obj in gameObjects)
+                    if (obj.layer == 3)
+                        obj.Draw(spriteBatch);
+            }, transformMatrix: camera.Transform, lightSource: player.position);
         }
 
         public void OpenPauseMenu()

@@ -25,7 +25,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, layerDepth: layer);
+//            spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, layerDepth: layer);
         }
 
     }
