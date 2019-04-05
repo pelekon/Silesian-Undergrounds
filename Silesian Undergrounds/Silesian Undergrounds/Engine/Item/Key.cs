@@ -20,7 +20,8 @@ namespace Silesian_Undergrounds.Engine.Item {
         {
             if (obj is Player)
             {
-                //TODO increase player keys counter by 1
+                Player pl = (Player)obj;
+                pl.AddKey(1);
                 this.scene.DeleteObject(this);
             }
         }
