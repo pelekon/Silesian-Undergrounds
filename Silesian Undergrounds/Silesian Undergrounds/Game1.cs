@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.States.Controls;
+//using Silesian_Undergrounds.States.Controls;
 using System.Runtime.CompilerServices;
 using System;
 using System.Diagnostics;
