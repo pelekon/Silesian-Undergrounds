@@ -30,21 +30,16 @@ float random(float3 position, float3 scale, int seed)
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
     float4 color = tex2D(s0, input.TextureCoordinates);
-    // float randomNumber = random(input.TextureCoordinates.xyx, input.TextureCoordinates.yxy, gameTime);
-	
     if (color.a < 0.4)
     {
         float4 right = tex2D(s0, float2(input.TextureCoordinates.x - 0.05, input.TextureCoordinates.y + 0.05));
-        //if (right.a > 0.4 && lightSource.y >= input.Position.y + 0.05)
-        //{
         if (right.a > 0.4)
         {
-            color.rgba = float4(0, 0, 0, 0.4);
+            return float4(0, 0, 0, 0.4);
         }
-        //}
         }
-        return color;
-    }
+    return float4(0, 0, 0, 0);
+}
 
 technique SpriteDrawing
 {

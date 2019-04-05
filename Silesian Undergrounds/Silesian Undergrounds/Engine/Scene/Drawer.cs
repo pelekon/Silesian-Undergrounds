@@ -13,12 +13,22 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public static class Shaders
         {
-            private static Effect _pickUpEffect, _grayScaleEffect;
+            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader;
 
             public static void DrawShadowEffect(Action<SpriteBatch, GameTime> drawer, Vector2 lightSource, Matrix? transformMatrix = null)
             {
-//                _pickUpEffect.Parameters["lightSource"].SetValue(new Vector2(960,540));
-                _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _pickUpEffect);
+                // TODO: Add dynamic shadows
+//                _shadowEffect.Parameters["lightSource"].SetValue(new Vector2(960,540));
+                _spriteBatch.Begin(blendState:BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _shadowEffect);
+                drawer.Invoke(_spriteBatch, _gameTime);
+                _spriteBatch.End();
+            }
+
+            public static void DrawVisibilityRadiusShader(Action<SpriteBatch, GameTime> drawer, Vector2 lightSource, Matrix? transformMatrix = null)
+            {
+                _visibilityRadiusShader.Parameters["lightSource"].SetValue(new Vector2(960, 540));
+                _visibilityRadiusShader.Parameters["gameTime"].SetValue(_gameTime.TotalGameTime.Seconds);
+                _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _visibilityRadiusShader);
                 drawer.Invoke(_spriteBatch, _gameTime);
                 _spriteBatch.End();
             }
@@ -32,8 +42,9 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             internal static void LoadShaders(ContentManager content)
             {
-                _pickUpEffect = content.Load<Effect>("ShadowShader");
+                _shadowEffect = content.Load<Effect>("ShadowShader");
                 _grayScaleEffect = content.Load<Effect>("GrayScaleShader");
+                _visibilityRadiusShader = content.Load<Effect>("VisibilityRadiusShader");
             }
 
         }

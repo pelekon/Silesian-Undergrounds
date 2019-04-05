@@ -93,7 +93,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Draw()
         {
-            Drawer.Draw((spriteBatch, gameTime) =>
+            Drawer.Shaders.DrawGrayScaleEffect((spriteBatch, gameTime) =>
             {
                 foreach (var obj in gameObjects)
                 {
@@ -103,9 +103,14 @@ namespace Silesian_Undergrounds.Engine.Scene
                     if (obj.layer != 3)
                         obj.Draw(spriteBatch);
                 }
-
+            }, transformMatrix: camera.Transform);
+            Drawer.Draw((spriteBatch, gameTime) =>
+            {
+                
+                foreach (var obj in gameObjects)
+                    if (obj.layer == 3)
+                        obj.Draw(spriteBatch);
                 player.Draw(spriteBatch);
-
             }, transformMatrix: camera.Transform);
             Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
             {
