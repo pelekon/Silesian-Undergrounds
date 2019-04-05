@@ -63,6 +63,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Font.spritefont
 
+#begin GrayScaleShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:GrayScaleShader.fx
+
 #begin Items/Chests/chest_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -267,6 +273,12 @@
 /processorParam:TextureFormat=Color
 /build:minerCharacter.png
 
+#begin ShadowShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ShadowShader.fx
+
 #begin test.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -278,6 +290,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:test.png
+
+#begin VisibilityRadiusShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:VisibilityRadiusShader.fx
 
 #begin x.png
 /importer:TextureImporter
