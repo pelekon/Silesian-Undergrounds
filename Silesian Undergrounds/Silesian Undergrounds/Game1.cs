@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.States.Controls;
 using System.Runtime.CompilerServices;
 using System;
 using System.Diagnostics;
@@ -50,6 +49,10 @@ namespace Silesian_Undergrounds
             ResolutionMgr.GameHeight = GraphicsDevice.DisplayMode.Height;
             //graphics.ToggleFullScreen();
             graphics.ApplyChanges();
+
+            // Calculate inner unit value
+            ResolutionMgr.yAxisUnit = ResolutionMgr.GameHeight / 100;
+            ResolutionMgr.xAxisUnit = ResolutionMgr.GameWidth / 100;
             #endregion
 
 

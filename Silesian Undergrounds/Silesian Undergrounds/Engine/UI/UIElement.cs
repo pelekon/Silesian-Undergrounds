@@ -8,31 +8,60 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Silesian_Undergrounds.Engine.Utils;
+
 namespace Silesian_Undergrounds.Engine.UI
 {
     public class UIElement
     {
         private Vector2 _position;
         public Vector2 Position => _position;
+        private Rectangle rectangle;
 
-        public Texture2D Texture { get; private set; }
-        public int Width;
-        public int Height;
+        public Texture2D Texture { get; protected set; }
+        public float Width { get; private set; }
+        public float Height { get; private set; }
 
-        public UIElement(float x, float y, Texture2D text)
+        public UIElement Parent { get; private set; }
+
+        public UIElement(float x, float y, float w, float h, Texture2D text, UIElement parent)
         {
             _position = new Vector2();
             SetPosition(x, y);
             Texture = text;
+            Width = w;
+            Height = h;
+
+            Parent = parent;
+            CalculateElementRectangle();
         }
 
         public void SetPosition(float x, float y)
         {
             if (x > 100 || y > 100 || x < 0 || y < 0)
-                throw new WrongElementPositionException("Wrong position for UIElement");
+                throw new WrongUIElementPositionException("Wrong position for UIElement");
 
             _position.X = x;
             _position.Y = y;
+            CalculateElementRectangle();
+        }
+
+        public void SetHeight(float h)
+        {
+            Height = h;
+            CalculateElementRectangle();
+        }
+
+        public void SetWidht(float w)
+        {
+            Width = w;
+            CalculateElementRectangle();
+        }
+
+        private void CalculateElementRectangle()
+        {
+            rectangle = new Rectangle((int)(_position.X * ResolutionMgr.xAxisUnit), (int)(_position.Y * ResolutionMgr.yAxisUnit),
+                (int)(Width * ResolutionMgr.xAxisUnit), (int)(Height * ResolutionMgr.xAxisUnit));
         }
 
         protected bool IsMouseButtonClicked()
@@ -48,7 +77,8 @@ namespace Silesian_Undergrounds.Engine.UI
 
             // get current Mouse bounds
             Rectangle mouseBounds = new Rectangle(mouseState.X, mouseState.Y, 1, 1);
-            //if (mouseBounds.Intersects(this.Rectangle)) return true;
+            if (mouseBounds.Intersects(rectangle))
+                return true;
 
 
             return false;
@@ -56,14 +86,14 @@ namespace Silesian_Undergrounds.Engine.UI
 
         public virtual void Update(GameTime gameTime) { }
 
-        public virtual void Draw(SpriteBatch batch, float xUnit, float yUnit)
+        public virtual void Draw(SpriteBatch batch)
         {
-            batch.Draw(Texture, new Rectangle((int)(_position.X * xUnit), (int)(_position.Y * yUnit), Width, Height), Color.White);
+            batch.Draw(Texture, rectangle, Color.White);
         }
     }
 
-    internal class WrongElementPositionException : Exception
+    internal class WrongUIElementPositionException : Exception
     {
-        internal WrongElementPositionException(string msg) : base (msg) { }
+        internal WrongUIElementPositionException(string msg) : base (msg) { }
     }
 }
