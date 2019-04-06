@@ -16,7 +16,7 @@ namespace Silesian_Undergrounds.Engine.UI
     {
         private Vector2 _position;
         public Vector2 Position => _position;
-        private Rectangle rectangle;
+        protected Rectangle rectangle;
 
         public Texture2D Texture { get; protected set; }
         public float Width { get; private set; }

@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-
-using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.UI.Controls
 {
@@ -17,21 +10,25 @@ namespace Silesian_Undergrounds.Engine.UI.Controls
         private Texture2D normalTexture;
         private Texture2D hoverTexture;
         private SpriteFont font;
+
         private bool isHovering;
+        public string Text;
 
         private Func<bool> OnMouseClick;
         private Func<bool> OnMouseHoverStart;
         private Func<bool> OnMouseHoverStop;
 
-        public Button(string text, float x, float y, float w, float h, Texture2D texture, string hoverTextureName, string font, UIElement parent) : 
+        public Button(string text, float x, float y, float w, float h, Texture2D texture, string hoverTextureName, string f, UIElement parent) : 
             base(x, y, w, h, texture, parent)
         {
             isHovering = false;
+            Text = text;
+
             if (hoverTextureName != "")
                 hoverTexture = TextureMgr.Instance.GetTexture(hoverTextureName);
 
             normalTexture = texture;
-            //font
+            font = FontMgr.Instance.GetFont(f);
 
             OnMouseClick = MouseClick;
             OnMouseHoverStart = MouseHoverStart;
@@ -78,31 +75,21 @@ namespace Silesian_Undergrounds.Engine.UI.Controls
             }
         }
 
-        // draws text to fit specific boundires (Rectangle)
-        /*private void DrawString(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch batch)
         {
-            Vector2 size = ButtonTextFont.MeasureString(Text);
+            base.Draw(batch);
 
-            float xScale = (Rectangle.Width / size.X);
-            float yScale = (Rectangle.Height / size.Y);
+            Vector2 size = font.MeasureString(Text);
 
-            float scale = Math.Min(xScale, yScale);
+            float marginX = rectangle.Width - size.X;
+            float marginY = rectangle.Height - size.Y;
 
+            marginX /= 2;
+            marginY /= 2;
 
-            int strWidth = (int)Math.Round(size.X * scale);
-            int strHeight = (int)Math.Round(size.Y * scale);
-            Vector2 position = new Vector2();
-            position.X = (((Rectangle.Width - strWidth) / 2) + Rectangle.X);
-            position.Y = (((Rectangle.Height - strHeight) / 2) + Rectangle.Y);
+            Vector2 position = new Vector2(rectangle.X + marginX, rectangle.Y + marginY);
 
-
-            float rotation = 0.0f;
-            Vector2 spriteOrigin = new Vector2(0, 0);
-            float spriteLayer = 0.0f;
-            SpriteEffects spriteEffects = new SpriteEffects();
-
-
-            spriteBatch.DrawString(ButtonTextFont, Text, position, Color.Black, rotation, spriteOrigin, scale, spriteEffects, spriteLayer);
-        }*/
+            batch.DrawString(font, Text, position, Color.Black);
+        }
     }
 }

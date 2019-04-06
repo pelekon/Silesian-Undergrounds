@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Silesian_Undergrounds.Engine.UI;
 using Silesian_Undergrounds.Engine.UI.Controls;
-using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Views
 {
@@ -24,7 +24,6 @@ namespace Silesian_Undergrounds.Views
 
             Texture2D background = TextureMgr.Instance.GetTexture("background");
             Texture2D buttonBg = TextureMgr.Instance.GetTexture("box_lit");
-            //SpriteFont buttonFont = content.Load<SpriteFont>("File");
 
             Image bg = new Image(0, 0, 100, 100, background, this);
             Button startGame = new Button("New game", 43, 10, 15, 8, buttonBg, "box", "File", this);

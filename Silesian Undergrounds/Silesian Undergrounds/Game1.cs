@@ -59,6 +59,7 @@ namespace Silesian_Undergrounds
 
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
+            FontMgr.Instance.SetCurrentContentMgr(Content);
 
             scene = SceneManager.LoadScene("drop", 64);
             mainMenu = new MainMenuView();
