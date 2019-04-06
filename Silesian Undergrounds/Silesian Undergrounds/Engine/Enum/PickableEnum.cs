@@ -3,6 +3,7 @@
         Ore,
         Key,
         Chest,
+        Food,
         None
     }
 }

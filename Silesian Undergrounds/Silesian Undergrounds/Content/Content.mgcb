@@ -63,6 +63,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Font.spritefont
 
+#begin GrayScaleShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:GrayScaleShader.fx
+
 #begin Items/Chests/chest_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -110,6 +116,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Items/Chests/chest_4.png
+
+#begin Items/Food/meat.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Items/Food/meat.png
+
+#begin Items/Food/steak.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Items/Food/steak.png
 
 #begin Items/Keys/key_1.png
 /importer:TextureImporter
@@ -267,17 +297,11 @@
 /processorParam:TextureFormat=Color
 /build:minerCharacter.png
 
-#begin playerSheet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:playerSheet.png
+#begin ShadowShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ShadowShader.fx
 
 #begin test.png
 /importer:TextureImporter
@@ -290,6 +314,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:test.png
+
+#begin VisibilityRadiusShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:VisibilityRadiusShader.fx
 
 #begin x.png
 /importer:TextureImporter

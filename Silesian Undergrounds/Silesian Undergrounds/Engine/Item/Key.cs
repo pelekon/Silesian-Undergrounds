@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Xml;
-using System.Collections.Generic;
-
-using Silesian_Undergrounds.Engine.Common;
+﻿using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Scene;
@@ -20,7 +15,8 @@ namespace Silesian_Undergrounds.Engine.Item {
         {
             if (obj is Player)
             {
-                //TODO increase player keys counter by 1
+                Player pl = (Player)obj;
+                pl.AddKey(1);
                 this.scene.DeleteObject(this);
             }
         }

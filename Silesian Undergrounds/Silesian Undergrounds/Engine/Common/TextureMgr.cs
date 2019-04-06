@@ -79,11 +79,24 @@ namespace Silesian_Undergrounds.Engine.Common
 
         }
 
+        private FoodEnum RandFoodType(Random random)
+        {
+            int randed = random.Next(1, 100);
+
+            if (randed <= 65)
+                return FoodEnum.Meat;
+            else
+                return FoodEnum.Steak;
+
+        }
+
         private PickableEnum RandItem(Random random)
         {
             int randed = random.Next(1, 100);
-            if (randed <= 45)
+            if (randed <= 25)
                 return PickableEnum.None;
+            else if (randed > 25 && randed <= 45)
+                return PickableEnum.Food;
             else if (randed > 45 && randed <= 75)
                 return PickableEnum.Ore;
             else if (randed > 75 && randed <= 85)
@@ -107,12 +120,13 @@ namespace Silesian_Undergrounds.Engine.Common
                     GenerateOre(scene, random, pickableObject);
                 else if (itemType == PickableEnum.Chest)
                     GenerateChest(scene, pickableObject);
+                else if (itemType == PickableEnum.Food)
+                    GenerateFood(scene, random, pickableObject);
                 else
                     GenerateKey(scene, pickableObject);
-
             }
         }
-
+  
         private void GenerateOre(Scene.Scene scene, Random random, Tile pickableObject)
         {
             OreEnum type = RandOreType(random);
@@ -125,6 +139,17 @@ namespace Silesian_Undergrounds.Engine.Common
                 scene.AddObject(new Ore(LoadTexture2DByName("Items/Ores/silver/silver_" + textureNumber), pickableObject.position, pickableObject.size / 2, 3, scene, type));
             else if (type == OreEnum.Gold)
                 scene.AddObject(new Ore(LoadTexture2DByName("Items/Ores/gold/gold_" + textureNumber), pickableObject.position, pickableObject.size / 2, 3, scene, type));
+
+        }
+
+        private void GenerateFood(Scene.Scene scene, Random random, Tile pickableObject)
+        {
+            FoodEnum type = RandFoodType(random);
+
+            if (type == FoodEnum.Meat)
+                scene.AddObject(new Food(LoadTexture2DByName("Items/Food/meat"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
+            else
+                scene.AddObject(new Food(LoadTexture2DByName("Items/Food/steak"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
 
         }
 
