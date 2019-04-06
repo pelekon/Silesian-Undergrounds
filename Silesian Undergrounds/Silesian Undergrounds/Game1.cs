@@ -2,13 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Scene;
-using Silesian_Undergrounds.Engine.Common;
-using System.Runtime.CompilerServices;
-using System;
-using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.HUD;
-using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Views;
 
 namespace Silesian_Undergrounds
@@ -21,12 +16,9 @@ namespace Silesian_Undergrounds
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteBatch HUDspriteBatch;
-        MainMenuView mainMenu;
 
         Scene scene;
-        private GameState CurrentState = GameState.InMenu;
         public GameHUD gameHUD = new GameHUD(ResolutionMgr.TileSize);
-
 
         public Game1()
         {
@@ -57,12 +49,14 @@ namespace Silesian_Undergrounds
             ResolutionMgr.xAxisUnit = ResolutionMgr.GameWidth / 100.0f;
             #endregion
 
-
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
 
+            #if DEBUG
             scene = SceneManager.LoadScene("drop", 64);
-            mainMenu = new MainMenuView();
+            #else
+            scene = new Scene(new MainMenuView());
+            #endif
 
             base.Initialize();
         }
@@ -97,26 +91,7 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                scene.OpenPauseMenu();
-
-           if (scene.isPaused)
-                return;
-
-            if (CurrentState == GameState.InGame)
-            {
-                GraphicsDevice.Clear(Color.AliceBlue);
-
-                // TODO: Add your update logic here
-                scene.Update(gameTime);
-                // update our player sprite
-            }
-            else if(CurrentState == GameState.InMenu)
-            {
-                //menuWindow.Update(gameTime);
-                mainMenu.Update(gameTime);
-            }
-
+            scene.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -129,37 +104,11 @@ namespace Silesian_Undergrounds
         {
             Drawer.UpdateGameTime(gameTime);
             GraphicsDevice.Clear(Color.Black);
-            // TODO: Add your drawing code here
 
-            switch (CurrentState)
-            {
-                case GameState.InGame:
-                {
-
-                    scene.Draw();
-                    gameHUD.Draw(HUDspriteBatch);
-                    break;
-                }
-                case GameState.InMenu:
-                {
-                    spriteBatch.Begin();
-                    mainMenu.Draw(spriteBatch);
-                    spriteBatch.End();
-                    break;
-                }
-                case GameState.InMenuSettings:
-                    break;
-            }
+            scene.Draw();
+            gameHUD.Draw(HUDspriteBatch);
 
             base.Draw(gameTime);
         }
-
-        #region CUSTOM_METHODS
-
-        public void changeGameState(GameState newState)
-        {
-            this.CurrentState = newState;
-        }
-        #endregion
     }
 }

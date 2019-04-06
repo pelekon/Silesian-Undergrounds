@@ -51,7 +51,6 @@
     <Compile Include="Engine\Utils\FontMgr.cs" />
     <Compile Include="Engine\Utils\TextureMgr.cs" />
     <Compile Include="Engine\Enum\FoodEnum.cs" />
-    <Compile Include="Engine\Enum\GameState.cs" />
     <Compile Include="Engine\Enum\OreEnum.cs" />
     <Compile Include="Engine\Enum\PickableEnum.cs" />
     <Compile Include="Engine\HUD\GameHUD.cs" />

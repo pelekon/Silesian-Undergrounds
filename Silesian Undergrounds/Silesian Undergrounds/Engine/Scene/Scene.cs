@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Utils;
+using Silesian_Undergrounds.Engine.UI;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -17,13 +16,15 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         #region SCENE_VARIABLES
         private List<GameObject> gameObjects;
-        public Player player;
         private List<GameObject> objectsToDelete;
         private List<GameObject> objectsToAdd;
+
+        public Player player;
+        private UIArea ui;
         public Camera camera { get; private set; }
 
-
         public bool isPaused { get; private set; }
+        private readonly bool canUnPause;
 
         #endregion
 
@@ -42,9 +43,17 @@ namespace Silesian_Undergrounds.Engine.Scene
             gameObjects.Add(player);
 
             camera = new Camera(player);
+            ui = new UIArea(); // TEMP SET EMPTY UI AREA, TO CHANGE AFTER MERGE WITH HUD
+            canUnPause = true;
         }
-        public List<GameObject> GameObjects { get; private set; }
 
+
+        public Scene(UIArea ui)
+        {
+            this.ui = ui;
+            isPaused = true;
+            canUnPause = false;
+        }
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
 
@@ -76,10 +85,22 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         #endregion
 
-
-
         public void Update(GameTime gameTime)
         {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                if (isPaused && canUnPause)
+                    isPaused = false;
+                else
+                    isPaused = true;
+            }
+
+            if (isPaused)
+            {
+                ui.Update(gameTime);
+                return;
+            }
+
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
             DeleteObjects();
@@ -93,6 +114,16 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Draw()
         {
+            if (isPaused)
+            {
+                Drawer.Draw((spriteBatch, gameTime) =>
+                {
+                    ui.Draw(spriteBatch);
+                }, null);
+
+                return;
+            }
+
             Drawer.Shaders.DrawGrayScaleEffect((spriteBatch, gameTime) =>
             {
                 foreach (var obj in gameObjects)
@@ -118,16 +149,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                     if (obj.layer == 3)
                         obj.Draw(spriteBatch);
             }, transformMatrix: camera.Transform, lightSource: player.position);
-        }
-
-        public void OpenPauseMenu()
-        {
-
-        }
-
-        public void PauseGame()
-        {
-            isPaused = true;
         }
     }
 }
