@@ -30,6 +30,7 @@ namespace Silesian_Undergrounds.Engine.UI.Controls
             if (hoverTextureName != "")
                 hoverTexture = TextureMgr.Instance.GetTexture(hoverTextureName);
 
+            normalTexture = texture;
             //font
 
             OnMouseClick = MouseClick;

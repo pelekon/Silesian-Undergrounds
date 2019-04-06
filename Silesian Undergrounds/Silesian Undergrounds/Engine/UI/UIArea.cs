@@ -38,12 +38,8 @@ namespace Silesian_Undergrounds.Engine.UI
 
         public override void Draw(SpriteBatch batch)
         {
-            batch.Begin();
-
             foreach (var element in _elements)
                 element.Draw(batch);
-
-            batch.End();
         }
     }
 }

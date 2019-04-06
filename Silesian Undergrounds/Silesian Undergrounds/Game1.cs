@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.HUD;
 using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Views;
 
 namespace Silesian_Undergrounds
 {
@@ -20,7 +21,8 @@ namespace Silesian_Undergrounds
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteBatch HUDspriteBatch;
-        Views.MenuWindow menuWindow;
+        MainMenuView mainMenu;
+
         Scene scene;
         private GameState CurrentState = GameState.InMenu;
         public GameHUD gameHUD = new GameHUD(ResolutionMgr.TileSize);
@@ -44,23 +46,22 @@ namespace Silesian_Undergrounds
             // Window.AllowAltF4 = true;
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            ResolutionMgr.GameWidth = GraphicsDevice.DisplayMode.Width;
+            ResolutionMgr.GameWidth = graphics.PreferredBackBufferWidth;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            ResolutionMgr.GameHeight = GraphicsDevice.DisplayMode.Height;
+            ResolutionMgr.GameHeight = graphics.PreferredBackBufferHeight;
             //graphics.ToggleFullScreen();
             graphics.ApplyChanges();
 
             // Calculate inner unit value
-            ResolutionMgr.yAxisUnit = ResolutionMgr.GameHeight / 100;
-            ResolutionMgr.xAxisUnit = ResolutionMgr.GameWidth / 100;
+            ResolutionMgr.yAxisUnit = ResolutionMgr.GameHeight / 100.0f;
+            ResolutionMgr.xAxisUnit = ResolutionMgr.GameWidth / 100.0f;
             #endregion
 
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
 
             scene = SceneManager.LoadScene("drop", 64);
-
-            menuWindow = new Views.MenuWindow(this);
+            mainMenu = new MainMenuView();
 
             base.Initialize();
         }
@@ -77,13 +78,6 @@ namespace Silesian_Undergrounds
 
             HUDspriteBatch = new SpriteBatch(GraphicsDevice);
             gameHUD.Load(content: Content);
-
-            TextureMgr.Instance.LoadIfNeeded("box");
-            TextureMgr.Instance.LoadIfNeeded("box_lit");
-            TextureMgr.Instance.LoadIfNeeded("background");
-
-            menuWindow.LoadContent(Content);
-
         }
 
         /// <summary>
@@ -118,7 +112,8 @@ namespace Silesian_Undergrounds
             }
             else if(CurrentState == GameState.InMenu)
             {
-                menuWindow.Update(gameTime);
+                //menuWindow.Update(gameTime);
+                mainMenu.Update(gameTime);
             }
 
 
@@ -146,20 +141,14 @@ namespace Silesian_Undergrounds
                 }
                 case GameState.InMenu:
                 {
-
                     spriteBatch.Begin();
-                    menuWindow.Draw(spriteBatch);
+                    mainMenu.Draw(spriteBatch);
                     spriteBatch.End();
                     break;
                 }
                 case GameState.InMenuSettings:
                     break;
             }
-
-
-
-
-
 
             base.Draw(gameTime);
         }

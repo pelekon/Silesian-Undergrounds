@@ -61,7 +61,7 @@ namespace Silesian_Undergrounds.Engine.UI
         private void CalculateElementRectangle()
         {
             rectangle = new Rectangle((int)(_position.X * ResolutionMgr.xAxisUnit), (int)(_position.Y * ResolutionMgr.yAxisUnit),
-                (int)(Width * ResolutionMgr.xAxisUnit), (int)(Height * ResolutionMgr.xAxisUnit));
+                (int)(Width * ResolutionMgr.xAxisUnit), (int)(Height * ResolutionMgr.yAxisUnit));
         }
 
         protected bool IsMouseButtonClicked()

@@ -38,15 +38,15 @@ namespace Silesian_Undergrounds.Engine.Common
         public Texture2D GetTexture(string name)
         {
             if (!textures.ContainsKey(name))
-                return null;
+            {
+                LoadIfNeeded(name);
+                if (!textures.ContainsKey(name))
+                    return null;
+            }
 
             Texture2D returned;
             if (!textures.TryGetValue(name, out returned))
-            {
-                LoadIfNeeded(name);
-                if (!textures.TryGetValue(name, out returned))
-                    return null;
-            }
+                return null;
 
             var method = returned.GetType().GetMethod("MemberwiseClone", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             return (Texture2D)method.Invoke(returned, null);

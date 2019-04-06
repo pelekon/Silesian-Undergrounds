@@ -13,6 +13,11 @@ namespace Silesian_Undergrounds.Views
 {
     class MainMenuView : UIArea
     {
+        public MainMenuView()
+        {
+            Initialize();
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -22,9 +27,9 @@ namespace Silesian_Undergrounds.Views
             //SpriteFont buttonFont = content.Load<SpriteFont>("File");
 
             Image bg = new Image(0, 0, 100, 100, background, this);
-            Button startGame = new Button("New game", 40, 5, 10, 10, buttonBg, "box", "File", this);
-            Button settings = new Button("Settings", 40, 15, 10, 10, buttonBg, "box", "File", this);
-            Button exit = new Button("Quit game", 40, 50, 10, 10, buttonBg, "box", "File", this);
+            Button startGame = new Button("New game", 43, 10, 15, 8, buttonBg, "box", "File", this);
+            Button settings = new Button("Settings", 43, 22, 15, 8, buttonBg, "box", "File", this);
+            Button exit = new Button("Quit game", 43, 50, 15, 8, buttonBg, "box", "File", this);
 
             AddElement(bg);
             AddElement(startGame);
