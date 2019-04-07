@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.UI;
+using Silesian_Undergrounds.Views;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -21,6 +22,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public Player player;
         private UIArea ui;
+        private UIArea pauseMenu;
         public Camera camera { get; private set; }
 
         public bool isPaused { get; private set; }
@@ -37,20 +39,20 @@ namespace Silesian_Undergrounds.Engine.Scene
             isPaused = false;
             player = new Player(new Vector2(100, 100), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
 
-
             TextureMgr.Instance.LoadIfNeeded("minerCharacter");
             player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
             gameObjects.Add(player);
 
             camera = new Camera(player);
-            ui = new UIArea(); // TEMP SET EMPTY UI AREA, TO CHANGE AFTER MERGE WITH HUD
+            ui = new InGameUI();
+            pauseMenu = new UIArea(); // TEMP SET EMPTY PAUSE MENU
             canUnPause = true;
         }
 
 
-        public Scene(UIArea ui)
+        public Scene(UIArea area)
         {
-            this.ui = ui;
+            pauseMenu = ui;
             isPaused = true;
             canUnPause = false;
         }
@@ -97,7 +99,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             if (isPaused)
             {
-                ui.Update(gameTime);
+                pauseMenu.Update(gameTime);
                 return;
             }
 
@@ -110,6 +112,8 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             camera.Update(gameTime);
             player.Collision(this.gameObjects);
+
+            ui.Update(gameTime);
         }
 
         public void Draw()
@@ -118,7 +122,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             {
                 Drawer.Draw((spriteBatch, gameTime) =>
                 {
-                    ui.Draw(spriteBatch);
+                    pauseMenu.Draw(spriteBatch);
                 }, null);
 
                 return;
@@ -149,6 +153,11 @@ namespace Silesian_Undergrounds.Engine.Scene
                     if (obj.layer == 3)
                         obj.Draw(spriteBatch);
             }, transformMatrix: camera.Transform, lightSource: player.position);
+
+            Drawer.Draw((spriteBatch, gameTime) =>
+            {
+                ui.Draw(spriteBatch);
+            }, null);
         }
     }
 }

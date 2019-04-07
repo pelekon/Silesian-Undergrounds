@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Utils;
-using Silesian_Undergrounds.Engine.HUD;
 using Silesian_Undergrounds.Views;
 
 namespace Silesian_Undergrounds
@@ -15,10 +14,8 @@ namespace Silesian_Undergrounds
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SpriteBatch HUDspriteBatch;
 
         Scene scene;
-        public GameHUD gameHUD = new GameHUD(ResolutionMgr.TileSize);
 
         public Game1()
         {
@@ -70,9 +67,6 @@ namespace Silesian_Undergrounds
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Drawer.Initialize(spriteBatch, Content);
-
-            HUDspriteBatch = new SpriteBatch(GraphicsDevice);
-            gameHUD.Load(content: Content);
         }
 
         /// <summary>
@@ -106,7 +100,6 @@ namespace Silesian_Undergrounds
             GraphicsDevice.Clear(Color.Black);
 
             scene.Draw();
-            gameHUD.Draw(HUDspriteBatch);
 
             base.Draw(gameTime);
         }

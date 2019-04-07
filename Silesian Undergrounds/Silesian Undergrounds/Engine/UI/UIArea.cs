@@ -16,6 +16,7 @@ namespace Silesian_Undergrounds.Engine.UI
         public UIArea() : base(0, 0, 100, 100, null, null)
         {
             _elements = new List<UIElement>();
+            Initialize();
         }
 
         protected virtual void Initialize() { }

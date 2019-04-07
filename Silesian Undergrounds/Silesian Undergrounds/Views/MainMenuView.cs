@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
-
+﻿using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.UI;
 using Silesian_Undergrounds.Engine.UI.Controls;
 using Silesian_Undergrounds.Engine.Utils;
@@ -13,11 +7,6 @@ namespace Silesian_Undergrounds.Views
 {
     class MainMenuView : UIArea
     {
-        public MainMenuView()
-        {
-            Initialize();
-        }
-
         protected override void Initialize()
         {
             base.Initialize();
