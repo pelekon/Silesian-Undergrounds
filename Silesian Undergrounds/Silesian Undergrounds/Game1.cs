@@ -31,9 +31,6 @@ namespace Silesian_Undergrounds
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
-            //WARNING: Remove this!!!!
-            //TargetElapsedTime = new TimeSpan(0, 0, 0, 0, 100);
         }
 
         /// <summary>
