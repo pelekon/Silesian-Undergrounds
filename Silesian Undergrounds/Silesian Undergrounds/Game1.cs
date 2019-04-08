@@ -2,14 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Scene;
-using Silesian_Undergrounds.Engine.Common;
-//using Silesian_Undergrounds.States.Controls;
-using System.Runtime.CompilerServices;
-using System;
-using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Utils;
-using Silesian_Undergrounds.Engine.HUD;
-using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Views;
 
 namespace Silesian_Undergrounds
 {
@@ -20,12 +14,8 @@ namespace Silesian_Undergrounds
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SpriteBatch HUDspriteBatch;
-        Views.MenuWindow menuWindow;
-        Scene scene;
-        private GameState CurrentState = GameState.InMenu;
-        public GameHUD gameHUD = new GameHUD(ResolutionMgr.TileSize);
 
+        Scene scene;
 
         public Game1()
         {
@@ -41,24 +31,29 @@ namespace Silesian_Undergrounds
         /// </summary>
         protected override void Initialize()
         {
-            // window options initialization
-
-            // TODO: Add your initialization logic here
+            #region GRAPHIC_SETTINGS_INIT
             // Window.AllowAltF4 = true;
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            ResolutionMgr.GameWidth = GraphicsDevice.DisplayMode.Width;
+            ResolutionMgr.GameWidth = graphics.PreferredBackBufferWidth;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            ResolutionMgr.GameHeight = GraphicsDevice.DisplayMode.Height;
+            ResolutionMgr.GameHeight = graphics.PreferredBackBufferHeight;
             //graphics.ToggleFullScreen();
-
-
             graphics.ApplyChanges();
+
+            // Calculate inner unit value
+            ResolutionMgr.yAxisUnit = ResolutionMgr.GameHeight / 100.0f;
+            ResolutionMgr.xAxisUnit = ResolutionMgr.GameWidth / 100.0f;
+            #endregion
+
             TextureMgr.Instance.SetCurrentContentMgr(Content);
+            FontMgr.Instance.SetCurrentContentMgr(Content);
 
+            #if DEBUG
             scene = SceneManager.LoadScene("drop", 64);
-
-            menuWindow = new Views.MenuWindow(this);
+            #else
+            scene = new Scene(new MainMenuView());
+            #endif
 
             base.Initialize();
         }
@@ -72,16 +67,6 @@ namespace Silesian_Undergrounds
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Drawer.Initialize(spriteBatch, Content);
-
-            HUDspriteBatch = new SpriteBatch(GraphicsDevice);
-            gameHUD.Load(content: Content);
-
-            TextureMgr.Instance.LoadIfNeeded("box");
-            TextureMgr.Instance.LoadIfNeeded("box_lit");
-            TextureMgr.Instance.LoadIfNeeded("background");
-
-            menuWindow.LoadContent(Content);
-
         }
 
         /// <summary>
@@ -100,25 +85,7 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                scene.OpenPauseMenu();
-
-           if (scene.isPaused)
-                return;
-
-            if (CurrentState == GameState.InGame)
-            {
-                GraphicsDevice.Clear(Color.AliceBlue);
-
-                // TODO: Add your update logic here
-                scene.Update(gameTime);
-                // update our player sprite
-            }
-            else if(CurrentState == GameState.InMenu)
-            {
-                menuWindow.Update(gameTime);
-            }
-
+            scene.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -131,43 +98,10 @@ namespace Silesian_Undergrounds
         {
             Drawer.UpdateGameTime(gameTime);
             GraphicsDevice.Clear(Color.Black);
-            // TODO: Add your drawing code here
 
-            switch (CurrentState)
-            {
-                case GameState.InGame:
-                {
-
-                    scene.Draw();
-                    gameHUD.Draw(HUDspriteBatch);
-                    break;
-                }
-                case GameState.InMenu:
-                {
-
-                    spriteBatch.Begin();
-                    menuWindow.Draw(spriteBatch);
-                    spriteBatch.End();
-                    break;
-                }
-                case GameState.InMenuSettings:
-                    break;
-            }
-
-
-
-
-
+            scene.Draw();
 
             base.Draw(gameTime);
         }
-
-        #region CUSTOM_METHODS
-
-        public void changeGameState(GameState newState)
-        {
-            this.CurrentState = newState;
-        }
-        #endregion
     }
 }

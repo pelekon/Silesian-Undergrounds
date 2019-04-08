@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Utils;
+using Silesian_Undergrounds.Engine.UI;
+using Silesian_Undergrounds.Views;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -17,13 +17,16 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         #region SCENE_VARIABLES
         private List<GameObject> gameObjects;
-        public Player player;
         private List<GameObject> objectsToDelete;
         private List<GameObject> objectsToAdd;
+
+        public Player player;
+        private UIArea ui;
+        private UIArea pauseMenu;
         public Camera camera { get; private set; }
 
-
         public bool isPaused { get; private set; }
+        private readonly bool canUnPause;
 
         #endregion
 
@@ -36,15 +39,23 @@ namespace Silesian_Undergrounds.Engine.Scene
             isPaused = false;
             player = new Player(new Vector2(100, 100), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
 
-
             TextureMgr.Instance.LoadIfNeeded("minerCharacter");
             player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
             gameObjects.Add(player);
 
             camera = new Camera(player);
+            ui = new InGameUI(player);
+            pauseMenu = new UIArea(); // TEMP SET EMPTY PAUSE MENU
+            canUnPause = true;
         }
-        public List<GameObject> GameObjects { get; private set; }
 
+
+        public Scene(UIArea area)
+        {
+            pauseMenu = ui;
+            isPaused = true;
+            canUnPause = false;
+        }
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
 
@@ -76,10 +87,22 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         #endregion
 
-
-
         public void Update(GameTime gameTime)
         {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                if (isPaused && canUnPause)
+                    isPaused = false;
+                else
+                    isPaused = true;
+            }
+
+            if (isPaused)
+            {
+                pauseMenu.Update(gameTime);
+                return;
+            }
+
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
             DeleteObjects();
@@ -89,6 +112,8 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             camera.Update(gameTime);
             player.Collision(this.gameObjects);
+
+            ui.Update(gameTime);
         }
 
         public void Draw()
@@ -118,16 +143,14 @@ namespace Silesian_Undergrounds.Engine.Scene
                     if (obj.layer == 3)
                         obj.Draw(spriteBatch);
             }, transformMatrix: camera.Transform, lightSource: player.position);
-        }
 
-        public void OpenPauseMenu()
-        {
-
-        }
-
-        public void PauseGame()
-        {
-            isPaused = true;
+            Drawer.Draw((spriteBatch, gameTime) =>
+            {
+                if (isPaused)
+                    pauseMenu.Draw(spriteBatch);
+                else
+                    ui.Draw(spriteBatch);
+            }, null);
         }
     }
 }

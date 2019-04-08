@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System.IO;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Enum;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Item;
+using Silesian_Undergrounds.Engine.Common;
 
-namespace Silesian_Undergrounds.Engine.Common
+namespace Silesian_Undergrounds.Engine.Utils
 {
     public sealed class TextureMgr
     {
@@ -38,7 +38,11 @@ namespace Silesian_Undergrounds.Engine.Common
         public Texture2D GetTexture(string name)
         {
             if (!textures.ContainsKey(name))
-                return null;
+            {
+                LoadIfNeeded(name);
+                if (!textures.ContainsKey(name))
+                    return null;
+            }
 
             Texture2D returned;
             if (!textures.TryGetValue(name, out returned))

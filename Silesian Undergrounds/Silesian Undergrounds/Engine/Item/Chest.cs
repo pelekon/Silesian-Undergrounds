@@ -38,10 +38,11 @@ namespace Silesian_Undergrounds.Engine.Item {
         {
             if (obj is Player)
             {
-                if (Player.keyAmount > 0)
+                Player plr = obj as Player;
+                if (plr.KeyAmount > 0)
                 {
                     WasPicked = true;
-                    ((Player)obj).RemoveKey(1);
+                    plr.RemoveKey(1);
                 }
             }
         }
