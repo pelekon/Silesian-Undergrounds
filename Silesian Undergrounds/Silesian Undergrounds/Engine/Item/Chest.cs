@@ -20,12 +20,12 @@ namespace Silesian_Undergrounds.Engine.Item {
         {
             if (obj is Player)
             {
-                //((Player)obj).ke
+                Player plr = obj as Player;
                 
-                if (Player.keyAmount > 0)
+                if (plr.KeyAmount > 0)
                 {
                     this.scene.DeleteObject(this);
-                    ((Player)obj).RemoveKey(1);
+                    plr.RemoveKey(1);
                 }
                 // TODO implement chest opening, player keys counter decrease, spawn pickable items != chest
             }

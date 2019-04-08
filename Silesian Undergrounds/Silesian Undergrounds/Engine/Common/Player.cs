@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,14 +11,16 @@ namespace Silesian_Undergrounds.Engine.Common
 {
     public class Player : AnimatedGameObject
     {
+        public event EventHandler<PlayerPropertyChangedEvent<int>> MoneyChangeEvent = delegate { };
+        public event EventHandler<PlayerPropertyChangedEvent<int>> KeyChangeEvent = delegate { };
 
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
 
         private Vector2 previousPosition;
         // @TODO: refactor this
-        public static int moneyAmount;
-        public static int keyAmount;
+        private int moneyAmount;
+        private int keyAmount;
 
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
         {
@@ -205,28 +208,48 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void AddMoney(int moneyToAdd)
         {
-            moneyAmount += moneyToAdd;
+            MoneyAmount += moneyToAdd;
         }
 
         public void RemoveMoney(int moneyToRemove)
         {
             if (moneyToRemove > moneyAmount)
-                moneyAmount = 0;
+                MoneyAmount = 0;
             else
-                moneyAmount -= moneyToRemove;
+                MoneyAmount -= moneyToRemove;
         }
 
         public void AddKey(int numberKeysToAdd)
         {
-            keyAmount += numberKeysToAdd;
+            KeyAmount += numberKeysToAdd;
         }
 
         public void RemoveKey(int numberKeysToRemove)
         {
             if (numberKeysToRemove > keyAmount)
-                keyAmount = 0;
+                KeyAmount = 0;
             else
-                keyAmount -= numberKeysToRemove;
+                KeyAmount -= numberKeysToRemove;
+        }
+
+        public int MoneyAmount
+        {
+            get { return moneyAmount; }
+            private set
+            {
+                MoneyChangeEvent.Invoke(this, new PlayerPropertyChangedEvent<int>(moneyAmount, value));
+                moneyAmount = value;
+            }
+        }
+
+        public int KeyAmount
+        {
+            get { return keyAmount; }
+            private set
+            {
+                KeyChangeEvent.Invoke(this, new PlayerPropertyChangedEvent<int>(keyAmount, value));
+                keyAmount = value;
+            }
         }
 
         private void HandleInput(KeyboardState keyState)
@@ -340,5 +363,17 @@ namespace Silesian_Undergrounds.Engine.Common
               this.Rectangle.Left < gameobjects.Rectangle.Right;
         }
         #endregion
+    }
+
+    public class PlayerPropertyChangedEvent<T> : EventArgs
+    {
+        public readonly T NewValue;
+        public readonly T OldValue;
+
+        public PlayerPropertyChangedEvent(T Old, T New)
+        {
+            OldValue = Old;
+            NewValue = New;
+        }
     }
 }

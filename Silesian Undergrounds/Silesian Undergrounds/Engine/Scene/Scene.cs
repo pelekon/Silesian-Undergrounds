@@ -44,7 +44,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             gameObjects.Add(player);
 
             camera = new Camera(player);
-            ui = new InGameUI();
+            ui = new InGameUI(player);
             pauseMenu = new UIArea(); // TEMP SET EMPTY PAUSE MENU
             canUnPause = true;
         }
@@ -118,16 +118,6 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Draw()
         {
-            if (isPaused)
-            {
-                Drawer.Draw((spriteBatch, gameTime) =>
-                {
-                    pauseMenu.Draw(spriteBatch);
-                }, null);
-
-                return;
-            }
-
             Drawer.Shaders.DrawGrayScaleEffect((spriteBatch, gameTime) =>
             {
                 foreach (var obj in gameObjects)
@@ -156,7 +146,10 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             Drawer.Draw((spriteBatch, gameTime) =>
             {
-                ui.Draw(spriteBatch);
+                if (isPaused)
+                    pauseMenu.Draw(spriteBatch);
+                else
+                    ui.Draw(spriteBatch);
             }, null);
         }
     }
