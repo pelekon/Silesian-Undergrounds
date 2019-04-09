@@ -48,6 +48,7 @@
     <Compile Include="Engine\Common\AnimatedGameObject.cs" />
     <Compile Include="Engine\Common\GameObject.cs" />
     <Compile Include="Engine\Common\PickableItem.cs" />
+    <Compile Include="Engine\Components\IComponent.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
     <Compile Include="Engine\Utils\FontMgr.cs" />
     <Compile Include="Engine\Utils\TextureMgr.cs" />

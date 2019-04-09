@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Diagnostics;
+using System.Collections.Generic;
+
+using Silesian_Undergrounds.Engine.Components;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
@@ -14,13 +16,8 @@ namespace Silesian_Undergrounds.Engine.Common
         public Vector2 size;
         public Vector2? scale;
         public Color color = Color.White;
-        public Rectangle Rectangle
-        {
-            get
-            {
-                return new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
-            }
-        }
+        public Rectangle Rectangle { get { return new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y); } }
+        private List<IComponent> components;
 
         public GameObject(Texture2D texture, Vector2 position, Vector2 size, int layer = 1, Vector2? scale = null)
         {
@@ -29,6 +26,8 @@ namespace Silesian_Undergrounds.Engine.Common
             this.size = size;
             this.layer = layer;
             this.scale = scale;
+
+            components = new List<IComponent>();
         }
 
         // causes movement
@@ -43,11 +42,23 @@ namespace Silesian_Undergrounds.Engine.Common
             return new Vector2((float)System.Math.Round(this.position.X / size.X) * size.X, (float)System.Math.Round(this.position.Y / size.Y) * size.Y);
         }
 
-        public virtual void Update(GameTime gameTime) { }
+        public virtual void Update(GameTime gameTime)
+        {
+            foreach (var component in components)
+                component.Update(gameTime);
+        }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, scale: scale, color: color);
+
+            foreach (var component in components)
+                component.Draw(spriteBatch);
+        }
+
+        public void AddComponent(IComponent c)
+        {
+            components.Add(c);
         }
 
         // TODO: Remove this and split collisions to 2 sparate components:
