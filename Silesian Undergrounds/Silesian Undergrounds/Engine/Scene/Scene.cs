@@ -46,6 +46,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             TextureMgr.Instance.LoadIfNeeded("minerCharacter");
             player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
+            player.Initialize();
             gameObjects.Add(player);
 
             camera = new Camera(player);

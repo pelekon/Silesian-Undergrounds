@@ -14,12 +14,16 @@ namespace Silesian_Undergrounds.Engine.Common
     {
         public event EventHandler<PropertyChangedArgs<int>> MoneyChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> KeyChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> HungerChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> LiveChangeEvent = delegate { };
 
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
         
         private int moneyAmount;
         private int keyAmount;
+        private int hungerValue;
+        private int liveValue;
 
         BoxCollider collider;
 
@@ -80,6 +84,8 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             moneyAmount = 0;
             keyAmount = 0;
+            hungerValue = 100;
+            liveValue = 100;
         }
 
         public void AddMoney(int moneyToAdd)
@@ -125,6 +131,26 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 KeyChangeEvent.Invoke(this, new PropertyChangedArgs<int>(keyAmount, value));
                 keyAmount = value;
+            }
+        }
+
+        public int HungerValue
+        {
+            get { return hungerValue; }
+            private set
+            {
+                HungerChangeEvent.Invoke(this, new PropertyChangedArgs<int>(hungerValue, value));
+                hungerValue = value;
+            }
+        }
+
+        public int LiveValue
+        {
+            get { return liveValue; }
+            private set
+            {
+                LiveChangeEvent.Invoke(this, new PropertyChangedArgs<int>(liveValue, value));
+                liveValue = value;
             }
         }
 
