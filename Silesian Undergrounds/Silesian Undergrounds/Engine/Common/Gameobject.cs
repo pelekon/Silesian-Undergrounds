@@ -17,7 +17,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public Vector2? scale;
         public Color color = Color.White;
         public Rectangle Rectangle { get { return new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y); } }
-        private List<IComponent> components;
+        protected List<IComponent> components;
 
         public GameObject(Texture2D texture, Vector2 position, Vector2 size, int layer = 1, Vector2? scale = null)
         {

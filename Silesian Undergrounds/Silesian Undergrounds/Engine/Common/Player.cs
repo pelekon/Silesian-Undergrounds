@@ -6,21 +6,24 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Scene;
+using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
     public class Player : AnimatedGameObject
     {
-        public event EventHandler<PlayerPropertyChangedEvent<int>> MoneyChangeEvent = delegate { };
-        public event EventHandler<PlayerPropertyChangedEvent<int>> KeyChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> MoneyChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> KeyChangeEvent = delegate { };
 
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
 
         private Vector2 previousPosition;
-        // @TODO: refactor this
+        
         private int moneyAmount;
         private int keyAmount;
+
+        BoxCollider collider;
 
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
         {
@@ -47,157 +50,33 @@ namespace Silesian_Undergrounds.Engine.Common
             AddAnimation(1, 25, 169, "IdleRight", 22, 22, new Vector2(0, 0));
             //Plays our start animation
             PlayAnimation("IdleDown");
+
+            collider = new BoxCollider(this, 65, 65, -2, -4, false);
+            AddComponent(collider);
+            collider.RegisterSelf();
+        }
+
+        ~Player()
+        {
+            foreach (var component in components)
+                component.UnRegisterSelf();
         }
 
         public override void Update(GameTime gameTime)
         {
             sDirection = Vector2.Zero;
-
         
             HandleInput(Keyboard.GetState());
 
-         
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             previousPosition = position;
-
+            //Console.WriteLine("Before: " + sDirection.X + " " + sDirection.Y);
             sDirection *= speed;
-
-            position += (sDirection * deltaTime);
+            sDirection *= deltaTime;
+            //Console.WriteLine("After: " + sDirection.X + " " + sDirection.Y);
+            collider.Move(sDirection);
 
             base.Update(gameTime);
-
-        }
-
-        // TODO: Remove this and split collisions to 2 sparate components:
-        // Collision Box and Collider
-        public void Collision(List<GameObject> gameobjects)
-        {
-            foreach (GameObject gameobject in gameobjects)
-            {
-                if (TouchingBottom(gameobject) || TouchingLeftSide(gameobject) || TouchingRightSide(gameobject) || TouchingTop(gameobject))
-                {
-                    gameobject.NotifyCollision(this);
-
-                    if (gameobject is Tile && gameobject.layer == 1)
-                    {
-
-                        if (gameobject.Rectangle.Intersects(this.Rectangle))
-                        {
-                            Vector2 temp = previousPosition;
-
-                            GameObject left = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(-1, 0) * this.size), 1);
-                            GameObject right = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(1, 0) * this.size), 1);
-                            GameObject top = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(0, -1) * this.size), 1);
-                            GameObject bottom = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(0, 1) * this.size), 1);
-
-                            if (left != null)
-                            {
-                                if (Keyboard.GetState().IsKeyDown(Keys.S) && Keyboard.GetState().IsKeyDown(Keys.A))
-                                    temp = previousPosition + new Vector2(0, 1);
-
-                                if (Keyboard.GetState().IsKeyDown(Keys.W) && Keyboard.GetState().IsKeyDown(Keys.A))
-                                    temp = previousPosition + new Vector2(0, -1);
-                            }
-
-                            if (top != null)
-                            {
-                                if (Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.W))
-                                    temp = previousPosition + new Vector2(-1, 0);
-
-                                if (Keyboard.GetState().IsKeyDown(Keys.D) && Keyboard.GetState().IsKeyDown(Keys.W))
-                                    temp = previousPosition + new Vector2(1, 0);
-
-                                if (Keyboard.GetState().IsKeyDown(Keys.W) && Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.S))
-                                    temp = previousPosition;
-                            }
-
-                            if (right != null)
-                            {
-                                if (Keyboard.GetState().IsKeyDown(Keys.W) && Keyboard.GetState().IsKeyDown(Keys.D))
-                                    temp = previousPosition + new Vector2(0, -1);
-
-                                if (Keyboard.GetState().IsKeyDown(Keys.S) && Keyboard.GetState().IsKeyDown(Keys.D))
-                                    temp = previousPosition + new Vector2(0, 1);
-                            }
-
-                            if (bottom != null)
-                            {
-                                if (Keyboard.GetState().IsKeyDown(Keys.D) && Keyboard.GetState().IsKeyDown(Keys.S))
-                                    temp = previousPosition + new Vector2(1, 0);
-
-                                if (Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.S))
-                                    temp = previousPosition + new Vector2(-1, 0);
-                            }
-
-                            if (left != null && top != null)
-                            {
-                                if (TouchingBottom(top) && !TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.A)))
-                                    if (left.position.X + 1 <= System.Math.Round(this.position.X) && left.position.Y + size.Y >= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(-1, 0);
-
-                                if (!TouchingBottom(top) && TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.W)))
-                                    if (top.position.X >= System.Math.Round(this.position.X) && top.position.Y + size.Y <= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(0, -1);
-
-                                if (TouchingBottom(top) && TouchingRightSide(left))
-                                    temp = previousPosition + new Vector2(1, 1);
-                            }
-
-                            if (right != null && top != null)
-                            {
-                                if (TouchingBottom(top) && !TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.D)))
-                                    if (right.position.X - 1 >= System.Math.Round(this.position.X) && right.position.Y + size.Y >= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(1, 0);
-
-                                if (!TouchingBottom(top) && TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.W)))
-                                    if (top.position.X <= System.Math.Round(this.position.X) && top.position.Y + size.Y + 1 <= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(0, -1);
-
-                                if (TouchingBottom(top) && TouchingLeftSide(right))
-
-                                    temp = previousPosition + new Vector2(-1, 1);
-                            }
-
-                            if (right != null && bottom != null)
-                            {
-                                if (TouchingTop(bottom) && !TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.D)))
-                                    if (right.position.X - 1 >= System.Math.Round(this.position.X) && right.position.Y + size.Y <= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(1, 0);
-
-                                if (!TouchingTop(bottom) && TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.S)))
-                                    if (bottom.position.X <= System.Math.Round(this.position.X) && bottom.position.Y + size.Y + 1 >= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(0, 1);
-
-                                if (TouchingTop(bottom) && TouchingLeftSide(right))
-                                    temp = previousPosition + new Vector2(-1, -1);
-                            }
-
-                            if (left != null && bottom != null)
-                            {
-                                if (TouchingTop(bottom) && !TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.A)))
-                                    if (left.position.X + 1 <= System.Math.Round(this.position.X) && left.position.Y + size.Y <= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(-1, 0);
-
-                                if (!TouchingTop(bottom) && TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.S)))
-                                    if (bottom.position.X >= System.Math.Round(this.position.X) && bottom.position.Y + size.Y + 1 >= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(0, 1);
-
-                                if (TouchingTop(bottom) && TouchingRightSide(left))
-                                    temp = previousPosition + new Vector2(1, -1);
-                            }
-                            this.position = temp;
-                            }
-                        }
-                    }
-            }
-        }
-
-        private GameObject GetGameobjectAtPosition(List<GameObject> gameobjects, Vector2 position, int layer)
-        {
-            foreach (GameObject gam in gameobjects)
-                if (gam.position == position && gam.layer == layer)
-                    return gam;
-            return null;
         }
 
         public void Initialize()
@@ -237,7 +116,7 @@ namespace Silesian_Undergrounds.Engine.Common
             get { return moneyAmount; }
             private set
             {
-                MoneyChangeEvent.Invoke(this, new PlayerPropertyChangedEvent<int>(moneyAmount, value));
+                MoneyChangeEvent.Invoke(this, new PropertyChangedArgs<int>(moneyAmount, value));
                 moneyAmount = value;
             }
         }
@@ -247,7 +126,7 @@ namespace Silesian_Undergrounds.Engine.Common
             get { return keyAmount; }
             private set
             {
-                KeyChangeEvent.Invoke(this, new PlayerPropertyChangedEvent<int>(keyAmount, value));
+                KeyChangeEvent.Invoke(this, new PropertyChangedArgs<int>(keyAmount, value));
                 keyAmount = value;
             }
         }
@@ -285,10 +164,8 @@ namespace Silesian_Undergrounds.Engine.Common
 
                 }
             }
-      
 
-        currentDirection = movementDirection.standstill;
-            
+            currentDirection = movementDirection.standstill;
         }
 
         public override void AnimationDone(string animation)
@@ -327,53 +204,6 @@ namespace Silesian_Undergrounds.Engine.Common
                 AddForce(0, -1);
             else if (state.IsKeyDown(Keys.Down))
                 AddForce(0, 1);
-        }
-
-        #region RectangleCollisionDetection
-
-        private bool TouchingLeftSide(GameObject gameobjects)
-        {
-            return this.Rectangle.Right > gameobjects.Rectangle.Left &&
-              this.Rectangle.Left < gameobjects.Rectangle.Left &&
-              this.Rectangle.Bottom > gameobjects.Rectangle.Top &&
-              this.Rectangle.Top < gameobjects.Rectangle.Bottom;
-        }
-
-        private bool TouchingRightSide(GameObject gameobjects)
-        {
-            return this.Rectangle.Left < gameobjects.Rectangle.Right &&
-              this.Rectangle.Right > gameobjects.Rectangle.Right &&
-              this.Rectangle.Bottom > gameobjects.Rectangle.Top &&
-              this.Rectangle.Top < gameobjects.Rectangle.Bottom;
-        }
-
-        private bool TouchingTop(GameObject gameobjects)
-        {
-            return this.Rectangle.Bottom > gameobjects.Rectangle.Top &&
-              this.Rectangle.Top < gameobjects.Rectangle.Top &&
-              this.Rectangle.Right > gameobjects.Rectangle.Left &&
-              this.Rectangle.Left < gameobjects.Rectangle.Right;
-        }
-
-        private bool TouchingBottom(GameObject gameobjects)
-        {
-            return this.Rectangle.Top < gameobjects.Rectangle.Bottom &&
-              this.Rectangle.Bottom > gameobjects.Rectangle.Bottom &&
-              this.Rectangle.Right > gameobjects.Rectangle.Left &&
-              this.Rectangle.Left < gameobjects.Rectangle.Right;
-        }
-        #endregion
-    }
-
-    public class PlayerPropertyChangedEvent<T> : EventArgs
-    {
-        public readonly T NewValue;
-        public readonly T OldValue;
-
-        public PlayerPropertyChangedEvent(T Old, T New)
-        {
-            OldValue = Old;
-            NewValue = New;
         }
     }
 }

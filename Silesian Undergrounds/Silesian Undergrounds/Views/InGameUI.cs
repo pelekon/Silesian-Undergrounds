@@ -18,12 +18,12 @@ namespace Silesian_Undergrounds.Views
             keyLabel.Text = plr.KeyAmount.ToString();
         }
 
-        private void Player_MoneyChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
+        private void Player_MoneyChangeEvent(object sender, PropertyChangedArgs<int> e)
         {
             moneyLabel.Text = e.NewValue.ToString() + " $";
         }
 
-        private void Player_KeyChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
+        private void Player_KeyChangeEvent(object sender, PropertyChangedArgs<int> e)
         {
             keyLabel.Text = e.NewValue.ToString();
         }

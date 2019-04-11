@@ -9,6 +9,7 @@ using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.UI;
 using Silesian_Undergrounds.Views;
+using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -32,6 +33,10 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public Scene()
         {
+            // Clear collision system store before creating new scene
+            // just in case :)
+            CollisionSystem.CleanUp();
+
             // Inittialize variables
             gameObjects = new List<GameObject>();
             objectsToDelete = new List<GameObject>();
@@ -111,7 +116,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                 obj.Update(gameTime);
 
             camera.Update(gameTime);
-            player.Collision(this.gameObjects);
 
             ui.Update(gameTime);
         }
