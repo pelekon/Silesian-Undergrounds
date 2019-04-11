@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Scene {
     class Tile : GameObject
@@ -13,6 +14,12 @@ namespace Silesian_Undergrounds.Engine.Scene {
             this.position = position;
             this.size = size;
             this.layer = layer;
+
+            if (layer == 1)
+            {
+                BoxCollider collider = new BoxCollider(this, size.X, size.Y, 0, 0, false);
+                AddComponent(collider);
+            }
         }
 
         public Rectangle Rectangle

@@ -42,7 +42,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             objectsToDelete = new List<GameObject>();
             objectsToAdd = new List<GameObject>();
             isPaused = false;
-            player = new Player(new Vector2(100, 100), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
+            player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
 
             TextureMgr.Instance.LoadIfNeeded("minerCharacter");
             player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
