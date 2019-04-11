@@ -17,8 +17,6 @@ namespace Silesian_Undergrounds.Engine.Common
 
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
-
-        private Vector2 previousPosition;
         
         private int moneyAmount;
         private int keyAmount;
@@ -28,7 +26,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
         {
             FramesPerSecond = 10;
-            previousPosition = position;
+
             //Adds all the players animations
             // AddAnimation(int frames, int yPos, int xStartFrame, string name, int width, int height, Vector2 offset)
             // frames - number of frames of animation 
@@ -69,11 +67,10 @@ namespace Silesian_Undergrounds.Engine.Common
             HandleInput(Keyboard.GetState());
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            previousPosition = position;
-            //Console.WriteLine("Before: " + sDirection.X + " " + sDirection.Y);
+
             sDirection *= speed;
             sDirection *= deltaTime;
-            //Console.WriteLine("After: " + sDirection.X + " " + sDirection.Y);
+
             collider.Move(sDirection);
 
             base.Update(gameTime);
