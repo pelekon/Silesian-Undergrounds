@@ -8,14 +8,20 @@ namespace Silesian_Undergrounds.Views
     {
         private Label moneyLabel;
         private Label keyLabel;
+        private Label hungerLabel;
+        private Label liveLabel;
 
         public InGameUI(Player plr) : base()
         {
             plr.MoneyChangeEvent += Player_MoneyChangeEvent;
             plr.KeyChangeEvent += Player_KeyChangeEvent;
+            plr.HungerChangeEvent += Player_HungerChangeEvent;
+            plr.LiveChangeEvent += Player_LiveChangeEvent;
 
             moneyLabel.Text = plr.MoneyAmount.ToString() + " $";
             keyLabel.Text = plr.KeyAmount.ToString();
+            hungerLabel.Text = plr.HungerValue.ToString();
+            liveLabel.Text = plr.LiveValue.ToString();
         }
 
         private void Player_MoneyChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
@@ -28,6 +34,16 @@ namespace Silesian_Undergrounds.Views
             keyLabel.Text = e.NewValue.ToString();
         }
 
+        private void Player_HungerChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
+        {
+            hungerLabel.Text = e.NewValue.ToString();
+        }
+
+        private void Player_LiveChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
+        {
+            liveLabel.Text = e.NewValue.ToString();
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -35,14 +51,27 @@ namespace Silesian_Undergrounds.Views
             moneyLabel = new Label("0 $", 3, 1.5f, 3, 2, this);
             moneyLabel.SetTextAlign(TextAlign.ALIGN_LEFT);
             moneyLabel.SetBackground(null);
+
             keyLabel = new Label("0", 10, 1.5f, 3, 2, this);
             keyLabel.SetTextAlign(TextAlign.ALIGN_LEFT);
             keyLabel.SetBackground(null);
+
+            liveLabel = new Label("100", 3, 5f, 5, 5, this);
+            liveLabel.SetTextAlign(TextAlign.ALIGN_LEFT);
+            liveLabel.SetBackground(null);
+
+            hungerLabel = new Label("100", 3, 9.5f, 5, 5, this);
+            hungerLabel.SetTextAlign(TextAlign.ALIGN_LEFT);
+            hungerLabel.SetBackground(null);
 
             AddElement(new Image(1, 1, 2, 3, "Items/Ores/gold/gold_1", this));
             AddElement(moneyLabel);
             AddElement(new Image(8, 1, 2, 3, "Items/Keys/key_1", this));
             AddElement(keyLabel);
+            AddElement(new Image(1, 6,2,3,"Items/Heart/heart_1",this));
+            AddElement(liveLabel);
+            AddElement(new Image(1, 11, 2, 3,"Items/Food/meat", this));
+            AddElement(hungerLabel);
         }
     }
 }

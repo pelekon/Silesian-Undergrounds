@@ -13,6 +13,8 @@ namespace Silesian_Undergrounds.Engine.Common
     {
         public event EventHandler<PlayerPropertyChangedEvent<int>> MoneyChangeEvent = delegate { };
         public event EventHandler<PlayerPropertyChangedEvent<int>> KeyChangeEvent = delegate { };
+        public event EventHandler<PlayerPropertyChangedEvent<int>> HungerChangeEvent = delegate { };
+        public event EventHandler<PlayerPropertyChangedEvent<int>> LiveChangeEvent = delegate { };
 
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
@@ -21,6 +23,8 @@ namespace Silesian_Undergrounds.Engine.Common
         // @TODO: refactor this
         private int moneyAmount;
         private int keyAmount;
+        private int hungerValue;
+        private int liveValue;
 
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
         {
@@ -204,6 +208,8 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             moneyAmount = 0;
             keyAmount = 0;
+            hungerValue = 100;
+            liveValue = 100;
         }
 
         public void AddMoney(int moneyToAdd)
@@ -249,6 +255,26 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 KeyChangeEvent.Invoke(this, new PlayerPropertyChangedEvent<int>(keyAmount, value));
                 keyAmount = value;
+            }
+        }
+
+        public int HungerValue
+        {
+            get { return hungerValue; }
+            private set
+            {
+                HungerChangeEvent.Invoke(this, new PlayerPropertyChangedEvent<int>(hungerValue, value));
+                hungerValue = value;
+            }
+        }
+
+        public int LiveValue
+        {
+            get { return liveValue; }
+            private set
+            {
+                LiveChangeEvent.Invoke(this, new PlayerPropertyChangedEvent<int>(liveValue, value));
+                liveValue = value;
             }
         }
 
