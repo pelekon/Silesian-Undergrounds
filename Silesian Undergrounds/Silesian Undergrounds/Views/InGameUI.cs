@@ -34,12 +34,12 @@ namespace Silesian_Undergrounds.Views
             keyLabel.Text = e.NewValue.ToString();
         }
 
-        private void Player_HungerChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
+        private void Player_HungerChangeEvent(object sender, PropertyChangedArgs<int> e)
         {
             hungerLabel.Text = e.NewValue.ToString();
         }
 
-        private void Player_LiveChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
+        private void Player_LiveChangeEvent(object sender, PropertyChangedArgs<int> e)
         {
             liveLabel.Text = e.NewValue.ToString();
         }
