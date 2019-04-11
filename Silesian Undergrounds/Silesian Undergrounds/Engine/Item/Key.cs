@@ -13,6 +13,7 @@ namespace Silesian_Undergrounds.Engine.Item {
             AddComponent(collider);
         }
 
+        //TODO: extract some code to PickableItem class
         public override void NotifyCollision(GameObject obj)
         {
             if (obj is Player)

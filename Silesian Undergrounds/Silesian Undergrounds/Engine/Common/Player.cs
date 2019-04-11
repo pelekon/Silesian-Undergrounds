@@ -64,6 +64,14 @@ namespace Silesian_Undergrounds.Engine.Common
                 component.UnRegisterSelf();
         }
 
+        public bool checkIfEnoughMoney(int cost)
+        {
+            if(cost > moneyAmount)
+                return false;
+            
+            return true;
+        }
+
         public override void Update(GameTime gameTime)
         {
             sDirection = Vector2.Zero;

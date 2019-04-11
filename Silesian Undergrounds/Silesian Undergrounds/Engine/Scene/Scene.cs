@@ -18,6 +18,8 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         #region SCENE_VARIABLES
         private List<GameObject> gameObjects;
+        //TODO: This is temporary just to present the buying mechanism
+        private List<GameObject> objectsToBuy;
         private List<GameObject> objectsToDelete;
         private List<GameObject> objectsToAdd;
 
@@ -41,6 +43,8 @@ namespace Silesian_Undergrounds.Engine.Scene
             gameObjects = new List<GameObject>();
             objectsToDelete = new List<GameObject>();
             objectsToAdd = new List<GameObject>();
+            //TODO: This is temporary
+            objectsToBuy = new List<GameObject>();
             isPaused = false;
             player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
 
