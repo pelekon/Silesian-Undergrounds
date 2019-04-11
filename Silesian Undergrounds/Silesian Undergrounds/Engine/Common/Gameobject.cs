@@ -59,6 +59,15 @@ namespace Silesian_Undergrounds.Engine.Common
         public void AddComponent(IComponent c)
         {
             components.Add(c);
+            c.RegisterSelf();
+        }
+
+        public void RemoveAllComponents()
+        {
+            foreach (var component in components)
+                component.UnRegisterSelf();
+
+            components.Clear();
         }
 
         // TODO: Remove this and split collisions to 2 sparate components:
