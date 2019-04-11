@@ -24,22 +24,22 @@ namespace Silesian_Undergrounds.Views
             liveLabel.Text = plr.LiveValue.ToString();
         }
 
-        private void Player_MoneyChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
+        private void Player_MoneyChangeEvent(object sender, PropertyChangedArgs<int> e)
         {
             moneyLabel.Text = e.NewValue.ToString() + " $";
         }
 
-        private void Player_KeyChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
+        private void Player_KeyChangeEvent(object sender, PropertyChangedArgs<int> e)
         {
             keyLabel.Text = e.NewValue.ToString();
         }
 
-        private void Player_HungerChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
+        private void Player_HungerChangeEvent(object sender, PropertyChangedArgs<int> e)
         {
             hungerLabel.Text = e.NewValue.ToString();
         }
 
-        private void Player_LiveChangeEvent(object sender, PlayerPropertyChangedEvent<int> e)
+        private void Player_LiveChangeEvent(object sender, PropertyChangedArgs<int> e)
         {
             liveLabel.Text = e.NewValue.ToString();
         }

@@ -90,11 +90,17 @@ namespace Silesian_Undergrounds.Engine.Common
                     numberFrames = 0;
                 }
             }
+
+            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture: texture, position: position + animOffsets[currentAnimation], sourceRectangle: animationDic[currentAnimation][numberFrames], color: Color.White, scale: scale);
+
+            // Temp code
+            foreach (var component in components)
+                component.Draw(spriteBatch);
         }
 
         // callback called every time animation is finished

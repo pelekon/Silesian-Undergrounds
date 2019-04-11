@@ -9,6 +9,7 @@ using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.UI;
 using Silesian_Undergrounds.Views;
+using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -32,13 +33,17 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public Scene()
         {
+            // Clear collision system store before creating new scene
+            // just in case :)
+            CollisionSystem.CleanUp();
+
             // Inittialize variables
             gameObjects = new List<GameObject>();
             objectsToDelete = new List<GameObject>();
             objectsToAdd = new List<GameObject>();
             isPaused = false;
-            player = new Player(new Vector2(100, 100), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
-            
+            player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
+
             TextureMgr.Instance.LoadIfNeeded("minerCharacter");
             player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
             player.Initialize();
@@ -81,7 +86,10 @@ namespace Silesian_Undergrounds.Engine.Scene
         private void DeleteObjects()
         {
             foreach (var obj in objectsToDelete)
+            {
                 gameObjects.Remove(obj);
+                obj.RemoveAllComponents();
+            }  
 
             objectsToDelete.Clear();
         }
@@ -112,7 +120,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                 obj.Update(gameTime);
 
             camera.Update(gameTime);
-            player.Collision(this.gameObjects);
 
             ui.Update(gameTime);
         }

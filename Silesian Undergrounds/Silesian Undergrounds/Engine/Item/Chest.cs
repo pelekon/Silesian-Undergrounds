@@ -3,9 +3,12 @@ using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Utils;
+using Silesian_Undergrounds.Engine.Collisions;
 
-namespace Silesian_Undergrounds.Engine.Item {
-    class Chest : PickableItem {
+namespace Silesian_Undergrounds.Engine.Item
+{
+    class Chest : PickableItem
+    {
         private const int NumberOfChestTexture = 4;
         // time since last frame change
         private double timeSinceLastFrameChange;
@@ -26,6 +29,14 @@ namespace Silesian_Undergrounds.Engine.Item {
             TextureMgr.Instance.LoadIfNeeded("Items/Chests/chest_4");
 
             FramesPerSecond = 10;
+            BoxCollider collider = new BoxCollider(this, 59, 46, 0, 0, false);
+            AddComponent(collider);
+        }
+
+        ~Chest()
+        {
+            foreach (var component in components)
+                component.UnRegisterSelf();
         }
 
         public override void NotifyCollision(GameObject obj)
@@ -33,14 +44,13 @@ namespace Silesian_Undergrounds.Engine.Item {
             if (obj is Player)
             {
                 Player plr = obj as Player;
-                if (plr.KeyAmount > 0)
+                if (!WasPicked && plr.KeyAmount > 0)
                 {
                     WasPicked = true;
                     plr.RemoveKey(1);
                 }
             }
         }
-
 
         public override void Update(GameTime gameTime)
         {

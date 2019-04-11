@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Silesian_Undergrounds.Engine.Scene;
+using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
 
 namespace Silesian_Undergrounds.Engine.Item {
@@ -24,6 +24,9 @@ namespace Silesian_Undergrounds.Engine.Item {
                 hunderRefil = 20;
             else
                 hunderRefil = 30;
+
+            BoxCollider collider = new BoxCollider(this, 20, 20, 0, 0, true);
+            AddComponent(collider);
         }
 
         public override void NotifyCollision(GameObject obj)
