@@ -10,7 +10,7 @@ using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
 
 namespace Silesian_Undergrounds.Engine.Item {
-    class Food : PickableItem {
+    public class Food : PickableItem {
 
         public int hunderRefil;
 

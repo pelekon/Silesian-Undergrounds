@@ -11,7 +11,7 @@ using Silesian_Undergrounds.Engine.Enum;
 
 namespace Silesian_Undergrounds.Engine.Item
 {
-    class Ore : PickableItem {
+    public class Ore : PickableItem {
 
         public OreEnum type;
 

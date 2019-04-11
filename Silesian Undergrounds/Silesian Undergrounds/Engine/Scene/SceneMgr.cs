@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Silesian_Undergrounds.Engine.Utils;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
+using Silesian_Undergrounds.Engine.Common;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -112,7 +113,12 @@ namespace Silesian_Undergrounds.Engine.Scene
             foreach (Tile tile in Renderer.Tiles)
                 scene.AddObject(tile);
 
-            TextureMgr.Instance.GenerateItems(scene, Renderer.Pickable);
+            List<PickableItem> generated = GameObjectFactory.ScenePickableItemsFactory(Renderer.Pickable);
+            foreach(var obj in generated)
+            {
+                obj.SetScene(scene);
+                scene.AddObject(obj);
+            }
 
             tileFile.Close();
             return true;

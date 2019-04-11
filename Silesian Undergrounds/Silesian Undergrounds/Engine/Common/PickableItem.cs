@@ -13,6 +13,11 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             this.scene = scene;
         }
+        
+        public void SetScene(Scene.Scene s)
+        {
+            scene = s;
+        }
 
     }
 }

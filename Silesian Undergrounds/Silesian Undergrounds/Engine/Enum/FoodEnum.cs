@@ -1,5 +1,5 @@
 ﻿namespace Silesian_Undergrounds.Engine.Enum {
-    enum FoodEnum {
+    public enum FoodEnum {
         Meat,
         Steak
     }
