@@ -93,8 +93,10 @@ namespace Silesian_Undergrounds.Engine.Utils
         private PickableEnum RandItem(Random random)
         {
             int randed = random.Next(1, 100);
-            if (randed <= 25)
+            if (randed <= 10)
                 return PickableEnum.None;
+            else if (randed > 10 && randed <= 25)
+                return PickableEnum.Hearth;
             else if (randed > 25 && randed <= 45)
                 return PickableEnum.Food;
             else if (randed > 45 && randed <= 75)
@@ -122,6 +124,8 @@ namespace Silesian_Undergrounds.Engine.Utils
                     GenerateChest(scene, pickableObject);
                 else if (itemType == PickableEnum.Food)
                     GenerateFood(scene, random, pickableObject);
+                else if(itemType == PickableEnum.Hearth)
+                    GenerateHearth(scene, pickableObject);
                 else
                     GenerateKey(scene, pickableObject);
             }
@@ -161,6 +165,11 @@ namespace Silesian_Undergrounds.Engine.Utils
         private void GenerateKey(Scene.Scene scene, Tile pickableObject)
         {
             scene.AddObject(new Key(LoadTexture2DByName("Items/Keys/key_1"), pickableObject.position, pickableObject.size, 3, scene));
+        }
+
+        private void GenerateHearth(Scene.Scene scene, Tile pickableObject)
+        {
+            scene.AddObject(new Heart(LoadTexture2DByName("Items/Heart/heart_1"), pickableObject.position, pickableObject.size, 3, scene));
         }
 
         public Texture2D LoadTexture2DByName(string name)
