@@ -25,6 +25,9 @@ namespace Silesian_Undergrounds.Engine.Common
         private int hungerValue;
         private int liveValue;
 
+        private int maxHungerValue;
+        private int maxLiveValue;
+
         BoxCollider collider;
 
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
@@ -86,6 +89,8 @@ namespace Silesian_Undergrounds.Engine.Common
             keyAmount = 0;
             hungerValue = 100;
             liveValue = 100;
+            maxHungerValue = 150;
+            maxLiveValue = 100;
         }
 
         public void AddMoney(int moneyToAdd)
@@ -106,12 +111,30 @@ namespace Silesian_Undergrounds.Engine.Common
             KeyAmount += numberKeysToAdd;
         }
 
+        public void RefilHunger(int hungerValueToRefil)
+        {
+            if (hungerValue + hungerValueToRefil > maxHungerValue)
+                HungerValue += (maxHungerValue - hungerValue);
+            else
+                HungerValue += hungerValueToRefil;
+        }
+
         public void RemoveKey(int numberKeysToRemove)
         {
             if (numberKeysToRemove > keyAmount)
                 KeyAmount = 0;
             else
                 KeyAmount -= numberKeysToRemove;
+        }
+
+        public int MaxHungerValue
+        {
+            get { return maxHungerValue;  }
+        }
+
+        public int MaxLiveValue
+        {
+            get { return maxLiveValue;  }
         }
 
         public int MoneyAmount
