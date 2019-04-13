@@ -38,8 +38,10 @@ namespace Silesian_Undergrounds.Engine.Utils
         private static PickableEnum RandItem(Random random)
         {
             int randed = random.Next(1, 100);
-            if (randed <= 25)
+            if (randed <= 10)
                 return PickableEnum.None;
+            else if (randed > 10 && randed <= 25)
+                return PickableEnum.Hearth;
             else if (randed > 25 && randed <= 45)
                 return PickableEnum.Food;
             else if (randed > 45 && randed <= 75)
@@ -77,6 +79,9 @@ namespace Silesian_Undergrounds.Engine.Utils
                         break;
                     case PickableEnum.Key:
                         list.Add(KeyFactory(source.position, source.size));
+                        break;
+                    case PickableEnum.Hearth:
+                        list.Add(HeartFactory(source.position, source.size));
                         break;
                     default:
                         #if DEBUG
@@ -128,6 +133,11 @@ namespace Silesian_Undergrounds.Engine.Utils
         public static Key KeyFactory(Vector2 position, Vector2 size)
         {
             return new Key(TextureMgr.Instance.GetTexture("Items/Keys/key_1"), position, size, 3, null);
+        }
+
+        public static Heart HeartFactory(Vector2 position, Vector2 size)
+        {
+            return new Heart(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, 3, null);
         }
     }
 }
