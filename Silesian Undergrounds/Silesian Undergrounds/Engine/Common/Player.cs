@@ -103,12 +103,15 @@ namespace Silesian_Undergrounds.Engine.Common
             timeSinceHungerFall = 0;
         }
 
-        public void AddLiveFromHeart()
+        public bool AddLiveFromHeart()
         {
             if(liveValue + HEART_INCREASE_VALUE <= MaxLiveValue)
             {
                 liveValue += HEART_INCREASE_VALUE;
+                return true;
              }
+
+            return false;
         }
 
         public void AddMoney(int moneyToAdd)
@@ -123,7 +126,6 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void RemoveMoney(int moneyToRemove)
         {
-            Debug.WriteLine("Removing the money!");
             if (moneyToRemove > moneyAmount)
                 MoneyAmount = 0;
             else
@@ -274,7 +276,6 @@ namespace Silesian_Undergrounds.Engine.Common
         // determines if current animation is up/donw/right/left
         private bool IsAnimationMovement(string animation)
         {
-            // we all love Clean Code <3 
             if((animation.Contains("Up") || animation.Contains("Left") || animation.Contains("Down") || animation.Contains("Right")) && !animation.Contains("Idle")) return true;
            
             return false;

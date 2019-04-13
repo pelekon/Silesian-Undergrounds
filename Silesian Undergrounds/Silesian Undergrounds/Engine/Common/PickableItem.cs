@@ -49,8 +49,7 @@ namespace Silesian_Undergrounds.Engine.CommonF
 
             if (player.MoneyAmount >= itemPrice)
             {
-                player.RemoveMoney(itemPrice);
-                BuyAppripriateProduct(player);
+                BuyAppripriateProduct(player, itemPrice);
             }
         }
 
@@ -78,18 +77,21 @@ namespace Silesian_Undergrounds.Engine.CommonF
             }
         }
 
-        private void BuyAppripriateProduct(Player player)
+        private void BuyAppripriateProduct(Player player, int itemPrice)
         {
             if (this is Food)
             {
+                player.RemoveMoney(itemPrice);
                 player.AddToHunger(((Food)this).hungerRefil);
             }
             else if (this is Heart)
             {
-                player.AddLiveFromHeart();
+                if(player.AddLiveFromHeart())
+                    player.RemoveMoney(itemPrice);
             }
             else if (this is Key)
             {
+                player.RemoveMoney(itemPrice);
                 player.AddKey(1);
             }
         }
@@ -102,8 +104,6 @@ namespace Silesian_Undergrounds.Engine.CommonF
             // temporary
             if (isBuyable)
                 this.color = Color.MediumVioletRed;
-       
-               
 
            base.Draw(spriteBatch);
         }
