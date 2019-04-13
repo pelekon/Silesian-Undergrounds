@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Item {
-    class Heart : PickableItem{
+    public class Heart : PickableItem{
 
         private int healtRegenerationValue = 0;
 

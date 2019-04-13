@@ -7,7 +7,7 @@ using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Item
 {
-    class Chest : PickableItem
+    public class Chest : PickableItem
     {
         private const int NumberOfChestTexture = 4;
         // time since last frame change
@@ -31,12 +31,6 @@ namespace Silesian_Undergrounds.Engine.Item
             FramesPerSecond = 10;
             BoxCollider collider = new BoxCollider(this, 59, 46, 0, 0, false);
             AddComponent(collider);
-        }
-
-        ~Chest()
-        {
-            foreach (var component in components)
-                component.UnRegisterSelf();
         }
 
         public override void NotifyCollision(GameObject obj)

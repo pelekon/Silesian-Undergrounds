@@ -1,15 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Silesian_Undergrounds.Engine.Scene;
-using Silesian_Undergrounds.Engine.Enum;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Silesian_Undergrounds.Engine.Item;
-using Silesian_Undergrounds.Engine.Common;
 
 namespace Silesian_Undergrounds.Engine.Utils
 {
@@ -66,117 +58,5 @@ namespace Silesian_Undergrounds.Engine.Utils
             foreach (var txt in list)
                 LoadIfNeeded(txt);
         }
-
-        private OreEnum RandOreType(Random random)
-        {
-            int randed = random.Next(1, 100);
-            if (randed > 40 && randed <= 70)
-                return OreEnum.Coal;
-            else if (randed > 70 && randed <= 90)
-                return OreEnum.Silver;
-            else
-                return OreEnum.Gold;
-
-        }
-
-        private FoodEnum RandFoodType(Random random)
-        {
-            int randed = random.Next(1, 100);
-
-            if (randed <= 65)
-                return FoodEnum.Meat;
-            else
-                return FoodEnum.Steak;
-
-        }
-
-        private PickableEnum RandItem(Random random)
-        {
-            int randed = random.Next(1, 100);
-            if (randed <= 10)
-                return PickableEnum.None;
-            else if (randed > 10 && randed <= 25)
-                return PickableEnum.Hearth;
-            else if (randed > 25 && randed <= 45)
-                return PickableEnum.Food;
-            else if (randed > 45 && randed <= 75)
-                return PickableEnum.Ore;
-            else if (randed > 75 && randed <= 85)
-                return PickableEnum.Chest;
-            else
-                return PickableEnum.Key;
-        }
-
-        public void GenerateItems(Scene.Scene scene, List<GameObject> pickableItems)
-        {
-            Random random = new Random();
-
-            foreach (Tile pickableObject in pickableItems)
-            {
-                PickableEnum itemType = RandItem(random);
-
-                if (itemType == PickableEnum.None)
-                    continue;
-
-                if (itemType == PickableEnum.Ore)
-                    GenerateOre(scene, random, pickableObject);
-                else if (itemType == PickableEnum.Chest)
-                    GenerateChest(scene, pickableObject);
-                else if (itemType == PickableEnum.Food)
-                    GenerateFood(scene, random, pickableObject);
-                else if(itemType == PickableEnum.Hearth)
-                    GenerateHearth(scene, pickableObject);
-                else
-                    GenerateKey(scene, pickableObject);
-            }
-        }
-  
-        private void GenerateOre(Scene.Scene scene, Random random, Tile pickableObject)
-        {
-            OreEnum type = RandOreType(random);
-
-            int textureNumber = random.Next(1, 3);
-
-            if (type == OreEnum.Coal)
-                scene.AddObject(new Ore(LoadTexture2DByName("Items/Ores/coal/coal"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
-            else if (type == OreEnum.Silver)
-                scene.AddObject(new Ore(LoadTexture2DByName("Items/Ores/silver/silver_" + textureNumber), pickableObject.position, pickableObject.size / 2, 3, scene, type));
-            else if (type == OreEnum.Gold)
-                scene.AddObject(new Ore(LoadTexture2DByName("Items/Ores/gold/gold_" + textureNumber), pickableObject.position, pickableObject.size / 2, 3, scene, type));
-
-        }
-
-        private void GenerateFood(Scene.Scene scene, Random random, Tile pickableObject)
-        {
-            FoodEnum type = RandFoodType(random);
-
-            if (type == FoodEnum.Meat)
-                scene.AddObject(new Food(LoadTexture2DByName("Items/Food/meat"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
-            else
-                scene.AddObject(new Food(LoadTexture2DByName("Items/Food/steak"), pickableObject.position, pickableObject.size / 2, 3, scene, type));
-
-        }
-
-        private void GenerateChest(Scene.Scene scene, Tile pickableObject)
-        {
-            scene.AddObject(new Chest(LoadTexture2DByName("Items/Chests/chest_1"), pickableObject.position, pickableObject.size, 3, scene));
-        }
-
-        private void GenerateKey(Scene.Scene scene, Tile pickableObject)
-        {
-            scene.AddObject(new Key(LoadTexture2DByName("Items/Keys/key_1"), pickableObject.position, pickableObject.size, 3, scene));
-        }
-
-        private void GenerateHearth(Scene.Scene scene, Tile pickableObject)
-        {
-            scene.AddObject(new Heart(LoadTexture2DByName("Items/Heart/heart_1"), pickableObject.position, pickableObject.size, 3, scene));
-        }
-
-        public Texture2D LoadTexture2DByName(string name)
-        {
-            return this.contentMgr.Load<Texture2D>(name);
-        }
-
-
     }
 }
