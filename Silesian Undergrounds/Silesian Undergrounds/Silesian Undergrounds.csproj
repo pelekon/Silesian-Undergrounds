@@ -7,7 +7,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E8652A93-3D09-4CD4-89AC-F630F61A9E20}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Silesian_Undergrounds</RootNamespace>
     <AssemblyName>Silesian Undergrounds</AssemblyName>
@@ -52,8 +52,10 @@
     <Compile Include="Engine\Common\PickableItem.cs" />
     <Compile Include="Engine\Common\PropertyChangedArgs.cs" />
     <Compile Include="Engine\Components\IComponent.cs" />
+    <Compile Include="Engine\Item\Heart.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
     <Compile Include="Engine\Utils\FontMgr.cs" />
+    <Compile Include="Engine\Utils\GameObjectFactory.cs" />
     <Compile Include="Engine\Utils\TextureMgr.cs" />
     <Compile Include="Engine\Enum\FoodEnum.cs" />
     <Compile Include="Engine\Enum\OreEnum.cs" />

@@ -10,9 +10,9 @@ using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
 
 namespace Silesian_Undergrounds.Engine.Item {
-    class Food : PickableItem {
+    public class Food : PickableItem {
 
-        public int hunderRefil;
+        public int hungerRefil;
 
         public FoodEnum type;
 
@@ -21,9 +21,9 @@ namespace Silesian_Undergrounds.Engine.Item {
             this.type = foodEnum;
 
             if (this.type == FoodEnum.Meat)
-                hunderRefil = 20;
+                hungerRefil = 20;
             else
-                hunderRefil = 30;
+                hungerRefil = 30;
 
             BoxCollider collider = new BoxCollider(this, 20, 20, 0, 0, true);
             AddComponent(collider);
@@ -35,7 +35,11 @@ namespace Silesian_Undergrounds.Engine.Item {
             if (obj is Player)
             {
                 Player pl = (Player)obj;
-                this.scene.DeleteObject(this);
+                if (pl.MaxHungerValue > pl.HungerValue)
+                {
+                    pl.RefilHunger(this.hungerRefil);
+                    this.scene.DeleteObject(this);
+                }
             }
         }
     }

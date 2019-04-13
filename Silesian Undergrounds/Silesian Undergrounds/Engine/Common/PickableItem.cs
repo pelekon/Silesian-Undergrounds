@@ -15,6 +15,11 @@ namespace Silesian_Undergrounds.Engine.Common
             this.scene = scene;
             this.isBuyable = isBuyable;
         }
+        
+        public void SetScene(Scene.Scene s)
+        {
+            scene = s;
+        }
 
     }
 }

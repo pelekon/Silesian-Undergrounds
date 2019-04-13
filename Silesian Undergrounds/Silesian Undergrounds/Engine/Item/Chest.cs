@@ -7,7 +7,7 @@ using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Item
 {
-    class Chest : PickableItem
+    public class Chest : PickableItem
     {
         private const int NumberOfChestTexture = 4;
         // time since last frame change
@@ -33,10 +33,17 @@ namespace Silesian_Undergrounds.Engine.Item
             AddComponent(collider);
         }
 
-        ~Chest()
+        public override void NotifyCollision(GameObject obj)
         {
-            foreach (var component in components)
-                component.UnRegisterSelf();
+            if (obj is Player)
+            {
+                Player plr = obj as Player;
+                if (!WasPicked && plr.KeyAmount > 0)
+                {
+                    WasPicked = true;
+                    plr.RemoveKey(1);
+                }
+            }
         }
 
         public override void Update(GameTime gameTime)

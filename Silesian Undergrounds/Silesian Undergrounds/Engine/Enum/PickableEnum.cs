@@ -4,6 +4,7 @@
         Key,
         Chest,
         Food,
+        Hearth,
         None
     }
 }
