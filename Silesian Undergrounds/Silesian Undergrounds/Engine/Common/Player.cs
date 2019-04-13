@@ -28,8 +28,9 @@ namespace Silesian_Undergrounds.Engine.Common
         private int maxHungerValue;
         private int maxLiveValue;
 
-        private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
-        private int HUNGER_DECREASE_VALUE = 1;
+        private const int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
+        private const int HUNGER_DECREASE_VALUE = 1;
+        public const int HEART_INCREASE_VALUE = 10;
 
         private float timeSinceHungerFall;
 
@@ -38,13 +39,6 @@ namespace Silesian_Undergrounds.Engine.Common
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
         {
             FramesPerSecond = 10;
-
-            //Adds all the players animations
-            // AddAnimation(int frames, int yPos, int xStartFrame, string name, int width, int height, Vector2 offset)
-            // frames - number of frames of animation 
-            // y position is a position from left right cornder
-            // xStart frame is the x - sum of all widths
-            // 80x80
 
             AddAnimation(5, 25, 313, "Down", 22, 22, new Vector2(0, 0));
             AddAnimation(1, 25, 313, "IdleDown", 22, 22, new Vector2(0, 0));
@@ -100,7 +94,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void Initialize()
         {
-            moneyAmount = 0;
+            moneyAmount = 200;
             keyAmount = 0;
             hungerValue = 100;
             liveValue = 100;
@@ -109,22 +103,36 @@ namespace Silesian_Undergrounds.Engine.Common
             timeSinceHungerFall = 0;
         }
 
+        public void AddLiveFromHeart()
+        {
+            if(liveValue + HEART_INCREASE_VALUE <= MaxLiveValue)
+            {
+                liveValue += HEART_INCREASE_VALUE;
+             }
+        }
+
         public void AddMoney(int moneyToAdd)
         {
             MoneyAmount += moneyToAdd;
         }
 
+        public void AddToHunger(int value)
+        {
+            hungerValue += value;
+        }
+
         public void RemoveMoney(int moneyToRemove)
         {
+            Debug.WriteLine("Removing the money!");
             if (moneyToRemove > moneyAmount)
                 MoneyAmount = 0;
             else
                 MoneyAmount -= moneyToRemove;
         }
 
-        public void AddKey(int numberKeysToAdd)
+        public void AddKey(int keyNumbers)
         {
-            KeyAmount += numberKeysToAdd;
+            KeyAmount += keyNumbers;
         }
 
         public void RefilHunger(int hungerValueToRefil)
@@ -258,7 +266,6 @@ namespace Silesian_Undergrounds.Engine.Common
            } else if(IsAnimationMovement(animation))
            {
                 currentAnimation = "Idle" + animation;
-                Debug.WriteLine(currentAnimation);
            }
            
 

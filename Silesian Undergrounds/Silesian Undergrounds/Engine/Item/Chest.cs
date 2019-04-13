@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Collisions;
+using System.Diagnostics;
+using Silesian_Undergrounds.Engine.CommonF;
 
 namespace Silesian_Undergrounds.Engine.Item
 {
@@ -22,7 +24,7 @@ namespace Silesian_Undergrounds.Engine.Item
         private int CurrentFrame = 1;
         private Boolean WasPicked = false;
 
-        public Chest(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene) : base(texture, position, size, layer, scene)
+        public Chest(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene, bool isBuyable = false) : base(texture, position, size, layer, scene, isBuyable)
         {
             TextureMgr.Instance.LoadIfNeeded("Items/Chests/chest_2");
             TextureMgr.Instance.LoadIfNeeded("Items/Chests/chest_3");
@@ -37,7 +39,7 @@ namespace Silesian_Undergrounds.Engine.Item
         {
             base.NotifyCollision(obj);
 
-            if (obj is Player)
+            if (obj is Player && !isBuyable)
             {
                 Player plr = obj as Player;
                 if (!WasPicked && plr.KeyAmount > 0)
@@ -67,5 +69,6 @@ namespace Silesian_Undergrounds.Engine.Item
 
             base.Update(gameTime);
         }
+
     }
 }

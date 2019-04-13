@@ -18,8 +18,6 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         #region SCENE_VARIABLES
         private List<GameObject> gameObjects;
-        //TODO: This is temporary just to present the buying mechanism
-        private List<GameObject> objectsToBuy;
         private List<GameObject> objectsToDelete;
         private List<GameObject> objectsToAdd;
 
@@ -35,16 +33,11 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public Scene()
         {
-            // Clear collision system store before creating new scene
-            // just in case :)
             CollisionSystem.CleanUp();
 
-            // Inittialize variables
             gameObjects = new List<GameObject>();
             objectsToDelete = new List<GameObject>();
             objectsToAdd = new List<GameObject>();
-            //TODO: This is temporary
-            objectsToBuy = new List<GameObject>();
             isPaused = false;
             player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
 
@@ -141,6 +134,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                         obj.Draw(spriteBatch);
                 }
             }, transformMatrix: camera.Transform);
+
             Drawer.Draw((spriteBatch, gameTime) =>
             {
                 
@@ -149,6 +143,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                         obj.Draw(spriteBatch);
                 player.Draw(spriteBatch);
             }, transformMatrix: camera.Transform);
+
             Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
             {
                 foreach (var obj in gameObjects)
