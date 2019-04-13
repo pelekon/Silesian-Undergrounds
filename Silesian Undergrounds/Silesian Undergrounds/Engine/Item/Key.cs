@@ -16,6 +16,8 @@ namespace Silesian_Undergrounds.Engine.Item {
         //TODO: extract some code to PickableItem class
         public override void NotifyCollision(GameObject obj)
         {
+            base.NotifyCollision(obj);
+
             if (obj is Player)
             {
                 Player pl = (Player)obj;

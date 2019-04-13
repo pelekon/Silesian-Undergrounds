@@ -35,6 +35,8 @@ namespace Silesian_Undergrounds.Engine.Item
 
         public override void NotifyCollision(GameObject obj)
         {
+            base.NotifyCollision(obj);
+
             if (obj is Player)
             {
                 Player plr = obj as Player;
@@ -64,20 +66,6 @@ namespace Silesian_Undergrounds.Engine.Item
            }
 
             base.Update(gameTime);
-        }
-
-        //TODO: extract some code to PickableItem class
-        public override void NotifyCollision(GameObject obj)
-        {
-            if (obj is Player)
-            {
-                Player plr = obj as Player;
-                if (!WasPicked && plr.KeyAmount > 0)
-                {
-                    WasPicked = true;
-                    plr.RemoveKey(1);
-                }
-            }
         }
     }
 }

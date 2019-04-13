@@ -8,10 +8,11 @@ namespace Silesian_Undergrounds.Engine.Enum
 {
     public enum ItemPricesEnum
     {
-        Key = 100,
-        Chest = 200,
-        Food = 300,
-        Steak = 400, 
-        Meat = 500
+            Chest = 20,
+            Food = 30,
+            Steak = 40,
+            Meat = 50,
+            Heart = 60,
+            Key = 70
     }
 }

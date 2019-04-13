@@ -17,6 +17,8 @@ namespace Silesian_Undergrounds.Engine.Item {
 
         public override void NotifyCollision(GameObject obj)
         {
+            base.NotifyCollision(obj);
+
             if (obj is Player)
             {
                 this.scene.DeleteObject(this);
