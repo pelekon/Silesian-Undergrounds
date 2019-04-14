@@ -97,7 +97,7 @@ namespace Silesian_Undergrounds.Engine.Common
             hungerValue = 100;
             liveValue = 100;
             maxHungerValue = 150;
-            maxLiveValue = 100;
+            maxLiveValue = 150;
             timeSinceHungerFall = 0;
         }
 
@@ -125,6 +125,14 @@ namespace Silesian_Undergrounds.Engine.Common
                 HungerValue += (maxHungerValue - hungerValue);
             else
                 HungerValue += hungerValueToRefil;
+        }
+
+        public void RefilLive(int liveValueToRefil)
+        {
+            if (liveValue + liveValueToRefil > maxLiveValue)
+                LiveValue += (maxLiveValue - liveValue);
+            else
+                LiveValue += liveValueToRefil;
         }
 
         public void RemoveKey(int numberKeysToRemove)
