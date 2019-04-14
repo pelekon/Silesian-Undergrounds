@@ -29,7 +29,8 @@ namespace Silesian_Undergrounds.Engine.Common
         private int maxLiveValue;
 
         private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
-        private int HUNGER_DECREASE_VALUE = 1;
+        private int HUNGER_DECREASE_VALUE = 101;
+        private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
 
         private float timeSinceHungerFall;
 
@@ -147,7 +148,29 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             if(hungerValue > 0)
             {
-                HungerValue -= hungerValueToDecrease;
+                if (HungerValue >= hungerValueToDecrease)
+                    HungerValue -= hungerValueToDecrease;
+                else
+                    HungerValue = 0;
+            }
+            else
+            {
+                DecreaseLiveValue(LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO);
+            }
+        }
+
+        public void DecreaseLiveValue(int liveValueToDecrease)
+        {
+            if(liveValue > 0)
+            {
+                if (LiveValue >= liveValueToDecrease)
+                    LiveValue -= liveValueToDecrease;
+                else
+                    LiveValue = 0;
+            }
+            else
+            {
+                //TODO player die 
             }
         }
 
