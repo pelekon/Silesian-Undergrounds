@@ -16,6 +16,8 @@ namespace Silesian_Undergrounds.Engine.Common
         public event EventHandler<PropertyChangedArgs<int>> KeyChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> HungerChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> LiveChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> HungerMaxValueChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
 
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
@@ -29,7 +31,7 @@ namespace Silesian_Undergrounds.Engine.Common
         private int maxLiveValue;
 
         private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
-        private int HUNGER_DECREASE_VALUE = 101;
+        private int HUNGER_DECREASE_VALUE = 5;
         private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
 
         private float timeSinceHungerFall;
@@ -221,6 +223,26 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 LiveChangeEvent.Invoke(this, new PropertyChangedArgs<int>(liveValue, value));
                 liveValue = value;
+            }
+        }
+
+        public int LiveMaxValue
+        {
+            get { return maxLiveValue; }
+            private set
+            {
+                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(maxLiveValue, value));
+                maxLiveValue = value;
+            }
+        }
+
+        public int HungerMaxValue
+        {
+            get { return maxHungerValue; }
+            private set
+            {
+                HungerMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(maxHungerValue, value));
+                maxHungerValue = value;
             }
         }
 
