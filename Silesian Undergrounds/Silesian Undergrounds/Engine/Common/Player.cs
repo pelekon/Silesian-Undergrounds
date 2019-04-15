@@ -63,13 +63,6 @@ namespace Silesian_Undergrounds.Engine.Common
 
             collider = new BoxCollider(this, 65, 65, -2, -4, false);
             AddComponent(collider);
-            collider.RegisterSelf();
-        }
-
-        ~Player()
-        {
-            foreach (var component in components)
-                component.UnRegisterSelf();
         }
 
         public override void Update(GameTime gameTime)
