@@ -16,10 +16,12 @@ namespace Silesian_Undergrounds.Engine.Common
         public event EventHandler<PropertyChangedArgs<int>> KeyChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> HungerChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> LiveChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> HungerMaxValueChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
 
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
-        
+
         private int moneyAmount;
         private int keyAmount;
         private int hungerValue;
@@ -28,9 +30,11 @@ namespace Silesian_Undergrounds.Engine.Common
         private int maxHungerValue;
         private int maxLiveValue;
 
-        private const int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
-        private const int HUNGER_DECREASE_VALUE = 1;
+        private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
+        private int HUNGER_DECREASE_VALUE = 5;
         public const int HEART_INCREASE_VALUE = 10;
+        private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
+
 
         private float timeSinceHungerFall;
 
@@ -57,27 +61,20 @@ namespace Silesian_Undergrounds.Engine.Common
 
             collider = new BoxCollider(this, 65, 65, -2, -4, false);
             AddComponent(collider);
-            collider.RegisterSelf();
-        }
-
-        ~Player()
-        {
-            foreach (var component in components)
-                component.UnRegisterSelf();
         }
 
         public bool checkIfEnoughMoney(int cost)
         {
             if(cost > moneyAmount)
                 return false;
-            
+
             return true;
         }
 
         public override void Update(GameTime gameTime)
         {
             sDirection = Vector2.Zero;
-        
+
             HandleInput(Keyboard.GetState());
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -129,6 +126,7 @@ namespace Silesian_Undergrounds.Engine.Common
                 HungerValue += hungerValueToRefil;
         }
 
+<<<<<<< HEAD
         public bool AddLiveFromHeart()
         {
             if (liveValue + HEART_INCREASE_VALUE <= MaxLiveValue)
@@ -138,6 +136,14 @@ namespace Silesian_Undergrounds.Engine.Common
             }
 
             return false;
+=======
+        public void RefilLive(int liveValueToRefil)
+        {
+            if (liveValue + liveValueToRefil > maxLiveValue)
+                LiveValue += (maxLiveValue - liveValue);
+            else
+                LiveValue += liveValueToRefil;
+>>>>>>> development
         }
 
         public void RemoveKey(int numberKeysToRemove)
@@ -152,7 +158,29 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             if(hungerValue > 0)
             {
-                HungerValue -= hungerValueToDecrease;
+                if (HungerValue >= hungerValueToDecrease)
+                    HungerValue -= hungerValueToDecrease;
+                else
+                    HungerValue = 0;
+            }
+            else
+            {
+                DecreaseLiveValue(LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO);
+            }
+        }
+
+        public void DecreaseLiveValue(int liveValueToDecrease)
+        {
+            if(liveValue > 0)
+            {
+                if (LiveValue >= liveValueToDecrease)
+                    LiveValue -= liveValueToDecrease;
+                else
+                    LiveValue = 0;
+            }
+            else
+            {
+                //TODO player die
             }
         }
 
@@ -206,6 +234,26 @@ namespace Silesian_Undergrounds.Engine.Common
             }
         }
 
+        public int LiveMaxValue
+        {
+            get { return maxLiveValue; }
+            private set
+            {
+                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(maxLiveValue, value));
+                maxLiveValue = value;
+            }
+        }
+
+        public int HungerMaxValue
+        {
+            get { return maxHungerValue; }
+            private set
+            {
+                HungerMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(maxHungerValue, value));
+                maxHungerValue = value;
+            }
+        }
+
         private void HandleHungerDecrasing(float deltaTime)
         {
             timeSinceHungerFall += deltaTime;
@@ -236,7 +284,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
                 }
                 if (keyState.IsKeyDown(Keys.S))
-                { 
+                {
                     sDirection += new Vector2(0, 1);
                     PlayAnimation("Down");
                     currentDirection = movementDirection.down;
@@ -264,7 +312,7 @@ namespace Silesian_Undergrounds.Engine.Common
            {
                 currentAnimation = "Idle" + animation;
            }
-           
+
 
         }
 
@@ -272,7 +320,7 @@ namespace Silesian_Undergrounds.Engine.Common
         private bool IsAnimationMovement(string animation)
         {
             if((animation.Contains("Up") || animation.Contains("Left") || animation.Contains("Down") || animation.Contains("Right")) && !animation.Contains("Idle")) return true;
-           
+
             return false;
         }
 

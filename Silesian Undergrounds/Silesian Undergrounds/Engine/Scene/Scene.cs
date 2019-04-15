@@ -84,8 +84,8 @@ namespace Silesian_Undergrounds.Engine.Scene
         {
             foreach (var obj in objectsToDelete)
             {
-                gameObjects.Remove(obj);
                 obj.RemoveAllComponents();
+                gameObjects.Remove(obj);
             }  
 
             objectsToDelete.Clear();

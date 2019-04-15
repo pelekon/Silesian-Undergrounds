@@ -56,6 +56,12 @@ namespace Silesian_Undergrounds.Engine.Collisions
             CollisionSystem.RemoveColliderFromSystem(this);
         }
 
+        public void CleanUp()
+        {
+            Parent = null;
+            boxTexture = null;
+        }
+
         public void Update(GameTime gameTime)
         {
         }
