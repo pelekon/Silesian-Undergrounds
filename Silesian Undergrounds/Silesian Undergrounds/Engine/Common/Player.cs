@@ -99,29 +99,13 @@ namespace Silesian_Undergrounds.Engine.Common
             hungerValue = 100;
             liveValue = 100;
             maxHungerValue = 150;
-            maxLiveValue = 100;
+            maxLiveValue = 150;
             timeSinceHungerFall = 0;
-        }
-
-        public bool AddLiveFromHeart()
-        {
-            if(liveValue + HEART_INCREASE_VALUE <= MaxLiveValue)
-            {
-                liveValue += HEART_INCREASE_VALUE;
-                return true;
-             }
-
-            return false;
         }
 
         public void AddMoney(int moneyToAdd)
         {
             MoneyAmount += moneyToAdd;
-        }
-
-        public void AddToHunger(int value)
-        {
-            hungerValue += value;
         }
 
         public void RemoveMoney(int moneyToRemove)
@@ -143,6 +127,17 @@ namespace Silesian_Undergrounds.Engine.Common
                 HungerValue += (maxHungerValue - hungerValue);
             else
                 HungerValue += hungerValueToRefil;
+        }
+
+        public bool AddLiveFromHeart()
+        {
+            if (liveValue + HEART_INCREASE_VALUE <= MaxLiveValue)
+            {
+                LiveValue += HEART_INCREASE_VALUE;
+                return true;
+            }
+
+            return false;
         }
 
         public void RemoveKey(int numberKeysToRemove)

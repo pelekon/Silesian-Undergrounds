@@ -82,7 +82,7 @@ namespace Silesian_Undergrounds.Engine.CommonF
             if (this is Food)
             {
                 player.RemoveMoney(itemPrice);
-                player.AddToHunger(((Food)this).hungerRefil);
+                player.RefilHunger(((Food)this).hungerRefil);
             }
             else if (this is Heart)
             {
