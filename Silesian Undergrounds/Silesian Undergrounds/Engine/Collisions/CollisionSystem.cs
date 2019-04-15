@@ -4,7 +4,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
 {
     public sealed class CollisionSystem
     {
-        public static readonly List<BoxCollider> Colliders = new List<BoxCollider>();
+        public static readonly HashSet<BoxCollider> Colliders = new HashSet<BoxCollider>();
 
         public static void CleanUp()
         {

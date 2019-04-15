@@ -65,7 +65,10 @@ namespace Silesian_Undergrounds.Engine.Common
         public void RemoveAllComponents()
         {
             foreach (var component in components)
+            {
+                component.CleanUp();
                 component.UnRegisterSelf();
+            }
 
             components.Clear();
         }

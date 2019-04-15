@@ -16,5 +16,6 @@ namespace Silesian_Undergrounds.Engine.Components
 
         void RegisterSelf();
         void UnRegisterSelf();
+        void CleanUp();
     }
 }
