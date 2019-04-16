@@ -37,13 +37,6 @@ namespace Silesian_Undergrounds.Engine.Utils
             }
 
             return textures[name];
-
-            /*Texture2D returned;
-            if (!textures.TryGetValue(name, out returned))
-                return null;
-
-            var method = returned.GetType().GetMethod("MemberwiseClone", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            return (Texture2D)method.Invoke(returned, null);*/
         }
 
         public void LoadIfNeeded(string name)
