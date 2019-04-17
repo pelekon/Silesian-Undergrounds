@@ -25,10 +25,8 @@ namespace Silesian_Undergrounds.Engine.Common
         private int moneyAmount;
         private int keyAmount;
         private int hungerValue;
-        private int liveValue;
 
         private int maxHungerValue;
-        private int maxLiveValue;
 
         private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
         private int HUNGER_DECREASE_VALUE = 5;
@@ -37,7 +35,9 @@ namespace Silesian_Undergrounds.Engine.Common
 
         private float timeSinceHungerFall;
 
-        BoxCollider collider;
+        private BoxCollider collider;
+
+        private StatisticHolder statistics;
 
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
         {
@@ -60,6 +60,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
             collider = new BoxCollider(this, 65, 65, -2, -4, false);
             AddComponent(collider);
+            statistics = new StatisticHolder(100, 150, 1.0f, 1.0f, 10);
         }
 
         public bool checkIfEnoughMoney(int cost)
@@ -93,9 +94,7 @@ namespace Silesian_Undergrounds.Engine.Common
             moneyAmount = 200;
             keyAmount = 0;
             hungerValue = 100;
-            liveValue = 100;
             maxHungerValue = 150;
-            maxLiveValue = 150;
             timeSinceHungerFall = 0;
         }
 
@@ -136,15 +135,15 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void RefilLive(int liveValueToRefil)
         {
-            if (liveValue + liveValueToRefil > maxLiveValue)
-                LiveValue += (maxLiveValue - liveValue);
+            if (statistics.Health + liveValueToRefil > statistics.MaxHealth)
+                LiveValue += (statistics.MaxHealth - statistics.Health);
             else
                 LiveValue += liveValueToRefil;
         }
 
         public bool CanRefilLive(int liveValueToRefil)
         {
-            if (liveValue + liveValueToRefil > maxLiveValue)
+            if (statistics.Health + liveValueToRefil > statistics.MaxHealth)
                 return false;
 
             return true;
@@ -175,7 +174,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void DecreaseLiveValue(int liveValueToDecrease)
         {
-            if(liveValue > 0)
+            if(statistics.Health > 0)
             {
                 if (LiveValue >= liveValueToDecrease)
                     LiveValue -= liveValueToDecrease;
@@ -195,7 +194,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public int MaxLiveValue
         {
-            get { return maxLiveValue;  }
+            get { return statistics.MaxHealth;  }
         }
 
         public int MoneyAmount
@@ -230,21 +229,21 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public int LiveValue
         {
-            get { return liveValue; }
+            get { return statistics.Health; }
             private set
             {
-                LiveChangeEvent.Invoke(this, new PropertyChangedArgs<int>(liveValue, value));
-                liveValue = value;
+                LiveChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.Health, value));
+                statistics.Health = value;
             }
         }
 
         public int LiveMaxValue
         {
-            get { return maxLiveValue; }
+            get { return statistics.MaxHealth; }
             private set
             {
-                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(maxLiveValue, value));
-                maxLiveValue = value;
+                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
+                statistics.MaxHealth = value;
             }
         }
 

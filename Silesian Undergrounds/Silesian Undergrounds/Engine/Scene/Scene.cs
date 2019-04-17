@@ -91,6 +91,11 @@ namespace Silesian_Undergrounds.Engine.Scene
             objectsToDelete.Clear();
         }
 
+        public List<GameObject> GameObjects
+        {
+            get { return gameObjects; }
+        }
+
         #endregion
 
         public void Update(GameTime gameTime)
@@ -137,11 +142,12 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             Drawer.Draw((spriteBatch, gameTime) =>
             {
-                
                 foreach (var obj in gameObjects)
-                    if (obj.layer == 3)
-                        obj.Draw(spriteBatch);
-                player.Draw(spriteBatch);
+                {
+                    if (obj is Player)
+                        continue;
+                    obj.Draw(spriteBatch);
+                }
             }, transformMatrix: camera.Transform);
 
             Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
@@ -150,7 +156,10 @@ namespace Silesian_Undergrounds.Engine.Scene
                     if (obj.layer == 3)
                         obj.Draw(spriteBatch);
             }, transformMatrix: camera.Transform, lightSource: player.position);
-
+            Drawer.Draw((spriteBatch, gameTime) =>
+            {
+                player.Draw(spriteBatch);
+            }, transformMatrix: camera.Transform);
             Drawer.Draw((spriteBatch, gameTime) =>
             {
                 if (isPaused)

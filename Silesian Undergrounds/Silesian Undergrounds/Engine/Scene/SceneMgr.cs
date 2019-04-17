@@ -2,12 +2,13 @@
 using System.IO;
 using System.Xml;
 using System.Collections.Generic;
-
 using Silesian_Undergrounds.Engine.Utils;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.CommonF;
+using Silesian_Undergrounds.Engine.Item;
+
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -37,8 +38,6 @@ namespace Silesian_Undergrounds.Engine.Scene
             return scene;
         }
 
-
-
         private static bool LoadSceneFile(string filePath, Scene scene, int tileSize)
         {
             SceneFile sceneFile;
@@ -52,7 +51,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                     #endif
                     return false;
                 }
-                
+
             }
             if (sceneFile.TileSets.Count < 1) return false;
             var tileSetFile = Path.Combine(DataDirectory, sceneFile.TileSets[0].Source);
@@ -114,7 +113,14 @@ namespace Silesian_Undergrounds.Engine.Scene
             foreach (Tile tile in Renderer.Tiles)
                 scene.AddObject(tile);
 
-            List<PickableItem> generated = GameObjectFactory.ScenePickableItemsFactory(Renderer.Pickable);
+            List<Ground> generatedGround = GroundTextureFactory.GroundFactory(Renderer.Grounds);
+            foreach (var ground in generatedGround)
+            {
+                ground.SetScene(scene);
+                scene.AddObject(ground);
+            }
+
+            List<PickableItem> generated = GameObjectFactory.ScenePickableItemsFactory(Renderer.Pickable, scene);
             foreach(var obj in generated)
             {
                 obj.SetScene(scene);
@@ -144,7 +150,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                     table[w][h] = TextureMgr.Instance.GetTexture(name);
                 }
             }
-            
+
             return table;
         }
     }
