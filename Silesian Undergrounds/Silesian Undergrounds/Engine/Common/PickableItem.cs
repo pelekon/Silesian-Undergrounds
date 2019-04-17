@@ -79,15 +79,15 @@ namespace Silesian_Undergrounds.Engine.CommonF
 
         private void BuyAppripriateProduct(Player player, int itemPrice)
         {
-            if (this is Food)
+            if (this is Food && player.CanRefilHunger(((Food)this).hungerRefil))
             {
                 player.RemoveMoney(itemPrice);
                 player.RefilHunger(((Food)this).hungerRefil);
             }
-            else if (this is Heart)
+            else if (this is Heart && player.CanRefilLive(Heart.HEART_INCREASE_VALUE))
             {
-                if(player.AddLiveFromHeart())
-                    player.RemoveMoney(itemPrice);
+                player.RefilLive(Heart.HEART_INCREASE_VALUE);
+                player.RemoveMoney(itemPrice);
             }
             else if (this is Key)
             {

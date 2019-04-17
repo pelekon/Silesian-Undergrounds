@@ -10,6 +10,7 @@ namespace Silesian_Undergrounds.Engine.Item {
     public class Heart : PickableItem {
 
         private int liveRegenerationValue = 25;
+        public const int HEART_INCREASE_VALUE = 10;
 
         public Heart(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene, bool isBuyable = false) : base(texture, position, size, layer, scene, isBuyable)
         {

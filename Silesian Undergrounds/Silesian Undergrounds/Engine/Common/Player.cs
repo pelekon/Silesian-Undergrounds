@@ -32,7 +32,6 @@ namespace Silesian_Undergrounds.Engine.Common
 
         private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
         private int HUNGER_DECREASE_VALUE = 5;
-        public const int HEART_INCREASE_VALUE = 10;
         private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
 
 
@@ -65,7 +64,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public bool checkIfEnoughMoney(int cost)
         {
-            if(cost > moneyAmount)
+            if (cost > moneyAmount)
                 return false;
 
             return true;
@@ -126,24 +125,29 @@ namespace Silesian_Undergrounds.Engine.Common
                 HungerValue += hungerValueToRefil;
         }
 
-<<<<<<< HEAD
-        public bool AddLiveFromHeart()
+        public bool CanRefilHunger(int hungerValueToRefil)
         {
-            if (liveValue + HEART_INCREASE_VALUE <= MaxLiveValue)
-            {
-                LiveValue += HEART_INCREASE_VALUE;
-                return true;
-            }
+            if (hungerValue + hungerValueToRefil > maxHungerValue)
+                return false;
 
-            return false;
-=======
+            return true;
+        }
+
+
         public void RefilLive(int liveValueToRefil)
         {
             if (liveValue + liveValueToRefil > maxLiveValue)
                 LiveValue += (maxLiveValue - liveValue);
             else
                 LiveValue += liveValueToRefil;
->>>>>>> development
+        }
+
+        public bool CanRefilLive(int liveValueToRefil)
+        {
+            if (liveValue + liveValueToRefil > maxLiveValue)
+                return false;
+
+            return true;
         }
 
         public void RemoveKey(int numberKeysToRemove)
