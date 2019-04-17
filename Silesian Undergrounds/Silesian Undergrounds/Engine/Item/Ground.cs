@@ -12,14 +12,11 @@ namespace Silesian_Undergrounds.Engine.Item {
         public Ground(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene) : base(texture, position, size, layer)
         {
             Scene = scene;
-            BoxCollider collider = new BoxCollider(this, 35, 35, 0, -4, true);
-            AddComponent(collider);
         }
 
         public void SetScene(Scene.Scene s)
         {
             Scene = s;
         }
-
     }
 }
