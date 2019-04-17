@@ -9,6 +9,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
     class TileMapRenderer {
         private List<Tile> tiles = new List<Tile>();
         private List<GameObject> pickableItems = new List<GameObject>();
+        private List<GameObject> grounds = new List<GameObject>();
         private int width, height;
 
         public List<Tile> Tiles
@@ -24,6 +25,14 @@ namespace Silesian_Undergrounds.Engine.Scene {
             get
             {
                 return pickableItems;
+            }
+        }
+
+        public List<GameObject> Grounds
+        {
+            get
+            {
+                return grounds;
             }
         }
 
@@ -52,15 +61,20 @@ namespace Silesian_Undergrounds.Engine.Scene {
                         if (array[y][x] == null)
                             continue;
 
-                        if (item.Key == 3)
-                            pickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
-                        else
-                            tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                        switch(item.Key){
+                            case 2: 
+                                grounds.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case 3: 
+                                pickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                             default:
+                                tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                        }
 
                         width = (x + 1) * size;
                         height = (y + 1) * size;
-
-
                     }
                 }
             }
