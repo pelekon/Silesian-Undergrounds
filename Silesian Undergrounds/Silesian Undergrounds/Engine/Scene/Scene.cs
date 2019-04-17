@@ -94,6 +94,11 @@ namespace Silesian_Undergrounds.Engine.Scene
             objectsToDelete.Clear();
         }
 
+        public List<GameObject> GameObjects
+        {
+            get { return gameObjects; }
+        }
+
         #endregion
 
         public void Update(GameTime gameTime)
