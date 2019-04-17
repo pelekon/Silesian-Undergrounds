@@ -14,7 +14,7 @@ namespace Silesian_Undergrounds.Engine.Utils
         private const int EndWithThingsTextureIndex = 25;
         private const int PercentageOfTexturesWithThings = 25;
         private static GroundEnum RandGround(Random random) => random.Next(1, 100) >= PercentageOfTexturesWithThings ? GroundEnum.Basic : GroundEnum.WithThings;
-        public static List<Ground> ScenePickableItemsFactory(List<GameObject> positionSources)
+        public static List<Ground> GroundFactory(List<GameObject> positionSources)
         {
             var list = new List<Ground>();
             var random = new Random();

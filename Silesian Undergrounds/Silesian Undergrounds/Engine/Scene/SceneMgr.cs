@@ -114,7 +114,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             foreach (Tile tile in Renderer.Tiles)
                 scene.AddObject(tile);
 
-            List<Ground> generatedGround = GroundTextureFactory.ScenePickableItemsFactory(Renderer.Grounds);
+            List<Ground> generatedGround = GroundTextureFactory.GroundFactory(Renderer.Grounds);
             foreach (var ground in generatedGround)
             {
                 ground.SetScene(scene);
