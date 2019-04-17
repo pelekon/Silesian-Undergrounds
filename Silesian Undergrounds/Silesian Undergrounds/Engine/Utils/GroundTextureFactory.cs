@@ -40,6 +40,6 @@ namespace Silesian_Undergrounds.Engine.Utils
 
             return list;
         }
-        public static Ground GroundFactory(int textureNumber, Vector2 position, Vector2 size) => new Ground(TextureMgr.Instance.GetTexture("Items/Grounds/ground_" + textureNumber), position, size, 3, null);
+        public static Ground GroundFactory(int textureNumber, Vector2 position, Vector2 size) => new Ground(TextureMgr.Instance.GetTexture("Items/Grounds/ground_" + textureNumber), position, size, 2, null);
     }
 }
