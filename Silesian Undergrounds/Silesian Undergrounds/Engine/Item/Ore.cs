@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.CommonF;
 
 namespace Silesian_Undergrounds.Engine.Item
 {
@@ -38,6 +39,7 @@ namespace Silesian_Undergrounds.Engine.Item
                 this.value = 0;
         }
 
+        //TODO: extract some code to PickableItem class
         public override void NotifyCollision(GameObject obj)
         {
             if (obj is Player)
@@ -47,7 +49,6 @@ namespace Silesian_Undergrounds.Engine.Item
                 this.scene.DeleteObject(this);
             }
         }
-
     }
 
 

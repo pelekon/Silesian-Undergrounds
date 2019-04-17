@@ -21,7 +21,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
-        
+
         private int moneyAmount;
         private int keyAmount;
         private int hungerValue;
@@ -32,6 +32,7 @@ namespace Silesian_Undergrounds.Engine.Common
         private int HUNGER_DECREASE_VALUE = 5;
         private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
 
+
         private float timeSinceHungerFall;
 
         private BoxCollider collider;
@@ -41,13 +42,6 @@ namespace Silesian_Undergrounds.Engine.Common
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
         {
             FramesPerSecond = 10;
-
-            //Adds all the players animations
-            // AddAnimation(int frames, int yPos, int xStartFrame, string name, int width, int height, Vector2 offset)
-            // frames - number of frames of animation 
-            // y position is a position from left right cornder
-            // xStart frame is the x - sum of all widths
-            // 80x80
 
             AddAnimation(5, 25, 313, "Down", 22, 22, new Vector2(0, 0));
             AddAnimation(1, 25, 313, "IdleDown", 22, 22, new Vector2(0, 0));
@@ -69,10 +63,18 @@ namespace Silesian_Undergrounds.Engine.Common
             statistics = new StatisticHolder(100, 150, 1.0f, 1.0f, 10);
         }
 
+        public bool checkIfEnoughMoney(int cost)
+        {
+            if (cost > moneyAmount)
+                return false;
+
+            return true;
+        }
+
         public override void Update(GameTime gameTime)
         {
             sDirection = Vector2.Zero;
-        
+
             HandleInput(Keyboard.GetState());
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -89,7 +91,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void Initialize()
         {
-            moneyAmount = 0;
+            moneyAmount = 200;
             keyAmount = 0;
             hungerValue = 100;
             maxHungerValue = 150;
@@ -109,9 +111,9 @@ namespace Silesian_Undergrounds.Engine.Common
                 MoneyAmount -= moneyToRemove;
         }
 
-        public void AddKey(int numberKeysToAdd)
+        public void AddKey(int keyNumbers)
         {
-            KeyAmount += numberKeysToAdd;
+            KeyAmount += keyNumbers;
         }
 
         public void RefilHunger(int hungerValueToRefil)
@@ -122,12 +124,29 @@ namespace Silesian_Undergrounds.Engine.Common
                 HungerValue += hungerValueToRefil;
         }
 
+        public bool CanRefilHunger(int hungerValueToRefil)
+        {
+            if (hungerValue + hungerValueToRefil > maxHungerValue)
+                return false;
+
+            return true;
+        }
+
+
         public void RefilLive(int liveValueToRefil)
         {
             if (statistics.Health + liveValueToRefil > statistics.MaxHealth)
                 LiveValue += (statistics.MaxHealth - statistics.Health);
             else
                 LiveValue += liveValueToRefil;
+        }
+
+        public bool CanRefilLive(int liveValueToRefil)
+        {
+            if (statistics.Health + liveValueToRefil > statistics.MaxHealth)
+                return false;
+
+            return true;
         }
 
         public void RemoveKey(int numberKeysToRemove)
@@ -164,7 +183,7 @@ namespace Silesian_Undergrounds.Engine.Common
             }
             else
             {
-                //TODO player die 
+                //TODO player die
             }
         }
 
@@ -268,7 +287,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
                 }
                 if (keyState.IsKeyDown(Keys.S))
-                { 
+                {
                     sDirection += new Vector2(0, 1);
                     PlayAnimation("Down");
                     currentDirection = movementDirection.down;
@@ -295,18 +314,16 @@ namespace Silesian_Undergrounds.Engine.Common
            } else if(IsAnimationMovement(animation))
            {
                 currentAnimation = "Idle" + animation;
-                Debug.WriteLine(currentAnimation);
            }
-           
+
 
         }
 
         // determines if current animation is up/donw/right/left
         private bool IsAnimationMovement(string animation)
         {
-            // we all love Clean Code <3 
             if((animation.Contains("Up") || animation.Contains("Left") || animation.Contains("Down") || animation.Contains("Right")) && !animation.Contains("Idle")) return true;
-           
+
             return false;
         }
 

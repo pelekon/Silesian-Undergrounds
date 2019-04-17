@@ -5,6 +5,8 @@ using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Item;
 using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
+using Silesian_Undergrounds.Engine.CommonF;
 
 namespace Silesian_Undergrounds.Engine.Utils
 {
@@ -59,7 +61,14 @@ namespace Silesian_Undergrounds.Engine.Utils
             List<PickableItem> list = new List<PickableItem>();
             Random random = new Random();
 
-            foreach(var source in positionSources)
+            // temporary code to be removed when we will generate the
+            // whole shop room, userd to show that the mechanics is already implemented
+            int buyableItemsCountType = 3;
+            list.Add(FoodFactory(random, positionSources[0].position, positionSources[0].size, scene, isBuyable: true));
+            list.Add(KeyFactory(positionSources[1].position, positionSources[1].size, scene, isBuyable: true));
+            list.Add(HeartFactory(positionSources[2].position, positionSources[2].size, scene, isBuyable: true));
+
+            foreach (var source in positionSources.GetRange(3, positionSources.Count - buyableItemsCountType))
             {
 
                 PickableEnum itemType = RandItem(random);
@@ -85,7 +94,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                         break;
                     default:
                         #if DEBUG
-                        Console.WriteLine("Not registered PickableItem Type in ScenePickableItemsFactory!");
+                        Console.WriteLine("Not registered PickableItem Type in ScenePickableItemsFactory.");
                         #endif
                         break;
                 }
@@ -114,7 +123,8 @@ namespace Silesian_Undergrounds.Engine.Utils
             return new Ore(TextureMgr.Instance.GetTexture(textureName), position, size / 2, 3, scene, type);
         }
 
-        public static Food FoodFactory(Random rng, Vector2 position, Vector2 size, Scene.Scene scene)
+
+        public static Food FoodFactory(Random rng, Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false)
         {
             FoodEnum type = RandFoodType(rng);
             string textureName = "Items/Food/steak";
@@ -122,22 +132,22 @@ namespace Silesian_Undergrounds.Engine.Utils
             if (type == FoodEnum.Meat)
                 textureName = "Items/Food/meat";
 
-            return new Food(TextureMgr.Instance.GetTexture(textureName), position, size / 2, 3, scene, type);
+            return new Food(TextureMgr.Instance.GetTexture(textureName), position, size / 2, 3, scene, type, isBuyable: isBuyable);
         }
 
-        public static Chest ChestFactory(Vector2 position, Vector2 size, Scene.Scene scene)
+        public static Chest ChestFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false)
         {
-            return new Chest(TextureMgr.Instance.GetTexture("Items/Chests/chest_1"), position, size, 3, scene);
+            return new Chest(TextureMgr.Instance.GetTexture("Items/Chests/chest_1"), position, size, 3, scene, isBuyable: isBuyable);
         }
 
-        public static Key KeyFactory(Vector2 position, Vector2 size, Scene.Scene scene)
+        public static Key KeyFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false)
         {
-            return new Key(TextureMgr.Instance.GetTexture("Items/Keys/key_1"), position, size, 3, scene);
+            return new Key(TextureMgr.Instance.GetTexture("Items/Keys/key_1"), position, size, 3, scene, isBuyable: isBuyable);
         }
 
-        public static Heart HeartFactory(Vector2 position, Vector2 size, Scene.Scene scene)
+        public static Heart HeartFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false)
         {
-            return new Heart(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, 3, scene);
+            return new Heart(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, 3, scene, isBuyable: isBuyable);
         }
     }
 }

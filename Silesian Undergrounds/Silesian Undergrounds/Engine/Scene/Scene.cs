@@ -33,11 +33,8 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public Scene()
         {
-            // Clear collision system store before creating new scene
-            // just in case :)
             CollisionSystem.CleanUp();
 
-            // Inittialize variables
             gameObjects = new List<GameObject>();
             objectsToDelete = new List<GameObject>();
             objectsToAdd = new List<GameObject>();
@@ -142,6 +139,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                         obj.Draw(spriteBatch);
                 }
             }, transformMatrix: camera.Transform);
+
             Drawer.Draw((spriteBatch, gameTime) =>
             {
                 foreach (var obj in gameObjects)
@@ -151,6 +149,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                     obj.Draw(spriteBatch);
                 }
             }, transformMatrix: camera.Transform);
+
             Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
             {
                 foreach (var obj in gameObjects)
