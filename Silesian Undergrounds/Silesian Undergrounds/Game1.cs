@@ -50,7 +50,7 @@ namespace Silesian_Undergrounds
             FontMgr.Instance.SetCurrentContentMgr(Content);
 
             #if DEBUG
-            scene = SceneManager.LoadScene("drop", 64);
+            scene = SceneManager.LoadScene("drop2", 64);
             #else
             scene = new Scene(new MainMenuView());
             #endif

@@ -64,11 +64,16 @@ namespace Silesian_Undergrounds.Engine.Utils
             // temporary code to be removed when we will generate the
             // whole shop room, userd to show that the mechanics is already implemented
             int buyableItemsCountType = 3;
-            list.Add(FoodFactory(random, positionSources[0].position, positionSources[0].size, scene, isBuyable: true));
-            list.Add(KeyFactory(positionSources[1].position, positionSources[1].size, scene, isBuyable: true));
-            list.Add(HeartFactory(positionSources[2].position, positionSources[2].size, scene, isBuyable: true));
 
-            foreach (var source in positionSources.GetRange(3, positionSources.Count - buyableItemsCountType))
+            //list.Add(FoodFactory(random, positionSources[0].position, positionSources[0].size, scene, isBuyable: true));
+            //list.Add(KeyFactory(positionSources[1].position, positionSources[1].size, scene, isBuyable: true));
+            //list.Add(HeartFactory(positionSources[2].position, positionSources[2].size, scene, isBuyable: true));
+
+        
+            //foreach (var source in positionSources.GetRange(3, positionSources.Count - buyableItemsCountType))
+
+
+            foreach (var source in positionSources)
             {
 
                 PickableEnum itemType = RandItem(random);
