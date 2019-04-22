@@ -26,10 +26,8 @@ namespace Silesian_Undergrounds.Engine.Scene
         public static Scene LoadScene(string sceneName, int tileSize)
         {
             var fileName = sceneName + JsonFileExtension;
-            //TODO: change this
-            //var path = Path.Combine(DataDirectory, fileName);
-            var path = @"C:\Users\kotto\Desktop\projekt_gry\PG2D_2019_Dzienni_4\Silesian Undergrounds\Silesian Undergrounds\Data\drop2.json";
-
+            var path = Path.Combine(DataDirectory, fileName);
+        
 
             if (!File.Exists(path)) return null;
 
