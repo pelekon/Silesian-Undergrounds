@@ -7,6 +7,7 @@ using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,9 +30,11 @@ namespace Silesian_Undergrounds.Engine.Traps
             base.NotifyCollision(obj);
 
             if (obj is Player)
+            {
                 // add damage
                 ((Player)obj).DecreaseLiveValue((int)TrapsDamageEnum.Spikes);
+                this.scene.DeleteObject(this);
+            }
         }
-
     }
 }

@@ -8,6 +8,6 @@ namespace Silesian_Undergrounds.Engine.Enum
 {
     public enum TrapsDamageEnum
     { 
-            Spikes = 20
+            Spikes = 10
     }
 }

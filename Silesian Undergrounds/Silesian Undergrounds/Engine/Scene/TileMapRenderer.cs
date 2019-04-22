@@ -21,6 +21,14 @@ namespace Silesian_Undergrounds.Engine.Scene {
             }
         }
 
+        public List<GameObject> Traps
+        {
+            get
+            {
+                return traps;
+            }
+        }
+
         public List<GameObject> Pickable
         {
             get

@@ -123,8 +123,15 @@ namespace Silesian_Undergrounds.Engine.Scene
                 scene.AddObject(ground);
             }
 
-            List<PickableItem> generated = GameObjectFactory.ScenePickableItemsFactory(Renderer.Pickable, scene);
-            foreach(var obj in generated)
+            List<PickableItem> generatedItems = GameObjectFactory.ScenePickableItemsFactory(Renderer.Pickable, scene);
+            foreach(var obj in generatedItems)
+            {
+                obj.SetScene(scene);
+                scene.AddObject(obj);
+            }
+
+            List<PickableItem> generatedTraps = GameObjectFactory.SceneTrapsFactory(Renderer.Traps, scene);
+            foreach (var obj in generatedTraps)
             {
                 obj.SetScene(scene);
                 scene.AddObject(obj);
