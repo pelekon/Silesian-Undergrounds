@@ -34,4 +34,8 @@
  <tile id="10">
   <image width="64" height="64" source="../Content/top.png"/>
  </tile>
+ <tile id="11">
+  <image width="64" height="64" source="../Content/x-green.png"/>
+ </tile>
+
 </tileset>

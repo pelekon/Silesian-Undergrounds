@@ -37,18 +37,6 @@
 /processorParam:TextureFormat=Color
 /build:bottom.png
 
-#begin bottom.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:bottom.png
-
 #begin bottom-left.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -368,18 +356,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Items/Grounds/ground_20.png
-
-#begin Items/Grounds/ground_21.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Items/Grounds/ground_21.png
 
 #begin Items/Grounds/ground_21.png
 /importer:TextureImporter
@@ -747,18 +723,6 @@
 /processorParam:TextureFormat=Color
 /build:top.png
 
-#begin top.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:top.png
-
 #begin top-left.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -800,6 +764,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:x.png
+
+#begin x-green.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:x-green.png
 
 #begin zielone.png
 /importer:TextureImporter

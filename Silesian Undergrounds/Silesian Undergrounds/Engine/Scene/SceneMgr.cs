@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.CommonF;
 using Silesian_Undergrounds.Engine.Item;
-
+using System.Diagnostics;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -26,7 +26,10 @@ namespace Silesian_Undergrounds.Engine.Scene
         public static Scene LoadScene(string sceneName, int tileSize)
         {
             var fileName = sceneName + JsonFileExtension;
-            var path = Path.Combine(DataDirectory, fileName);
+            //TODO: change this
+            //var path = Path.Combine(DataDirectory, fileName);
+            var path = @"C:\Users\kotto\Desktop\projekt_gry\PG2D_2019_Dzienni_4\Silesian Undergrounds\Silesian Undergrounds\Data\drop2.json";
+
 
             if (!File.Exists(path)) return null;
 
