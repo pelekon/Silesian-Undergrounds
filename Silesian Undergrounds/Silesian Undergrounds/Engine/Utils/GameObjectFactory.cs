@@ -13,7 +13,13 @@ namespace Silesian_Undergrounds.Engine.Utils
 {
     public sealed class GameObjectFactory
     {
+
+        #region GENERATION_PARAMETERS
+        private static double trapPropability = 0.1;
+        #endregion
+
         #region OBJECT_TYPE_RAND_FUNCTIONS
+
 
         private static OreEnum RandOreType(Random random)
         {
@@ -62,14 +68,14 @@ namespace Silesian_Undergrounds.Engine.Utils
         {
             Random random = new Random();
             List<PickableItem> list = new List<PickableItem>();
-            bool trapPossibility = random.NextDouble() <= 0.1;
+            bool trapPossibility = random.NextDouble() <= trapPropability;
 
             foreach (var source in positionSources)
             {
                 if (trapPossibility)
                     list.Add(SpikeFactory(source.position, source.size, scene));
 
-                trapPossibility = random.NextDouble() <= 0.1;
+                trapPossibility = random.NextDouble() <= trapPropability;
             }
 
             return list;
@@ -178,7 +184,7 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         public static Spike SpikeFactory(Vector2 position, Vector2 size, Scene.Scene scene)
         {
-            return new Spike(TextureMgr.Instance.GetTexture("Items/Traps/temporary_spike"), position, size, 4, scene);
+            return new Spike(TextureMgr.Instance.GetTexture("Items/Traps/temporary_spike_1"), position, size, 4, scene);
         }
     }
 }

@@ -633,7 +633,7 @@
 /processorParam:TextureFormat=Color
 /build:Items/Ores/silver/silver_3.png
 
-#begin Items/Traps/temporary_spike.png
+#begin Items/Traps/temporary_spike_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -643,7 +643,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Items/Traps/temporary_spike.png
+/build:Items/Traps/temporary_spike_1.png
+
+#begin Items/Traps/temporary_spike_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Items/Traps/temporary_spike_2.png
+
+#begin Items/Traps/temporary_spike_3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Items/Traps/temporary_spike_3.png
 
 #begin Items/Wall/left.png
 /importer:TextureImporter

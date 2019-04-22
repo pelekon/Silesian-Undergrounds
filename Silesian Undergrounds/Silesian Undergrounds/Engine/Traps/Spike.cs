@@ -16,11 +16,29 @@ namespace Silesian_Undergrounds.Engine.Traps
 {
     public class Spike : PickableItem
     {
+        #region ANIMATION_VARIABLES
+        private const int NUMBER_OF_SPIKE_TEXTURES = 3;
+        // time since last frame change
+        private double timeSinceLastFrameChange;
+        // time it takes to update theframe
+        private double timeToUpdateFrame;
+        // FPS
+        public int FramesPerSecond
+        {
+            set { timeToUpdateFrame = (1f / value); }
+        }
+        private int CurrentFrame = 1;
+        private Boolean WasPicked = false;
+        #endregion
+
         public Spike(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene) : base(texture, position, size, layer, scene, isBuyable: false)
         {
-            TextureMgr.Instance.LoadIfNeeded("Items/Traps/temporary_spike");
+            TextureMgr.Instance.LoadIfNeeded("Items/Traps/temporary_spike_1");
+            TextureMgr.Instance.LoadIfNeeded("Items/Traps/temporary_spike_2");
+            TextureMgr.Instance.LoadIfNeeded("Items/Traps/temporary_spike_3");
 
-            BoxCollider collider = new BoxCollider(this, 59, 46, 0, 0, false);
+            FramesPerSecond = 1;
+            BoxCollider collider = new BoxCollider(this, 59, 46, 0, 0, true);
             AddComponent(collider);
         }
 
@@ -29,12 +47,32 @@ namespace Silesian_Undergrounds.Engine.Traps
         {
             base.NotifyCollision(obj);
 
-            if (obj is Player)
+            if ((obj is Player) && !WasPicked)
             {
-                // add damage
-                ((Player)obj).DecreaseLiveValue((int)TrapsDamageEnum.Spikes);
-                this.scene.DeleteObject(this);
+              // add damage
+              Player player = obj as Player;
+              player.DecreaseLiveValue((int)TrapsDamageEnum.Spikes);
+              WasPicked = true;
+              
+                //this.scene.DeleteObject(this);
             }
         }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (WasPicked)
+            {
+                timeSinceLastFrameChange += gameTime.ElapsedGameTime.TotalSeconds;
+                if (timeSinceLastFrameChange > timeToUpdateFrame && CurrentFrame <= NUMBER_OF_SPIKE_TEXTURES)
+                {
+                    timeSinceLastFrameChange -= timeToUpdateFrame;
+                    CurrentFrame++;
+                    this.texture = TextureMgr.Instance.GetTexture("Items/Traps/temporary_spike_" + CurrentFrame);
+                }
+                else if (CurrentFrame == NUMBER_OF_SPIKE_TEXTURES)
+                    this.scene.DeleteObject(this);
+            }
+        }
+
     }
 }
