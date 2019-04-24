@@ -32,7 +32,7 @@
          "name":"Warstwa Kafelk\u00f3w 3",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":15,
          "x":0,
          "y":0
