@@ -10,7 +10,16 @@ namespace Silesian_Undergrounds.Engine.Scene {
         private List<Tile> tiles = new List<Tile>();
         private List<GameObject> pickableItems = new List<GameObject>();
         private List<GameObject> grounds = new List<GameObject>();
+        private List<Tile> transitions = new List<Tile>();
         private int width, height;
+
+        public List<Tile> Transitions
+        {
+            get
+            {
+                return transitions;
+            }
+        }
 
         public List<Tile> Tiles
         {
@@ -68,7 +77,10 @@ namespace Silesian_Undergrounds.Engine.Scene {
                             case 3: 
                                 pickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
-                             default:
+                            case 4:
+                                transitions.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            default:
                                 tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
                         }

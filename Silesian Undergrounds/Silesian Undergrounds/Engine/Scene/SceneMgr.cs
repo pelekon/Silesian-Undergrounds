@@ -113,6 +113,9 @@ namespace Silesian_Undergrounds.Engine.Scene
             foreach (Tile tile in Renderer.Tiles)
                 scene.AddObject(tile);
 
+            foreach (Tile tile in Renderer.Transitions)
+                scene.AddTransition(tile);
+
             List<Ground> generatedGround = GroundTextureFactory.GroundFactory(Renderer.Grounds);
             foreach (var ground in generatedGround)
             {

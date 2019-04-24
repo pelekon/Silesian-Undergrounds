@@ -20,6 +20,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         private List<GameObject> gameObjects;
         private List<GameObject> objectsToDelete;
         private List<GameObject> objectsToAdd;
+        private List<GameObject> transitions;
 
         public Player player;
         private UIArea ui;
@@ -38,6 +39,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             gameObjects = new List<GameObject>();
             objectsToDelete = new List<GameObject>();
             objectsToAdd = new List<GameObject>();
+            transitions = new List<GameObject>();
             isPaused = false;
             player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
 
@@ -61,6 +63,12 @@ namespace Silesian_Undergrounds.Engine.Scene
         }
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
+
+        public void AddTransition(GameObject obj)
+        {
+            transitions.Add(obj);
+            objectsToAdd.Add(obj);
+        }
 
         public void AddObject(GameObject obj)
         {
@@ -113,6 +121,9 @@ namespace Silesian_Undergrounds.Engine.Scene
                 pauseMenu.Update(gameTime);
                 return;
             }
+
+            if (player.GetTileWhereStanding() == transitions[0].GetTileWhereStanding())
+                System.Diagnostics.Debug.WriteLine("CYK");
 
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();

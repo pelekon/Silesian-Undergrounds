@@ -58,7 +58,7 @@ namespace Silesian_Undergrounds.Engine.Common
             //Plays our start animation
             PlayAnimation("IdleDown");
 
-            collider = new BoxCollider(this, 65, 65, -2, -4, false);
+            collider = new BoxCollider(this, 60, 60, -2, -4, false);
             AddComponent(collider);
             statistics = new StatisticHolder(100, 150, 1.0f, 1.0f, 10);
         }
