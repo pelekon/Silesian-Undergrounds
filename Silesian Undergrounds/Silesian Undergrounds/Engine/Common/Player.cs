@@ -37,9 +37,9 @@ namespace Silesian_Undergrounds.Engine.Common
 
         private BoxCollider collider;
 
-        private StatisticHolder statistics;
+        private PlayerStatistic statistics;
 
-        public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
+        public Player(Vector2 position, Vector2 size, int layer, Vector2 scale, PlayerStatistic playerStatistic) : base(position, size, layer, scale)
         {
             FramesPerSecond = 10;
 
@@ -60,7 +60,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
             collider = new BoxCollider(this, 60, 60, -2, -4, false);
             AddComponent(collider);
-            statistics = new StatisticHolder(100, 150, 1.0f, 1.0f, 10);
+            statistics = playerStatistic;
         }
 
         public bool checkIfEnoughMoney(int cost)
@@ -91,10 +91,6 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void Initialize()
         {
-            moneyAmount = 200;
-            keyAmount = 0;
-            hungerValue = 100;
-            maxHungerValue = 150;
             timeSinceHungerFall = 0;
         }
 
@@ -105,7 +101,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void RemoveMoney(int moneyToRemove)
         {
-            if (moneyToRemove > moneyAmount)
+            if (moneyToRemove > statistics.Money)
                 MoneyAmount = 0;
             else
                 MoneyAmount -= moneyToRemove;
@@ -118,15 +114,15 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void RefilHunger(int hungerValueToRefil)
         {
-            if (hungerValue + hungerValueToRefil > maxHungerValue)
-                HungerValue += (maxHungerValue - hungerValue);
+            if (statistics.Hunger + hungerValueToRefil > statistics.MaxHunger)
+                HungerValue += (statistics.MaxHunger - statistics.Hunger);
             else
                 HungerValue += hungerValueToRefil;
         }
 
         public bool CanRefilHunger(int hungerValueToRefil)
         {
-            if (hungerValue + hungerValueToRefil > maxHungerValue)
+            if (statistics.Hunger + hungerValueToRefil > statistics.MaxHunger)
                 return false;
 
             return true;
@@ -151,7 +147,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void RemoveKey(int numberKeysToRemove)
         {
-            if (numberKeysToRemove > keyAmount)
+            if (numberKeysToRemove > statistics.Key)
                 KeyAmount = 0;
             else
                 KeyAmount -= numberKeysToRemove;
@@ -159,7 +155,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public void DecreaseHungerValue(int hungerValueToDecrease)
         {
-            if(hungerValue > 0)
+            if(statistics.Hunger > 0)
             {
                 if (HungerValue >= hungerValueToDecrease)
                     HungerValue -= hungerValueToDecrease;
@@ -189,7 +185,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public int MaxHungerValue
         {
-            get { return maxHungerValue;  }
+            get { return statistics.MaxHunger;  }
         }
 
         public int MaxLiveValue
@@ -199,31 +195,31 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public int MoneyAmount
         {
-            get { return moneyAmount; }
+            get { return statistics.Money; }
             private set
             {
-                MoneyChangeEvent.Invoke(this, new PropertyChangedArgs<int>(moneyAmount, value));
-                moneyAmount = value;
+                MoneyChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.Money, value));
+                statistics.Money = value;
             }
         }
 
         public int KeyAmount
         {
-            get { return keyAmount; }
+            get { return statistics.Key; }
             private set
             {
-                KeyChangeEvent.Invoke(this, new PropertyChangedArgs<int>(keyAmount, value));
-                keyAmount = value;
+                KeyChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.Key, value));
+                statistics.Key = value;
             }
         }
 
         public int HungerValue
         {
-            get { return hungerValue; }
+            get { return statistics.Hunger; }
             private set
             {
-                HungerChangeEvent.Invoke(this, new PropertyChangedArgs<int>(hungerValue, value));
-                hungerValue = value;
+                HungerChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.Hunger, value));
+                statistics.Hunger = value;
             }
         }
 
@@ -249,11 +245,11 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public int HungerMaxValue
         {
-            get { return maxHungerValue; }
+            get { return statistics.MaxHunger; }
             private set
             {
-                HungerMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(maxHungerValue, value));
-                maxHungerValue = value;
+                HungerMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHunger, value));
+                statistics.MaxHunger = value;
             }
         }
 

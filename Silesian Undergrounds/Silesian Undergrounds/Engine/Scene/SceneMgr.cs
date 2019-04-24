@@ -21,6 +21,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         public static Scene GetCurrentScene() { return _currentScene; }
         private static readonly TileMapRenderer Renderer = new TileMapRenderer();
         private const string JsonFileExtension = ".json", DataDirectory = "Data";
+        private static PlayerStatistic playerStatistic;
         #endregion
 
         public static Scene LoadScene(string sceneName, int tileSize)
@@ -30,7 +31,12 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             if (!File.Exists(path)) return null;
 
-            var scene = new Scene();
+            if(playerStatistic == null)
+            {
+                playerStatistic = new PlayerStatistic(100, 150, 100, 150, 1.0f, 1.0f, 10, 0, 0);
+            }
+
+            var scene = new Scene(playerStatistic);
 
             if (!LoadSceneFile(path, scene, tileSize)) return null;
 

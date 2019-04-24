@@ -32,7 +32,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         #endregion
 
-        public Scene()
+        public Scene(PlayerStatistic playerStatistic)
         {
             CollisionSystem.CleanUp();
 
@@ -41,7 +41,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             objectsToAdd = new List<GameObject>();
             transitions = new List<GameObject>();
             isPaused = false;
-            player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
+            player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f), playerStatistic);
 
             TextureMgr.Instance.LoadIfNeeded("minerCharacter");
             player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
