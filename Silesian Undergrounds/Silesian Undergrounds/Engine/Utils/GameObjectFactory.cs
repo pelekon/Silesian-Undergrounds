@@ -7,12 +7,19 @@ using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 using Silesian_Undergrounds.Engine.CommonF;
+using Silesian_Undergrounds.Engine.Traps;
 
 namespace Silesian_Undergrounds.Engine.Utils
 {
     public sealed class GameObjectFactory
     {
+
+        #region GENERATION_PARAMETERS
+        private static double trapPropability = 0.1;
+        #endregion
+
         #region OBJECT_TYPE_RAND_FUNCTIONS
+
 
         private static OreEnum RandOreType(Random random)
         {
@@ -56,6 +63,26 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         #endregion
 
+        // renders traps int the random way
+        public static List<PickableItem> SceneTrapsFactory(List<GameObject> positionSources, Scene.Scene scene)
+        {
+            Random random = new Random();
+            List<PickableItem> list = new List<PickableItem>();
+            bool trapPossibility = random.NextDouble() <= trapPropability;
+
+            foreach (var source in positionSources)
+            {
+                if (trapPossibility)
+                    list.Add(SpikeFactory(source.position, source.size, scene));
+
+                trapPossibility = random.NextDouble() <= trapPropability;
+            }
+
+            return list;
+        }
+
+
+        // renders random items (hearts, chests and ores) on the map
         public static List<PickableItem> ScenePickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene)
         {
             List<PickableItem> list = new List<PickableItem>();
@@ -153,6 +180,11 @@ namespace Silesian_Undergrounds.Engine.Utils
         public static Heart HeartFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false)
         {
             return new Heart(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, 3, scene, isBuyable: isBuyable);
+        }
+
+        public static Spike SpikeFactory(Vector2 position, Vector2 size, Scene.Scene scene)
+        {
+            return new Spike(TextureMgr.Instance.GetTexture("Items/Traps/temporary_spike_1"), position, size, 4, scene);
         }
     }
 }

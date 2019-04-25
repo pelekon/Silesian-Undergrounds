@@ -14,7 +14,7 @@ namespace Silesian_Undergrounds.Engine.Item
 {
     public class Chest : PickableItem
     {
-        private const int NumberOfChestTexture = 4;
+        private const int NUMBER_OF_CHEST_TEXTURE = 4;
         private const int NUMBER_OF_POSSIBLE_SPAWNED_ITEM = 6;
         private const int MINIMUM_NUMBER_OF_SPAWNED_ITEM = 1;
         private const int RANGE_OF_SPAWN = 1;
@@ -63,12 +63,12 @@ namespace Silesian_Undergrounds.Engine.Item
             {
                 timeSinceLastFrameChange += gameTime.ElapsedGameTime.TotalSeconds;
 
-                if (timeSinceLastFrameChange > timeToUpdateFrame && CurrentFrame <= NumberOfChestTexture)
+                if (timeSinceLastFrameChange > timeToUpdateFrame && CurrentFrame <= NUMBER_OF_CHEST_TEXTURE)
                 {
                     timeSinceLastFrameChange -= timeToUpdateFrame;
                     CurrentFrame++;
                     this.texture = TextureMgr.Instance.GetTexture("Items/Chests/chest_" + CurrentFrame);
-                } else if(CurrentFrame == NumberOfChestTexture)
+                } else if(CurrentFrame == NUMBER_OF_CHEST_TEXTURE)
                 {
                     List<GameObject> list = new List<GameObject>();
 
