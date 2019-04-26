@@ -71,7 +71,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
             grounds = new List<GameObject>();
             transitions = new List<Tile>();
 
-            foreach (var item in map)
+            foreach(var item in map)
             {
                 Texture2D[][] array = item.Value;
 

@@ -22,16 +22,11 @@ namespace Silesian_Undergrounds.Engine.Common
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
 
-        private int moneyAmount;
-        private int keyAmount;
-        private int hungerValue;
-
-        private int maxHungerValue;
-
         private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
         private int HUNGER_DECREASE_VALUE = 5;
         private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
-
+        private const int PLAYER_COLLIDER_BOX_WIDTH = 60;
+        private const int PLAYER_COLLIDER_BOX_HEIGHT = 60;
 
         private float timeSinceHungerFall;
 
@@ -39,7 +34,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
         private PlayerStatistic statistics;
 
-        public Player(Vector2 position, Vector2 size, int layer, Vector2 scale, PlayerStatistic playerStatistic) : base(position, size, layer, scale)
+        public Player(Vector2 position, Vector2 size, int layer, Vector2 scale, PlayerStatistic globalPlayerStatistic) : base(position, size, layer, scale)
         {
             FramesPerSecond = 10;
 
@@ -58,14 +53,14 @@ namespace Silesian_Undergrounds.Engine.Common
             //Plays our start animation
             PlayAnimation("IdleDown");
 
-            collider = new BoxCollider(this, 60, 60, -2, -4, false);
+            collider = new BoxCollider(this, PLAYER_COLLIDER_BOX_WIDTH, PLAYER_COLLIDER_BOX_HEIGHT, -2, -4, false);
             AddComponent(collider);
-            statistics = playerStatistic;
+            statistics = globalPlayerStatistic;
         }
 
         public bool checkIfEnoughMoney(int cost)
         {
-            if (cost > moneyAmount)
+            if (cost > statistics.Money)
                 return false;
 
             return true;

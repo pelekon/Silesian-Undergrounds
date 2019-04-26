@@ -99,8 +99,6 @@ namespace Silesian_Undergrounds.Engine.Utils
 
             //foreach (var source in positionSources.GetRange(3, positionSources.Count - buyableItemsCountType))
 
-            System.Diagnostics.Debug.WriteLine(positionSources.Count);
-
             foreach (var source in positionSources)
             {
 
