@@ -18,6 +18,7 @@ namespace Silesian_Undergrounds
         SpriteBatch spriteBatch;
 
         public List<String> scenes = new List<String>();
+        public int levelCounter = 0;
 
         Scene scene;
 
@@ -50,14 +51,15 @@ namespace Silesian_Undergrounds
             ResolutionMgr.xAxisUnit = ResolutionMgr.GameWidth / 100.0f;
             #endregion
 
-            scenes.Add("drop2");
             scenes.Add("drop");
+            scenes.Add("drop2");
+            scenes.Add("drop3");
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
 
             #if DEBUG
-            scene = SceneManager.LoadScene("drop3", 64);
+            scene = LevelsManagement();
             #else
             scene = new Scene(new MainMenuView());
             #endif
@@ -96,8 +98,7 @@ namespace Silesian_Undergrounds
                 scene.Update(gameTime);
             else
             {
-                
-                scene = SceneManager.LoadScene("drop", 64);
+                scene = LevelsManagement();
             }
 
             base.Update(gameTime);
@@ -115,6 +116,17 @@ namespace Silesian_Undergrounds
             scene.Draw();
 
             base.Draw(gameTime);
+        }
+
+        protected Scene LevelsManagement()
+        {
+            var sceneName = scenes[levelCounter];
+            #if DEBUG
+            System.Diagnostics.Debug.WriteLine("Current scene: " + sceneName);
+            System.Diagnostics.Debug.WriteLine(levelCounter);
+            #endif
+            levelCounter++;
+            return SceneManager.LoadScene(sceneName, 64);
         }
     }
 }

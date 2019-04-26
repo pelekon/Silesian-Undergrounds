@@ -136,21 +136,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             ui.Update(gameTime);
 
-            if(transitions.Count > 0)
-                if (player.GetTileWhereStanding() == transitions[0].GetTileWhereStanding())
-                {
-                    foreach(var obj in gameObjects)
-                        DeleteObject(obj);
-
-                    foreach (var obj in transitions)
-                        DeleteObject(obj);
-
-                    foreach (var obj in objectsToAdd)
-                        DeleteObject(obj);
-
-                    DeleteObjects();
-                    isEnd = true;
-                }
+            DetectPlayerOnTransition();
         }
 
         public void Draw()
@@ -194,6 +180,25 @@ namespace Silesian_Undergrounds.Engine.Scene
                 else
                     ui.Draw(spriteBatch);
             }, null);
+        }
+
+        private void DetectPlayerOnTransition()
+        {
+            foreach (var transition in transitions)
+                if (player.GetTileWhereStanding() == transition.GetTileWhereStanding())
+                {
+                    foreach (var obj in gameObjects)
+                        DeleteObject(obj);
+
+                    foreach (var obj in transitions)
+                        DeleteObject(obj);
+
+                    foreach (var obj in objectsToAdd)
+                        DeleteObject(obj);
+
+                    DeleteObjects();
+                    isEnd = true;
+                }
         }
     }
 }
