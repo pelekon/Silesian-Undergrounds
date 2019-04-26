@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Enum;
+
 namespace Silesian_Undergrounds.Engine.Scene {
     class TileMapRenderer {
         private List<Tile> tiles = new List<Tile>();
@@ -83,14 +85,14 @@ namespace Silesian_Undergrounds.Engine.Scene {
                         if (array[y][x] == null)
                             continue;
 
-                        switch(item.Key){
-                            case 2: 
+                        switch(item.Key) {
+                            case (int)LayerEnum.Background: 
                                 grounds.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
-                            case 3: 
+                            case (int)LayerEnum.Pickables: 
                                 pickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
-                            case 4:
+                            case (int)LayerEnum.Traps:
                                 traps.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
                             case 5:

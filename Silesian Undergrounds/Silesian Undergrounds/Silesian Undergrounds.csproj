@@ -56,6 +56,7 @@
     <Compile Include="Engine\Components\IComponent.cs" />
     <Compile Include="Engine\Enum\ItemPricesEnum.cs" />
     <Compile Include="Engine\Enum\GroundEnum.cs" />
+    <Compile Include="Engine\Enum\LayerEnum.cs" />
     <Compile Include="Engine\Enum\TrapsDamageEnum.cs" />
     <Compile Include="Engine\Item\Ground.cs" />
     <Compile Include="Engine\Item\Heart.cs" />
