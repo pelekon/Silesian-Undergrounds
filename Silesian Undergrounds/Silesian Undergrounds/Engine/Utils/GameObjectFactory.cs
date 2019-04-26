@@ -69,9 +69,10 @@ namespace Silesian_Undergrounds.Engine.Utils
             //list.Add(KeyFactory(positionSources[1].position, positionSources[1].size, scene, isBuyable: true));
             //list.Add(HeartFactory(positionSources[2].position, positionSources[2].size, scene, isBuyable: true));
 
-        
+
             //foreach (var source in positionSources.GetRange(3, positionSources.Count - buyableItemsCountType))
 
+            System.Diagnostics.Debug.WriteLine(positionSources.Count);
 
             foreach (var source in positionSources)
             {

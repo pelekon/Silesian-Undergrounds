@@ -28,6 +28,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         public Camera camera { get; private set; }
 
         public bool isPaused { get; private set; }
+        public bool isEnd { get; private set; }
         private readonly bool canUnPause;
 
         #endregion
@@ -122,9 +123,8 @@ namespace Silesian_Undergrounds.Engine.Scene
                 return;
             }
 
-            if (player.GetTileWhereStanding() == transitions[0].GetTileWhereStanding())
-                System.Diagnostics.Debug.WriteLine("CYK");
 
+            
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
             DeleteObjects();
@@ -135,6 +135,22 @@ namespace Silesian_Undergrounds.Engine.Scene
             camera.Update(gameTime);
 
             ui.Update(gameTime);
+
+            if(transitions.Count > 0)
+                if (player.GetTileWhereStanding() == transitions[0].GetTileWhereStanding())
+                {
+                    foreach(var obj in gameObjects)
+                        DeleteObject(obj);
+
+                    foreach (var obj in transitions)
+                        DeleteObject(obj);
+
+                    foreach (var obj in objectsToAdd)
+                        DeleteObject(obj);
+
+                    DeleteObjects();
+                    isEnd = true;
+                }
         }
 
         public void Draw()
