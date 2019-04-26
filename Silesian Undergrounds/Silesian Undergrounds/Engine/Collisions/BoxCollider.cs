@@ -84,11 +84,6 @@ namespace Silesian_Undergrounds.Engine.Collisions
             CalculatePosition();
         }
 
-        public bool IsCollidingWith(BoxCollider collider)
-        {
-            return false;
-        }
-
         public bool IsCollidingWith(CircleCollider collider)
         {
             return false;

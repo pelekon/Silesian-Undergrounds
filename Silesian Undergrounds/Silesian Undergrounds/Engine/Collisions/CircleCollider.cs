@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Components;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Collisions
 {
@@ -30,6 +31,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
             OffsetY = offsetY;
             Radius = r;
             CalculatePosition();
+            circleTexture = TextureMgr.Instance.GetTexture("debug_circle");
         }
 
         public void CleanUp()
@@ -40,10 +42,13 @@ namespace Silesian_Undergrounds.Engine.Collisions
         public void Draw(SpriteBatch batch)
         {
             #if DEBUG
-            // Add code to draw debug texture
+            batch.Draw(circleTexture, Parent.Rectangle, Color.White);
             #endif
         }
-        public void Update(GameTime gameTime) { }
+        public void Update(GameTime gameTime)
+        {
+            CalculatePosition();
+        }
 
         public void RegisterSelf()
         {
@@ -55,19 +60,29 @@ namespace Silesian_Undergrounds.Engine.Collisions
             CollisionSystem.RemoveColliderFromSystem(this);
         }
 
-        public bool IsCollidingWith(BoxCollider collider)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool IsCollidingWith(CircleCollider collider)
         {
-            throw new NotImplementedException();
+            float totalRadius = Radius + collider.Radius;
+            float totalDiff = GetDistanceBetweenPoints(Position.X, Position.Y, collider.Position.X, collider.Position.Y);
+
+            if (totalDiff <= totalRadius)
+                return true;
+
+            return false;
         }
 
         public bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides sides)
         {
-            throw new NotImplementedException();
+            // look for closest point in rectangle of collider
+            float posX = MathHelper.Clamp(Position.X, collider.Rect.Left, collider.Rect.Right);
+            float posY = MathHelper.Clamp(Position.Y, collider.Rect.Top, collider.Rect.Bottom);
+
+            float dist = GetDistanceBetweenPoints(Position.X, Position.Y, posX, posY);
+
+            if (dist <= Radius)
+                return true;
+
+            return false;
         }
 
         public void Move(Vector2 moveForce)
@@ -81,6 +96,15 @@ namespace Silesian_Undergrounds.Engine.Collisions
             float posY = Parent.Rectangle.Y + (Parent.Rectangle.Height / 2) + OffsetY;
 
             Position = new Vector2(posX, posY);
+        }
+
+        public static float GetDistanceBetweenPoints(float aX, float aY, float bX, float bY)
+        {
+            double diffX = Math.Pow(Math.Abs(aX - bX), 2);
+            double diffY = Math.Pow(Math.Abs(aY - bY), 2);
+            float totalDiff = (float)Math.Sqrt(diffX + diffY);
+
+            return totalDiff;
         }
     }
 }

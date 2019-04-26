@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Components;
 using Silesian_Undergrounds.Engine.Collisions;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Behaviours
 {
@@ -16,11 +17,18 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
         public GameObject Parent { get; private set; }
 
-        // HostileBehaviour specyfic
+        // HostileBehaviour specific
         private bool IsInCombat;
         private GameObject enemy;
+        private CircleCollider aggroArea;
+        private BoxCollider collider;
+        private bool IsMoveNeeded;
+        private TimedEventsScheduler events;
+        private bool IsRangedType;
+        private float MinDistToEnemy;
+        AttackPattern attackPattern;
 
-        public HostileBehaviour(GameObject parent)
+        public HostileBehaviour(GameObject parent, AttackPattern pattern, bool ranged = false, float minDist = 1)
         {
             Parent = parent;
             Position = new Vector2(0, 0);
@@ -28,14 +36,25 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             IsInCombat = false;
             enemy = null;
+            IsMoveNeeded = false;
+            IsRangedType = ranged;
+            MinDistToEnemy = minDist;
 
-            Parent.AddComponent(new CircleCollider(Parent, 70, 0, 0));
+            aggroArea = new CircleCollider(Parent, 70, 0, 0);
+            collider = new BoxCollider(Parent, 70, 70, 0, 0, false);
+            Parent.AddComponent(collider);
+            Parent.AddComponent(aggroArea);
             Parent.OnCollision += NotifyCollision;
+
+            events = new TimedEventsScheduler();
+            attackPattern = pattern;
         }
 
         public void CleanUp()
         {
             Parent = null;
+            aggroArea = null;
+            collider = null;
         }
 
         public void Draw(SpriteBatch batch) { }
@@ -46,16 +65,70 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
         public void Update(GameTime gameTime)
         {
-            
+            if (IsInCombat)
+            {
+                CheckDistanceToEnemy();
+
+                if (IsMoveNeeded)
+                    UpdateMovement();
+                else
+                    events.Update(gameTime);
+            }
+        }
+
+        private void DropCombat()
+        {
+            IsInCombat = false;
+            IsMoveNeeded = false;
+            enemy = null;
+            events.ClearAll();
         }
 
         public void NotifyCollision(object sender, CollisionNotifyData data)
         {
-            if (!IsInCombat && data.source is CircleCollider)
+            if (!IsInCombat && data.source == aggroArea)
             {
-                IsInCombat = true;
-                enemy = data.obj;
+                if (data.obj is Player)
+                {
+                    IsInCombat = true;
+                    enemy = data.obj;
+                    CheckDistanceToEnemy();
+                    PrepareAttackEvents();
+                }
             }
+        }
+
+        private void UpdateMovement()
+        {
+            Vector2 moveForce = new Vector2(0, 0);
+
+            if (enemy.position.X < Parent.position.X)
+                moveForce.X = -1;
+            else
+                moveForce.X = 1;
+
+            if (enemy.position.Y < Parent.position.Y)
+                moveForce.Y = -1;
+            else
+                moveForce.Y = 1;
+
+            collider.Move(moveForce);
+        }
+
+        private void CheckDistanceToEnemy()
+        {
+            float dist = CircleCollider.GetDistanceBetweenPoints(Parent.position.X, Parent.position.Y, enemy.position.X, enemy.position.Y);
+
+            if (dist >= MinDistToEnemy)
+                IsMoveNeeded = true;
+            else
+                IsMoveNeeded = false;
+        }
+
+        private void PrepareAttackEvents()
+        {
+            // @TODO: Add code to init events with data from AttackPattern
+            // require: implementation of AttackPatterns
         }
     }
 }

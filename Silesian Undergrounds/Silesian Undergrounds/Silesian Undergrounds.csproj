@@ -45,6 +45,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Engine\Behaviours\AttackPattern.cs" />
     <Compile Include="Engine\Behaviours\HostileBehaviour.cs" />
     <Compile Include="Engine\Collisions\BoxCollider.cs" />
     <Compile Include="Engine\Collisions\CircleCollider.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Engine\Components\IComponent.cs" />
     <Compile Include="Engine\Item\Heart.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
+    <Compile Include="Engine\Utils\EnemyFactory.cs" />
     <Compile Include="Engine\Utils\FontMgr.cs" />
     <Compile Include="Engine\Utils\GameObjectFactory.cs" />
     <Compile Include="Engine\Utils\TextureMgr.cs" />
@@ -83,6 +85,8 @@
     <Compile Include="Engine\UI\UIArea.cs" />
     <Compile Include="Engine\UI\UIElement.cs" />
     <Compile Include="Engine\Scene\Drawer.cs" />
+    <Compile Include="Engine\Utils\TimedEvent.cs" />
+    <Compile Include="Engine\Utils\TimedEventsScheduler.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Engine\Utils\ResolutionMgr.cs" />
     <Compile Include="Program.cs" />

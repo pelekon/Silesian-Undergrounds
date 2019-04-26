@@ -8,7 +8,6 @@ namespace Silesian_Undergrounds.Engine.Collisions
         float OffsetX { get; }
         float OffsetY { get; }
 
-        bool IsCollidingWith(BoxCollider collider);
         bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides sides);
         bool IsCollidingWith(CircleCollider collider);
 
