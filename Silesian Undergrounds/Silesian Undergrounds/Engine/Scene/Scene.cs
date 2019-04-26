@@ -20,6 +20,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         private List<GameObject> gameObjects;
         private List<GameObject> objectsToDelete;
         private List<GameObject> objectsToAdd;
+        private List<GameObject> transitions;
 
         public Player player;
         private UIArea ui;
@@ -27,19 +28,21 @@ namespace Silesian_Undergrounds.Engine.Scene
         public Camera camera { get; private set; }
 
         public bool isPaused { get; private set; }
+        public bool isEnd { get; private set; }
         private readonly bool canUnPause;
 
         #endregion
 
-        public Scene()
+        public Scene(PlayerStatistic playerStatistic)
         {
             CollisionSystem.CleanUp();
 
             gameObjects = new List<GameObject>();
             objectsToDelete = new List<GameObject>();
             objectsToAdd = new List<GameObject>();
+            transitions = new List<GameObject>();
             isPaused = false;
-            player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
+            player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f), playerStatistic);
 
             TextureMgr.Instance.LoadIfNeeded("minerCharacter");
             player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
@@ -61,6 +64,12 @@ namespace Silesian_Undergrounds.Engine.Scene
         }
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
+
+        public void AddTransition(GameObject obj)
+        {
+            transitions.Add(obj);
+            objectsToAdd.Add(obj);
+        }
 
         public void AddObject(GameObject obj)
         {
@@ -114,6 +123,8 @@ namespace Silesian_Undergrounds.Engine.Scene
                 return;
             }
 
+
+            
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
             DeleteObjects();
@@ -124,6 +135,8 @@ namespace Silesian_Undergrounds.Engine.Scene
             camera.Update(gameTime);
 
             ui.Update(gameTime);
+
+            DetectPlayerOnTransition();
         }
 
         public void Draw()
@@ -167,6 +180,25 @@ namespace Silesian_Undergrounds.Engine.Scene
                 else
                     ui.Draw(spriteBatch);
             }, null);
+        }
+
+        private void DetectPlayerOnTransition()
+        {
+            foreach (var transition in transitions)
+                if (player.GetTileWhereStanding() == transition.GetTileWhereStanding())
+                {
+                    foreach (var obj in gameObjects)
+                        DeleteObject(obj);
+
+                    foreach (var obj in transitions)
+                        DeleteObject(obj);
+
+                    foreach (var obj in objectsToAdd)
+                        DeleteObject(obj);
+
+                    DeleteObjects();
+                    isEnd = true;
+                }
         }
     }
 }

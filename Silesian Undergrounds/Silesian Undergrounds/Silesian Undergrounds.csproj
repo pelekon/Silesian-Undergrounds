@@ -50,6 +50,7 @@
     <Compile Include="Engine\Common\AnimatedGameObject.cs" />
     <Compile Include="Engine\Common\GameObject.cs" />
     <Compile Include="Engine\Common\PickableItem.cs" />
+    <Compile Include="Engine\Common\PlayerStatistic.cs" />
     <Compile Include="Engine\Common\PropertyChangedArgs.cs" />
     <Compile Include="Engine\Common\StatisticHolder.cs" />
     <Compile Include="Engine\Components\IComponent.cs" />

@@ -11,7 +11,16 @@ namespace Silesian_Undergrounds.Engine.Scene {
         private List<GameObject> pickableItems = new List<GameObject>();
         private List<GameObject> traps = new List<GameObject>();
         private List<GameObject> grounds = new List<GameObject>();
+        private List<Tile> transitions = new List<Tile>();
         private int width, height;
+
+        public List<Tile> Transitions
+        {
+            get
+            {
+                return transitions;
+            }
+        }
 
         public List<Tile> Tiles
         {
@@ -57,6 +66,10 @@ namespace Silesian_Undergrounds.Engine.Scene {
 
         public void GenerateTileMap(Dictionary<int, Texture2D[][]> map, int size)
         {
+            tiles = new List<Tile>();
+            pickableItems = new List<GameObject>();
+            grounds = new List<GameObject>();
+            transitions = new List<Tile>();
 
             foreach(var item in map)
             {
@@ -79,6 +92,9 @@ namespace Silesian_Undergrounds.Engine.Scene {
                                 break;
                             case 4:
                                 traps.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case 5:
+                                transitions.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
                             default:
                                 tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
