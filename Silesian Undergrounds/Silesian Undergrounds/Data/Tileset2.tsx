@@ -49,4 +49,7 @@
  <tile id="15">
   <image width="64" height="64" source="../Content/ledder.png"/>
  </tile>
+ <tile id="16">
+  <image width="64" height="64" source="../Content/x-green.png"/>
+ </tile>
 </tileset>
