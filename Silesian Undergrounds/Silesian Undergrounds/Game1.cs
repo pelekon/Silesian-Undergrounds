@@ -123,7 +123,6 @@ namespace Silesian_Undergrounds
             var sceneName = scenes[levelCounter];
             #if DEBUG
             System.Diagnostics.Debug.WriteLine("Current scene: " + sceneName);
-            System.Diagnostics.Debug.WriteLine(levelCounter);
             #endif
             levelCounter++;
             return SceneManager.LoadScene(sceneName, 64);
