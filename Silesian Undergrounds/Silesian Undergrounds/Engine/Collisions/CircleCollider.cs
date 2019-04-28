@@ -15,7 +15,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
     {
         // Component inherited
         public Vector2 Position { get; set; }
-        public Rectangle Rect { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Rectangle Rect { get ; set; }
         public GameObject Parent { get; private set; }
 
         // Circle
@@ -42,7 +42,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
         public void Draw(SpriteBatch batch)
         {
             #if DEBUG
-            batch.Draw(circleTexture, Parent.Rectangle, Color.White);
+            batch.Draw(circleTexture, Rect, Color.White);
             #endif
         }
         public void Update(GameTime gameTime)
@@ -96,6 +96,11 @@ namespace Silesian_Undergrounds.Engine.Collisions
             float posY = Parent.Rectangle.Y + (Parent.Rectangle.Height / 2) + OffsetY;
 
             Position = new Vector2(posX, posY);
+
+            float x = posX - Radius;
+            float y = posY - Radius;
+            float size = Radius * 2;
+            Rect = new Rectangle((int)x, (int)y, (int)size, (int)size);
         }
 
         public static float GetDistanceBetweenPoints(float aX, float aY, float bX, float bY)

@@ -30,6 +30,7 @@ namespace Silesian_Undergrounds.Engine.Common
             this.size = size;
             this.layer = layer;
             this.scale = scale;
+            speed = 0.8f;
 
             components = new List<IComponent>();
         }
@@ -75,6 +76,17 @@ namespace Silesian_Undergrounds.Engine.Common
             }
 
             components.Clear();
+        }
+
+        public T GetComponent<T>()
+        {
+            foreach(var component in components)
+            {
+                if (component is T)
+                    return (T)component;
+            }
+
+            return default(T);
         }
         
         public virtual void NotifyCollision(GameObject gameobject, ICollider source)

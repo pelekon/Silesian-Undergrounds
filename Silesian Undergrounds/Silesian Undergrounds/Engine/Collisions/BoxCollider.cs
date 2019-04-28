@@ -63,7 +63,8 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
             foreach (var collider in CollisionSystem.Colliders)
             {
-                if (collider == this)
+                // ignore self and other colliders of parent object
+                if (collider == this || Parent == collider.Parent)
                     continue;
 
                 bool isColliding = false;
@@ -75,7 +76,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
                 if (isColliding)
                 {
-                    collider.Parent.NotifyCollision(Parent, this);
+                    collider.Parent.NotifyCollision(Parent, collider);
                     Parent.NotifyCollision(collider.Parent, this);
                 }
             }
@@ -86,6 +87,15 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
         public bool IsCollidingWith(CircleCollider collider)
         {
+            // look for closest point in rectangle of collider
+            float posX = MathHelper.Clamp(collider.Position.X, Rect.Left, Rect.Right);
+            float posY = MathHelper.Clamp(collider.Position.Y, Rect.Top, Rect.Bottom);
+
+            float dist = CircleCollider.GetDistanceBetweenPoints(collider.Position.X, collider.Position.Y, posX, posY);
+
+            if (dist <= collider.Radius)
+                return true;
+
             return false;
         }
 

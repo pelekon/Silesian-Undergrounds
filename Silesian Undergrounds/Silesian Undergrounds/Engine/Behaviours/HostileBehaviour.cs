@@ -20,6 +20,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         // HostileBehaviour specific
         private bool IsInCombat;
         private GameObject enemy;
+        private BoxCollider enemyCollider;
         private CircleCollider aggroArea;
         private BoxCollider collider;
         private bool IsMoveNeeded;
@@ -80,6 +81,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             IsInCombat = false;
             IsMoveNeeded = false;
             enemy = null;
+            enemyCollider = null;
         }
 
         public void NotifyCollision(object sender, CollisionNotifyData data)
@@ -90,6 +92,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 {
                     IsInCombat = true;
                     enemy = data.obj;
+                    enemyCollider = enemy.GetComponent<BoxCollider>();
                     CheckDistanceToEnemy();
                     PrepareAttackEvents();
                 }
@@ -114,11 +117,24 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             collider.Move(moveForce);
         }
 
-        private void CheckDistanceToEnemy()
+        private float GetDistToEnemy()
         {
             float dist = CircleCollider.GetDistanceBetweenPoints(Parent.position.X, Parent.position.Y, enemy.position.X, enemy.position.Y);
+            dist -= (collider.Rect.Width / 2);
+            // fix me!
+            if (enemy != null)
+                dist -= (enemyCollider.Rect.Width / 2);
+            else
+                dist -= (enemy.Rectangle.Width / 2);
 
-            if (dist >= MinDistToEnemy)
+            return dist;
+        }
+
+        private void CheckDistanceToEnemy()
+        {
+            float dist = GetDistToEnemy();
+
+            if (dist > MinDistToEnemy)
                 IsMoveNeeded = true;
             else
                 IsMoveNeeded = false;
@@ -140,15 +156,11 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                         return;
 
                     // Check distance between unit and enemy in order to validate attack with its data
-                    float dist = CircleCollider.GetDistanceBetweenPoints(Parent.position.X, Parent.position.Y, enemy.position.X, enemy.position.Y);
-                    // dist is distance between center points of rectangles -> 
-                    //remove half of width of both rectangles to get distance between borders
-                    dist -= (Parent.Rectangle.Width / 2);
-                    dist -= (enemy.Rectangle.Width / 2);
+                    float dist = GetDistToEnemy();
                     // validate attack
                     if (att.MinRange > 0.0f && dist > att.MinRange)
                         return;
-                    if (att.MaxRange > dist)
+                    if (att.MaxRange < dist)
                         return;
 
                     Random rng = new Random();

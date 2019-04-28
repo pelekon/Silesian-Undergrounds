@@ -21,11 +21,11 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         public void Update(GameTime gameTime)
         {
+            //Console.WriteLine("Update in scheduler, size: " + events.Count);
             ExecuteListChanges();
 
-            int diff = gameTime.ElapsedGameTime.Milliseconds - lastUpdateMs;
-            lastUpdateMs = gameTime.ElapsedGameTime.Milliseconds;
-
+            int diff = gameTime.ElapsedGameTime.Milliseconds;// - lastUpdateMs;
+            //lastUpdateMs = gameTime.ElapsedGameTime.Milliseconds;
             foreach (var e in events)
             {
                 e.UpdateEvent(diff);
@@ -52,7 +52,7 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         private void ExecuteListChanges()
         {
-            if(toDelete.Count > 0)
+            if (toDelete.Count > 0)
             {
                 foreach (var e in toDelete)
                     events.Remove(e);
@@ -66,5 +66,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                 toAdd.Clear();
             }
         }
+
+        public int GetSize() { return events.Count; }
     }
 }

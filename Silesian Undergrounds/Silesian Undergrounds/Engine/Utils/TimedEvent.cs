@@ -28,6 +28,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             if (currentTime <= 0)
             {
                 eventCode.Invoke();
+
                 if (isRepeatable)
                     currentTime = timeToExecute;
             }
