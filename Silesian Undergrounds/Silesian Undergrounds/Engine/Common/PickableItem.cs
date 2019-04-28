@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System;
 using System.Windows.Forms;
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.CommonF
 {
@@ -32,7 +33,7 @@ namespace Silesian_Undergrounds.Engine.CommonF
             scene = s;
         }
 
-        public override void NotifyCollision(GameObject gameobject) {
+        public override void NotifyCollision(GameObject gameobject, ICollider source) {
             if (!wasBought && isBuyable && (gameobject is Player))
             {
                 wasBought = true;

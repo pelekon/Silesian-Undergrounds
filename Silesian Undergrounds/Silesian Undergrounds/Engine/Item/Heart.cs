@@ -20,7 +20,7 @@ namespace Silesian_Undergrounds.Engine.Item {
 
         public override void NotifyCollision(GameObject obj, ICollider source)
         {
-            base.NotifyCollision(obj);
+            base.NotifyCollision(obj, source);
 
             if (obj is Player && !isBuyable)
             {
