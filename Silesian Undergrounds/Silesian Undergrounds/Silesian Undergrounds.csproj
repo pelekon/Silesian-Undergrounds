@@ -45,6 +45,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Engine\Behaviours\AttackData.cs" />
     <Compile Include="Engine\Behaviours\AttackPattern.cs" />
     <Compile Include="Engine\Behaviours\HostileBehaviour.cs" />
     <Compile Include="Engine\Collisions\BoxCollider.cs" />

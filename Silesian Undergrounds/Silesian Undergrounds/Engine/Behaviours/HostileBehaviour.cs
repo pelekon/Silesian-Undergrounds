@@ -24,11 +24,10 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private BoxCollider collider;
         private bool IsMoveNeeded;
         private TimedEventsScheduler events;
-        private bool IsRangedType;
         private float MinDistToEnemy;
         AttackPattern attackPattern;
 
-        public HostileBehaviour(GameObject parent, AttackPattern pattern, bool ranged = false, float minDist = 1)
+        public HostileBehaviour(GameObject parent, AttackPattern pattern, float minDist = 1)
         {
             Parent = parent;
             Position = new Vector2(0, 0);
@@ -37,7 +36,6 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             IsInCombat = false;
             enemy = null;
             IsMoveNeeded = false;
-            IsRangedType = ranged;
             MinDistToEnemy = minDist;
 
             aggroArea = new CircleCollider(Parent, 70, 0, 0);
@@ -71,17 +69,17 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
                 if (IsMoveNeeded)
                     UpdateMovement();
-                else
-                    events.Update(gameTime);
+
+                events.Update(gameTime);
             }
         }
 
         private void DropCombat()
         {
+            events.ClearAll();
             IsInCombat = false;
             IsMoveNeeded = false;
             enemy = null;
-            events.ClearAll();
         }
 
         public void NotifyCollision(object sender, CollisionNotifyData data)
@@ -112,6 +110,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             else
                 moveForce.Y = 1;
 
+            moveForce *= Parent.speed;
             collider.Move(moveForce);
         }
 
@@ -127,8 +126,37 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
         private void PrepareAttackEvents()
         {
-            // @TODO: Add code to init events with data from AttackPattern
-            // require: implementation of AttackPatterns
+            foreach(var attack in attackPattern.attacks)
+            {
+                events.ScheduleEvent(attack.AttackTimer, attack.IsRepeatable, () =>
+                {
+                    // Additional check just for safety
+                    if (enemy == null)
+                        return;
+
+                    AttackData att = attack;
+                    // Do not handle melee attack while unit is during movement to enemy
+                    if (att.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
+                        return;
+
+                    // Check distance between unit and enemy in order to validate attack with its data
+                    float dist = CircleCollider.GetDistanceBetweenPoints(Parent.position.X, Parent.position.Y, enemy.position.X, enemy.position.Y);
+                    // dist is distance between center points of rectangles -> 
+                    //remove half of width of both rectangles to get distance between borders
+                    dist -= (Parent.Rectangle.Width / 2);
+                    dist -= (enemy.Rectangle.Width / 2);
+                    // validate attack
+                    if (att.MinRange > 0.0f && dist > att.MinRange)
+                        return;
+                    if (att.MaxRange > dist)
+                        return;
+
+                    Random rng = new Random();
+                    int dmgValue = rng.Next(att.MinDamage, att.MaxDamage);
+                    Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
+                    plr.DecreaseLiveValue(dmgValue);
+                });
+            }
         }
     }
 }
