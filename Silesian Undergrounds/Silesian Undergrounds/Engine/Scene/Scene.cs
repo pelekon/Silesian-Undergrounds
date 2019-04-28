@@ -53,6 +53,8 @@ namespace Silesian_Undergrounds.Engine.Scene
             ui = new InGameUI(player);
             pauseMenu = new UIArea(); // TEMP SET EMPTY PAUSE MENU
             canUnPause = true;
+            // TEST CODE
+            AddObject(EnemyFactory.TestEnemyFactory());
         }
 
 
