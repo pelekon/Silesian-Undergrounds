@@ -66,7 +66,6 @@ namespace Silesian_Undergrounds.Engine.Common
             //Makes sure we won't start a new annimation unless it differs from our current animation
             if (currentAnimation != name && currentDirection == movementDirection.standstill)
             {
-                Debug.WriteLine("Current animation is: " + name);
                 currentAnimation = name;
                 numberFrames = 0;
             }

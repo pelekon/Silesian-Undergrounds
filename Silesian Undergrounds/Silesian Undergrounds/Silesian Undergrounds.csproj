@@ -56,16 +56,24 @@
     <Compile Include="Engine\Common\AnimatedGameObject.cs" />
     <Compile Include="Engine\Common\GameObject.cs" />
     <Compile Include="Engine\Common\PickableItem.cs" />
+    <Compile Include="Engine\Common\PlayerStatistic.cs" />
     <Compile Include="Engine\Common\PropertyChangedArgs.cs" />
     <Compile Include="Engine\Common\StatisticHolder.cs" />
     <Compile Include="Engine\Common\Unit.cs" />
     <Compile Include="Engine\Collisions\CollisionNotifyData.cs" />
     <Compile Include="Engine\Components\IComponent.cs" />
+    <Compile Include="Engine\Enum\ItemPricesEnum.cs" />
+    <Compile Include="Engine\Enum\GroundEnum.cs" />
+    <Compile Include="Engine\Enum\LayerEnum.cs" />
+    <Compile Include="Engine\Enum\TrapsDamageEnum.cs" />
+    <Compile Include="Engine\Item\Ground.cs" />
     <Compile Include="Engine\Item\Heart.cs" />
+    <Compile Include="Engine\Traps\Spike.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
     <Compile Include="Engine\Utils\EnemyFactory.cs" />
     <Compile Include="Engine\Utils\FontMgr.cs" />
     <Compile Include="Engine\Utils\GameObjectFactory.cs" />
+    <Compile Include="Engine\Utils\GroundTextureFactory.cs" />
     <Compile Include="Engine\Utils\TextureMgr.cs" />
     <Compile Include="Engine\Enum\FoodEnum.cs" />
     <Compile Include="Engine\Enum\OreEnum.cs" />
@@ -96,11 +104,15 @@
     <Compile Include="Views\MainMenuView.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic.Compatibility" />
+    <Reference Include="Microsoft.VisualBasic.Compatibility.Data" />
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Input.Manipulations" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +176,9 @@
     <None Include="Data\camera.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Data\drop2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Data\test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -183,7 +198,6 @@
   <ItemGroup>
     <Content Include="Content\playerSheet.png" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

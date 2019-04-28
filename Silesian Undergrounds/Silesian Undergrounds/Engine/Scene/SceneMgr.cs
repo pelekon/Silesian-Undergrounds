@@ -2,11 +2,13 @@
 using System.IO;
 using System.Xml;
 using System.Collections.Generic;
-
 using Silesian_Undergrounds.Engine.Utils;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.CommonF;
+using Silesian_Undergrounds.Engine.Item;
+using System.Diagnostics;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -19,24 +21,44 @@ namespace Silesian_Undergrounds.Engine.Scene
         public static Scene GetCurrentScene() { return _currentScene; }
         private static readonly TileMapRenderer Renderer = new TileMapRenderer();
         private const string JsonFileExtension = ".json", DataDirectory = "Data";
+        private static PlayerStatistic playerStatistic;
+        #endregion
+
+        #region
+        private const int PLAYER_BASIC_HEALTH = 100;
+        private const int PLAYER_BASIC_MAX_HEALTH = 150;
+        private const int PLAYER_BASIC_HUNGER = 100;
+        private const int PLAYER_BASIC_MAX_HUNGER = 150;
+        private const float PLAYER_BASIC_ATTACK_SPEED = 1.0f;
+        private const float PLAYER_BASIC_MOVEMENT_SPEED = 1.0f;
+        private const int PLAYER_BASIC_DAMAGE = 10;
+        private const int PLAYER_BASIC_KEY_AMOUNT = 0;
+        private const int PLAYER_BASIC_MONEY_AMOUNT = 0;
         #endregion
 
         public static Scene LoadScene(string sceneName, int tileSize)
         {
             var fileName = sceneName + JsonFileExtension;
             var path = Path.Combine(DataDirectory, fileName);
+        
 
             if (!File.Exists(path)) return null;
 
-            var scene = new Scene();
+            if(playerStatistic == null)
+            {
+                playerStatistic = new PlayerStatistic(PLAYER_BASIC_HEALTH, PLAYER_BASIC_MAX_HEALTH,
+                    PLAYER_BASIC_HUNGER, PLAYER_BASIC_MAX_HUNGER,
+                    PLAYER_BASIC_MOVEMENT_SPEED, PLAYER_BASIC_ATTACK_SPEED,
+                    PLAYER_BASIC_DAMAGE, PLAYER_BASIC_MONEY_AMOUNT, PLAYER_BASIC_KEY_AMOUNT);
+            }
+
+            var scene = new Scene(playerStatistic);
 
             if (!LoadSceneFile(path, scene, tileSize)) return null;
 
             _currentScene = scene;
             return scene;
         }
-
-
 
         private static bool LoadSceneFile(string filePath, Scene scene, int tileSize)
         {
@@ -51,7 +73,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                     #endif
                     return false;
                 }
-                
+
             }
             if (sceneFile.TileSets.Count < 1) return false;
             var tileSetFile = Path.Combine(DataDirectory, sceneFile.TileSets[0].Source);
@@ -113,8 +135,25 @@ namespace Silesian_Undergrounds.Engine.Scene
             foreach (Tile tile in Renderer.Tiles)
                 scene.AddObject(tile);
 
-            List<PickableItem> generated = GameObjectFactory.ScenePickableItemsFactory(Renderer.Pickable);
-            foreach(var obj in generated)
+            foreach (Tile tile in Renderer.Transitions)
+                scene.AddTransition(tile);
+
+            List<Ground> generatedGround = GroundTextureFactory.GroundFactory(Renderer.Grounds);
+            foreach (var ground in generatedGround)
+            {
+                ground.SetScene(scene);
+                scene.AddObject(ground);
+            }
+
+            List<PickableItem> generatedItems = GameObjectFactory.ScenePickableItemsFactory(Renderer.Pickable, scene);
+            foreach(var obj in generatedItems)
+            {
+                obj.SetScene(scene);
+                scene.AddObject(obj);
+            }
+
+            List<PickableItem> generatedTraps = GameObjectFactory.SceneTrapsFactory(Renderer.Traps, scene);
+            foreach (var obj in generatedTraps)
             {
                 obj.SetScene(scene);
                 scene.AddObject(obj);
@@ -143,7 +182,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                     table[w][h] = TextureMgr.Instance.GetTexture(name);
                 }
             }
-            
+
             return table;
         }
     }

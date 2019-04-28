@@ -8,15 +8,16 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.CommonF;
 
 namespace Silesian_Undergrounds.Engine.Item {
     public class Food : PickableItem {
 
-        public int hungerRefil;
+        public int hungerRefil { get; private set; }
 
         public FoodEnum type;
 
-        public Food(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene, FoodEnum foodEnum) : base(texture, position, size, layer, scene)
+        public Food(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene, FoodEnum foodEnum, bool isBuyable = false) : base(texture, position, size, layer, scene, isBuyable)
         {
             this.type = foodEnum;
 
@@ -31,7 +32,9 @@ namespace Silesian_Undergrounds.Engine.Item {
 
         public override void NotifyCollision(GameObject obj, ICollider source)
         {
-            if (obj is Player)
+            base.NotifyCollision(obj);
+
+            if (obj is Player && !isBuyable)
             {
                 Player pl = (Player)obj;
                 if (pl.MaxHungerValue > pl.HungerValue)
