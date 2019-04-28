@@ -158,7 +158,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                     // Check distance between unit and enemy in order to validate attack with its data
                     float dist = GetDistToEnemy();
                     // validate attack
-                    if (att.MinRange > 0.0f && dist > att.MinRange)
+                    if (att.MinRange > 0.0f && dist < att.MinRange)
                         return;
                     if (att.MaxRange < dist)
                         return;
