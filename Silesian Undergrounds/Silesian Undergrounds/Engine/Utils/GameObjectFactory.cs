@@ -5,7 +5,7 @@ using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Item;
 using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework;
-using System.Diagnostics;
+using Silesian_Undergrounds.Engine.SpecialItems;
 using Silesian_Undergrounds.Engine.CommonF;
 using Silesian_Undergrounds.Engine.Traps;
 
@@ -42,6 +42,28 @@ namespace Silesian_Undergrounds.Engine.Utils
             else
                 return FoodEnum.Steak;
 
+        }
+
+        private static SpecialItemEnum RandSpecialItem(Random random)
+        {
+            int randed = random.Next(1, (int)SpecialItemEnum.MAX);
+
+            switch (1){
+                case 1: 
+                    return SpecialItemEnum.LiveBooster;
+                case 2:
+                    return SpecialItemEnum.HungerBooster;
+                case 3:
+                    return SpecialItemEnum.MovementBooster;
+                case 4:
+                    return SpecialItemEnum.AttackBooster;
+                case 5:
+                    return SpecialItemEnum.HungerImmunite;
+                case 6:
+                    return SpecialItemEnum.PickupDouble;
+                default:
+                    return SpecialItemEnum.ChestsDropBooster;
+            }
         }
 
         private static PickableEnum RandItem(Random random)
@@ -81,6 +103,21 @@ namespace Silesian_Undergrounds.Engine.Utils
             return list;
         }
 
+
+        public static List<SpecialItem> SceneSpecialItemsFactory(List<GameObject> specialItemsPositions, Scene.Scene scene)
+        {
+            List<SpecialItem> specialItems = new List<SpecialItem>();
+            Random random = new Random();
+
+            foreach(var obj in specialItemsPositions)
+            {
+                SpecialItemEnum itemType = RandSpecialItem(random);
+
+                specialItems.Add(SpecialItemFactory(itemType, obj.position, obj.size, scene));
+            }
+
+            return specialItems;
+        }
 
         // renders random items (hearts, chests and ores) on the map
         public static List<PickableItem> ScenePickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene)
@@ -132,6 +169,27 @@ namespace Silesian_Undergrounds.Engine.Utils
             }
 
             return list;
+        }
+
+        public static SpecialItem SpecialItemFactory(SpecialItemEnum itemType, Vector2 position, Vector2 size, Scene.Scene scene)
+        {
+            switch (itemType)
+            {
+                case SpecialItemEnum.LiveBooster:
+                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, 6, scene);
+                //case 2:
+                //    return SpecialItemEnum.HungerBooster;
+                //case 3:
+                //    return SpecialItemEnum.MovementBooster;
+                //case 4:
+                //    return SpecialItemEnum.AttackBooster;
+                //case 5:
+                //    return SpecialItemEnum.HungerImmunite;
+                //case 6:
+                //    return SpecialItemEnum.PickupDouble;
+                default:
+                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, 6, scene);
+            }
         }
 
         public static Ore OreFactory(Random rng, Vector2 position, Vector2 size, Scene.Scene scene)

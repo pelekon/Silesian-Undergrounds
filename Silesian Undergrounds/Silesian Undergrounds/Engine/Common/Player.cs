@@ -178,14 +178,34 @@ namespace Silesian_Undergrounds.Engine.Common
             }
         }
 
+        public void IncreaseLiveMaxValueBy(int liveMaxValueToIncrease)
+        {
+            MaxLiveValue = MaxLiveValue + liveMaxValueToIncrease;
+        }
+
+        public void IncreaseHungerMaxValueBy(int hungerMaxValueToIncrease)
+        {
+            MaxHungerValue = MaxHungerValue + hungerMaxValueToIncrease;
+        }
+
         public int MaxHungerValue
         {
             get { return statistics.MaxHunger;  }
+            private set
+            {
+                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
+                statistics.MaxHealth = value;
+            }
         }
 
         public int MaxLiveValue
         {
             get { return statistics.MaxHealth;  }
+            private set
+            {
+                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
+                statistics.MaxHealth = value;
+            }
         }
 
         public int MoneyAmount
@@ -231,11 +251,6 @@ namespace Silesian_Undergrounds.Engine.Common
         public int LiveMaxValue
         {
             get { return statistics.MaxHealth; }
-            private set
-            {
-                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
-                statistics.MaxHealth = value;
-            }
         }
 
         public int HungerMaxValue
