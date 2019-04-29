@@ -82,6 +82,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
             grounds = new List<GameObject>();
             transitions = new List<Tile>();
             traps = new List<GameObject>();
+            specialItems = new List<GameObject>();
 
             foreach (var item in map)
             {

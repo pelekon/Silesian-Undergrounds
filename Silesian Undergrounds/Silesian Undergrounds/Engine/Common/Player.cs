@@ -193,6 +193,11 @@ namespace Silesian_Undergrounds.Engine.Common
             MaxHungerValue = MaxHungerValue + hungerMaxValueToIncrease;
         }
 
+        public void IncreaseAttackValueBy(float attackValueToIncrease)
+        {
+            this.statistics.AttackSpeed += attackValueToIncrease;
+        }
+
         public int MaxHungerValue
         {
             get { return statistics.MaxHunger;  }
