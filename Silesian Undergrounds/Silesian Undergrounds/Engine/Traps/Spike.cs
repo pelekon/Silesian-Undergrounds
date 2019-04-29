@@ -43,9 +43,9 @@ namespace Silesian_Undergrounds.Engine.Traps
         }
 
 
-        public override void NotifyCollision(GameObject obj)
+        public override void NotifyCollision(GameObject obj, ICollider source)
         {
-            base.NotifyCollision(obj);
+            base.NotifyCollision(obj, source);
 
             if ((obj is Player) && !WasPicked)
             {

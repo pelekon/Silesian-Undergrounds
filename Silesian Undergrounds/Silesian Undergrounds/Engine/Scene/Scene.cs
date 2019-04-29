@@ -53,6 +53,8 @@ namespace Silesian_Undergrounds.Engine.Scene
             ui = new InGameUI(player);
             pauseMenu = new UIArea(); // TEMP SET EMPTY PAUSE MENU
             canUnPause = true;
+            // TEST CODE
+            gameObjects.Add(EnemyFactory.TestEnemyFactory());
         }
 
 
@@ -122,8 +124,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                 pauseMenu.Update(gameTime);
                 return;
             }
-
-
             
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
@@ -172,6 +172,8 @@ namespace Silesian_Undergrounds.Engine.Scene
             Drawer.Draw((spriteBatch, gameTime) =>
             {
                 player.Draw(spriteBatch);
+                // VERY VERY TEST CODE
+                gameObjects[1].Draw(spriteBatch);
             }, transformMatrix: camera.Transform);
             Drawer.Draw((spriteBatch, gameTime) =>
             {

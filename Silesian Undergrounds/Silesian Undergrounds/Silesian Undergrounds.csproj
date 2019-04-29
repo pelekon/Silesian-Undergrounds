@@ -7,7 +7,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E8652A93-3D09-4CD4-89AC-F630F61A9E20}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Silesian_Undergrounds</RootNamespace>
     <AssemblyName>Silesian Undergrounds</AssemblyName>
@@ -45,14 +45,22 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Engine\Behaviours\AttackData.cs" />
+    <Compile Include="Engine\Behaviours\AttackPattern.cs" />
+    <Compile Include="Engine\Behaviours\HostileBehaviour.cs" />
     <Compile Include="Engine\Collisions\BoxCollider.cs" />
+    <Compile Include="Engine\Collisions\CircleCollider.cs" />
     <Compile Include="Engine\Collisions\CollisionSystem.cs" />
+    <Compile Include="Engine\Collisions\ICollider.cs" />
+    <Compile Include="Engine\Collisions\RectCollisionSides.cs" />
     <Compile Include="Engine\Common\AnimatedGameObject.cs" />
     <Compile Include="Engine\Common\GameObject.cs" />
     <Compile Include="Engine\Common\PickableItem.cs" />
     <Compile Include="Engine\Common\PlayerStatistic.cs" />
     <Compile Include="Engine\Common\PropertyChangedArgs.cs" />
     <Compile Include="Engine\Common\StatisticHolder.cs" />
+    <Compile Include="Engine\Common\Unit.cs" />
+    <Compile Include="Engine\Collisions\CollisionNotifyData.cs" />
     <Compile Include="Engine\Components\IComponent.cs" />
     <Compile Include="Engine\Enum\ItemPricesEnum.cs" />
     <Compile Include="Engine\Enum\GroundEnum.cs" />
@@ -62,6 +70,7 @@
     <Compile Include="Engine\Item\Heart.cs" />
     <Compile Include="Engine\Traps\Spike.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
+    <Compile Include="Engine\Utils\EnemyFactory.cs" />
     <Compile Include="Engine\Utils\FontMgr.cs" />
     <Compile Include="Engine\Utils\GameObjectFactory.cs" />
     <Compile Include="Engine\Utils\GroundTextureFactory.cs" />
@@ -85,6 +94,8 @@
     <Compile Include="Engine\UI\UIArea.cs" />
     <Compile Include="Engine\UI\UIElement.cs" />
     <Compile Include="Engine\Scene\Drawer.cs" />
+    <Compile Include="Engine\Utils\TimedEvent.cs" />
+    <Compile Include="Engine\Utils\TimedEventsScheduler.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Engine\Utils\ResolutionMgr.cs" />
     <Compile Include="Program.cs" />

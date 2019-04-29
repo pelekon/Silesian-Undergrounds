@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Components
 {

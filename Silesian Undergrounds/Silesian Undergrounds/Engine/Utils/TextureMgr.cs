@@ -35,7 +35,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                 if (!textures.ContainsKey(name))
                     return null;
             }
-
+            
             return textures[name];
         }
 
