@@ -183,6 +183,11 @@ namespace Silesian_Undergrounds.Engine.Common
             MaxLiveValue = MaxLiveValue + liveMaxValueToIncrease;
         }
 
+        public void IncreaseMovementSpped(float movementSpeedValueToIncrease)
+        {
+            this.statistics.MovementSpeed += movementSpeedValueToIncrease;
+        }
+
         public void IncreaseHungerMaxValueBy(int hungerMaxValueToIncrease)
         {
             MaxHungerValue = MaxHungerValue + hungerMaxValueToIncrease;
@@ -280,28 +285,28 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 if (keyState.IsKeyDown(Keys.W))
                 {
-                    sDirection += new Vector2(0, -1);
+                    sDirection += new Vector2(0, -1 * this.statistics.MovementSpeed);
                     PlayAnimation("Up");
                     currentDirection = movementDirection.up;
 
                 }
                 if (keyState.IsKeyDown(Keys.A))
                 {
-                    sDirection += new Vector2(-1, 0);
+                    sDirection += new Vector2(-1 * this.statistics.MovementSpeed, 0);
                     PlayAnimation("Left");
                     currentDirection = movementDirection.left;
 
                 }
                 if (keyState.IsKeyDown(Keys.S))
                 {
-                    sDirection += new Vector2(0, 1);
+                    sDirection += new Vector2(0, 1 * this.statistics.MovementSpeed);
                     PlayAnimation("Down");
                     currentDirection = movementDirection.down;
 
                 }
                 if (keyState.IsKeyDown(Keys.D))
                 {
-                    sDirection += new Vector2(1, 0);
+                    sDirection += new Vector2(1 * this.statistics.MovementSpeed, 0);
                     PlayAnimation("Right");
                     currentDirection = movementDirection.right;
 

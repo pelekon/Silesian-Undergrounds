@@ -64,6 +64,7 @@
     <Compile Include="Engine\Item\Heart.cs" />
     <Compile Include="Engine\SpecialItems\HungerBooster.cs" />
     <Compile Include="Engine\SpecialItems\LiveBooster.cs" />
+    <Compile Include="Engine\SpecialItems\MovementBooster.cs" />
     <Compile Include="Engine\Traps\Spike.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
     <Compile Include="Engine\Utils\FontMgr.cs" />

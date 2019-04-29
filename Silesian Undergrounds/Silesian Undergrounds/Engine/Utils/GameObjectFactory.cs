@@ -46,7 +46,7 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         private static SpecialItemEnum RandSpecialItem(Random random)
         {
-            int randed = random.Next(1, 3);
+            int randed = random.Next(1, 4);
 
             switch (randed){
                 case 1: 
@@ -179,8 +179,8 @@ namespace Silesian_Undergrounds.Engine.Utils
                     return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.HungerBooster:
                     return new HungerBooster(TextureMgr.Instance.GetTexture("Items/Food/steak"), position, size, (int)LayerEnum.SpecialItems, scene);
-                //case 3:
-                //    return SpecialItemEnum.MovementBooster;
+                case SpecialItemEnum.MovementBooster:
+                    return new MovementBooster(TextureMgr.Instance.GetTexture("Items/Ores/gold/gold_1"), position, size, (int)LayerEnum.SpecialItems, scene);
                 //case 4:
                 //    return SpecialItemEnum.AttackBooster;
                 //case 5:
