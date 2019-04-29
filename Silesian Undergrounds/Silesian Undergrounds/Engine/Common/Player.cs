@@ -22,6 +22,8 @@ namespace Silesian_Undergrounds.Engine.Common
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
 
+        public bool immuniteToHunger = false;
+
         private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
         private int HUNGER_DECREASE_VALUE = 5;
         private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
@@ -74,7 +76,10 @@ namespace Silesian_Undergrounds.Engine.Common
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            HandleHungerDecrasing(deltaTime);
+            if (!immuniteToHunger)
+            {
+                HandleHungerDecrasing(deltaTime);
+            }
 
             sDirection *= speed;
             sDirection *= deltaTime;
