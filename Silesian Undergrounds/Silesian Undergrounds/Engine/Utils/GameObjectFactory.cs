@@ -176,7 +176,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             switch (itemType)
             {
                 case SpecialItemEnum.LiveBooster:
-                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, 6, scene);
+                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, (int)LayerEnum.SpecialItems, scene);
                 //case 2:
                 //    return SpecialItemEnum.HungerBooster;
                 //case 3:
@@ -188,7 +188,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                 //case 6:
                 //    return SpecialItemEnum.PickupDouble;
                 default:
-                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, 6, scene);
+                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, (int)LayerEnum.SpecialItems, scene);
             }
         }
 

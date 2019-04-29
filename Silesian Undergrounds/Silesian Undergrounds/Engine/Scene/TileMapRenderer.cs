@@ -105,10 +105,10 @@ namespace Silesian_Undergrounds.Engine.Scene {
                             case (int)LayerEnum.Traps:
                                 traps.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
-                            case 5:
+                            case (int)LayerEnum.Transitions:
                                 transitions.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
-                            case 6:
+                            case (int)LayerEnum.SpecialItems:
                                 specialItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
                             default:
