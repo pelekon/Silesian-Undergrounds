@@ -193,8 +193,8 @@ namespace Silesian_Undergrounds.Engine.Common
             get { return statistics.MaxHunger;  }
             private set
             {
-                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
-                statistics.MaxHealth = value;
+                HungerMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
+                statistics.MaxHunger = value;
             }
         }
 

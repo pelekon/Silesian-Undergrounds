@@ -22,9 +22,9 @@ namespace Silesian_Undergrounds.Engine.Item {
             this.type = foodEnum;
 
             if (this.type == FoodEnum.Meat)
-                hungerRefil = 20;
+                hungerRefil = 100;
             else
-                hungerRefil = 30;
+                hungerRefil = 100;
 
             BoxCollider collider = new BoxCollider(this, 20, 20, 0, 0, true);
             AddComponent(collider);
