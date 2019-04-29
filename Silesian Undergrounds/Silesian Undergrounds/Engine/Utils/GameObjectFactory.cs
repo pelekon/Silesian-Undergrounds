@@ -176,11 +176,11 @@ namespace Silesian_Undergrounds.Engine.Utils
             switch (itemType)
             {
                 case SpecialItemEnum.LiveBooster:
-                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Special/liveBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.HungerBooster:
-                    return new HungerBooster(TextureMgr.Instance.GetTexture("Items/Food/steak"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new HungerBooster(TextureMgr.Instance.GetTexture("Items/Special/hungerBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.MovementBooster:
-                    return new MovementBooster(TextureMgr.Instance.GetTexture("Items/Ores/gold/gold_1"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new MovementBooster(TextureMgr.Instance.GetTexture("Items/Special/movementBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 //case 4:
                 //    return SpecialItemEnum.AttackBooster;
                 //case 5:
@@ -188,7 +188,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                 //case 6:
                 //    return SpecialItemEnum.PickupDouble;
                 default:
-                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Special/liveBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
             }
         }
 
