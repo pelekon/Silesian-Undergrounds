@@ -63,7 +63,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
         public bool IsCollidingWith(CircleCollider collider)
         {
             float totalRadius = Radius + collider.Radius;
-            float totalDiff = GetDistanceBetweenPoints(Position.X, Position.Y, collider.Position.X, collider.Position.Y);
+            float totalDiff = Vector2.Distance(Position, collider.Position);
 
             if (totalDiff <= totalRadius)
                 return true;
@@ -76,8 +76,9 @@ namespace Silesian_Undergrounds.Engine.Collisions
             // look for closest point in rectangle of collider
             float posX = MathHelper.Clamp(Position.X, collider.Rect.Left, collider.Rect.Right);
             float posY = MathHelper.Clamp(Position.Y, collider.Rect.Top, collider.Rect.Bottom);
+            Vector2 pointOnRect = new Vector2(posX, posY);
 
-            float dist = GetDistanceBetweenPoints(Position.X, Position.Y, posX, posY);
+            float dist = Vector2.Distance(Position, pointOnRect);
 
             if (dist <= Radius)
                 return true;
@@ -101,15 +102,6 @@ namespace Silesian_Undergrounds.Engine.Collisions
             float y = posY - Radius;
             float size = Radius * 2;
             Rect = new Rectangle((int)x, (int)y, (int)size, (int)size);
-        }
-
-        public static float GetDistanceBetweenPoints(float aX, float aY, float bX, float bY)
-        {
-            double diffX = Math.Pow(Math.Abs(aX - bX), 2);
-            double diffY = Math.Pow(Math.Abs(aY - bY), 2);
-            float totalDiff = (float)Math.Sqrt(diffX + diffY);
-
-            return totalDiff;
         }
     }
 }

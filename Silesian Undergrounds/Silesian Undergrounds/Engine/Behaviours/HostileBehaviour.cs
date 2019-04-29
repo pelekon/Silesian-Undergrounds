@@ -27,8 +27,10 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private TimedEventsScheduler events;
         private float MinDistToEnemy;
         AttackPattern attackPattern;
+        private float BonusMoveSpeed;
+        private bool IsEvading;
 
-        public HostileBehaviour(GameObject parent, AttackPattern pattern, float minDist = 1)
+        public HostileBehaviour(GameObject parent, AttackPattern pattern, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
             Parent = parent;
             Position = new Vector2(0, 0);
@@ -38,6 +40,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             enemy = null;
             IsMoveNeeded = false;
             MinDistToEnemy = minDist;
+            BonusMoveSpeed = bonusMoveSpeed;
 
             aggroArea = new CircleCollider(Parent, 70, 0, 0);
             collider = new BoxCollider(Parent, 70, 70, 0, 0, false);
@@ -51,6 +54,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
         public void CleanUp()
         {
+            DropCombat();
             Parent = null;
             aggroArea = null;
             collider = null;
@@ -67,10 +71,6 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             if (IsInCombat)
             {
                 CheckDistanceToEnemy();
-
-                if (IsMoveNeeded)
-                    UpdateMovement();
-
                 events.Update(gameTime);
             }
         }
@@ -94,6 +94,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                     enemy = data.obj;
                     enemyCollider = enemy.GetComponent<BoxCollider>();
                     CheckDistanceToEnemy();
+                    events.ScheduleEvent(50, true, UpdateMovement);
                     PrepareAttackEvents();
                 }
             }
@@ -101,6 +102,9 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
         private void UpdateMovement()
         {
+            if (!IsMoveNeeded)
+                return;
+
             Vector2 moveForce = new Vector2(0, 0);
 
             if (enemy.position.X < Parent.position.X)
@@ -113,13 +117,13 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             else
                 moveForce.Y = 1;
 
-            moveForce *= Parent.speed;
+            moveForce *= (Parent.speed + BonusMoveSpeed);
             collider.Move(moveForce);
         }
 
         private float GetDistToEnemy()
         {
-            float dist = CircleCollider.GetDistanceBetweenPoints(Parent.position.X, Parent.position.Y, enemy.position.X, enemy.position.Y);
+            float dist = Vector2.Distance(collider.Position, enemyCollider.Position);
             dist -= (collider.Rect.Width / 2);
             // fix me!
             if (enemy != null)

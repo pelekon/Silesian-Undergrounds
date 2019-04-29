@@ -30,7 +30,7 @@ namespace Silesian_Undergrounds.Engine.Common
             this.size = size;
             this.layer = layer;
             this.scale = scale;
-            speed = 0.8f;
+            speed = 1.0f;
 
             components = new List<IComponent>();
         }

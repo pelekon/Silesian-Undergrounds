@@ -90,8 +90,9 @@ namespace Silesian_Undergrounds.Engine.Collisions
             // look for closest point in rectangle of collider
             float posX = MathHelper.Clamp(collider.Position.X, Rect.Left, Rect.Right);
             float posY = MathHelper.Clamp(collider.Position.Y, Rect.Top, Rect.Bottom);
+            Vector2 posOnMe = new Vector2(posX, posY);
 
-            float dist = CircleCollider.GetDistanceBetweenPoints(collider.Position.X, collider.Position.Y, posX, posY);
+            float dist = Vector2.Distance(collider.Position, posOnMe);
 
             if (dist <= collider.Radius)
                 return true;
