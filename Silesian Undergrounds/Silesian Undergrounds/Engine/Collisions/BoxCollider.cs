@@ -104,7 +104,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
         {
             bool isColliding = false;
 
-            if (TouchingBottom(collider))
+            if (TouchingBottom(collider) && Rect.Intersects(collider.Rect))
             {
                 isColliding = true;
 
@@ -112,7 +112,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
                     collisionSides = collisionSides | RectCollisionSides.SIDE_BOTTOM;
             }
 
-            if (TouchingLeftSide(collider))
+            if (TouchingLeftSide(collider) && Rect.Intersects(collider.Rect))
             {
                 isColliding = true;
 
@@ -120,7 +120,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
                     collisionSides = collisionSides | RectCollisionSides.SIDE_LEFT;
             }
 
-            if (TouchingRightSide(collider))
+            if (TouchingRightSide(collider) && Rect.Intersects(collider.Rect))
             {
                 isColliding = true;
 
@@ -128,7 +128,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
                     collisionSides = collisionSides | RectCollisionSides.SIDE_RIGHT;
             }
 
-            if (TouchingTop(collider))
+            if (TouchingTop(collider) && Rect.Intersects(collider.Rect))
             {
                 isColliding = true;
 

@@ -37,10 +37,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         {
             CollisionSystem.CleanUp();
 
-            gameObjects = new List<GameObject>();
-            objectsToDelete = new List<GameObject>();
-            objectsToAdd = new List<GameObject>();
-            transitions = new List<GameObject>();
+            InitLists();
             isPaused = false;
             player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f), playerStatistic);
 
@@ -60,9 +57,19 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public Scene(UIArea area)
         {
-            pauseMenu = ui;
+            pauseMenu = area;
             isPaused = true;
             canUnPause = false;
+            camera = new Camera(null);
+            InitLists();
+        }
+
+        void InitLists()
+        {
+            gameObjects = new List<GameObject>();
+            objectsToDelete = new List<GameObject>();
+            objectsToAdd = new List<GameObject>();
+            transitions = new List<GameObject>();
         }
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
@@ -163,17 +170,24 @@ namespace Silesian_Undergrounds.Engine.Scene
                 }
             }, transformMatrix: camera.Transform);
 
-            Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
+            if (player != null)
             {
-                foreach (var obj in gameObjects)
-                    if (obj.layer == 3)
-                        obj.Draw(spriteBatch);
-            }, transformMatrix: camera.Transform, lightSource: player.position);
+                Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
+                {
+                    foreach (var obj in gameObjects)
+                        if (obj.layer == 3)
+                            obj.Draw(spriteBatch);
+                }, transformMatrix: camera.Transform, lightSource: player.position);
+            }
+
             Drawer.Draw((spriteBatch, gameTime) =>
             {
-                player.Draw(spriteBatch);
-                // VERY VERY TEST CODE
-                gameObjects[1].Draw(spriteBatch);
+                if(player != null)
+                {
+                    player.Draw(spriteBatch);
+                    // VERY VERY TEST CODE
+                    gameObjects[1].Draw(spriteBatch);
+                }
             }, transformMatrix: camera.Transform);
             Drawer.Draw((spriteBatch, gameTime) =>
             {
