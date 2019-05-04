@@ -102,10 +102,6 @@ namespace Silesian_Undergrounds.Engine.CommonF
         // temporary to show buying mechanics works
         public override void Draw(SpriteBatch spriteBatch)
         {
-            // temporary
-            if (isBuyable)
-                this.color = Color.MediumVioletRed;
-
            base.Draw(spriteBatch);
         }
 
