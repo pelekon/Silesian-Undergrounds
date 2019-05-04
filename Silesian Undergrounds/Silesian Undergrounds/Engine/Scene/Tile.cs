@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Collisions;
+using Silesian_Undergrounds.Engine.Enum;
 
 namespace Silesian_Undergrounds.Engine.Scene {
     class Tile : GameObject
@@ -15,7 +16,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
             this.size = size;
             this.layer = layer;
 
-            if (layer == 1)
+            if (layer == (int)LayerEnum.Walls || layer == (int)LayerEnum.ShopWalls)
             {
                 BoxCollider collider = new BoxCollider(this, size.X, size.Y, 0, 0, false);
                 AddComponent(collider);
