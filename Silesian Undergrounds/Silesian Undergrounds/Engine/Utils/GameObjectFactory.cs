@@ -16,6 +16,7 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         #region GENERATION_PARAMETERS
         private static double trapPropability = 0.1;
+        private static int NUMBER_OF_SHOP_ITEMS_TYPES = 3;
         #endregion
 
         #region OBJECT_TYPE_RAND_FUNCTIONS
@@ -81,23 +82,37 @@ namespace Silesian_Undergrounds.Engine.Utils
             return list;
         }
 
+        // renders shop pickable elements in the positions given in the positionSources arguemnt
+        public static List<PickableItem> SceneShopPickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene)
+        {
+            List<PickableItem> list = new List<PickableItem>();
+            if (positionSources.Count != NUMBER_OF_SHOP_ITEMS_TYPES) throw new Exception("There should be exactly as many positions as shop items types");
+            Random random = new Random();
+
+           for(int i = 0; i < NUMBER_OF_SHOP_ITEMS_TYPES; i++)
+            {
+                if(i == 0 )
+                {
+                    list.Add(FoodFactory(random, positionSources[i].position, positionSources[i].size, scene, isBuyable: true));
+                } else if(i == 1)
+                {
+                    list.Add(KeyFactory(positionSources[i].position, positionSources[i].size, scene, isBuyable: true));
+                } else if(i == 2)
+                {
+                    list.Add(HeartFactory(positionSources[i].position, positionSources[i].size, scene, isBuyable: true));
+                }
+            }
+           
+        
+            return list;
+        }
+
 
         // renders random items (hearts, chests and ores) on the map
         public static List<PickableItem> ScenePickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene)
         {
             List<PickableItem> list = new List<PickableItem>();
             Random random = new Random();
-
-            // temporary code to be removed when we will generate the
-            // whole shop room, userd to show that the mechanics is already implemented
-            int buyableItemsCountType = 3;
-
-            //list.Add(FoodFactory(random, positionSources[0].position, positionSources[0].size, scene, isBuyable: true));
-            //list.Add(KeyFactory(positionSources[1].position, positionSources[1].size, scene, isBuyable: true));
-            //list.Add(HeartFactory(positionSources[2].position, positionSources[2].size, scene, isBuyable: true));
-
-
-            //foreach (var source in positionSources.GetRange(3, positionSources.Count - buyableItemsCountType))
 
             foreach (var source in positionSources)
             {

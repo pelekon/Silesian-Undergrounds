@@ -15,7 +15,9 @@ namespace Silesian_Undergrounds.Engine.Common {
 
         public PlayerStatistic(int health, int maxHealth, int hunger, int maxHunger, float movementSpeed, float attackSpeed, int baseDamage, int moneyAmount, int keyAmount) : base(health, maxHealth, movementSpeed, attackSpeed, baseDamage)
         {
-            this.moneyAmount = moneyAmount;
+            // this.moneyAmount = moneyAmount;
+            //change this - this is just for testing
+            this.moneyAmount = 20000;
             this.keyAmount = keyAmount;
             this.hungerValue = hunger;
             this.hungerMaxValue = maxHunger;
