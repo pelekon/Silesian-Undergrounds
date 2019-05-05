@@ -85,6 +85,12 @@
 /processorParam:TextureFormat=Color
 /build:box_lit.png
 
+#begin BrighteningShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:BrighteningShader.fx
+
 #begin debug_box.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -51,10 +51,10 @@ namespace Silesian_Undergrounds
             ResolutionMgr.xAxisUnit = ResolutionMgr.GameWidth / 100.0f;
             #endregion
 
-            //TODO: uncomment this
-            //scenes.Add("drop");
+            scenes.Add("drop");
             scenes.Add("drop2");
-            //scenes.Add("drop3");
+            scenes.Add("drop3");
+            
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);

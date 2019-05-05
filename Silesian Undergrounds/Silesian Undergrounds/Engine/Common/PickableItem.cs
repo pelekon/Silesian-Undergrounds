@@ -14,7 +14,7 @@ namespace Silesian_Undergrounds.Engine.CommonF
     public class PickableItem : GameObject
     {
         public Scene.Scene scene;
-        protected bool isBuyable { get; set; }
+        public bool isBuyable { get; set; }
         protected bool wasEntered = false;
         protected bool wasBought = false;
         private double timeSinceBought;
@@ -110,12 +110,11 @@ namespace Silesian_Undergrounds.Engine.CommonF
             base.Update(gameTime);
             double elapsed = gameTime.ElapsedGameTime.TotalSeconds;
             timer -= elapsed;
-            if(timer < 0)
+            if (timer < 0)
             {
                 timer = PickableItem.TIMER;
                 wasBought = false;
             }
-            
         }
     }
 }

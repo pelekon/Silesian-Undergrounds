@@ -86,20 +86,21 @@ namespace Silesian_Undergrounds.Engine.Utils
         public static List<PickableItem> SceneShopPickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene)
         {
             List<PickableItem> list = new List<PickableItem>();
-            if (positionSources.Count != NUMBER_OF_SHOP_ITEMS_TYPES) throw new Exception("There should be exactly as many positions as shop items types");
             Random random = new Random();
+            if (positionSources.Count != NUMBER_OF_SHOP_ITEMS_TYPES)
+                return list;
 
            for(int i = 0; i < NUMBER_OF_SHOP_ITEMS_TYPES; i++)
             {
                 if(i == 0 )
                 {
-                    list.Add(FoodFactory(random, positionSources[i].position, positionSources[i].size, scene, isBuyable: true));
+                    list.Add(FoodFactory(random, positionSources[i].position, positionSources[i].size, scene, layer: (int)LayerEnum.ShopPickables, isBuyable: true));
                 } else if(i == 1)
                 {
-                    list.Add(KeyFactory(positionSources[i].position, positionSources[i].size, scene, isBuyable: true));
+                    list.Add(KeyFactory(positionSources[i].position, positionSources[i].size, scene, layer: (int)LayerEnum.ShopPickables, isBuyable: true));
                 } else if(i == 2)
                 {
-                    list.Add(HeartFactory(positionSources[i].position, positionSources[i].size, scene, isBuyable: true));
+                    list.Add(HeartFactory(positionSources[i].position, positionSources[i].size, scene, layer: (int)LayerEnum.ShopPickables, isBuyable: true));
                 }
             }
            
@@ -170,7 +171,7 @@ namespace Silesian_Undergrounds.Engine.Utils
         }
 
 
-        public static Food FoodFactory(Random rng, Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false)
+        public static Food FoodFactory(Random rng, Vector2 position, Vector2 size, Scene.Scene scene, int layer = 3, bool isBuyable = false)
         {
             FoodEnum type = RandFoodType(rng);
             string textureName = "Items/Food/steak";
@@ -178,7 +179,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             if (type == FoodEnum.Meat)
                 textureName = "Items/Food/meat";
 
-            return new Food(TextureMgr.Instance.GetTexture(textureName), position, size / 2, 3, scene, type, isBuyable: isBuyable);
+            return new Food(TextureMgr.Instance.GetTexture(textureName), position, size / 2, layer, scene, type, isBuyable: isBuyable);
         }
 
         public static Chest ChestFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false)
@@ -186,14 +187,14 @@ namespace Silesian_Undergrounds.Engine.Utils
             return new Chest(TextureMgr.Instance.GetTexture("Items/Chests/chest_1"), position, size, 3, scene, isBuyable: isBuyable);
         }
 
-        public static Key KeyFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false)
+        public static Key KeyFactory(Vector2 position, Vector2 size, Scene.Scene scene, int layer = 3, bool isBuyable = false)
         {
-            return new Key(TextureMgr.Instance.GetTexture("Items/Keys/key_1"), position, size, 3, scene, isBuyable: isBuyable);
+            return new Key(TextureMgr.Instance.GetTexture("Items/Keys/key_1"), position, size, layer, scene, isBuyable: isBuyable);
         }
 
-        public static Heart HeartFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false)
+        public static Heart HeartFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false, int layer = 3)
         {
-            return new Heart(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, 3, scene, isBuyable: isBuyable);
+            return new Heart(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, layer, scene, isBuyable: isBuyable);
         }
 
         public static Spike SpikeFactory(Vector2 position, Vector2 size, Scene.Scene scene)

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Silesian_Undergrounds.Engine.Common;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -13,13 +15,12 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public static class Shaders
         {
-            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader;
+            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect;
 
-            public static void DrawShadowEffect(Action<SpriteBatch, GameTime> drawer, Vector2 lightSource, Matrix? transformMatrix = null)
-            {
-                // TODO: Add dynamic shadows
-//                _shadowEffect.Parameters["lightSource"].SetValue(new Vector2(960,540));
-                _spriteBatch.Begin(blendState:BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _shadowEffect);
+            public static void DrawBrightShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
+            {      
+                _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _brightEffect);
+                _brightEffect.Parameters["brightFraction"].SetValue((float)0.65);
                 drawer.Invoke(_spriteBatch, _gameTime);
                 _spriteBatch.End();
             }
@@ -29,6 +30,15 @@ namespace Silesian_Undergrounds.Engine.Scene
                 _visibilityRadiusShader.Parameters["lightSource"].SetValue(new Vector2(960, 540));
                 _visibilityRadiusShader.Parameters["gameTime"].SetValue(_gameTime.TotalGameTime.Seconds);
                 _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _visibilityRadiusShader);
+                drawer.Invoke(_spriteBatch, _gameTime);
+                _spriteBatch.End();
+            }
+
+            public static void DrawShadowEffect(Action<SpriteBatch, GameTime> drawer, Vector2 lightSource, Matrix? transformMatrix = null)
+            {
+                // TODO: Add dynamic shadows
+//                _shadowEffect.Parameters["lightSource"].SetValue(new Vector2(960,540));
+                _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _shadowEffect);
                 drawer.Invoke(_spriteBatch, _gameTime);
                 _spriteBatch.End();
             }
@@ -45,6 +55,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 _shadowEffect = content.Load<Effect>("ShadowShader");
                 _grayScaleEffect = content.Load<Effect>("GrayScaleShader");
                 _visibilityRadiusShader = content.Load<Effect>("VisibilityRadiusShader");
+                _brightEffect = content.Load<Effect>("BrighteningShader");
             }
 
         }

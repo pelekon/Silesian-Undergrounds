@@ -160,7 +160,8 @@ namespace Silesian_Undergrounds.Engine.Scene
             }
 
             List<PickableItem> generatedShopPickables = GameObjectFactory.SceneShopPickableItemsFactory(Renderer.ShopPickables, scene);
-            foreach(var obj in generatedShopPickables)
+
+            foreach (var obj in generatedShopPickables)
             {
                 obj.SetScene(scene);
                 scene.AddObject(obj);
