@@ -96,7 +96,6 @@ namespace Silesian_Undergrounds.Engine.Scene {
 
                         switch(item.Key) {
                             case (int)LayerEnum.Background:
-                            case (int)LayerEnum.ShopBackground:
                                 grounds.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
                             case (int)LayerEnum.Pickables: 

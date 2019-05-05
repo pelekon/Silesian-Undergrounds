@@ -13,8 +13,6 @@ namespace Silesian_Undergrounds.Engine.Enum
         Pickables = 3,
         Traps = 4,
         Transitions = 5,
-        ShopBackground = 8,
-        ShopPickables = 9,
-        ShopWalls = 7
+        ShopPickables = 9
     }
 }

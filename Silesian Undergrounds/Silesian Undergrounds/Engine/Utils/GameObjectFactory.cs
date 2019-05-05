@@ -92,15 +92,17 @@ namespace Silesian_Undergrounds.Engine.Utils
 
            for(int i = 0; i < NUMBER_OF_SHOP_ITEMS_TYPES; i++)
             {
-                if(i == 0 )
+                switch(i)
                 {
-                    list.Add(FoodFactory(random, positionSources[i].position, positionSources[i].size, scene, layer: (int)LayerEnum.ShopPickables, isBuyable: true));
-                } else if(i == 1)
-                {
-                    list.Add(KeyFactory(positionSources[i].position, positionSources[i].size, scene, layer: (int)LayerEnum.ShopPickables, isBuyable: true));
-                } else if(i == 2)
-                {
-                    list.Add(HeartFactory(positionSources[i].position, positionSources[i].size, scene, layer: (int)LayerEnum.ShopPickables, isBuyable: true));
+                    case 0:
+                        list.Add(FoodFactory(random, positionSources[i].position, positionSources[i].size, scene, layer: (int)LayerEnum.ShopPickables, isBuyable: true));
+                        break;
+                    case 1:
+                        list.Add(KeyFactory(positionSources[i].position, positionSources[i].size, scene, layer: (int)LayerEnum.ShopPickables, isBuyable: true));
+                        break;
+                    case 2:
+                        list.Add(HeartFactory(positionSources[i].position, positionSources[i].size, scene, layer: (int)LayerEnum.ShopPickables, isBuyable: true));
+                        break;
                 }
             }
            

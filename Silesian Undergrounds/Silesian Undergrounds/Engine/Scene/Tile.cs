@@ -16,7 +16,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
             this.size = size;
             this.layer = layer;
 
-            if (layer == (int)LayerEnum.Walls || layer == (int)LayerEnum.ShopWalls)
+            if (layer == (int)LayerEnum.Walls)
             {
                 BoxCollider collider = new BoxCollider(this, size.X, size.Y, 0, 0, false);
                 AddComponent(collider);
