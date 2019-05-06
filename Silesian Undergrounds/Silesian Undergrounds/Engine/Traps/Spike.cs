@@ -2,15 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.CommonF;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Utils;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Silesian_Undergrounds.Engine.Traps
 {

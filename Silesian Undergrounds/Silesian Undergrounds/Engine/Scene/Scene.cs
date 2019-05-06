@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.UI;
 using Silesian_Undergrounds.Views;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
-using System.Diagnostics;
-using Silesian_Undergrounds.Engine.CommonF;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {

@@ -1,15 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Silesian_Undergrounds.Engine;
 using Silesian_Undergrounds.Engine.Item;
 using Silesian_Undergrounds.Engine.Enum;
 using System.Diagnostics;
-using System;
-using System.Windows.Forms;
-using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Collisions;
 
-namespace Silesian_Undergrounds.Engine.CommonF
+namespace Silesian_Undergrounds.Engine.Common
 {
     public class PickableItem : GameObject
     {

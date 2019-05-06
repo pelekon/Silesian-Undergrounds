@@ -6,9 +6,9 @@ using Silesian_Undergrounds.Engine.Utils;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.CommonF;
 using Silesian_Undergrounds.Engine.Item;
-using System.Diagnostics;
+using Silesian_Undergrounds.Engine.Enum;
+using System.Threading;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -128,6 +128,15 @@ namespace Silesian_Undergrounds.Engine.Scene
                 var tab = BuildTableWithTiles(layer.Data, layer.Width, layer.Height, textures);
 
                 tileMap.Add(layer.Id, tab);
+            }
+
+            RoomGenerator roomGenerator = null;
+
+            if (tileMap.ContainsKey((int)LayerEnum.RandomRooms))
+            {
+                roomGenerator = new RoomGenerator();
+                Thread thread = new Thread(new ThreadStart(() => roomGenerator.GenerateRooms(tileMap[(int)LayerEnum.RandomRooms])));
+                thread.Start();
             }
 
             Renderer.GenerateTileMap(tileMap,tileSize);

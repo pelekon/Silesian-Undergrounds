@@ -1,10 +1,7 @@
-﻿using System;
-using Silesian_Undergrounds.Engine.Common;
+﻿using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Collisions;
-using System.Diagnostics;
-using Silesian_Undergrounds.Engine.CommonF;
 
 namespace Silesian_Undergrounds.Engine.Item {
     public class Heart : PickableItem {
