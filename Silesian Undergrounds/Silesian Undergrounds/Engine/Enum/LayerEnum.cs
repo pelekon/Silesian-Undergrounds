@@ -11,6 +11,7 @@ namespace Silesian_Undergrounds.Engine.Enum
         Walls = 1,
         Background = 2,
         Pickables = 3,
-        Traps = 4
+        Traps = 4,
+        Enemies = 6,
     }
 }

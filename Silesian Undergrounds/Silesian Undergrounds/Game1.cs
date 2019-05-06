@@ -58,12 +58,11 @@ namespace Silesian_Undergrounds
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
 
-            //#if DEBUG
-            //scene = LevelsManagement();
-            //#else
-            //scene = new Scene(new MainMenuView());
-            //#endif
+            #if DEBUG
+            scene = LevelsManagement();
+            #else
             scene = new Scene(new MainMenuView());
+            #endif
 
             base.Initialize();
         }
