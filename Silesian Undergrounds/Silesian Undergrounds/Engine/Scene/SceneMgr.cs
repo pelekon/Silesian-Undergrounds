@@ -167,6 +167,10 @@ namespace Silesian_Undergrounds.Engine.Scene
                 scene.AddObject(obj);
             }
 
+            List<GameObject> generatedEnemies = EnemyFactory.GenerateEnemiesForScene(Renderer.Enemies);
+            foreach (var obj in generatedEnemies)
+                scene.AddObject(obj);
+
             tileFile.Close();
             return true;
         }
