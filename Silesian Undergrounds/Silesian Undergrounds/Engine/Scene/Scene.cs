@@ -10,6 +10,9 @@ using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.UI;
 using Silesian_Undergrounds.Views;
 using Silesian_Undergrounds.Engine.Collisions;
+using Silesian_Undergrounds.Engine.Enum;
+using System.Diagnostics;
+using Silesian_Undergrounds.Engine.CommonF;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -190,6 +193,24 @@ namespace Silesian_Undergrounds.Engine.Scene
                 else
                     ui.Draw(spriteBatch);
             }, null);
+
+
+            // Draw bright effect for shop items
+            //NOTE: moving this lines above causes bug!!!
+            Drawer.Shaders.DrawBrightShader((spriteBatch, gameTime) =>
+            {
+                foreach (var obj in gameObjects)
+                {
+                    if (obj.layer == (int)LayerEnum.ShopPickables)
+                    {
+                        obj.Draw(spriteBatch);
+                        //obj.color = Color.MediumVioletRed;
+                    }
+
+                }
+
+            }, transformMatrix: camera.Transform);
+
         }
 
         private void DetectPlayerOnTransition()
