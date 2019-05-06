@@ -11,6 +11,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
     class TileMapRenderer {
         private List<Tile> tiles = new List<Tile>();
         private List<GameObject> pickableItems = new List<GameObject>();
+        private List<GameObject> shopPickableItems = new List<GameObject>();
         private List<GameObject> traps = new List<GameObject>();
         private List<GameObject> grounds = new List<GameObject>();
         private List<Tile> transitions = new List<Tile>();
@@ -37,6 +38,14 @@ namespace Silesian_Undergrounds.Engine.Scene {
             get
             {
                 return traps;
+            }
+        }
+
+        public List<GameObject> ShopPickables
+        {
+            get
+            {
+                return shopPickableItems;
             }
         }
 
@@ -73,7 +82,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
             grounds = new List<GameObject>();
             transitions = new List<Tile>();
 
-            foreach(var item in map)
+            foreach (var item in map)
             {
                 Texture2D[][] array = item.Value;
 
@@ -86,7 +95,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
                             continue;
 
                         switch(item.Key) {
-                            case (int)LayerEnum.Background: 
+                            case (int)LayerEnum.Background:
                                 grounds.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
                             case (int)LayerEnum.Pickables: 
@@ -95,8 +104,11 @@ namespace Silesian_Undergrounds.Engine.Scene {
                             case (int)LayerEnum.Traps:
                                 traps.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
-                            case 5:
+                            case (int)LayerEnum.Transitions:
                                 transitions.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.ShopPickables:
+                                shopPickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
                             default:
                                 tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));

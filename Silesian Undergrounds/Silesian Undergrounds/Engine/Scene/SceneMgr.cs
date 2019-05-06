@@ -159,6 +159,14 @@ namespace Silesian_Undergrounds.Engine.Scene
                 scene.AddObject(obj);
             }
 
+            List<PickableItem> generatedShopPickables = GameObjectFactory.SceneShopPickableItemsFactory(Renderer.ShopPickables, scene);
+
+            foreach (var obj in generatedShopPickables)
+            {
+                obj.SetScene(scene);
+                scene.AddObject(obj);
+            }
+
             tileFile.Close();
             return true;
         }
