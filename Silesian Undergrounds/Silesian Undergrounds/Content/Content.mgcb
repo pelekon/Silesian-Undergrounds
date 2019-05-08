@@ -85,6 +85,12 @@
 /processorParam:TextureFormat=Color
 /build:box_lit.png
 
+#begin BrighteningShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:BrighteningShader.fx
+
 #begin debug_box.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -96,6 +102,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:debug_box.png
+
+#begin debug_circle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:debug_circle.png
 
 #begin default.png
 /importer:TextureImporter
@@ -944,6 +962,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:x.png
+
+#begin x-blue.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:x-blue.png
 
 #begin x-green.png
 /importer:TextureImporter

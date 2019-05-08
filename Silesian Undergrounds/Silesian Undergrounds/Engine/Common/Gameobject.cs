@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 using Silesian_Undergrounds.Engine.Components;
+using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
@@ -19,6 +21,8 @@ namespace Silesian_Undergrounds.Engine.Common
         public Rectangle Rectangle { get { return new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y); } }
         protected List<IComponent> components;
 
+        public event EventHandler<CollisionNotifyData> OnCollision = delegate { };
+
         public GameObject(Texture2D texture, Vector2 position, Vector2 size, int layer = 1, Vector2? scale = null)
         {
             this.texture = texture;
@@ -26,6 +30,7 @@ namespace Silesian_Undergrounds.Engine.Common
             this.size = size;
             this.layer = layer;
             this.scale = scale;
+            speed = 1.0f;
 
             components = new List<IComponent>();
         }
@@ -73,8 +78,20 @@ namespace Silesian_Undergrounds.Engine.Common
             components.Clear();
         }
 
-        // TODO: Remove this and split collisions to 2 sparate components:
-        // Collision Box and Collider
-        public virtual void NotifyCollision(GameObject gameobject) { }
+        public T GetComponent<T>()
+        {
+            foreach(var component in components)
+            {
+                if (component is T)
+                    return (T)component;
+            }
+
+            return default(T);
+        }
+        
+        public virtual void NotifyCollision(GameObject gameobject, ICollider source)
+        {
+            OnCollision.Invoke(this, new CollisionNotifyData(gameobject, source));
+        }
     }
 }

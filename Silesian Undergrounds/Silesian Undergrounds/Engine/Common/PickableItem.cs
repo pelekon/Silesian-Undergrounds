@@ -7,13 +7,14 @@ using System.Diagnostics;
 using System;
 using System.Windows.Forms;
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.CommonF
 {
     public class PickableItem : GameObject
     {
         public Scene.Scene scene;
-        protected bool isBuyable { get; set; }
+        public bool isBuyable { get; set; }
         protected bool wasEntered = false;
         protected bool wasBought = false;
         private double timeSinceBought;
@@ -32,7 +33,7 @@ namespace Silesian_Undergrounds.Engine.CommonF
             scene = s;
         }
 
-        public override void NotifyCollision(GameObject gameobject) {
+        public override void NotifyCollision(GameObject gameobject, ICollider source) {
             if (!wasBought && isBuyable && (gameobject is Player))
             {
                 wasBought = true;
@@ -101,10 +102,6 @@ namespace Silesian_Undergrounds.Engine.CommonF
         // temporary to show buying mechanics works
         public override void Draw(SpriteBatch spriteBatch)
         {
-            // temporary
-            if (isBuyable)
-                this.color = Color.MediumVioletRed;
-
            base.Draw(spriteBatch);
         }
 
@@ -113,12 +110,11 @@ namespace Silesian_Undergrounds.Engine.CommonF
             base.Update(gameTime);
             double elapsed = gameTime.ElapsedGameTime.TotalSeconds;
             timer -= elapsed;
-            if(timer < 0)
+            if (timer < 0)
             {
                 timer = PickableItem.TIMER;
                 wasBought = false;
             }
-            
         }
     }
 }
