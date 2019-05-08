@@ -99,6 +99,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
             traps = new List<GameObject>();
             specialItems = new List<GameObject>();
             enemies = new List<GameObject>();
+            shopPickableItems = new List<GameObject>();
 
             foreach (var item in map)
             {

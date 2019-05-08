@@ -13,9 +13,9 @@ namespace Silesian_Undergrounds.Engine.SpecialItems {
             AddComponent(collider);
         }
 
-        public override void NotifyCollision(GameObject obj)
+        public override void NotifyCollision(GameObject obj, ICollider source)
         {
-            base.NotifyCollision(obj);
+            base.NotifyCollision(obj, source);
 
             if (obj is Player)
             {

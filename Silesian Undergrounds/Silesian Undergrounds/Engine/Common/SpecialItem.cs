@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Common {
     public class SpecialItem : GameObject {
@@ -16,9 +17,9 @@ namespace Silesian_Undergrounds.Engine.Common {
             this.scene = scene;
         }
 
-        public override void NotifyCollision(GameObject obj)
+        public override void NotifyCollision(GameObject gameobject, ICollider source)
         {
-            base.NotifyCollision(obj);
+            
         }
     }
 }
