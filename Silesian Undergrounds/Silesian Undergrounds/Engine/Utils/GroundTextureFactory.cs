@@ -9,6 +9,7 @@ namespace Silesian_Undergrounds.Engine.Utils
 {
     internal class GroundTextureFactory
     {
+        private const string isRandomTextureName = "../Content/kolejne";
         private const int BasicTextureIndex = 1;
         private const int StartWithThingsTextureIndex = 2;
         private const int EndWithThingsTextureIndex = 25;
@@ -20,25 +21,37 @@ namespace Silesian_Undergrounds.Engine.Utils
             var random = new Random();
             foreach(var source in positionSources)
             {
-                var itemType = RandGround(random);
-                switch (itemType)
+                Console.WriteLine("Name: " + source.texture.Name);
+                switch(source.texture.Name)
                 {
-                    case GroundEnum.Basic:
-                        list.Add(GroundFactory(BasicTextureIndex, source.position, source.size));
-                        break;
-                    case GroundEnum.WithThings:
-                        var textureNumber = random.Next(StartWithThingsTextureIndex, EndWithThingsTextureIndex);
-                        list.Add(GroundFactory(textureNumber, source.position, source.size));
+                    case isRandomTextureName:
+                        list.Add(GetRandomGround(random, source));
                         break;
                     default:
-                        #if DEBUG
-                        Console.WriteLine("Not registered GroundTexture Type in GroundTextureFactory!");
-                        #endif
+                        list.Add(new Ground(TextureMgr.Instance.GetTexture(source.texture.Name), source.position, source.size, 2, null));
                         break;
                 }
+                
+            }
+            return list;
+        }
+        static Ground GetRandomGround(Random random, GameObject source)
+        {
+            var itemType = RandGround(random);
+            switch (itemType)
+            {
+                case GroundEnum.Basic:
+                    return GroundFactory(BasicTextureIndex, source.position, source.size);
+                case GroundEnum.WithThings:
+                    var textureNumber = random.Next(StartWithThingsTextureIndex, EndWithThingsTextureIndex);
+                    return GroundFactory(textureNumber, source.position, source.size);
+                default:
+                    #if DEBUG
+                    Console.WriteLine("Not registered GroundTexture Type in GroundTextureFactory!");
+#endif
+                    return null;
             }
 
-            return list;
         }
         public static Ground GroundFactory(int textureNumber, Vector2 position, Vector2 size) => new Ground(TextureMgr.Instance.GetTexture("Items/Grounds/ground_" + textureNumber), position, size, 2, null);
     }
