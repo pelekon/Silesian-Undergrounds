@@ -54,7 +54,10 @@ namespace Silesian_Undergrounds
             scenes.Add("drop");
             scenes.Add("drop2");
             scenes.Add("drop3");
-            
+            // Dyn rooms test code
+            scenes.Add("dynamic_rooms");
+            levelCounter = 3;
+            // end of test code
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);

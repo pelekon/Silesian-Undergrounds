@@ -8,7 +8,7 @@ using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace Silesian_Undergrounds.Engine.Scene
+namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
 {
     public class RoomGenerator
     {
@@ -16,9 +16,9 @@ namespace Silesian_Undergrounds.Engine.Scene
         public bool isJobDone;
 
         // Constant helpers
-        private static readonly int minRoomWidht = 5;
+        private static readonly int minRoomWidht = 6;
         private static readonly int maxRoomWidht = 10;
-        private static readonly int minRoomHeight = 5;
+        private static readonly int minRoomHeight = 6;
         private static readonly int maxRoomHeight = 10;
 
         public RoomGenerator()
@@ -38,9 +38,13 @@ namespace Silesian_Undergrounds.Engine.Scene
             }
 
             Dictionary<int, List<Point>> groups = GroupBlocks(positions);
+            #if DEBUG
             DebugPrintOfGroups(groups, "Before validation");
+            #endif
             ValidateGroups(groups);
+            #if DEBUG
             DebugPrintOfGroups(groups, "After validation");
+            #endif
             BuildRoomsFromGroups(groups);
 
             isJobDone = true;
@@ -106,6 +110,10 @@ namespace Silesian_Undergrounds.Engine.Scene
 
                         if (pointsToGroupsHelper.ContainsKey(tileToCheck))
                             checkingTileGroup = pointsToGroupsHelper[tileToCheck];
+
+                        // Skip grouping if tile has group and is in same group as tileToCheck
+                        if (currentTileGroup == checkingTileGroup && currentTileGroup != -1)
+                            continue;
 
                         // assign group to tiles
                         if (currentTileGroup >= 0)
@@ -181,12 +189,92 @@ namespace Silesian_Undergrounds.Engine.Scene
         // into "List<GameObject> result" object 
         private void BuildRoomsFromGroups(Dictionary<int, List<Point>> groups)
         {
+            foreach(var group in groups)
+            {
+                if (group.Value.Count == 0)
+                    continue;
 
+                // build matrix to start process of building room from group
+                RoomGroupMatrix roomMatrix = PrepareMatrixFromRoom(group.Value);
+                BuildRoomFromMatrix(ref roomMatrix);
+            }
         }
 
+        private RoomGroupMatrix PrepareMatrixFromRoom(List<Point> points)
+        {
+            RoomGroupMatrix matrix = new RoomGroupMatrix();
+            int minX = points[0].X;
+            int minY = points[0].Y;
+            int maxX = 0;
+            int maxY = 0;
+
+            // find min and max X and Y to get offset and size for matrix
+            foreach(var point in points)
+            {
+                if (point.X < minX)
+                    minX = point.X;
+
+                if (point.Y < minY)
+                    minY = point.Y;
+
+                if (point.X > maxX)
+                    maxX = point.X;
+
+                if (point.Y > maxY)
+                    maxY = point.Y;
+            }
+
+            // Calculate size of matrix and allocate memory for data
+            int sizeX = (maxX - minX) + 1;
+            int sizeY = (maxY - minY) + 1;
+            matrix.data = new RoomTileType[sizeX][];
+            for (int i = 0; i < sizeX; ++i)
+                matrix.data[i] = new RoomTileType[sizeY];
+
+            matrix.offset = new Point(minX, minY);
+
+            return matrix;
+        }
+
+        private void BuildRoomFromMatrix(ref RoomGroupMatrix matrix)
+        {
+            // Temp test code, just generate one room for now
+            int sizeX = matrix.data.Length;
+            int sizeY = matrix.data[0].Length;
+
+            for (int x = 0; x < sizeX; ++x)
+            {
+                matrix.data[x][0] = RoomTileType.ROOM_TILE_WALL_UP;
+                matrix.data[x][sizeY - 1] = RoomTileType.ROOM_TILE_WALL_BOTTOM;
+            }
+
+            for(int y = 0; y < sizeY; ++y)
+            {
+                matrix.data[0][y] = RoomTileType.ROOM_TILE_WALL_LEFT;
+                matrix.data[sizeX - 1][y] = RoomTileType.ROOM_TILE_WALL_RIGHT;
+            }
+
+            for(int x = 1; x < sizeX - 1; ++x)
+            {
+                for (int y = 1; y < sizeY - 1; ++y)
+                    matrix.data[x][y] = RoomTileType.ROOM_TILE_GROUND;
+            }
+        }
+
+        // Debug print which shows current elements for dictonary with groups
         private void DebugPrintOfGroups(Dictionary<int, List<Point>> groups, string text)
         {
+            Console.WriteLine(text);
+            foreach(var group in groups)
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Grupa: " + group.Key);
 
+                foreach (var point in group.Value)
+                    Console.Write("(" + point.X + ", " + point.Y + "), ");
+            }
+
+            Console.WriteLine("");
         }
     }
 }

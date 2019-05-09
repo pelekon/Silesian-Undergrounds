@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Item;
 using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.Scene.RandomRooms;
 using System.Threading;
 
 namespace Silesian_Undergrounds.Engine.Scene
@@ -179,6 +180,11 @@ namespace Silesian_Undergrounds.Engine.Scene
             List<GameObject> generatedEnemies = EnemyFactory.GenerateEnemiesForScene(Renderer.Enemies);
             foreach (var obj in generatedEnemies)
                 scene.AddObject(obj);
+
+            if (roomGenerator != null)
+            {
+                while(!roomGenerator.isJobDone) { }
+            }
 
             tileFile.Close();
             return true;
