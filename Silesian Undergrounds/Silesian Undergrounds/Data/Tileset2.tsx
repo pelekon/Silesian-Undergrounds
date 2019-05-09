@@ -91,4 +91,7 @@
  <tile id="32">
   <image width="64" height="64" source="../Content/Items/Grounds/wood-ground-corner-top-right.png"/>
  </tile>
+ <tile id="17">
+  <image width="64" height="64" source="../Content/x-blue.png"/>
+ </tile>
 </tileset>

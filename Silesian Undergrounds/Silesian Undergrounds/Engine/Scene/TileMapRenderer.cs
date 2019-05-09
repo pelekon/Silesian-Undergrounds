@@ -5,14 +5,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Enum;
+
 namespace Silesian_Undergrounds.Engine.Scene {
     class TileMapRenderer {
         private List<Tile> tiles = new List<Tile>();
         private List<GameObject> pickableItems = new List<GameObject>();
+        private List<GameObject> shopPickableItems = new List<GameObject>();
         private List<GameObject> traps = new List<GameObject>();
         private List<GameObject> grounds = new List<GameObject>();
         private List<Tile> transitions = new List<Tile>();
+        private List<GameObject> enemies = new List<GameObject>();
+        private List<GameObject> specialItems = new List<GameObject>();
         private int width, height;
+
+        public List<GameObject> SpecialItems
+        {
+            get
+            {
+                return specialItems;
+            }
+        }
 
         public List<Tile> Transitions
         {
@@ -38,6 +51,14 @@ namespace Silesian_Undergrounds.Engine.Scene {
             }
         }
 
+        public List<GameObject> ShopPickables
+        {
+            get
+            {
+                return shopPickableItems;
+            }
+        }
+
         public List<GameObject> Pickable
         {
             get
@@ -52,6 +73,11 @@ namespace Silesian_Undergrounds.Engine.Scene {
             {
                 return grounds;
             }
+        }
+
+        public List<GameObject> Enemies
+        {
+            get { return enemies; }
         }
 
         public int Width
@@ -70,8 +96,12 @@ namespace Silesian_Undergrounds.Engine.Scene {
             pickableItems = new List<GameObject>();
             grounds = new List<GameObject>();
             transitions = new List<Tile>();
+            traps = new List<GameObject>();
+            specialItems = new List<GameObject>();
+            enemies = new List<GameObject>();
+            shopPickableItems = new List<GameObject>();
 
-            foreach(var item in map)
+            foreach (var item in map)
             {
                 Texture2D[][] array = item.Value;
 
@@ -83,18 +113,28 @@ namespace Silesian_Undergrounds.Engine.Scene {
                         if (array[y][x] == null)
                             continue;
 
-                        switch(item.Key){
-                            case 2: 
+                        switch(item.Key)
+                        {
+                            case (int)LayerEnum.Background:
                                 grounds.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
-                            case 3: 
+                            case (int)LayerEnum.Pickables: 
                                 pickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
-                            case 4:
+                            case (int)LayerEnum.Traps:
                                 traps.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
-                            case 5:
+                            case (int)LayerEnum.Transitions:
                                 transitions.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.Enemies:
+                                enemies.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.ShopPickables:
+                                shopPickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.SpecialItems:
+                                specialItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
                             default:
                                 tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));

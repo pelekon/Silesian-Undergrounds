@@ -16,15 +16,21 @@ namespace Silesian_Undergrounds.Engine.Item {
             AddComponent(collider);
         }
 
-        //TODO: extract some code to PickableItem class
-        public override void NotifyCollision(GameObject obj)
+        public override void NotifyCollision(GameObject obj, ICollider source)
         {
-            base.NotifyCollision(obj);
+            base.NotifyCollision(obj, source);
 
             if (obj is Player && !isBuyable)
             {
                 Player pl = (Player)obj;
-                pl.AddKey(1);
+                if (pl.PlayerStatistic.PickupDouble)
+                {
+                    pl.AddKey(2);
+                }
+                else
+                {
+                    pl.AddKey(1);
+                }
                 this.scene.DeleteObject(this);
             }
         }

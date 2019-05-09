@@ -39,13 +39,19 @@ namespace Silesian_Undergrounds.Engine.Item
                 this.value = 0;
         }
 
-        //TODO: extract some code to PickableItem class
-        public override void NotifyCollision(GameObject obj)
+        public override void NotifyCollision(GameObject obj, ICollider source)
         {
             if (obj is Player)
             {
                 Player pl = (Player)obj;
-                pl.AddMoney(this.value);
+                if (pl.PlayerStatistic.PickupDouble)
+                {
+                    pl.AddMoney(this.value * 2);
+                }
+                else
+                {
+                    pl.AddMoney(this.value);
+                }
                 this.scene.DeleteObject(this);
             }
         }

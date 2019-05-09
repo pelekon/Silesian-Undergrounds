@@ -10,6 +10,9 @@ using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.UI;
 using Silesian_Undergrounds.Views;
 using Silesian_Undergrounds.Engine.Collisions;
+using Silesian_Undergrounds.Engine.Enum;
+using System.Diagnostics;
+using Silesian_Undergrounds.Engine.CommonF;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -37,10 +40,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         {
             CollisionSystem.CleanUp();
 
-            gameObjects = new List<GameObject>();
-            objectsToDelete = new List<GameObject>();
-            objectsToAdd = new List<GameObject>();
-            transitions = new List<GameObject>();
+            InitLists();
             isPaused = false;
             player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f), playerStatistic);
 
@@ -58,9 +58,19 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public Scene(UIArea area)
         {
-            pauseMenu = ui;
+            pauseMenu = area;
             isPaused = true;
             canUnPause = false;
+            camera = new Camera(null);
+            InitLists();
+        }
+
+        void InitLists()
+        {
+            gameObjects = new List<GameObject>();
+            objectsToDelete = new List<GameObject>();
+            objectsToAdd = new List<GameObject>();
+            transitions = new List<GameObject>();
         }
 
         #region SCENE_OBJECTS_MANAGMENT_METHODS
@@ -122,8 +132,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                 pauseMenu.Update(gameTime);
                 return;
             }
-
-
             
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
@@ -163,15 +171,20 @@ namespace Silesian_Undergrounds.Engine.Scene
                 }
             }, transformMatrix: camera.Transform);
 
-            Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
+            if (player != null)
             {
-                foreach (var obj in gameObjects)
-                    if (obj.layer == 3)
-                        obj.Draw(spriteBatch);
-            }, transformMatrix: camera.Transform, lightSource: player.position);
+                Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
+                {
+                    foreach (var obj in gameObjects)
+                        if (obj.layer == 3)
+                            obj.Draw(spriteBatch);
+                }, transformMatrix: camera.Transform, lightSource: player.position);
+            }
+
             Drawer.Draw((spriteBatch, gameTime) =>
             {
-                player.Draw(spriteBatch);
+                if (player != null)
+                    player.Draw(spriteBatch);
             }, transformMatrix: camera.Transform);
             Drawer.Draw((spriteBatch, gameTime) =>
             {
@@ -180,6 +193,24 @@ namespace Silesian_Undergrounds.Engine.Scene
                 else
                     ui.Draw(spriteBatch);
             }, null);
+
+
+            // Draw bright effect for shop items
+            //NOTE: moving this lines above causes bug!!!
+            Drawer.Shaders.DrawBrightShader((spriteBatch, gameTime) =>
+            {
+                foreach (var obj in gameObjects)
+                {
+                    if (obj.layer == (int)LayerEnum.ShopPickables)
+                    {
+                        obj.Draw(spriteBatch);
+                        //obj.color = Color.MediumVioletRed;
+                    }
+
+                }
+
+            }, transformMatrix: camera.Transform);
+
         }
 
         private void DetectPlayerOnTransition()

@@ -30,17 +30,23 @@ namespace Silesian_Undergrounds.Engine.Item {
             AddComponent(collider);
         }
 
-        //TODO: extract some code to PickableItem class
-        public override void NotifyCollision(GameObject obj)
+        public override void NotifyCollision(GameObject obj, ICollider source)
         {
-            base.NotifyCollision(obj);
+            base.NotifyCollision(obj, source);
 
             if (obj is Player && !isBuyable)
             {
                 Player pl = (Player)obj;
                 if (pl.MaxHungerValue > pl.HungerValue)
                 {
-                    pl.RefilHunger(this.hungerRefil);
+                    if (pl.PlayerStatistic.PickupDouble)
+                    {
+                        pl.RefilHunger(this.hungerRefil * 2);
+                    }
+                    else
+                    {
+                        pl.RefilHunger(this.hungerRefil);
+                    }
                     this.scene.DeleteObject(this);
                 }
             }
