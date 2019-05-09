@@ -27,6 +27,7 @@ namespace Silesian_Undergrounds.Engine.Item
         }
         private int CurrentFrame = 1;
         private Boolean WasPicked = false;
+        private Player player = null;
         private Random random = new Random();
 
         public Chest(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene, bool isBuyable = false) : base(texture, position, size, layer, scene, isBuyable)
@@ -47,6 +48,7 @@ namespace Silesian_Undergrounds.Engine.Item
             if (obj is Player && !isBuyable)
             {
                 Player plr = obj as Player;
+                this.player = plr;
                 if (!WasPicked && plr.KeyAmount > 0)
                 {
                     WasPicked = true;
@@ -85,7 +87,7 @@ namespace Silesian_Undergrounds.Engine.Item
                         }
                     }
 
-                    foreach (var obj in GameObjectFactory.ScenePickableItemsFactory(list, this.scene))
+                    foreach (var obj in GameObjectFactory.ScenePickableItemsFactory(list, this.scene, player.PlayerStatistic))
                     {
                         this.scene.AddObject(obj);
                     }

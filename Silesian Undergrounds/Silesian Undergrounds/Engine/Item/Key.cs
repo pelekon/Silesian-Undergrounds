@@ -22,7 +22,14 @@ namespace Silesian_Undergrounds.Engine.Item {
             if (obj is Player && !isBuyable)
             {
                 Player pl = (Player)obj;
-                pl.AddKey(1);
+                if (pl.PlayerStatistic.PickupDouble)
+                {
+                    pl.AddKey(2);
+                }
+                else
+                {
+                    pl.AddKey(1);
+                }
                 this.scene.DeleteObject(this);
             }
         }

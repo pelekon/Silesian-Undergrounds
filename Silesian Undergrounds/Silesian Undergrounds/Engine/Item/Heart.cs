@@ -24,7 +24,14 @@ namespace Silesian_Undergrounds.Engine.Item {
                 Player pl = (Player)obj;
                 if (pl.MaxLiveValue > pl.LiveValue)
                 {
-                    pl.RefilLive(this.liveRegenerationValue);
+                    if (pl.PlayerStatistic.PickupDouble)
+                    {
+                        pl.RefilLive(this.liveRegenerationValue * 2);
+                    }
+                    else
+                    {
+                        pl.RefilLive(this.liveRegenerationValue);
+                    }
                     this.scene.DeleteObject(this);
                 }
 

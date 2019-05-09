@@ -11,6 +11,9 @@ namespace Silesian_Undergrounds.Engine.Common {
         private int keyAmount;
         private int hungerValue;
         private int hungerMaxValue;
+        private bool havePickupDouble = false;
+        private bool haveChestDropBooster = false;
+        private bool isImmuniteToHunger = false;
    
 
         public PlayerStatistic(int health, int maxHealth, int hunger, int maxHunger, float movementSpeed, float attackSpeed, int baseDamage, int moneyAmount, int keyAmount) : base(health, maxHealth, movementSpeed, attackSpeed, baseDamage)
@@ -25,5 +28,8 @@ namespace Silesian_Undergrounds.Engine.Common {
         public int MaxHunger { get => hungerMaxValue; set => hungerMaxValue = value; }
         public int Key { get => keyAmount; set => keyAmount = value; }
         public int Money { get => moneyAmount; set => moneyAmount = value; }
+        public bool PickupDouble { get => havePickupDouble; set => havePickupDouble = value; }
+        public bool ChestDropBooster { get => haveChestDropBooster; set => haveChestDropBooster = value; }
+        public bool ImmuniteToHunger { get => isImmuniteToHunger; set => isImmuniteToHunger = value; }
     }
 }
