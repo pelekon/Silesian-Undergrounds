@@ -184,9 +184,9 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             foreach (var key in groupsToDelete)
                 groups.Remove(key);
         }
-        
+
         // Function to build room based on generated groups, generated objects are put
-        // into "List<GameObject> result" object 
+        // into List<GeneratedRoom> result" object 
         private void BuildRoomsFromGroups(Dictionary<int, List<Point>> groups)
         {
             foreach(var group in groups)
@@ -196,8 +196,6 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
 
                 // build matrix to start process of building room from group
                 RoomGroupMatrix roomMatrix = PrepareMatrixFromRoom(group.Value);
-                //BuildRoomFromMatrix(ref roomMatrix);
-                //result.Add(new GeneratedRoom(roomMatrix));
                 Random rng = new Random();
                 List<RoomGroupMatrix> rooms = SplitMatrixForFewRooms(ref roomMatrix, rng);
                 foreach (var room in rooms)
