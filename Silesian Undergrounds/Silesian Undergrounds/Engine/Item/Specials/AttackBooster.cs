@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Collisions;
 
-namespace Silesian_Undergrounds.Engine.SpecialItems {
+namespace Silesian_Undergrounds.Engine.Item.Specials {
     class AttackBooster : SpecialItem {
 
         private const float PLAYER_ATTACK_INCREASE_BY = 1.0f;
