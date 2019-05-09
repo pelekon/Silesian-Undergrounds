@@ -525,30 +525,6 @@
 /processorParam:TextureFormat=Color
 /build:Items/Grounds/wood_bottom_left_ground.png
 
-#begin Items/Grounds/wood_bottom_left_ground.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Items/Grounds/wood_bottom_left_ground.png
-
-#begin Items/Grounds/wood_bottom_right_ground.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Items/Grounds/wood_bottom_right_ground.png
-
 #begin Items/Grounds/wood_bottom_right_ground.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -609,18 +585,6 @@
 /processorParam:TextureFormat=Color
 /build:Items/Grounds/wood_top_left_ground.png
 
-#begin Items/Grounds/wood_top_left_ground.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Items/Grounds/wood_top_left_ground.png
-
 #begin Items/Grounds/wood_top_right_ground.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -633,7 +597,7 @@
 /processorParam:TextureFormat=Color
 /build:Items/Grounds/wood_top_right_ground.png
 
-#begin Items/Grounds/wood_top_right_ground.png
+#begin Items/Grounds/wood-ground-corner-bottom-left.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -643,7 +607,43 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Items/Grounds/wood_top_right_ground.png
+/build:Items/Grounds/wood-ground-corner-bottom-left.png
+
+#begin Items/Grounds/wood-ground-corner-bottom-right.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Items/Grounds/wood-ground-corner-bottom-right.png
+
+#begin Items/Grounds/wood-ground-corner-top-left.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Items/Grounds/wood-ground-corner-top-left.png
+
+#begin Items/Grounds/wood-ground-corner-top-right.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Items/Grounds/wood-ground-corner-top-right.png
 
 #begin Items/Heart/heart_1.png
 /importer:TextureImporter
