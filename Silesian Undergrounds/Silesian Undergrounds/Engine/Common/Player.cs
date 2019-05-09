@@ -193,6 +193,16 @@ namespace Silesian_Undergrounds.Engine.Common
             this.statistics.MovementSpeed += movementSpeedValueToIncrease;
         }
 
+        public void GrandPickupDouble()
+        {
+            this.statistics.PickupDouble = true;
+        }
+
+        public PlayerStatistic PlayerStatistic
+        {
+            get { return this.statistics;  }
+        }
+
         public void IncreaseHungerMaxValueBy(int hungerMaxValueToIncrease)
         {
             MaxHungerValue = MaxHungerValue + hungerMaxValueToIncrease;

@@ -44,7 +44,14 @@ namespace Silesian_Undergrounds.Engine.Item
             if (obj is Player)
             {
                 Player pl = (Player)obj;
-                pl.AddMoney(this.value);
+                if (pl.PlayerStatistic.PickupDouble)
+                {
+                    pl.AddMoney(this.value * 2);
+                }
+                else
+                {
+                    pl.AddMoney(this.value);
+                }
                 this.scene.DeleteObject(this);
             }
         }
