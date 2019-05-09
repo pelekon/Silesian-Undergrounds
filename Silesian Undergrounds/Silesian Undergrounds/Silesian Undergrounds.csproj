@@ -197,9 +197,6 @@
     <None Include="Data\left.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Data\left.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Data\special_items.json" />
     <None Include="Data\test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
