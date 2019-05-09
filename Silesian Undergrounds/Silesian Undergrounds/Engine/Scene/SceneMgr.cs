@@ -184,6 +184,13 @@ namespace Silesian_Undergrounds.Engine.Scene
             if (roomGenerator != null)
             {
                 while(!roomGenerator.isJobDone) { }
+
+                foreach(var room in roomGenerator.result)
+                {
+                    var list = room.BuildGameObjectsList();
+                    foreach (var obj in list)
+                        scene.AddObject(obj);
+                }
             }
 
             tileFile.Close();

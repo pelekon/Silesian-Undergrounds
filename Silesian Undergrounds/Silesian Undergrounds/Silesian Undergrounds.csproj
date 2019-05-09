@@ -71,6 +71,7 @@
     <Compile Include="Engine\Scene\RandomRooms\GeneratedRoom.cs" />
     <Compile Include="Engine\Scene\RandomRooms\RoomGenerator.cs" />
     <Compile Include="Engine\Scene\RandomRooms\RoomGroupMatrix.cs" />
+    <Compile Include="Engine\Scene\RandomRooms\RoomSplitSide.cs" />
     <Compile Include="Engine\Traps\Spike.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
     <Compile Include="Engine\Utils\EnemyFactory.cs" />

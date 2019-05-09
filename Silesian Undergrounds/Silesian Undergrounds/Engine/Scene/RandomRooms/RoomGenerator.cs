@@ -12,26 +12,26 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
 {
     public class RoomGenerator
     {
-        private List<GameObject> result;
+        public List<GeneratedRoom> result { get; private set; }
         public bool isJobDone;
 
         // Constant helpers
-        private static readonly int minRoomWidht = 6;
-        private static readonly int maxRoomWidht = 10;
+        private static readonly int minRoomWidth = 6;
+        private static readonly int maxRoomWidth = 10;
         private static readonly int minRoomHeight = 6;
         private static readonly int maxRoomHeight = 10;
 
         public RoomGenerator()
         {
             isJobDone = false;
-            result = new List<GameObject>();
+            result = new List<GeneratedRoom>();
         }
 
         public void GenerateRooms(Texture2D[][] layer)
         {
             List<Point> positions = FilterTiles(layer);
 
-            if (positions.Count < (minRoomWidht * minRoomHeight))
+            if (positions.Count < (minRoomWidth * minRoomHeight))
             {
                 isJobDone = true;
                 return;
@@ -58,7 +58,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             {
                 for(int y = 0; y < layer[x].Length; ++y)
                 {
-                    if (layer[x][y] != null)
+                    if (layer[y][x] != null)
                         list.Add(new Point(x, y));
                 }
             }
@@ -177,7 +177,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
 
             foreach (var group in groups)
             {
-                if (group.Value.Count < (minRoomWidht * minRoomHeight))
+                if (group.Value.Count < (minRoomWidth * minRoomHeight))
                     groupsToDelete.Add(group.Key);
             }
 
@@ -196,7 +196,16 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
 
                 // build matrix to start process of building room from group
                 RoomGroupMatrix roomMatrix = PrepareMatrixFromRoom(group.Value);
-                BuildRoomFromMatrix(ref roomMatrix);
+                //BuildRoomFromMatrix(ref roomMatrix);
+                //result.Add(new GeneratedRoom(roomMatrix));
+                Random rng = new Random();
+                List<RoomGroupMatrix> rooms = SplitMatrixForFewRooms(ref roomMatrix, rng);
+                foreach (var room in rooms)
+                {
+                    RoomGroupMatrix r = room;
+                    BuildRoomFromMatrix(ref r);
+                    result.Add(new GeneratedRoom(r));
+                }
             }
         }
 
@@ -236,9 +245,154 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             return matrix;
         }
 
+        private List<RoomGroupMatrix> SplitMatrixForFewRooms(ref RoomGroupMatrix matrix, Random rng)
+        {
+            List<RoomGroupMatrix> list = new List<RoomGroupMatrix>();
+
+            int sizeX = matrix.data.Length;
+            int sizeY = matrix.data[0].Length;
+
+            if (sizeX >= (minRoomWidth * 2 + 1) || sizeY >= (minRoomHeight * 2 + 1))
+            {
+                if (sizeY > sizeX)
+                    SplitMatrixByAxisY(ref matrix, list, rng, sizeX, sizeY);
+                else
+                    SplitMatrixByAxisX(ref matrix, list, rng, sizeX, sizeY);
+            }
+            else
+                list.Add(matrix);
+
+            return list;
+        }
+
+        private void SplitMatrixByAxisX(ref RoomGroupMatrix matrix, List<RoomGroupMatrix> list, Random rng, int sizeX, int sizeY)
+        {
+            int chance = rng.Next(100);
+            // Check chance to build one bigg room instead of two sepparate
+            if (chance < 45)
+            {
+                list.Add(matrix);
+                return;
+            }
+
+            int leftRoomSpace = sizeX;
+            int rightRoomSpace = sizeX;
+            int splitMode = rng.Next(0, 2);
+            switch (splitMode)
+            {
+                case 0: // split rooms evenly(50/50)
+                    leftRoomSpace = sizeX / 2;
+                    rightRoomSpace = leftRoomSpace;
+                    break;
+                case 1: // split rooms in way that left room is bigger
+                    leftRoomSpace = sizeX - minRoomWidth;
+                    rightRoomSpace = minRoomWidth;
+                    break;
+                case 2: // split rooms in way that right room is bigger
+                    leftRoomSpace = minRoomWidth;
+                    rightRoomSpace = sizeX - minRoomWidth;
+                    break;
+            }
+
+            // Prepare matrix for left room
+            RoomGroupMatrix leftRoom = new RoomGroupMatrix();
+            leftRoom.offset = new Point(matrix.offset.X, matrix.offset.Y);
+            leftRoom.splitSide = RoomSplitSide.SPLIT_SIDE_LEFT;
+            leftRoom.data = new RoomTileType[leftRoomSpace][];
+            for (int i = 0; i < leftRoomSpace; ++i)
+                leftRoom.data[i] = new RoomTileType[sizeY];
+
+            // copy left area from orginal matrix
+            for (int x = 0; x < leftRoomSpace; ++x)
+            {
+                for (int y = 0; y < sizeY; ++y)
+                    leftRoom.data[x][y] = matrix.data[x][y];
+            }
+
+            // Prepare matrix for right room
+            RoomGroupMatrix rightRoom = new RoomGroupMatrix();
+            rightRoom.offset = new Point(matrix.offset.X + leftRoomSpace, matrix.offset.Y);
+            rightRoom.splitSide = RoomSplitSide.SPLIT_SIDE_RIGHT;
+            rightRoom.data = new RoomTileType[rightRoomSpace][];
+            for (int i = 0; i < rightRoomSpace; ++i)
+                rightRoom.data[i] = new RoomTileType[sizeY];
+
+            // copy right area from orginal matrix
+            for (int x = 0; x < rightRoomSpace; ++x)
+            {
+                for (int y = 0; y < sizeY; ++y)
+                    rightRoom.data[x][y] = matrix.data[x + leftRoomSpace][y];
+            }
+
+            list.Add(leftRoom);
+            list.Add(rightRoom);
+        }
+
+        private void SplitMatrixByAxisY(ref RoomGroupMatrix matrix, List<RoomGroupMatrix> list, Random rng, int sizeX, int sizeY)
+        {
+            int chance = rng.Next(100);
+            // Check chance to build one bigg room instead of two sepparate
+            if (chance < 45)
+            {
+                list.Add(matrix);
+                return;
+            }
+
+            int upperRoomSpace = sizeY;
+            int bottomRoomSpace = sizeY;
+            int splitMode = rng.Next(0, 2);
+            switch (splitMode)
+            {
+                case 0: // split rooms evenly(50/50)
+                    upperRoomSpace = sizeY / 2;
+                    bottomRoomSpace = upperRoomSpace;
+                    break;
+                case 1: // split rooms in way that upper room is bigger
+                    upperRoomSpace = sizeY - minRoomHeight;
+                    bottomRoomSpace = minRoomHeight;
+                    break;
+                case 2: // split rooms in way that bottom room is bigger
+                    upperRoomSpace = minRoomHeight;
+                    bottomRoomSpace = sizeY - minRoomHeight;
+                    break;
+            }
+
+            // Prepare matrix for upper room
+            RoomGroupMatrix upperRoom = new RoomGroupMatrix();
+            upperRoom.offset = new Point(matrix.offset.X, matrix.offset.Y);
+            upperRoom.splitSide = RoomSplitSide.SPLIT_SIDE_UP;
+            upperRoom.data = new RoomTileType[sizeX][];
+            for (int i = 0; i < sizeX; ++i)
+                upperRoom.data[i] = new RoomTileType[upperRoomSpace];
+
+            // copy upper area from orginal matrix
+            for (int x = 0; x < sizeX; ++x)
+            {
+                for (int y = 0; y < upperRoomSpace; ++y)
+                    upperRoom.data[x][y] = matrix.data[x][y];
+            }
+
+            // Prepare matrix for bottom room
+            RoomGroupMatrix bottomRoom = new RoomGroupMatrix();
+            bottomRoom.offset = new Point(matrix.offset.X, matrix.offset.Y + upperRoomSpace);
+            bottomRoom.splitSide = RoomSplitSide.SPLIT_SIDE_DOWN;
+            bottomRoom.data = new RoomTileType[sizeX][];
+            for (int i = 0; i < sizeX; ++i)
+                bottomRoom.data[i] = new RoomTileType[bottomRoomSpace];
+
+            // copy bottom area from orginal matrix
+            for (int x = 0; x < sizeX; ++x)
+            {
+                for (int y = 0; y < bottomRoomSpace; ++y)
+                    bottomRoom.data[x][y] = matrix.data[x][y + upperRoomSpace];
+            }
+
+            list.Add(upperRoom);
+            list.Add(bottomRoom);
+        }
+
         private void BuildRoomFromMatrix(ref RoomGroupMatrix matrix)
         {
-            // Temp test code, just generate one room for now
             int sizeX = matrix.data.Length;
             int sizeY = matrix.data[0].Length;
 
@@ -258,6 +412,49 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             {
                 for (int y = 1; y < sizeY - 1; ++y)
                     matrix.data[x][y] = RoomTileType.ROOM_TILE_GROUND;
+            }
+
+            // Add corners
+            matrix.data[0][0] = RoomTileType.ROOM_TILE_CORNER_UL;
+            matrix.data[0][sizeY - 1] = RoomTileType.ROOM_TILE_CORNER_BL;
+            matrix.data[sizeX - 1][0] = RoomTileType.ROOM_TILE_CORNER_UR;
+            matrix.data[sizeX - 1][sizeY - 1] = RoomTileType.ROOM_TILE_CORNER_BR;
+
+            // Create passage between rooms if there is need for that
+            if (matrix.splitSide != RoomSplitSide.SPLIT_SIDE_NONE)
+            {
+                switch(matrix.splitSide)
+                {
+                    case RoomSplitSide.SPLIT_SIDE_LEFT:
+                    {
+                        int tileToSwap = sizeY / 2 - 1;
+                        matrix.data[sizeX - 1][tileToSwap] = RoomTileType.ROOM_TILE_GROUND;
+                        matrix.data[sizeX - 1][tileToSwap + 1] = RoomTileType.ROOM_TILE_GROUND;
+                        break;
+                    }
+                        
+                    case RoomSplitSide.SPLIT_SIDE_RIGHT:
+                    {
+                        int tileToSwap = sizeY / 2 - 1;
+                        matrix.data[0][tileToSwap] = RoomTileType.ROOM_TILE_GROUND;
+                        matrix.data[0][tileToSwap + 1] = RoomTileType.ROOM_TILE_GROUND;
+                        break;
+                    }
+                    case RoomSplitSide.SPLIT_SIDE_UP:
+                    {
+                        int tileToSwap = sizeX / 2;
+                        matrix.data[tileToSwap][sizeY - 1] = RoomTileType.ROOM_TILE_GROUND;
+                        matrix.data[tileToSwap + 1][sizeY - 1] = RoomTileType.ROOM_TILE_GROUND;
+                        break;
+                    }
+                    case RoomSplitSide.SPLIT_SIDE_DOWN:
+                    {
+                        int tileToSwap = sizeX / 2;
+                        matrix.data[tileToSwap][0] = RoomTileType.ROOM_TILE_GROUND;
+                        matrix.data[tileToSwap + 1][0] = RoomTileType.ROOM_TILE_GROUND;
+                        break;
+                    }
+                }
             }
         }
 
