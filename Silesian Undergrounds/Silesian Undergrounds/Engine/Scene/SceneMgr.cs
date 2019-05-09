@@ -24,7 +24,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         private static PlayerStatistic playerStatistic;
         #endregion
 
-        #region
+        #region PLAYER_BASIC_STATISTICS
         private const int PLAYER_BASIC_HEALTH = 100;
         private const int PLAYER_BASIC_MAX_HEALTH = 150;
         private const int PLAYER_BASIC_HUNGER = 100;
@@ -170,6 +170,13 @@ namespace Silesian_Undergrounds.Engine.Scene
             List<GameObject> generatedEnemies = EnemyFactory.GenerateEnemiesForScene(Renderer.Enemies);
             foreach (var obj in generatedEnemies)
                 scene.AddObject(obj);
+
+
+            List<SpecialItem> specialItems = GameObjectFactory.SceneSpecialItemsFactory(Renderer.SpecialItems, scene, playerStatistic);
+            foreach (var item in specialItems)
+            {
+                scene.AddObject(item);
+            }
 
             tileFile.Close();
             return true;

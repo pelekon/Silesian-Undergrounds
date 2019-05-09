@@ -58,6 +58,7 @@
     <Compile Include="Engine\Common\PickableItem.cs" />
     <Compile Include="Engine\Common\PlayerStatistic.cs" />
     <Compile Include="Engine\Common\PropertyChangedArgs.cs" />
+    <Compile Include="Engine\Common\SpecialItem.cs" />
     <Compile Include="Engine\Common\StatisticHolder.cs" />
     <Compile Include="Engine\Common\Unit.cs" />
     <Compile Include="Engine\Collisions\CollisionNotifyData.cs" />
@@ -65,9 +66,17 @@
     <Compile Include="Engine\Enum\ItemPricesEnum.cs" />
     <Compile Include="Engine\Enum\GroundEnum.cs" />
     <Compile Include="Engine\Enum\LayerEnum.cs" />
+    <Compile Include="Engine\Enum\SpecialItemEnum.cs" />
     <Compile Include="Engine\Enum\TrapsDamageEnum.cs" />
     <Compile Include="Engine\Item\Ground.cs" />
     <Compile Include="Engine\Item\Heart.cs" />
+    <Compile Include="Engine\SpecialItems\AttackBooster.cs" />
+    <Compile Include="Engine\SpecialItems\ChestsDropBooster.cs" />
+    <Compile Include="Engine\SpecialItems\HungerBooster.cs" />
+    <Compile Include="Engine\SpecialItems\HungerImmunite.cs" />
+    <Compile Include="Engine\SpecialItems\LiveBooster.cs" />
+    <Compile Include="Engine\SpecialItems\MovementBooster.cs" />
+    <Compile Include="Engine\SpecialItems\PickupDouble.cs" />
     <Compile Include="Engine\Traps\Spike.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
     <Compile Include="Engine\Utils\EnemyFactory.cs" />
@@ -198,6 +207,7 @@
   <ItemGroup>
     <Content Include="Content\playerSheet.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -74,7 +74,10 @@ namespace Silesian_Undergrounds.Engine.Common
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            HandleHungerDecrasing(deltaTime);
+            if (!this.statistics.ImmuniteToHunger)
+            {
+                HandleHungerDecrasing(deltaTime);
+            }
 
             sDirection *= speed;
             sDirection *= deltaTime;
@@ -178,14 +181,59 @@ namespace Silesian_Undergrounds.Engine.Common
             }
         }
 
+        public void IncreaseLiveMaxValueBy(int liveMaxValueToIncrease)
+        {
+            MaxLiveValue = MaxLiveValue + liveMaxValueToIncrease;
+        }
+
+        public void IncreaseMovementSpped(float movementSpeedValueToIncrease)
+        {
+            this.statistics.MovementSpeed += movementSpeedValueToIncrease;
+        }
+
+        public void GrandPickupDouble()
+        {
+            this.statistics.PickupDouble = true;
+        }
+
+        public void GrandChestDropBooster()
+        {
+            this.statistics.ChestDropBooster = true;
+        }
+
+        public PlayerStatistic PlayerStatistic
+        {
+            get { return this.statistics;  }
+        }
+
+        public void IncreaseHungerMaxValueBy(int hungerMaxValueToIncrease)
+        {
+            MaxHungerValue = MaxHungerValue + hungerMaxValueToIncrease;
+        }
+
+        public void IncreaseAttackValueBy(float attackValueToIncrease)
+        {
+            this.statistics.AttackSpeed += attackValueToIncrease;
+        }
+
         public int MaxHungerValue
         {
             get { return statistics.MaxHunger;  }
+            private set
+            {
+                HungerMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
+                statistics.MaxHunger = value;
+            }
         }
 
         public int MaxLiveValue
         {
             get { return statistics.MaxHealth;  }
+            private set
+            {
+                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
+                statistics.MaxHealth = value;
+            }
         }
 
         public int MoneyAmount
@@ -231,11 +279,6 @@ namespace Silesian_Undergrounds.Engine.Common
         public int LiveMaxValue
         {
             get { return statistics.MaxHealth; }
-            private set
-            {
-                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
-                statistics.MaxHealth = value;
-            }
         }
 
         public int HungerMaxValue
@@ -265,28 +308,28 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 if (keyState.IsKeyDown(Keys.W))
                 {
-                    sDirection += new Vector2(0, -1);
+                    sDirection += new Vector2(0, -1 * this.statistics.MovementSpeed);
                     PlayAnimation("Up");
                     currentDirection = movementDirection.up;
 
                 }
                 if (keyState.IsKeyDown(Keys.A))
                 {
-                    sDirection += new Vector2(-1, 0);
+                    sDirection += new Vector2(-1 * this.statistics.MovementSpeed, 0);
                     PlayAnimation("Left");
                     currentDirection = movementDirection.left;
 
                 }
                 if (keyState.IsKeyDown(Keys.S))
                 {
-                    sDirection += new Vector2(0, 1);
+                    sDirection += new Vector2(0, 1 * this.statistics.MovementSpeed);
                     PlayAnimation("Down");
                     currentDirection = movementDirection.down;
 
                 }
                 if (keyState.IsKeyDown(Keys.D))
                 {
-                    sDirection += new Vector2(1, 0);
+                    sDirection += new Vector2(1 * this.statistics.MovementSpeed, 0);
                     PlayAnimation("Right");
                     currentDirection = movementDirection.right;
 

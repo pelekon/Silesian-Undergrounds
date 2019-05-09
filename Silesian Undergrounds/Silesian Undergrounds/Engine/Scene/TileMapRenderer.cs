@@ -16,7 +16,16 @@ namespace Silesian_Undergrounds.Engine.Scene {
         private List<GameObject> grounds = new List<GameObject>();
         private List<Tile> transitions = new List<Tile>();
         private List<GameObject> enemies = new List<GameObject>();
+        private List<GameObject> specialItems = new List<GameObject>();
         private int width, height;
+
+        public List<GameObject> SpecialItems
+        {
+            get
+            {
+                return specialItems;
+            }
+        }
 
         public List<Tile> Transitions
         {
@@ -87,7 +96,10 @@ namespace Silesian_Undergrounds.Engine.Scene {
             pickableItems = new List<GameObject>();
             grounds = new List<GameObject>();
             transitions = new List<Tile>();
+            traps = new List<GameObject>();
+            specialItems = new List<GameObject>();
             enemies = new List<GameObject>();
+            shopPickableItems = new List<GameObject>();
 
             foreach (var item in map)
             {
@@ -120,6 +132,9 @@ namespace Silesian_Undergrounds.Engine.Scene {
                                 break;
                             case (int)LayerEnum.ShopPickables:
                                 shopPickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.SpecialItems:
+                                specialItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
                             default:
                                 tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
