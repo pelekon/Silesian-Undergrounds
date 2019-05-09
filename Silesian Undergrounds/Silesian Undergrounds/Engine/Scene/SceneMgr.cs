@@ -172,7 +172,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 scene.AddObject(obj);
 
 
-            List<SpecialItem> specialItems = GameObjectFactory.SceneSpecialItemsFactory(Renderer.SpecialItems, scene);
+            List<SpecialItem> specialItems = GameObjectFactory.SceneSpecialItemsFactory(Renderer.SpecialItems, scene, playerStatistic);
             foreach (var item in specialItems)
             {
                 scene.AddObject(item);

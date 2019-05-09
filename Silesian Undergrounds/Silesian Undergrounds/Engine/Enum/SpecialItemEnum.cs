@@ -6,10 +6,6 @@
         AttackBooster,
         HungerImmunite,
         PickupDouble,
-        ChestsDropBooster,
-
-
-
-        MAX
+        ChestsDropBooster
     }
 }

@@ -20,7 +20,7 @@ namespace Silesian_Undergrounds.Engine.SpecialItems {
             if (obj is Player)
             {
                 Player pl = (Player)obj;
-                pl.immuniteToHunger = true;
+                pl.PlayerStatistic.ImmuniteToHunger = true;
                 this.scene.DeleteObject(this);
             }
         }

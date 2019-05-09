@@ -44,10 +44,26 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         }
 
-        private static SpecialItemEnum RandSpecialItem(Random random)
+        private static SpecialItemEnum RandSpecialItem(Random random, PlayerStatistic playerStatistic = null)
         {
-            int randed = random.Next(1, 8);
-            System.Diagnostics.Debug.WriteLine(randed);
+            int randed = random.Next((int)SpecialItemEnum.LiveBooster, (int)SpecialItemEnum.ChestsDropBooster + 1);
+
+            // ensure to not to rand special item whose second pickup will not change statistics
+            if (playerStatistic != null)
+            {
+                if((playerStatistic.ChestDropBooster && randed == ((int)SpecialItemEnum.ChestsDropBooster)) ||
+                    (playerStatistic.PickupDouble && randed == ((int)SpecialItemEnum.PickupDouble)) ||
+                    (playerStatistic.ImmuniteToHunger && randed == ((int)SpecialItemEnum.HungerImmunite)))
+                {
+                    do
+                    {
+                       randed = random.Next(1, 8);
+                    } while (randed == ((int)SpecialItemEnum.ChestsDropBooster) ||
+                    randed == ((int)SpecialItemEnum.PickupDouble) ||
+                    randed == ((int)SpecialItemEnum.HungerImmunite));
+                }
+            }
+
             switch (randed){
                 case 1: 
                     return SpecialItemEnum.LiveBooster;
@@ -74,7 +90,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                 if (playerStatistic.ChestDropBooster)
                     maxRandValue += 20;
 
-            int randed = random.Next(1, maxRandValue);
+            int randed = random.Next(0, maxRandValue);
 
             if (randed <= 10)
                 return PickableEnum.None;
@@ -111,14 +127,14 @@ namespace Silesian_Undergrounds.Engine.Utils
         }
 
 
-        public static List<SpecialItem> SceneSpecialItemsFactory(List<GameObject> specialItemsPositions, Scene.Scene scene)
+        public static List<SpecialItem> SceneSpecialItemsFactory(List<GameObject> specialItemsPositions, Scene.Scene scene, PlayerStatistic playerStatistic = null)
         {
             List<SpecialItem> specialItems = new List<SpecialItem>();
             Random random = new Random();
 
             foreach(var obj in specialItemsPositions)
             {
-                SpecialItemEnum itemType = RandSpecialItem(random);
+                SpecialItemEnum itemType = RandSpecialItem(random, playerStatistic);
 
                 specialItems.Add(SpecialItemFactory(itemType, obj.position, obj.size, scene));
             }
