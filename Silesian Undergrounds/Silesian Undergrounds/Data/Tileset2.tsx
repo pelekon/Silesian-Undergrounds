@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.3" name="Tileset" tilewidth="64" tileheight="64" tilecount="20" columns="0">
+<tileset version="1.2" tiledversion="1.2.3" name="Tileset" tilewidth="64" tileheight="64" tilecount="30" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="64" height="64" source="../Content/test.png"/>
@@ -60,5 +60,47 @@
  </tile>
  <tile id="35">
   <image width="64" height="64" source="../Content/Items/Wall/bricks-left-transparent.png"/>
+ </tile>
+ <tile id="19">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood_bottom_ground.png"/>
+ </tile>
+ <tile id="20">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood_left_ground.png"/>
+ </tile>
+ <tile id="21">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood_right_ground.png"/>
+ </tile>
+ <tile id="22">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood_top_ground.png"/>
+ </tile>
+ <tile id="23">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood_1.png"/>
+ </tile>
+ <tile id="25">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood_bottom_right_ground.png"/>
+ </tile>
+ <tile id="26">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood_top_left_ground.png"/>
+ </tile>
+ <tile id="27">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood_top_right_ground.png"/>
+ </tile>
+ <tile id="28">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood_bottom_left_ground.png"/>
+ </tile>
+ <tile id="29">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood-ground-corner-bottom-left.png"/>
+ </tile>
+ <tile id="30">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood-ground-corner-bottom-right.png"/>
+ </tile>
+ <tile id="31">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood-ground-corner-top-left.png"/>
+ </tile>
+ <tile id="32">
+  <image width="64" height="64" source="../Content/Items/Grounds/wood-ground-corner-top-right.png"/>
+ </tile>
+ <tile id="17">
+  <image width="64" height="64" source="../Content/x-blue.png"/>
  </tile>
 </tileset>
