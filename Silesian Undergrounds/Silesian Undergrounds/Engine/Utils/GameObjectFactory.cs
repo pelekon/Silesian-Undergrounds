@@ -21,7 +21,6 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         #region OBJECT_TYPE_RAND_FUNCTIONS
 
-
         private static OreEnum RandOreType(Random random)
         {
             int randed = random.Next(1, 100);
@@ -47,8 +46,8 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         private static SpecialItemEnum RandSpecialItem(Random random)
         {
-            int randed = random.Next(1, 7);
-
+            int randed = random.Next(1, 8);
+            System.Diagnostics.Debug.WriteLine(randed);
             switch (randed){
                 case 1: 
                     return SpecialItemEnum.LiveBooster;
@@ -67,9 +66,16 @@ namespace Silesian_Undergrounds.Engine.Utils
             }
         }
 
-        private static PickableEnum RandItem(Random random)
+        private static PickableEnum RandItem(Random random, PlayerStatistic playerStatistic = null)
         {
-            int randed = random.Next(1, 100);
+            int maxRandValue = 100;
+
+            if (playerStatistic != null)
+                if (playerStatistic.ChestDropBooster)
+                    maxRandValue += 20;
+
+            int randed = random.Next(1, maxRandValue);
+
             if (randed <= 10)
                 return PickableEnum.None;
             else if (randed > 10 && randed <= 25)
@@ -79,9 +85,9 @@ namespace Silesian_Undergrounds.Engine.Utils
             else if (randed > 45 && randed <= 75)
                 return PickableEnum.Ore;
             else if (randed > 75 && randed <= 85)
-                return PickableEnum.Chest;
-            else
                 return PickableEnum.Key;
+            else
+                return PickableEnum.Chest;
         }
 
         #endregion
@@ -151,7 +157,7 @@ namespace Silesian_Undergrounds.Engine.Utils
 
 
         // renders random items (hearts, chests and ores) on the map
-        public static List<PickableItem> ScenePickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene)
+        public static List<PickableItem> ScenePickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene, PlayerStatistic playerStatistic = null)
         {
             List<PickableItem> list = new List<PickableItem>();
             Random random = new Random();
@@ -159,7 +165,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             foreach (var source in positionSources)
             {
 
-                PickableEnum itemType = RandItem(random);
+                PickableEnum itemType = RandItem(random, playerStatistic);
                 if (itemType == PickableEnum.None)
                     continue;
 
@@ -208,7 +214,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                 case SpecialItemEnum.PickupDouble:
                     return new PickupDouble(TextureMgr.Instance.GetTexture("Items/Special/pickupDouble"), position, size, (int)LayerEnum.SpecialItems, scene);
                 default:
-                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Special/liveBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new ChestsDropBooster(TextureMgr.Instance.GetTexture("Items/Special/chestDrop"), position, size, (int)LayerEnum.SpecialItems, scene);
             }
         }
 

@@ -198,6 +198,11 @@ namespace Silesian_Undergrounds.Engine.Common
             this.statistics.PickupDouble = true;
         }
 
+        public void GrandChestDropBooster()
+        {
+            this.statistics.ChestDropBooster = true;
+        }
+
         public PlayerStatistic PlayerStatistic
         {
             get { return this.statistics;  }

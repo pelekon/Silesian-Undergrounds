@@ -71,6 +71,7 @@
     <Compile Include="Engine\Item\Ground.cs" />
     <Compile Include="Engine\Item\Heart.cs" />
     <Compile Include="Engine\SpecialItems\AttackBooster.cs" />
+    <Compile Include="Engine\SpecialItems\ChestsDropBooster.cs" />
     <Compile Include="Engine\SpecialItems\HungerBooster.cs" />
     <Compile Include="Engine\SpecialItems\HungerImmunite.cs" />
     <Compile Include="Engine\SpecialItems\LiveBooster.cs" />
