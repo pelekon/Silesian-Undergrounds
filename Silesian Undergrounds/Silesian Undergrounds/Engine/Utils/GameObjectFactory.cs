@@ -218,19 +218,19 @@ namespace Silesian_Undergrounds.Engine.Utils
             switch (itemType)
             {
                 case SpecialItemEnum.LiveBooster:
-                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Special/liveBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Special/live-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.HungerBooster:
-                    return new HungerBooster(TextureMgr.Instance.GetTexture("Items/Special/hungerBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new HungerBooster(TextureMgr.Instance.GetTexture("Items/Special/hunger-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.MovementBooster:
-                    return new MovementBooster(TextureMgr.Instance.GetTexture("Items/Special/movementBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new MovementBooster(TextureMgr.Instance.GetTexture("Items/Special/movement-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.AttackBooster:
-                    return new AttackBooster(TextureMgr.Instance.GetTexture("Items/Special/attackBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new AttackBooster(TextureMgr.Instance.GetTexture("Items/Special/atack-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.HungerImmunite:
-                    return new HungerImmunite(TextureMgr.Instance.GetTexture("Items/Special/hungerImmunite"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new HungerImmunite(TextureMgr.Instance.GetTexture("Items/Special/hunger-immunite-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.PickupDouble:
-                    return new PickupDouble(TextureMgr.Instance.GetTexture("Items/Special/pickupDouble"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new PickupDouble(TextureMgr.Instance.GetTexture("Items/Special/pickup-double-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 default:
-                    return new ChestsDropBooster(TextureMgr.Instance.GetTexture("Items/Special/chestDrop"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new ChestsDropBooster(TextureMgr.Instance.GetTexture("Items/Special/chest-droop-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
             }
         }
 

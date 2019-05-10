@@ -807,7 +807,7 @@
 /processorParam:TextureFormat=Color
 /build:Items/Ores/silver/silver_3.png
 
-#begin Items/Special/attackBooster.png
+#begin Items/Special/atack-booster.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -817,9 +817,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Items/Special/attackBooster.png
+/build:Items/Special/atack-booster.png
 
-#begin Items/Special/chestDrop.png
+#begin Items/Special/chest-droop-booster.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -829,9 +829,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Items/Special/chestDrop.png
+/build:Items/Special/chest-droop-booster.png
 
-#begin Items/Special/hungerBooster.png
+#begin Items/Special/hunger-booster.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -841,9 +841,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Items/Special/hungerBooster.png
+/build:Items/Special/hunger-booster.png
 
-#begin Items/Special/hungerImmunite.png
+#begin Items/Special/hunger-immunite-booster.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -853,9 +853,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Items/Special/hungerImmunite.png
+/build:Items/Special/hunger-immunite-booster.png
 
-#begin Items/Special/liveBooster.png
+#begin Items/Special/live-booster.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -865,9 +865,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Items/Special/liveBooster.png
+/build:Items/Special/live-booster.png
 
-#begin Items/Special/movementBooster.png
+#begin Items/Special/movement-booster.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -877,9 +877,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Items/Special/movementBooster.png
+/build:Items/Special/movement-booster.png
 
-#begin Items/Special/pickupDouble.png
+#begin Items/Special/pickup-double-booster.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -889,7 +889,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Items/Special/pickupDouble.png
+/build:Items/Special/pickup-double-booster.png
 
 #begin Items/Traps/temporary_spike_1.png
 /importer:TextureImporter
