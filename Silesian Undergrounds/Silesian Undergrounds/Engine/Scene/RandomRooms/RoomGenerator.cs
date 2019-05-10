@@ -192,7 +192,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
                 // build matrix to start process of building room from group
                 RoomGroupMatrix roomMatrix = PrepareMatrixFromRoom(group.Value);
                 Random rng = new Random();
-                List<RoomGroupMatrix> rooms = SplitMatrixForFewRooms(ref roomMatrix, rng);
+                List<RoomGroupMatrix> rooms = SplitMatrixForFewRooms(ref roomMatrix, group.Value, rng);
                 foreach (var room in rooms)
                 {
                     RoomGroupMatrix r = room;
@@ -238,9 +238,11 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             return matrix;
         }
 
-        private List<RoomGroupMatrix> SplitMatrixForFewRooms(ref RoomGroupMatrix matrix, Random rng)
+        private List<RoomGroupMatrix> SplitMatrixForFewRooms(ref RoomGroupMatrix matrix, List<Point> points, Random rng)
         {
             List<RoomGroupMatrix> list = new List<RoomGroupMatrix>();
+
+            CheckMatrixForWrongCells(ref matrix, points);
 
             int sizeX = matrix.data.Length;
             int sizeY = matrix.data[0].Length;
@@ -256,6 +258,72 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
                 list.Add(matrix);
 
             return list;
+        }
+
+        private void CheckMatrixForWrongCells(ref RoomGroupMatrix matrix, List<Point> points)
+        {
+            // Swap tile type to ROOM_TILE_NONE when tile is proper tile 
+            foreach (var point in points)
+                matrix.data[point.X - matrix.offset.X][point.Y - matrix.offset.Y] = RoomTileType.ROOM_TILE_NONE;
+
+            int sizeX = matrix.data.Length;
+            int sizeY = matrix.data[0].Length;
+
+            int minX = -1;
+            int maxX = -1;
+            int minY = -1;
+            int maxY = -1;
+
+            // Fill coordinates for empty area
+            for (int x = 0; x < sizeX; ++x)
+            {
+                for(int y = 0; y < sizeY; ++y)
+                {
+                    if (matrix.data[x][y] == RoomTileType.ROOM_TILE_EMPTY)
+                    {
+                        if (minX == -1)
+                            minX = x;
+
+                        if (maxX < x || maxX == -1)
+                            maxX = x;
+
+                        if (minY == -1)
+                            minY = y;
+
+                        if (maxY < y || maxY == -1)
+                            maxY = y;
+                    }
+                }
+            }
+
+            // If there are coordinates for empty area then remove it from matrix
+            if (minX > -1 && minY > -1)
+                RemoveUnwantedEmptySpace(ref matrix, minX, maxX, minY, maxY, sizeX, sizeY);
+        }
+
+        private void RemoveUnwantedEmptySpace(ref RoomGroupMatrix matrix, int minX, int maxX, int minY, int maxY, int sizeX, int sizeY)
+        {
+            int startX = minX;
+            int startY = minY;
+
+            // test code
+            startX = sizeX - 1;
+            startY = sizeY - 1;
+            // 
+
+            if (maxX == sizeX - 1)
+                startX = 0;
+
+            if (maxY == sizeY - 1)
+                startY = 0;
+
+            if (startX == 0 || startY == 0)
+            {
+                int newSizeX = sizeX - (maxX - startX + 1);
+                int newSizeY = sizeY - (maxY - startY + 1);
+
+
+            }
         }
 
         private void SplitMatrixByAxisX(ref RoomGroupMatrix matrix, List<RoomGroupMatrix> list, Random rng, int sizeX, int sizeY)

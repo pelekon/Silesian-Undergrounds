@@ -4,6 +4,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
 {
     internal enum RoomTileType
     {
+        ROOM_TILE_EMPTY,
         ROOM_TILE_NONE,
         ROOM_TILE_WALL_UP,
         ROOM_TILE_WALL_BOTTOM,

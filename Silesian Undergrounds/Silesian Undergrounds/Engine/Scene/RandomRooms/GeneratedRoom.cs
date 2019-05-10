@@ -35,6 +35,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             Texture2D wallBottomRight = TextureMgr.Instance.GetTexture("bottom-right");
 
             int wallLayer = (int)LayerEnum.Walls;
+            wallLayer = 0;
 
             for (int x = 0; x < sizeX; ++x)
             {
