@@ -82,28 +82,27 @@ namespace Silesian_Undergrounds.Engine.Utils
             }
         }
 
-        private static PickableEnum RandItem(Random random, PlayerStatistic playerStatistic = null)
+        private static PickableEnum RandItem(Random random, PlayerStatistic playerStatistic = null, bool generateChest = true)
         {
             int maxRandValue = 100;
 
-            if (playerStatistic != null)
+            if (generateChest && playerStatistic != null)
                 if (playerStatistic.ChestDropBooster)
                     maxRandValue += 20;
 
             int randed = random.Next(0, maxRandValue);
-
             if (randed <= 10)
                 return PickableEnum.None;
             else if (randed > 10 && randed <= 25)
                 return PickableEnum.Hearth;
             else if (randed > 25 && randed <= 45)
                 return PickableEnum.Food;
-            else if (randed > 45 && randed <= 75)
+            else if (randed > 45 && randed <= 90)
                 return PickableEnum.Ore;
-            else if (randed > 75 && randed <= 85)
+            else if (randed > 90 && randed <= 95)
                 return PickableEnum.Key;
             else
-                return PickableEnum.Chest;
+                return generateChest ? PickableEnum.Chest : PickableEnum.Ore;
         }
 
         #endregion
@@ -173,7 +172,7 @@ namespace Silesian_Undergrounds.Engine.Utils
 
 
         // renders random items (hearts, chests and ores) on the map
-        public static List<PickableItem> ScenePickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene, PlayerStatistic playerStatistic = null)
+        public static List<PickableItem> ScenePickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene, PlayerStatistic playerStatistic = null, bool generateChest = true)
         {
             List<PickableItem> list = new List<PickableItem>();
             Random random = new Random();
@@ -181,7 +180,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             foreach (var source in positionSources)
             {
 
-                PickableEnum itemType = RandItem(random, playerStatistic);
+                PickableEnum itemType = RandItem(random, playerStatistic, generateChest: generateChest);
                 if (itemType == PickableEnum.None)
                     continue;
 
