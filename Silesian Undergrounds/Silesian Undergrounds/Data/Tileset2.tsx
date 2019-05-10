@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.3" name="Tileset" tilewidth="64" tileheight="64" tilecount="30" columns="0">
+<tileset version="1.2" tiledversion="1.2.3" name="Tileset" tilewidth="64" tileheight="64" tilecount="41" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="64" height="64" source="../Content/test.png"/>
@@ -52,6 +52,9 @@
  <tile id="16">
   <image width="64" height="64" source="../Content/x-green.png"/>
  </tile>
+ <tile id="17">
+  <image width="64" height="64" source="../Content/x-blue.png"/>
+ </tile>
  <tile id="19">
   <image width="64" height="64" source="../Content/Items/Grounds/wood_bottom_ground.png"/>
  </tile>
@@ -91,7 +94,34 @@
  <tile id="32">
   <image width="64" height="64" source="../Content/Items/Grounds/wood-ground-corner-top-right.png"/>
  </tile>
- <tile id="17">
-  <image width="64" height="64" source="../Content/x-blue.png"/>
+ <tile id="33">
+  <image width="64" height="64" source="../Content/Items/Wall/bricks-left.png"/>
+ </tile>
+ <tile id="34">
+  <image width="64" height="64" source="../Content/Items/Wall/bricks-top.png"/>
+ </tile>
+ <tile id="35">
+  <image width="64" height="64" source="../Content/Items/Wall/bricks-left-transparent.png"/>
+ </tile>
+ <tile id="36">
+  <image width="64" height="64" source="../Content/Items/Wall/bricks-left-top.png"/>
+ </tile>
+ <tile id="37">
+  <image width="64" height="64" source="../Content/Items/Wall/bricks-bottom.png"/>
+ </tile>
+ <tile id="38">
+  <image width="64" height="64" source="../Content/Items/Wall/bricks-left-bottom.png"/>
+ </tile>
+ <tile id="39">
+  <image width="64" height="64" source="../Content/Items/Wall/bricks-right.png"/>
+ </tile>
+ <tile id="40">
+  <image width="64" height="64" source="../Content/Items/Wall/bricks-right-bottom.png"/>
+ </tile>
+ <tile id="41">
+  <image width="64" height="64" source="../Content/Items/Wall/bricks-right-top.png"/>
+ </tile>
+ <tile id="42">
+  <image width="64" height="64" source="../Content/Items/Wall/bricks-ledder.png"/>
  </tile>
 </tileset>
