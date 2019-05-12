@@ -207,6 +207,18 @@
 /processorParam:TextureFormat=Color
 /build:Items/Food/meat.png
 
+#begin Items/Food/meat_with_label.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Items/Food/meat_with_label.png
+
 #begin Items/Food/steak.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -675,6 +687,18 @@
 /processorParam:TextureFormat=Color
 /build:Items/Heart/heart_1.png
 
+#begin Items/Heart/heart_shop_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Items/Heart/heart_shop_1.png
+
 #begin Items/Keys/key_1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -686,6 +710,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Items/Keys/key_1.png
+
+#begin Items/Keys/key_1_label.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Items/Keys/key_1_label.png
 
 #begin Items/Keys/key_2.png
 /importer:TextureImporter
