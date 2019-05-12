@@ -23,5 +23,6 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
         public Point offset;
         public RoomTileType[][] data;
         public RoomSplitSide splitSide;
+        public bool isInvalid;
     }
 }

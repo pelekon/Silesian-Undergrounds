@@ -78,6 +78,7 @@
     <Compile Include="Engine\Item\Specials\MovementBooster.cs" />
     <Compile Include="Engine\Item\Specials\PickupDouble.cs" />
     <Compile Include="Engine\Scene\RandomRooms\GeneratedRoom.cs" />
+    <Compile Include="Engine\Scene\RandomRooms\RoomEntryPassage.cs" />
     <Compile Include="Engine\Scene\RandomRooms\RoomGenerator.cs" />
     <Compile Include="Engine\Scene\RandomRooms\RoomGroupMatrix.cs" />
     <Compile Include="Engine\Scene\RandomRooms\RoomSplitSide.cs" />

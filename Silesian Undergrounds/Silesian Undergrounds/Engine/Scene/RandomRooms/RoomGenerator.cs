@@ -24,7 +24,8 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
 
         public void GenerateRooms(Texture2D[][] layer)
         {
-            List<Point> positions = FilterTiles(layer);
+            List<Point> passages = new List<Point>();
+            List<Point> positions = FilterTiles(layer, passages);
 
             if (positions.Count < (minRoomWidth * minRoomHeight))
             {
@@ -33,6 +34,8 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             }
 
             Dictionary<int, List<Point>> groups = GroupBlocks(positions);
+            // Group passage tiles via function to group random room tiles into groups
+            Dictionary<int, List<Point>> passageGroups = GroupBlocks(passages);
             #if DEBUG
             DebugPrintOfGroups(groups, "Before validation");
             #endif
@@ -40,12 +43,12 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             #if DEBUG
             DebugPrintOfGroups(groups, "After validation");
             #endif
-            BuildRoomsFromGroups(groups);
+            BuildRoomsFromGroups(groups, passageGroups);
 
             isJobDone = true;
         }
 
-        private List<Point> FilterTiles(Texture2D[][] layer)
+        private List<Point> FilterTiles(Texture2D[][] layer, List<Point> passages)
         {
             List<Point> list = new List<Point>();
 
@@ -54,7 +57,12 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
                 for(int y = 0; y < layer[x].Length; ++y)
                 {
                     if (layer[y][x] != null)
-                        list.Add(new Point(x, y));
+                    {
+                        if (layer[y][x].Name == "../Content/test")
+                            list.Add(new Point(x, y));
+                        else
+                            passages.Add(new Point(x, y));
+                    }
                 }
             }
 
@@ -182,7 +190,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
 
         // Function to build room based on generated groups, generated objects are put
         // into List<GeneratedRoom> result" object 
-        private void BuildRoomsFromGroups(Dictionary<int, List<Point>> groups)
+        private void BuildRoomsFromGroups(Dictionary<int, List<Point>> groups, Dictionary<int, List<Point>> passageGroups)
         {
             foreach(var group in groups)
             {
@@ -190,21 +198,30 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
                     continue;
 
                 // build matrix to start process of building room from group
-                RoomGroupMatrix roomMatrix = PrepareMatrixFromRoom(group.Value);
                 Random rng = new Random();
+                RoomGroupMatrix roomMatrix = PrepareMatrixFromRoom(group.Value, rng);
                 List<RoomGroupMatrix> rooms = SplitMatrixForFewRooms(ref roomMatrix, group.Value, rng);
                 foreach (var room in rooms)
                 {
                     RoomGroupMatrix r = room;
                     BuildRoomFromMatrix(ref r);
-                    result.Add(new GeneratedRoom(r));
+                    RoomEntryPassage passage = FindPassageToRoom(ref r, passageGroups);
+                    result.Add(new GeneratedRoom(r, passage));
                 }
             }
         }
 
-        private RoomGroupMatrix PrepareMatrixFromRoom(List<Point> points)
+        private RoomGroupMatrix PrepareMatrixFromRoom(List<Point> points, Random rng)
         {
             RoomGroupMatrix matrix = new RoomGroupMatrix();
+            int chance = rng.Next(0, 100);
+
+            // roll chance for room to not appear at all
+            if (chance <= 40)
+                matrix.isInvalid = true;
+            else
+                matrix.isInvalid = false;
+
             int minX = points[0].X;
             int minY = points[0].Y;
             int maxX = 0;
@@ -241,6 +258,12 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
         private List<RoomGroupMatrix> SplitMatrixForFewRooms(ref RoomGroupMatrix matrix, List<Point> points, Random rng)
         {
             List<RoomGroupMatrix> list = new List<RoomGroupMatrix>();
+
+            if (matrix.isInvalid)
+            {
+                list.Add(matrix);
+                return list;
+            }
 
             CheckMatrixForWrongCells(ref matrix, points);
 
@@ -306,24 +329,54 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             int startX = minX;
             int startY = minY;
 
-            // test code
-            startX = sizeX - 1;
-            startY = sizeY - 1;
-            // 
-
             if (maxX == sizeX - 1)
                 startX = 0;
 
             if (maxY == sizeY - 1)
                 startY = 0;
 
-            if (startX == 0 || startY == 0)
+            // new offsets for matrix object
+            int newOffsetX = maxX - startX + 1;
+            int newOffsetY = maxY - startY + 1;
+
+            // calculate new size for matrix
+            int newSizeX = sizeX - newOffsetX;
+            int newSizeY = sizeY - newOffsetY;
+            int copyIndexX = maxX;
+            int copyIndexY = maxY;
+
+            // check if size is 0 and bring back previous size if it is
+            // + reset copy indexes and new offsets to 0
+            if (newSizeX == 0 || newSizeX < minRoomWidth)
             {
-                int newSizeX = sizeX - (maxX - startX + 1);
-                int newSizeY = sizeY - (maxY - startY + 1);
-
-
+                newSizeX = sizeX;
+                copyIndexX = 0;
+                newOffsetX = 0;
             }
+
+            if (newSizeY == 0 || newSizeY < minRoomHeight)
+            {
+                newSizeY = sizeY;
+                copyIndexY = 0;
+                newOffsetY = 0;
+            }
+
+            // allocate new matrix object which won't containt area to remove
+            RoomTileType[][] data = new RoomTileType[newSizeX][];
+            for (int i = 0; i < newSizeX; ++i)
+                data[i] = new RoomTileType[newSizeY];
+
+            // copy data from previous object to new object
+            for (int x = 0; x < newSizeX; ++x)
+            {
+                for (int y = 0; y < newSizeY; ++y)
+                    data[x][y] = matrix.data[copyIndexX + x][copyIndexY + y];
+            }
+
+            // swap objects
+            matrix.data = data;
+            // set new offsets
+            matrix.offset = new Point(matrix.offset.X + newOffsetX, matrix.offset.Y + newOffsetY);
         }
 
         private void SplitMatrixByAxisX(ref RoomGroupMatrix matrix, List<RoomGroupMatrix> list, Random rng, int sizeX, int sizeY)
@@ -454,6 +507,9 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
 
         private void BuildRoomFromMatrix(ref RoomGroupMatrix matrix)
         {
+            if (matrix.isInvalid)
+                return;
+
             int sizeX = matrix.data.Length;
             int sizeY = matrix.data[0].Length;
 
@@ -517,6 +573,49 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
                     }
                 }
             }
+        }
+
+        private RoomEntryPassage FindPassageToRoom(ref RoomGroupMatrix matrix, Dictionary<int, List<Point>> passageGroups)
+        {
+            RoomEntryPassage entryPassage = null;
+            PassageSide passageSide = PassageSide.PASSAGE_SIDE_LEFT_OR_RIGHT;
+            int groupToDelete = -1;
+
+            foreach(var passagePair in passageGroups)
+            {
+                if (passagePair.Value.Count == 0)
+                    continue;
+
+                // check only one element from all points
+                var passage = passagePair.Value[0];
+
+                if (passage.X >= matrix.offset.X && passage.X <= (matrix.data.Length - 1 + matrix.offset.X))
+                {
+                    if (passage.Y == (matrix.offset.Y - 1) || passage.Y == (matrix.data[0].Length + matrix.offset.Y))
+                    {
+                        groupToDelete = passagePair.Key;
+                        passageSide = PassageSide.PASSAGE_SIDE_UP_OR_DOWN;
+                        break;
+                    }
+                }
+                else if (passage.Y >= matrix.offset.Y && passage.Y <= (matrix.data[0].Length - 1 + matrix.offset.Y))
+                {
+                    if (passage.X == (matrix.offset.X - 1) || passage.X == (matrix.data.Length + matrix.offset.X))
+                    {
+                        groupToDelete = passagePair.Key;
+                        passageSide = PassageSide.PASSAGE_SIDE_LEFT_OR_RIGHT;
+                        break;
+                    }
+                }
+            }
+
+            if (groupToDelete != -1)
+            {
+                entryPassage = new RoomEntryPassage(passageGroups[groupToDelete], passageSide);
+                passageGroups.Remove(groupToDelete);
+            }
+
+            return entryPassage;
         }
 
         // Debug print which shows current elements for dictonary with groups
