@@ -55,7 +55,17 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, scale: scale, color: color);
+            if (texture.Name == "Items/Food/meat_with_label")
+            {
+                //thi
+
+                spriteBatch.Draw(texture: texture, destinationRectangle: new Rectangle((int)position.X, (int)position.Y, (int)size.X * 2, (int)size.Y * 2), scale: new Vector2(2f, 2f), color: color);
+            }
+            else
+            {
+                spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, scale: scale, color: color);
+            }
+
 
             foreach (var component in components)
                 component.Draw(spriteBatch);

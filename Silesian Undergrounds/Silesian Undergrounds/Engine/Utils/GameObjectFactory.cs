@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.SpecialItems;
 using Silesian_Undergrounds.Engine.CommonF;
 using Silesian_Undergrounds.Engine.Traps;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Utils
 {
@@ -262,6 +263,9 @@ namespace Silesian_Undergrounds.Engine.Utils
             if (type == FoodEnum.Meat)
                 textureName = "Items/Food/meat";
 
+            if (isBuyable)
+                textureName = "Items/Food/meat_with_label";
+
             return new Food(TextureMgr.Instance.GetTexture(textureName), position, size / 2, layer, scene, type, isBuyable: isBuyable);
         }
 
@@ -272,12 +276,22 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         public static Key KeyFactory(Vector2 position, Vector2 size, Scene.Scene scene, int layer = 3, bool isBuyable = false)
         {
-            return new Key(TextureMgr.Instance.GetTexture("Items/Keys/key_1"), position, size, layer, scene, isBuyable: isBuyable);
+            string textureName = "Items/Keys/key_1";
+
+            if (isBuyable)
+                textureName = "Items/Keys/key_1_label";
+
+            return new Key(TextureMgr.Instance.GetTexture(textureName), position, size, layer, scene, isBuyable: isBuyable);
         }
 
         public static Heart HeartFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false, int layer = 3)
         {
-            return new Heart(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, layer, scene, isBuyable: isBuyable);
+            string textureName = "Items/Heart/heart_1";
+
+            if (isBuyable)
+                textureName = "Items/Heart/heart_shop_1";
+
+            return new Heart(TextureMgr.Instance.GetTexture(textureName), position, size, layer, scene, isBuyable: isBuyable);
         }
 
         public static Spike SpikeFactory(Vector2 position, Vector2 size, Scene.Scene scene)
