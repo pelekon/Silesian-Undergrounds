@@ -383,7 +383,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
         {
             int chance = rng.Next(100);
             // Check chance to build one bigg room instead of two sepparate
-            if (chance < 45)
+            if (chance <= 45)
             {
                 list.Add(matrix);
                 return;
@@ -446,7 +446,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
         {
             int chance = rng.Next(100);
             // Check chance to build one bigg room instead of two sepparate
-            if (chance < 45)
+            if (chance <= 45)
             {
                 list.Add(matrix);
                 return;

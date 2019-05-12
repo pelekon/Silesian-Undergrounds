@@ -65,7 +65,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
                             objs.Add(new Tile(wallLeft, new Vector2(posX * ResolutionMgr.TileSize, posY * ResolutionMgr.TileSize), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), wallLayer));
                             break;
                         case RoomTileType.ROOM_TILE_WALL_RIGHT:
-                            objs.Add(new Tile(wallRight, new Vector2(posX * ResolutionMgr.TileSize, posY * ResolutionMgr.TileSize), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 0));
+                            objs.Add(new Tile(wallRight, new Vector2(posX * ResolutionMgr.TileSize, posY * ResolutionMgr.TileSize), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), wallLayer));
                             break;
                         case RoomTileType.ROOM_TILE_CORNER_UL:
                             objs.Add(new Tile(wallUpperLeft, new Vector2(posX * ResolutionMgr.TileSize, posY * ResolutionMgr.TileSize), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), wallLayer));
