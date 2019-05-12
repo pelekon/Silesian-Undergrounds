@@ -89,7 +89,7 @@ namespace Silesian_Undergrounds.Engine.Item
                         }
                     }
 
-                    foreach (var obj in GameObjectFactory.ScenePickableItemsFactory(list, this.scene, player.PlayerStatistic))
+                    foreach (var obj in GameObjectFactory.ScenePickableItemsFactory(list, this.scene, player.PlayerStatistic, generateChest: false))
                     {
                         this.scene.AddObject(obj);
                     }
