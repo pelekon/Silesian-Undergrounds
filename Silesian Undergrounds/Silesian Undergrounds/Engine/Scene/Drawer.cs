@@ -18,10 +18,11 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             public static void DrawBrightShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
             {      
-                _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _brightEffect);
-                _brightEffect.Parameters["brightFraction"].SetValue((float)0.65);
-                drawer.Invoke(_spriteBatch, _gameTime);
-                _spriteBatch.End();
+                // temporary commented
+               // _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _brightEffect);
+                //_brightEffect.Parameters["brightFraction"].SetValue((float)0.65);
+               // drawer.Invoke(_spriteBatch, _gameTime);
+               // _spriteBatch.End();
             }
 
             public static void DrawVisibilityRadiusShader(Action<SpriteBatch, GameTime> drawer, Vector2 lightSource, Matrix? transformMatrix = null)

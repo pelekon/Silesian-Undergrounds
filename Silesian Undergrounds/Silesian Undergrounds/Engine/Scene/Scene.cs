@@ -161,6 +161,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 {
                     if (obj is Player)
                         continue;
+
                     obj.Draw(spriteBatch);
                 }
             }, transformMatrix: camera.Transform);

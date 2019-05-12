@@ -6,6 +6,7 @@ using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Traps;
 using Silesian_Undergrounds.Engine.Item.Specials;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Utils
 {
@@ -80,28 +81,27 @@ namespace Silesian_Undergrounds.Engine.Utils
             }
         }
 
-        private static PickableEnum RandItem(Random random, PlayerStatistic playerStatistic = null)
+        private static PickableEnum RandItem(Random random, PlayerStatistic playerStatistic = null, bool generateChest = true)
         {
             int maxRandValue = 100;
 
-            if (playerStatistic != null)
+            if (generateChest && playerStatistic != null)
                 if (playerStatistic.ChestDropBooster)
                     maxRandValue += 20;
 
             int randed = random.Next(0, maxRandValue);
-
             if (randed <= 10)
                 return PickableEnum.None;
             else if (randed > 10 && randed <= 25)
                 return PickableEnum.Hearth;
             else if (randed > 25 && randed <= 45)
                 return PickableEnum.Food;
-            else if (randed > 45 && randed <= 75)
+            else if (randed > 45 && randed <= 90)
                 return PickableEnum.Ore;
-            else if (randed > 75 && randed <= 85)
+            else if (randed > 90 && randed <= 95)
                 return PickableEnum.Key;
             else
-                return PickableEnum.Chest;
+                return generateChest ? PickableEnum.Chest : PickableEnum.Ore;
         }
 
         #endregion
@@ -171,7 +171,7 @@ namespace Silesian_Undergrounds.Engine.Utils
 
 
         // renders random items (hearts, chests and ores) on the map
-        public static List<PickableItem> ScenePickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene, PlayerStatistic playerStatistic = null)
+        public static List<PickableItem> ScenePickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene, PlayerStatistic playerStatistic = null, bool generateChest = true)
         {
             List<PickableItem> list = new List<PickableItem>();
             Random random = new Random();
@@ -179,7 +179,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             foreach (var source in positionSources)
             {
 
-                PickableEnum itemType = RandItem(random, playerStatistic);
+                PickableEnum itemType = RandItem(random, playerStatistic, generateChest: generateChest);
                 if (itemType == PickableEnum.None)
                     continue;
 
@@ -216,19 +216,19 @@ namespace Silesian_Undergrounds.Engine.Utils
             switch (itemType)
             {
                 case SpecialItemEnum.LiveBooster:
-                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Special/liveBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new LiveBooster(TextureMgr.Instance.GetTexture("Items/Special/live-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.HungerBooster:
-                    return new HungerBooster(TextureMgr.Instance.GetTexture("Items/Special/hungerBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new HungerBooster(TextureMgr.Instance.GetTexture("Items/Special/hunger-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.MovementBooster:
-                    return new MovementBooster(TextureMgr.Instance.GetTexture("Items/Special/movementBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new MovementBooster(TextureMgr.Instance.GetTexture("Items/Special/movement-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.AttackBooster:
-                    return new AttackBooster(TextureMgr.Instance.GetTexture("Items/Special/attackBooster"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new AttackBooster(TextureMgr.Instance.GetTexture("Items/Special/atack-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.HungerImmunite:
-                    return new HungerImmunite(TextureMgr.Instance.GetTexture("Items/Special/hungerImmunite"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new HungerImmunite(TextureMgr.Instance.GetTexture("Items/Special/hunger-immunite-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 case SpecialItemEnum.PickupDouble:
-                    return new PickupDouble(TextureMgr.Instance.GetTexture("Items/Special/pickupDouble"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new PickupDouble(TextureMgr.Instance.GetTexture("Items/Special/pickup-double-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
                 default:
-                    return new ChestsDropBooster(TextureMgr.Instance.GetTexture("Items/Special/chestDrop"), position, size, (int)LayerEnum.SpecialItems, scene);
+                    return new ChestsDropBooster(TextureMgr.Instance.GetTexture("Items/Special/chest-droop-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
             }
         }
 
@@ -261,6 +261,9 @@ namespace Silesian_Undergrounds.Engine.Utils
             if (type == FoodEnum.Meat)
                 textureName = "Items/Food/meat";
 
+            if (isBuyable)
+                textureName = "Items/Food/meat_with_label";
+
             return new Food(TextureMgr.Instance.GetTexture(textureName), position, size / 2, layer, scene, type, isBuyable: isBuyable);
         }
 
@@ -271,12 +274,22 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         public static Key KeyFactory(Vector2 position, Vector2 size, Scene.Scene scene, int layer = 3, bool isBuyable = false)
         {
-            return new Key(TextureMgr.Instance.GetTexture("Items/Keys/key_1"), position, size, layer, scene, isBuyable: isBuyable);
+            string textureName = "Items/Keys/key_1";
+
+            if (isBuyable)
+                textureName = "Items/Keys/key_1_label";
+
+            return new Key(TextureMgr.Instance.GetTexture(textureName), position, size, layer, scene, isBuyable: isBuyable);
         }
 
         public static Heart HeartFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false, int layer = 3)
         {
-            return new Heart(TextureMgr.Instance.GetTexture("Items/Heart/heart_1"), position, size, layer, scene, isBuyable: isBuyable);
+            string textureName = "Items/Heart/heart_1";
+
+            if (isBuyable)
+                textureName = "Items/Heart/heart_shop_1";
+
+            return new Heart(TextureMgr.Instance.GetTexture(textureName), position, size, layer, scene, isBuyable: isBuyable);
         }
 
         public static Spike SpikeFactory(Vector2 position, Vector2 size, Scene.Scene scene)
