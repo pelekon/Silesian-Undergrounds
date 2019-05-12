@@ -64,7 +64,7 @@ namespace Silesian_Undergrounds.Engine.UI
                 (int)(Width * ResolutionMgr.xAxisUnit), (int)(Height * ResolutionMgr.yAxisUnit));
         }
 
-        protected bool IsMouseButtonClicked()
+        public bool IsMouseButtonClicked()
         {
             MouseState mouseState = Mouse.GetState();
 

@@ -62,6 +62,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             isPaused = true;
             canUnPause = false;
             camera = new Camera(null);
+            ui = new UIArea();
             InitLists();
         }
 
@@ -130,6 +131,14 @@ namespace Silesian_Undergrounds.Engine.Scene
             if (isPaused)
             {
                 pauseMenu.Update(gameTime);
+                if (pauseMenu is MainMenuView)
+                {
+                    MainMenuView maineMenu = pauseMenu as MainMenuView;
+                    if (maineMenu.GetStartGameButton().IsMouseButtonClicked())
+                    {
+                        isPaused = false;
+                    }
+                }
                 return;
             }
             

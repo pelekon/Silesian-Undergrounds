@@ -19,6 +19,7 @@ namespace Silesian_Undergrounds
 
         public List<String> scenes = new List<String>();
         public int levelCounter = 0;
+        public bool isPlayerInMaineMenu = true;
 
         Scene scene;
 
@@ -60,11 +61,11 @@ namespace Silesian_Undergrounds
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
 
-            #if DEBUG
-            scene = LevelsManagement();
-            #else
+            //#if DEBUG
+            //scene = LevelsManagement();
+            //#else
             scene = new Scene(new MainMenuView());
-            #endif
+            //#endif
 
             base.Initialize();
         }
@@ -96,6 +97,12 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if(!scene.isPaused && isPlayerInMaineMenu)
+            {
+                scene = LevelsManagement();
+                isPlayerInMaineMenu = false;
+            }
+
             if (!scene.isEnd)
                 scene.Update(gameTime);
             else
