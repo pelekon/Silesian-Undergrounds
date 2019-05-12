@@ -37,7 +37,7 @@ namespace Silesian_Undergrounds.Engine.UI.Controls
 
         public void SetOnClick(Func<bool> functionOnClick)
         {
-            OnMouseClick = functionOnClick;
+            OnMouseClick += functionOnClick;
         }
 
         private bool MouseClick()
