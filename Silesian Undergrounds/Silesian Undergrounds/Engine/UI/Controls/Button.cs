@@ -35,6 +35,11 @@ namespace Silesian_Undergrounds.Engine.UI.Controls
             OnMouseHoverStop = MouseHoverStop;
         }
 
+        public void SetOnClick(Func<bool> functionOnClick)
+        {
+            OnMouseClick += functionOnClick;
+        }
+
         private bool MouseClick()
         {
             return true;
@@ -55,14 +60,15 @@ namespace Silesian_Undergrounds.Engine.UI.Controls
 
             return true;
         }
-
+        
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
             if (IsMouseButtonClicked())
+            {
                 OnMouseClick.Invoke();
-
+            }
             if (IsMouseHovering() && !isHovering)
             {
                 isHovering = true;
