@@ -53,6 +53,7 @@ namespace Silesian_Undergrounds
             #endregion
 
             scenes.Add("level_1");
+            scenes.Add("level_2");
             scenes.Add("t");
             scenes.Add("drop");
             scenes.Add("drop2");
