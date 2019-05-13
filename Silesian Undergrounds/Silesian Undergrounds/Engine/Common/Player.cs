@@ -58,6 +58,11 @@ namespace Silesian_Undergrounds.Engine.Common
             statistics = globalPlayerStatistic;
         }
 
+        public void SetPosition(Vector2 position)
+        {
+            this.position = position;
+        }
+
         public bool checkIfEnoughMoney(int cost)
         {
             if (cost > statistics.Money)

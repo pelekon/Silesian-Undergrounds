@@ -124,4 +124,13 @@
  <tile id="42">
   <image width="64" height="64" source="../Content/Items/Wall/bricks-ledder.png"/>
  </tile>
+  <tile id="43">
+  <image width="64" height="64" source="../Content/test.png"/>
+ </tile>
+ <tile id="44">
+  <image width="64" height="64" source="../Content/kolejne.png"/>
+ </tile>
+ <tile id="45">
+  <image width="64" height="64" source="../Content/zielone.png"/>
+ </tile>
 </tileset>

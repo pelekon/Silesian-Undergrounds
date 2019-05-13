@@ -202,6 +202,7 @@
     <None Include="Data\dynamic_rooms.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Data\t.json" />
     <None Include="Data\test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
