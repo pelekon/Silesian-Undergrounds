@@ -56,7 +56,6 @@ namespace Silesian_Undergrounds
             scenes.Add("drop");
             scenes.Add("drop2");
             scenes.Add("drop3");
-            
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);

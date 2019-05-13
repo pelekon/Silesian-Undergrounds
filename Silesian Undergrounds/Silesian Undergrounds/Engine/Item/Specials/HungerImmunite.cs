@@ -1,17 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Collisions;
 
-namespace Silesian_Undergrounds.Engine.SpecialItems {
-    class LiveBooster : SpecialItem {
+namespace Silesian_Undergrounds.Engine.Item.Specials
+{
+    class HungerImmunite : SpecialItem {
 
-        private const int PLAYER_MAX_LIVE_VALUE_INCREASE_BY = 100;
-
-        public LiveBooster(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene) : base(texture, position, size, layer, scene)
+        public HungerImmunite(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene) : base(texture, position, size, layer, scene)
         {
-            BoxCollider collider = new BoxCollider(this, 35, 35, 0, -4, true);
+            BoxCollider collider = new BoxCollider(this, 20, 20, 0, 0, true);
             AddComponent(collider);
         }
 
@@ -22,7 +20,7 @@ namespace Silesian_Undergrounds.Engine.SpecialItems {
             if (obj is Player)
             {
                 Player pl = (Player)obj;
-                pl.IncreaseLiveMaxValueBy(PLAYER_MAX_LIVE_VALUE_INCREASE_BY);
+                pl.PlayerStatistic.ImmuniteToHunger = true;
                 this.scene.DeleteObject(this);
             }
         }

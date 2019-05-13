@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Collisions;
-using System.Diagnostics;
-using Silesian_Undergrounds.Engine.CommonF;
 using System.Collections.Generic;
 using System.Linq;
 

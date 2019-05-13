@@ -136,6 +136,9 @@ namespace Silesian_Undergrounds.Engine.Scene {
                             case (int)LayerEnum.SpecialItems:
                                 specialItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;
+                            case (int)LayerEnum.RandomRooms:
+                                // empty case, tile markers for random rooms shouldn't be rendered
+                                break;
                             default:
                                 tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
                                 break;

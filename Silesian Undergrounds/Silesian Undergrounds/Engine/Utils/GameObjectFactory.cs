@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Item;
 using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework;
-using Silesian_Undergrounds.Engine.SpecialItems;
-using Silesian_Undergrounds.Engine.CommonF;
 using Silesian_Undergrounds.Engine.Traps;
+using Silesian_Undergrounds.Engine.Item.Specials;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Utils

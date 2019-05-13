@@ -70,13 +70,18 @@
     <Compile Include="Engine\Enum\TrapsDamageEnum.cs" />
     <Compile Include="Engine\Item\Ground.cs" />
     <Compile Include="Engine\Item\Heart.cs" />
-    <Compile Include="Engine\SpecialItems\AttackBooster.cs" />
-    <Compile Include="Engine\SpecialItems\ChestsDropBooster.cs" />
-    <Compile Include="Engine\SpecialItems\HungerBooster.cs" />
-    <Compile Include="Engine\SpecialItems\HungerImmunite.cs" />
-    <Compile Include="Engine\SpecialItems\LiveBooster.cs" />
-    <Compile Include="Engine\SpecialItems\MovementBooster.cs" />
-    <Compile Include="Engine\SpecialItems\PickupDouble.cs" />
+    <Compile Include="Engine\Item\Specials\AttackBooster.cs" />
+    <Compile Include="Engine\Item\Specials\ChestsDropBooster.cs" />
+    <Compile Include="Engine\Item\Specials\HungerBooster.cs" />
+    <Compile Include="Engine\Item\Specials\HungerImmunite.cs" />
+    <Compile Include="Engine\Item\Specials\LiveBooster.cs" />
+    <Compile Include="Engine\Item\Specials\MovementBooster.cs" />
+    <Compile Include="Engine\Item\Specials\PickupDouble.cs" />
+    <Compile Include="Engine\Scene\RandomRooms\GeneratedRoom.cs" />
+    <Compile Include="Engine\Scene\RandomRooms\RoomEntryPassage.cs" />
+    <Compile Include="Engine\Scene\RandomRooms\RoomGenerator.cs" />
+    <Compile Include="Engine\Scene\RandomRooms\RoomGroupMatrix.cs" />
+    <Compile Include="Engine\Scene\RandomRooms\RoomSplitSide.cs" />
     <Compile Include="Engine\Traps\Spike.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
     <Compile Include="Engine\Utils\EnemyFactory.cs" />
@@ -192,7 +197,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Data\drop3.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\dynamic_rooms.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Data\test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
