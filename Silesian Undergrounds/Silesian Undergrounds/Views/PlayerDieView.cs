@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 namespace Silesian_Undergrounds.Views {
     class PlayerDieView : UIArea {
 
-        private string endGameMessage;
         private Button returnToMenuButton;
         private Label message;
 
