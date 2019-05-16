@@ -30,8 +30,9 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private float BonusMoveSpeed;
         private int health;
         private int maxHealth;
+        private int moneyReward;
 
-        public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, float bonusMoveSpeed = 0.0f, float minDist = 1)
+        public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, int moneyRew, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
             Parent = parent;
             Position = new Vector2(0, 0);
@@ -54,6 +55,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             this.health = health;
             maxHealth = health;
+            moneyReward = moneyRew;
         }
 
         public void CleanUp()
@@ -86,7 +88,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             if (health <= 0)
             {
                 Player plr = enemy as Player;
-                plr.AddMoney(20);
+                plr.AddMoney(moneyReward);
                 DropCombat();
                 // TODO: swap this code with proper handler working wiht on death anim
                 Scene.SceneManager.GetCurrentScene().DeleteObject(Parent);
