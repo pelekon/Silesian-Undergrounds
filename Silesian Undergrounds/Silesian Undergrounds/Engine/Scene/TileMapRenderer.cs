@@ -17,6 +17,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
         private List<Tile> transitions = new List<Tile>();
         private List<GameObject> enemies = new List<GameObject>();
         private List<GameObject> specialItems = new List<GameObject>();
+        public Vector2 position = new Vector2();
         private int width, height;
 
         public List<GameObject> SpecialItems
@@ -100,6 +101,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
             specialItems = new List<GameObject>();
             enemies = new List<GameObject>();
             shopPickableItems = new List<GameObject>();
+            position = new Vector2();
 
             foreach (var item in map)
             {
@@ -135,6 +137,9 @@ namespace Silesian_Undergrounds.Engine.Scene {
                                 break;
                             case (int)LayerEnum.SpecialItems:
                                 specialItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.PlayerSpawn:
+                                this.position = new Vector2(x, y);
                                 break;
                             case (int)LayerEnum.RandomRooms:
                                 // empty case, tile markers for random rooms shouldn't be rendered

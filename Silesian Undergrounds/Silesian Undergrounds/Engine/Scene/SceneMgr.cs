@@ -10,6 +10,7 @@ using Silesian_Undergrounds.Engine.Item;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Scene.RandomRooms;
 using System.Threading;
+using Microsoft.Xna.Framework;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -58,6 +59,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             if (!LoadSceneFile(path, scene, tileSize)) return null;
 
             _currentScene = scene;
+            scene.player.SetPosition(Renderer.position * new Vector2(64, 64));
             return scene;
         }
 
