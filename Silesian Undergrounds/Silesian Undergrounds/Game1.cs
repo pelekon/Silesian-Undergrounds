@@ -136,10 +136,17 @@ namespace Silesian_Undergrounds
             return true;
         }
 
+        protected bool ExitGame()
+        {
+            this.Exit();
+            return true;
+        }
+
         protected Scene SetMainMenuScene()
         {
             MainMenuView mainMenu = new MainMenuView();
             mainMenu.GetStartGameButton().SetOnClick(StartGame);
+            mainMenu.GetExitButton().SetOnClick(ExitGame);
             return new Scene(mainMenu);
         }
     }
