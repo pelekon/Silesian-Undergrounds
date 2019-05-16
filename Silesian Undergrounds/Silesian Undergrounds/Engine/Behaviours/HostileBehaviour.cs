@@ -28,9 +28,10 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private float MinDistToEnemy;
         AttackPattern attackPattern;
         private float BonusMoveSpeed;
-        private bool IsEvading;
+        private int health;
+        private int maxHealth;
 
-        public HostileBehaviour(GameObject parent, AttackPattern pattern, float bonusMoveSpeed = 0.0f, float minDist = 1)
+        public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
             Parent = parent;
             Position = new Vector2(0, 0);
@@ -50,6 +51,9 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             events = new TimedEventsScheduler();
             attackPattern = pattern;
+
+            this.health = health;
+            maxHealth = health;
         }
 
         public void CleanUp()
@@ -72,6 +76,20 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             {
                 CheckDistanceToEnemy();
                 events.Update(gameTime);
+            }
+        }
+
+        public void GetDamage(int dmg)
+        {
+            health -= dmg;
+
+            if (health <= 0)
+            {
+                Player plr = enemy as Player;
+                plr.AddMoney(20);
+                DropCombat();
+                // TODO: swap this code with proper handler working wiht on death anim
+                Scene.SceneManager.GetCurrentScene().DeleteObject(Parent);
             }
         }
 
