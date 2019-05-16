@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +18,8 @@ namespace Silesian_Undergrounds.Engine.Common
         public event EventHandler<PropertyChangedArgs<int>> LiveChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> HungerMaxValueChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
+
+        private Func<bool> OnPlayeDeath;
 
         // determines if the player is in 'attacking' mode (now just digging)
         bool attacking = false;
@@ -61,6 +63,11 @@ namespace Silesian_Undergrounds.Engine.Common
         public void SetPosition(Vector2 position)
         {
             this.position = position;
+        }
+
+        public void SetOnDeath(Func<bool> functionOnDeath)
+        {
+            OnPlayeDeath += functionOnDeath;
         }
 
         public bool checkIfEnoughMoney(int cost)
@@ -180,8 +187,11 @@ namespace Silesian_Undergrounds.Engine.Common
                 else
                     LiveValue = 0;
             }
-            else
+
+            if (LiveValue <= 0)
             {
+                System.Diagnostics.Debug.WriteLine("Śmierć");
+                OnPlayeDeath.Invoke();
                 //TODO player die
             }
         }

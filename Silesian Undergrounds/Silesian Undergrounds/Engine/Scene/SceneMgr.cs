@@ -27,9 +27,9 @@ namespace Silesian_Undergrounds.Engine.Scene
         #endregion
 
         #region PLAYER_BASIC_STATISTICS
-        private const int PLAYER_BASIC_HEALTH = 100;
+        private const int PLAYER_BASIC_HEALTH = 10;
         private const int PLAYER_BASIC_MAX_HEALTH = 150;
-        private const int PLAYER_BASIC_HUNGER = 100;
+        private const int PLAYER_BASIC_HUNGER = 0;
         private const int PLAYER_BASIC_MAX_HUNGER = 150;
         private const float PLAYER_BASIC_ATTACK_SPEED = 1.0f;
         private const float PLAYER_BASIC_MOVEMENT_SPEED = 2.0f;
@@ -61,6 +61,11 @@ namespace Silesian_Undergrounds.Engine.Scene
             _currentScene = scene;
             scene.player.SetPosition(Renderer.position * new Vector2(64, 64));
             return scene;
+        }
+
+        public static void ClearPlayerStatistics()
+        {
+            playerStatistic = null;
         }
 
         private static bool LoadSceneFile(string filePath, Scene scene, int tileSize)

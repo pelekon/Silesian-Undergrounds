@@ -127,7 +127,9 @@ namespace Silesian_Undergrounds
             System.Diagnostics.Debug.WriteLine("Current scene: " + sceneName);
             #endif
             levelCounter++;
-            return SceneManager.LoadScene(sceneName, 64);
+            Scene sceneToLoad = SceneManager.LoadScene(sceneName, 64);
+            sceneToLoad.player.SetOnDeath(EndGame);
+            return sceneToLoad;
         }
 
         protected bool StartGame()
@@ -142,12 +144,33 @@ namespace Silesian_Undergrounds
             return true;
         }
 
+        protected bool EndGame()
+        {
+            this.scene = SetEndGameScene();
+            return true;
+        }
+
+        protected bool ReturnToMenu()
+        {
+            levelCounter = 0;
+            SceneManager.ClearPlayerStatistics();
+            this.scene = SetMainMenuScene();
+            return true;
+        }
+
         protected Scene SetMainMenuScene()
         {
             MainMenuView mainMenu = new MainMenuView();
             mainMenu.GetStartGameButton().SetOnClick(StartGame);
             mainMenu.GetExitButton().SetOnClick(ExitGame);
             return new Scene(mainMenu);
+        }
+
+        protected Scene SetEndGameScene()
+        {
+            PlayerDieView endGameWhenPlayerDie = new PlayerDieView();
+            endGameWhenPlayerDie.GetReturnToMenuButton().SetOnClick(ReturnToMenu);
+            return new Scene(endGameWhenPlayerDie);
         }
     }
 }
