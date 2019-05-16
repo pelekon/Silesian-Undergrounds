@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Collisions;
+using Silesian_Undergrounds.Engine.Behaviours;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
@@ -19,9 +20,6 @@ namespace Silesian_Undergrounds.Engine.Common
         public event EventHandler<PropertyChangedArgs<int>> HungerMaxValueChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
 
-        // determines if the player is in 'attacking' mode (now just digging)
-        bool attacking = false;
-
         private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
         private int HUNGER_DECREASE_VALUE = 5;
         private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
@@ -33,6 +31,8 @@ namespace Silesian_Undergrounds.Engine.Common
         private BoxCollider collider;
 
         private PlayerStatistic statistics;
+
+        private PlayerBehaviour behaviour;
 
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale, PlayerStatistic globalPlayerStatistic) : base(position, size, layer, scale)
         {
@@ -56,6 +56,8 @@ namespace Silesian_Undergrounds.Engine.Common
             collider = new BoxCollider(this, PLAYER_COLLIDER_BOX_WIDTH, PLAYER_COLLIDER_BOX_HEIGHT, -2, -4, false);
             AddComponent(collider);
             statistics = globalPlayerStatistic;
+            behaviour = new PlayerBehaviour(this);
+            AddComponent(behaviour);
         }
 
         public void SetPosition(Vector2 position)
@@ -309,36 +311,36 @@ namespace Silesian_Undergrounds.Engine.Common
 
         private void HandleInput(KeyboardState keyState)
         {
-            if (!attacking)
+            if (keyState.IsKeyDown(Keys.W))
             {
-                if (keyState.IsKeyDown(Keys.W))
-                {
-                    sDirection += new Vector2(0, -1 * this.statistics.MovementSpeed);
-                    PlayAnimation("Up");
-                    currentDirection = movementDirection.up;
+                sDirection += new Vector2(0, -1 * this.statistics.MovementSpeed);
+                PlayAnimation("Up");
+                currentDirection = movementDirection.up;
+                behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_NORTH);
 
-                }
-                if (keyState.IsKeyDown(Keys.A))
-                {
-                    sDirection += new Vector2(-1 * this.statistics.MovementSpeed, 0);
-                    PlayAnimation("Left");
-                    currentDirection = movementDirection.left;
+            }
+            if (keyState.IsKeyDown(Keys.A))
+            {
+                sDirection += new Vector2(-1 * this.statistics.MovementSpeed, 0);
+                PlayAnimation("Left");
+                currentDirection = movementDirection.left;
+                behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_WEST);
 
-                }
-                if (keyState.IsKeyDown(Keys.S))
-                {
-                    sDirection += new Vector2(0, 1 * this.statistics.MovementSpeed);
-                    PlayAnimation("Down");
-                    currentDirection = movementDirection.down;
+            }
+            if (keyState.IsKeyDown(Keys.S))
+            {
+                sDirection += new Vector2(0, 1 * this.statistics.MovementSpeed);
+                PlayAnimation("Down");
+                currentDirection = movementDirection.down;
+                behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_SOUTH);
 
-                }
-                if (keyState.IsKeyDown(Keys.D))
-                {
-                    sDirection += new Vector2(1 * this.statistics.MovementSpeed, 0);
-                    PlayAnimation("Right");
-                    currentDirection = movementDirection.right;
-
-                }
+            }
+            if (keyState.IsKeyDown(Keys.D))
+            {
+                sDirection += new Vector2(1 * this.statistics.MovementSpeed, 0);
+                PlayAnimation("Right");
+                currentDirection = movementDirection.right;
+                behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_EAST);
             }
 
             currentDirection = movementDirection.standstill;
@@ -349,13 +351,10 @@ namespace Silesian_Undergrounds.Engine.Common
            if (animation.Contains("Attack"))
            {
                Debug.WriteLine("Attack!");
-               attacking = false;
            } else if(IsAnimationMovement(animation))
            {
                 currentAnimation = "Idle" + animation;
            }
-
-
         }
 
         // determines if current animation is up/donw/right/left
