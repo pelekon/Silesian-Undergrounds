@@ -10,11 +10,15 @@
 Texture2D SpriteTexture;
 sampler s0;
 
-float brightFraction;
-
 sampler2D SpriteTextureSampler = sampler_state
 {
 	Texture = <SpriteTexture>;
+};
+
+Texture2D lightRaysMask;
+sampler2D lightTextureSampler = sampler_state
+{
+	Texture = <lightRaysMask>;
 };
 
 struct VertexShaderOutput
@@ -27,7 +31,9 @@ struct VertexShaderOutput
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	float4 color = tex2D(s0, input.TextureCoordinates);
-	return saturate((color - brightFraction) / (1 - brightFraction));
+	float4 lightcolor = tex2D(lightTextureSampler, input.TextureCoordinates);
+	
+	return color * lightcolor;
 }
 
 technique SpriteDrawing

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -15,14 +16,14 @@ namespace Silesian_Undergrounds.Engine.Scene
         public static class Shaders
         {
             private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect;
+            private static Texture2D _brightningTexture;
 
             public static void DrawBrightShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
             {      
-                // temporary commented
-               // _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _brightEffect);
-                //_brightEffect.Parameters["brightFraction"].SetValue((float)0.65);
-               // drawer.Invoke(_spriteBatch, _gameTime);
-               // _spriteBatch.End();
+                _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _brightEffect);
+                _brightEffect.Parameters["lightRaysMask"].SetValue(_brightningTexture);
+                drawer.Invoke(_spriteBatch, _gameTime);
+                _spriteBatch.End();
             }
 
             public static void DrawVisibilityRadiusShader(Action<SpriteBatch, GameTime> drawer, Vector2 lightSource, Matrix? transformMatrix = null)
@@ -55,6 +56,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 _shadowEffect = content.Load<Effect>("ShadowShader");
                 _grayScaleEffect = content.Load<Effect>("GrayScaleShader");
                 _visibilityRadiusShader = content.Load<Effect>("VisibilityRadiusShader");
+                _brightningTexture = TextureMgr.Instance.GetTexture("rays_map");
                 _brightEffect = content.Load<Effect>("BrighteningShader");
             }
 

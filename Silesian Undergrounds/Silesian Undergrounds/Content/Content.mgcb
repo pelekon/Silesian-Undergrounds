@@ -1167,6 +1167,30 @@
 /processorParam:TextureFormat=Color
 /build:minerCharacter.png
 
+#begin rays_map.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:rays_map.png
+
+#begin rays_map.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:rays_map.png
+
 #begin right.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1202,6 +1226,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:right-entry-top.png
+
+#begin sample.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:sample.fx
 
 #begin ShadowShader.fx
 /importer:EffectImporter
