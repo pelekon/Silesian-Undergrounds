@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using Silesian_Undergrounds.Engine.Scene;
+﻿using Newtonsoft.Json;
 
 namespace Silesian_Undergrounds.Engine.Config
 {
@@ -46,9 +44,11 @@ namespace Silesian_Undergrounds.Engine.Config
         [JsonProperty("heart", Required = Required.Always)]
         public HeartConfig Heart { get; set; }
         [JsonProperty("attack-booster", Required = Required.Always)]
-        public AttackBooster AttackBooster { get; set; }
+        public AttackBoosterConfig AttackBooster { get; set; }
         [JsonProperty("hunger-booster", Required = Required.Always)]
-        public HungerBooster HungerBooster { get; set; }
+        public HungerBoosterConfig HungerBooster { get; set; }
+        [JsonProperty("live-booster", Required = Required.Always)]
+        public LiveBoosterConfig LiveBoosterConfig { get; set; }
     }
 
     public class HeartConfig
@@ -58,14 +58,19 @@ namespace Silesian_Undergrounds.Engine.Config
         [JsonProperty("live-regeneration-value", Required = Required.Always)]
         public int LiveRegenerationValue { get; set; }
     }
-    public class AttackBooster
+    public class AttackBoosterConfig
     {
         [JsonProperty("player-attack-increase-by", Required = Required.Always)]
         public float PlayerAttackIncreaseBy { get; set; }
     }
-    public class HungerBooster
+    public class HungerBoosterConfig
     {
         [JsonProperty("player-max-hunger-value-increase-by", Required = Required.Always)]
         public int PlayerMaxHungerValueIncreaseBy { get; set; }
+    }
+    public class LiveBoosterConfig
+    {
+        [JsonProperty("player-max-live-value-increase-by", Required = Required.Always)]
+        public int PlayerMaxLiveValueIncreaseBy { get; set; }
     }
 }

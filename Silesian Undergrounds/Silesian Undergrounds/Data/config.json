@@ -23,6 +23,9 @@
     },
     "hunger-booster": {
       "player-max-hunger-value-increase-by": 100
+    },
+    "live-booster": {
+      "player-max-live-value-increase-by": 100
     }
   }
 }

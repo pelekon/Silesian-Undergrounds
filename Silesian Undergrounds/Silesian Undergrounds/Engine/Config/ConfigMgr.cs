@@ -1,10 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.CompilerServices;
-using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
-using Silesian_Undergrounds.Engine.Common;
-using Silesian_Undergrounds.Engine.Scene;
 
 namespace Silesian_Undergrounds.Engine.Config
 {
@@ -18,8 +14,9 @@ namespace Silesian_Undergrounds.Engine.Config
         public static ChestConfig ChestConfig => _config.Chest;
         public static PickableConfig PickableConfig => _config.Pickable;
         public static HeartConfig HeartConfig => _config.Pickable.Heart;
-        public static AttackBooster AtackBoosterConfig => _config.Pickable.AttackBooster;
-        public static HungerBooster HungerBoosterConfig => _config.Pickable.HungerBooster;
+        public static AttackBoosterConfig AtackBoosterConfig => _config.Pickable.AttackBooster;
+        public static HungerBoosterConfig HungerBoosterConfig => _config.Pickable.HungerBooster;
+        public static LiveBoosterConfig LiveBoosterConfig => _config.Pickable.LiveBoosterConfig;
 
         public static Config LoadConfig()
         {
