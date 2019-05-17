@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Utils;
+using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Views;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,7 @@ namespace Silesian_Undergrounds
             scenes.Add("t");
             scenes.Add("drop");
             scenes.Add("drop2");
-            scenes.Add("drop3");
+            //scenes.Add("drop3");
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
@@ -127,8 +128,19 @@ namespace Silesian_Undergrounds
             System.Diagnostics.Debug.WriteLine("Current scene: " + sceneName);
             #endif
             levelCounter++;
-            Scene sceneToLoad = SceneManager.LoadScene(sceneName, 64);
-            sceneToLoad.player.SetOnDeath(EndGame);
+            Scene sceneToLoad;
+            if (levelCounter == scenes.Count)
+            {
+                sceneToLoad = SceneManager.LoadScene(sceneName, 64);
+                sceneToLoad.SetLastScene(true);
+                sceneToLoad.SetOnWin(EndGamePlayerWin);
+            }
+
+            else
+                sceneToLoad = SceneManager.LoadScene(sceneName, 64);
+
+            sceneToLoad.player.SetOnDeath(EndGamePlayerDie);
+
             return sceneToLoad;
         }
 
@@ -144,9 +156,15 @@ namespace Silesian_Undergrounds
             return true;
         }
 
-        protected bool EndGame()
+        protected bool EndGamePlayerDie()
         {
-            this.scene = SetEndGameScene();
+            this.scene = SetEndGameScene(EndGameEnum.Lost);
+            return true;
+        }
+
+        protected bool EndGamePlayerWin()
+        {
+            this.scene = SetEndGameScene(EndGameEnum.Win);
             return true;
         }
 
@@ -166,11 +184,22 @@ namespace Silesian_Undergrounds
             return new Scene(mainMenu);
         }
 
-        protected Scene SetEndGameScene()
+        protected Scene SetEndGameScene(EndGameEnum endGameEnum)
         {
-            PlayerDieView endGameWhenPlayerDie = new PlayerDieView();
-            endGameWhenPlayerDie.GetReturnToMenuButton().SetOnClick(ReturnToMenu);
-            return new Scene(endGameWhenPlayerDie);
+
+            if(endGameEnum == EndGameEnum.Lost)
+            {
+                PlayerDieView endGameWhenPlayerDie = new PlayerDieView();
+                endGameWhenPlayerDie.GetReturnToMenuButton().SetOnClick(ReturnToMenu);
+                return new Scene(endGameWhenPlayerDie);
+            }
+            else
+            {
+                PlayerWinView endGameWhenPlayerWin = new PlayerWinView();
+                endGameWhenPlayerWin.GetReturnToMenuButton().SetOnClick(ReturnToMenu);
+                return new Scene(endGameWhenPlayerWin);
+            }
+
         }
     }
 }

@@ -7,6 +7,7 @@ using Silesian_Undergrounds.Engine.UI;
 using Silesian_Undergrounds.Views;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
+using System;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -23,9 +24,11 @@ namespace Silesian_Undergrounds.Engine.Scene
         private UIArea ui;
         private UIArea pauseMenu;
         public Camera camera { get; private set; }
+        private Func<bool> OnPlayerWin;
 
         public bool isPaused { get; private set; }
         public bool isEnd { get; private set; }
+        public bool lastScene { get; private set; }
         private readonly bool canUnPause;
 
         #endregion
@@ -42,7 +45,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
             player.Initialize();
             gameObjects.Add(player);
-
+            this.lastScene = lastScene;
             camera = new Camera(player);
             ui = new InGameUI(player);
             pauseMenu = new UIArea(); // TEMP SET EMPTY PAUSE MENU
@@ -66,8 +69,17 @@ namespace Silesian_Undergrounds.Engine.Scene
             objectsToAdd = new List<GameObject>();
             transitions = new List<GameObject>();
         }
-
         #region SCENE_OBJECTS_MANAGMENT_METHODS
+
+        public void SetOnWin(Func<bool> functionOnWin)
+        {
+            this.OnPlayerWin += functionOnWin;
+        }
+
+        public void SetLastScene(bool isLastScene)
+        {
+            this.lastScene = isLastScene;
+        }
 
         public void AddTransition(GameObject obj)
         {
@@ -139,6 +151,10 @@ namespace Silesian_Undergrounds.Engine.Scene
             ui.Update(gameTime);
 
             DetectPlayerOnTransition();
+            if(isEnd && lastScene)
+            {
+                OnPlayerWin.Invoke();
+            }
         }
 
         public void Draw()

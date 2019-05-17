@@ -27,12 +27,12 @@ namespace Silesian_Undergrounds.Engine.Scene
         #endregion
 
         #region PLAYER_BASIC_STATISTICS
-        private const int PLAYER_BASIC_HEALTH = 10;
+        private const int PLAYER_BASIC_HEALTH = 100;
         private const int PLAYER_BASIC_MAX_HEALTH = 150;
-        private const int PLAYER_BASIC_HUNGER = 0;
+        private const int PLAYER_BASIC_HUNGER = 100;
         private const int PLAYER_BASIC_MAX_HUNGER = 150;
         private const float PLAYER_BASIC_ATTACK_SPEED = 1.0f;
-        private const float PLAYER_BASIC_MOVEMENT_SPEED = 2.0f;
+        private const float PLAYER_BASIC_MOVEMENT_SPEED = 6.0f;
         private const int PLAYER_BASIC_DAMAGE = 10;
         private const int PLAYER_BASIC_KEY_AMOUNT = 0;
         private const int PLAYER_BASIC_MONEY_AMOUNT = 0;

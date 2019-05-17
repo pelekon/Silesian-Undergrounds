@@ -191,9 +191,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
             if (LiveValue <= 0)
             {
-                System.Diagnostics.Debug.WriteLine("Śmierć");
                 OnPlayeDeath.Invoke();
-                //TODO player die
             }
         }
 
