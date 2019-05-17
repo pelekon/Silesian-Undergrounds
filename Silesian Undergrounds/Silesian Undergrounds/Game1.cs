@@ -38,6 +38,9 @@ namespace Silesian_Undergrounds
         /// </summary>
         protected override void Initialize()
         {
+            #region LOAD_CONFIG
+            ConfigMgr.LoadConfig();
+            #endregion
             #region GRAPHIC_SETTINGS_INIT
             // Window.AllowAltF4 = true;
             IsMouseVisible = true;
@@ -63,8 +66,6 @@ namespace Silesian_Undergrounds
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
-            Config config = ConfigMgr.LoadConfig();
-
             scene = SetMainMenuScene();
 
             base.Initialize();

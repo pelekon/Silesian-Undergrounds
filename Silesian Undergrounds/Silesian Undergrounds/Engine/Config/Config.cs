@@ -29,6 +29,33 @@ namespace Silesian_Undergrounds.Engine.Config
         public int PlayerColliderBoxWidth { get; set; }
         [JsonProperty("player-collider-box-height", Required = Required.Always)]
         public int PlayerColliderBoxHeight { get; set; }
+
+        [JsonProperty("health", Required = Required.Always)]
+        public int Health { get; set; }
+
+        [JsonProperty("max-health", Required = Required.Always)]
+        public int MaxHealth { get; set; }
+
+        [JsonProperty("hunger", Required = Required.Always)]
+        public int Hunger { get; set; }
+
+        [JsonProperty("max-hunger", Required = Required.Always)]
+        public int MaxHunger { get; set; }
+
+        [JsonProperty("attack-speed", Required = Required.Always)]
+        public float AttackSpeed { get; set; }
+
+        [JsonProperty("movement-speed", Required = Required.Always)]
+        public float MovementSpeed { get; set; }
+
+        [JsonProperty("key-amount", Required = Required.Always)]
+        public int KeyAmount { get; set; }
+
+        [JsonProperty("money-amount", Required = Required.Always)]
+        public int MoneyAmount { get; set; }
+
+        [JsonProperty("damage", Required = Required.Always)]
+        public int Damage { get; set; }
     }
 
     public class ChestConfig

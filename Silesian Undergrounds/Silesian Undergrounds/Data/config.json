@@ -1,11 +1,19 @@
 ﻿{
   "player": {
-    "player-speed": 564,
     "hunger-decrese-interval-in-seconds": 10,
     "hunger-decrease-value": 5,
     "live-decrease-value-when-hunger-is-zero": 20,
     "player-collider-box-width": 60,
-    "player-collider-box-height": 60
+    "player-collider-box-height": 60,
+    "health": 100,
+    "max-health": 150,
+    "hunger": 100,
+    "max-hunger": 150,
+    "attack-speed": 1.0,
+    "movement-speed": 2.0,
+    "damage": 10,
+    "key-amount": 0,
+    "money-amount": 0
   },
   "terrain": {
     "percentage-of-textures-with-things": 25
