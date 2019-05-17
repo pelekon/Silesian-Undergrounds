@@ -140,6 +140,7 @@ namespace Silesian_Undergrounds
                 sceneToLoad = SceneManager.LoadScene(sceneName, 64);
 
             sceneToLoad.player.SetOnDeath(EndGamePlayerDie);
+            sceneToLoad.SetEndGameButtonInPauseMenu(ReturnToMenu);
 
             return sceneToLoad;
         }

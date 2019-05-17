@@ -48,11 +48,16 @@ namespace Silesian_Undergrounds.Engine.Scene
             this.lastScene = lastScene;
             camera = new Camera(player);
             ui = new InGameUI(player);
-            pauseMenu = new UIArea(); // TEMP SET EMPTY PAUSE MENU
+            pauseMenu = CreatePauseMenu();
             canUnPause = true;
         }
 
-
+        private PauseView CreatePauseMenu()
+        {
+            PauseView pauseView = new PauseView();
+            pauseView.GetResumeButton().SetOnClick(ResumeGame);
+            return pauseView;
+        }
         public Scene(UIArea area)
         {
             pauseMenu = area;
@@ -74,6 +79,19 @@ namespace Silesian_Undergrounds.Engine.Scene
         public void SetOnWin(Func<bool> functionOnWin)
         {
             this.OnPlayerWin += functionOnWin;
+        }
+
+        public void SetEndGameButtonInPauseMenu(Func<bool> functionOnExitGame)
+        {
+            PauseView pV = (PauseView)this.pauseMenu;
+            pV.GetEndGameButton().SetOnClick(functionOnExitGame);
+            this.pauseMenu = pV;
+        }
+
+        public bool ResumeGame()
+        {
+            this.isPaused = false;
+            return true;
         }
 
         public void SetLastScene(bool isLastScene)
