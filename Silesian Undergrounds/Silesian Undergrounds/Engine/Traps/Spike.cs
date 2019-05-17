@@ -31,8 +31,8 @@ namespace Silesian_Undergrounds.Engine.Traps
             TextureMgr.Instance.LoadIfNeeded("Items/Traps/temporary_spike_2");
             TextureMgr.Instance.LoadIfNeeded("Items/Traps/temporary_spike_3");
 
-            FramesPerSecond = 1;
-            BoxCollider collider = new BoxCollider(this, 59, 46, 0, 0, true);
+            FramesPerSecond = 5;
+            BoxCollider collider = new BoxCollider(this, 20, 20, 0, 0, true);
             AddComponent(collider);
         }
 
@@ -43,10 +43,11 @@ namespace Silesian_Undergrounds.Engine.Traps
 
             if ((obj is Player) && !WasPicked)
             {
-              // add damage
+                // add damage
+              WasPicked = true;
               Player player = obj as Player;
               player.DecreaseLiveValue((int)TrapsDamageEnum.Spikes);
-              WasPicked = true;
+              
               
                 //this.scene.DeleteObject(this);
             }

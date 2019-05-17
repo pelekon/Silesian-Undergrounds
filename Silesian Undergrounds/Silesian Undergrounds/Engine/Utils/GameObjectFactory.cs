@@ -14,7 +14,7 @@ namespace Silesian_Undergrounds.Engine.Utils
     {
 
         #region GENERATION_PARAMETERS
-        private static double trapPropability = 0.1;
+        private static double trapPropability = 0.5;
         private static int NUMBER_OF_SHOP_ITEMS_TYPES = 3;
         #endregion
 
