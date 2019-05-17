@@ -26,6 +26,9 @@
     },
     "live-booster": {
       "player-max-live-value-increase-by": 100
+    },
+    "movement-booster": {
+      "player-movement-increase-by": 1.0
     }
   }
 }

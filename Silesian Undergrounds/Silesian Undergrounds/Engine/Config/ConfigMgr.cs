@@ -17,6 +17,7 @@ namespace Silesian_Undergrounds.Engine.Config
         public static AttackBoosterConfig AtackBoosterConfig => _config.Pickable.AttackBooster;
         public static HungerBoosterConfig HungerBoosterConfig => _config.Pickable.HungerBooster;
         public static LiveBoosterConfig LiveBoosterConfig => _config.Pickable.LiveBoosterConfig;
+        public static MovementBoosterConfig MovementBoosterConfig => _config.Pickable.MovementBoosterConfig;
 
         public static Config LoadConfig()
         {
