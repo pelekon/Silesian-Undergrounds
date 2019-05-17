@@ -20,6 +20,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public Color color = Color.White;
         public Rectangle Rectangle { get { return new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y); } }
         protected List<IComponent> components;
+        private bool canDrawItself;
 
         public event EventHandler<CollisionNotifyData> OnCollision = delegate { };
 
@@ -33,6 +34,7 @@ namespace Silesian_Undergrounds.Engine.Common
             speed = 1.0f;
 
             components = new List<IComponent>();
+            canDrawItself = true;
         }
 
         // causes movement
@@ -55,17 +57,19 @@ namespace Silesian_Undergrounds.Engine.Common
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (texture.Name == "Items/Food/meat_with_label")
+            if (canDrawItself)
             {
-                //thi
+                if (texture.Name == "Items/Food/meat_with_label")
+                {
+                    //thi
 
-                spriteBatch.Draw(texture: texture, destinationRectangle: new Rectangle((int)position.X, (int)position.Y, (int)size.X * 2, (int)size.Y * 2), scale: new Vector2(2f, 2f), color: color);
+                    spriteBatch.Draw(texture: texture, destinationRectangle: new Rectangle((int)position.X, (int)position.Y, (int)size.X * 2, (int)size.Y * 2), scale: new Vector2(2f, 2f), color: color);
+                }
+                else
+                {
+                    spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, scale: scale, color: color);
+                }
             }
-            else
-            {
-                spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, scale: scale, color: color);
-            }
-
 
             foreach (var component in components)
                 component.Draw(spriteBatch);
@@ -103,5 +107,7 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             OnCollision.Invoke(this, new CollisionNotifyData(gameobject, source));
         }
+
+        public void ChangeDrawAbility(bool val) { canDrawItself = val; }
     }
 }

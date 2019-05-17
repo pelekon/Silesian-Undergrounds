@@ -19,5 +19,22 @@ namespace Silesian_Undergrounds.Engine.Utils
 
             return list;
         }
+
+        public static GameObject MinotaurFactory(Vector2 position)
+        {
+            TextureMgr.Instance.LoadSingleTextureFromSpritescheet("Monsters/128x80Minotaur_FullSheet", "Monsters/Minotaur", 6, 8, 0, 0);
+            Texture2D texture = TextureMgr.Instance.GetTexture("Monsters/Minotaur");
+
+            if (TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/128x80Minotaur_FullSheet", "Monsters/Minotaur_Attack", 6, 8, 2, 8, false))
+                TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/128x80Minotaur_FullSheet", "Monsters/Minotaur_Attack", 6, 8, 3, 8, true);
+
+            GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
+            AttackPattern attackPattern = new AttackPattern();
+            HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
+            obj.AddComponent(behaviour);
+            behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_Attack"), 4000);
+
+            return obj;
+        }
     }
 }

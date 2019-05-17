@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Common;
@@ -59,7 +56,10 @@ namespace Silesian_Undergrounds.Engine.Components
             eventsScheduler.Update(gameTime);
         }
 
-        public void Draw(SpriteBatch batch) { }
+        public void Draw(SpriteBatch batch)
+        {
+            batch.Draw(texture: textureToDraw, destinationRectangle: Parent.Rectangle, scale: Parent.scale, color: Parent.color);
+        }
 
         public void AddAnimation(string name, List<Texture2D> textures, int animDuration)
         {
@@ -119,24 +119,33 @@ namespace Silesian_Undergrounds.Engine.Components
             StopAnimation();
 
             currentAnimation = animations[name];
+            int max = currentAnimation.textures.Count;
+            int time = 0;
 
             // Schedule events to chage texture to draw based on animation frames
-            for (int i = 0; i < currentAnimation.textures.Count; ++i)
+            for (int i = 0; i < max; ++i)
             {
                 if (i == 0)
                     textureToDraw = currentAnimation.textures[0];
 
-                eventsScheduler.ScheduleEvent(currentAnimation.timestamps[i], false, () =>
-                {
-                    int index = i + 1;
-                    int max = currentAnimation.textures.Count;
-
-                    if (index < max)
-                        textureToDraw = currentAnimation.textures[index];
-                    else
-                        CallAnimationEnd();
-                });
+                time += currentAnimation.timestamps[i];
+                ScheduleAnimationFrame(i, time, max);
             }
+        }
+
+        private void ScheduleAnimationFrame(int i, int time, int max)
+        {
+            eventsScheduler.ScheduleEvent(time, false, () =>
+            {
+                int index = i + 1;
+
+                if (index < max)
+                    textureToDraw = currentAnimation.textures[index];
+                else
+                    CallAnimationEnd();
+
+                Console.WriteLine("Event: " + index);
+            });
         }
 
         // Stop playing current animation if there is any

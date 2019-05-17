@@ -6,6 +6,7 @@ using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Components;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Utils;
+using Microsoft.Xna.Framework.Input;
 
 namespace Silesian_Undergrounds.Engine.Behaviours
 {
@@ -31,6 +32,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private int health;
         private int maxHealth;
         private int moneyReward;
+        public Animator Animator { get; private set; }
 
         public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, int moneyRew, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
@@ -56,6 +58,11 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             this.health = health;
             maxHealth = health;
             moneyReward = moneyRew;
+
+            Animator = new Animator(Parent);
+            Parent.AddComponent(Animator);
+            
+            Parent.ChangeDrawAbility(false);
         }
 
         public void CleanUp()
@@ -66,7 +73,10 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             collider = null;
         }
 
-        public void Draw(SpriteBatch batch) { }
+        public void Draw(SpriteBatch batch)
+        {
+            Animator.Draw(batch);
+        }
 
         public void RegisterSelf() { }
 
@@ -136,9 +146,16 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 moveForce.Y = -1;
             else
                 moveForce.Y = 1;
+            
+
 
             moveForce *= (Parent.speed + BonusMoveSpeed);
             collider.Move(moveForce);
+        }
+
+        private void SelectMovementAnimation(Vector2 moveForce)
+        {
+
         }
 
         private float GetDistToEnemy()

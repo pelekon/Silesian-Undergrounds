@@ -47,6 +47,8 @@ namespace Silesian_Undergrounds.Engine.Scene
             ui = new InGameUI(player);
             pauseMenu = new UIArea(); // TEMP SET EMPTY PAUSE MENU
             canUnPause = true;
+
+            AddObject(EnemyFactory.MinotaurFactory(new Vector2(100, 100)));
         }
 
 
@@ -193,6 +195,13 @@ namespace Silesian_Undergrounds.Engine.Scene
             {
                 if (player != null)
                     player.Draw(spriteBatch);
+
+                foreach(var obj in gameObjects)
+                {
+                    if (obj.layer == 6)
+                        obj.Draw(spriteBatch);
+                }
+
             }, transformMatrix: camera.Transform);
             Drawer.Draw((spriteBatch, gameTime) =>
             {
