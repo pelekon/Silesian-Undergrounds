@@ -1,0 +1,22 @@
+﻿{
+  "player": {
+    "player-speed": 564,
+    "hunger-decrese-interval-in-seconds": 10,
+    "hunger-decrease-value": 5,
+    "live-decrease-value-when-hunger-is-zero": 20,
+    "player-collider-box-width": 60,
+    "player-collider-box-height": 60
+  },
+  "chest": {
+    "number-of-chest-texture": 4,
+    "number-of-possible-spawned-item": 6,
+    "minimum-number-of-spawned-item": 1,
+    "range-of-spawn": 1
+  },
+  "pickable": {
+      "heart": {
+          "heart-increase-value": 10,
+          "live-regeneration-value": 25
+      }
+  }
+}
