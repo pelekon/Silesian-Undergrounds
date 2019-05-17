@@ -81,6 +81,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             this.OnPlayerWin += functionOnWin;
         }
 
+
         public void SetEndGameButtonInPauseMenu(Func<bool> functionOnExitGame)
         {
             PauseView pV = (PauseView)this.pauseMenu;
@@ -169,10 +170,6 @@ namespace Silesian_Undergrounds.Engine.Scene
             ui.Update(gameTime);
 
             DetectPlayerOnTransition();
-            if(isEnd && lastScene)
-            {
-                OnPlayerWin.Invoke();
-            }
         }
 
         public void Draw()
@@ -253,6 +250,10 @@ namespace Silesian_Undergrounds.Engine.Scene
 
                     DeleteObjects();
                     isEnd = true;
+                    if (lastScene)
+                    {
+                        OnPlayerWin.Invoke();
+                    }
                 }
         }
     }

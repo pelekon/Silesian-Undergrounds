@@ -28,7 +28,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private TimedEventsScheduler eventsScheduler;
         private bool isAttackOnCooldown;
 
-        private readonly int attackCooldown = 300;
+        private readonly int attackCooldown = 2000;
 
         public PlayerBehaviour(GameObject parent)
         {

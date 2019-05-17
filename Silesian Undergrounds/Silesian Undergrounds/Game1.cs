@@ -55,10 +55,10 @@ namespace Silesian_Undergrounds
 
             scenes.Add("level_1");
             scenes.Add("level_2");
-            scenes.Add("level_3");
-            scenes.Add("t");
-            scenes.Add("drop");
-            scenes.Add("drop2");
+            //scenes.Add("level_3");
+            //scenes.Add("t");
+            //scenes.Add("drop");
+            //scenes.Add("drop2");
             //scenes.Add("drop3");
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
