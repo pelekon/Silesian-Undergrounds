@@ -10,6 +10,9 @@ namespace Silesian_Undergrounds.Engine.Config
         public ChestConfig Chest { get; set; }
         [JsonProperty("pickable", Required = Required.Always)]
         public PickableConfig Pickable { get; set; }
+        [JsonProperty("terrain", Required = Required.Always)]
+        public TerrainConfig Terrain { get; set; }
+        
     }
 
     public class PlayerConfig
@@ -79,5 +82,10 @@ namespace Silesian_Undergrounds.Engine.Config
     {
         [JsonProperty("player-movement-increase-by", Required = Required.Always)]
         public float PlayerMovementIncreaseBy { get; set; }
+    }
+    public class TerrainConfig
+    {
+        [JsonProperty("percentage-of-textures-with-things", Required = Required.Always)]
+        public int PercentageOfTexturesWithThings { get; set; }
     }
 }
