@@ -32,7 +32,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             AttackPattern attackPattern = new AttackPattern();
             HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
             obj.AddComponent(behaviour);
-            behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_Attack"), 4000);
+            behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_Attack"), 1000);
 
             return obj;
         }

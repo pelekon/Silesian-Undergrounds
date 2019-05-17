@@ -13,6 +13,7 @@ namespace Silesian_Undergrounds.Engine.Components
         {
             internal string animationName;
             internal int duration;
+            internal bool isRepeatable;
             internal List<Texture2D> textures;
             internal List<int> timestamps;
         }
@@ -61,7 +62,7 @@ namespace Silesian_Undergrounds.Engine.Components
             batch.Draw(texture: textureToDraw, destinationRectangle: Parent.Rectangle, scale: Parent.scale, color: Parent.color);
         }
 
-        public void AddAnimation(string name, List<Texture2D> textures, int animDuration)
+        public void AddAnimation(string name, List<Texture2D> textures, int animDuration, bool repeatable = false)
         {
             if (animations.ContainsKey(name))
                 return;
@@ -76,10 +77,11 @@ namespace Silesian_Undergrounds.Engine.Components
             for (int i = 0; i < textures.Count; ++i)
                 animData.timestamps.Add(frameLenght);
 
+            animData.isRepeatable = repeatable;
             animations.Add(name, animData);
         }
 
-        public void AddAnimation(string name, List<Texture2D> textures, int animDuration, List<int> timestamps)
+        public void AddAnimation(string name, List<Texture2D> textures, int animDuration, List<int> timestamps, bool repeatable = false)
         {
             if (animations.ContainsKey(name))
                 return;
@@ -106,14 +108,15 @@ namespace Silesian_Undergrounds.Engine.Components
             animData.duration = animDuration;
             animData.textures = textures;
             animData.timestamps = timestamps;
+            animData.isRepeatable = repeatable;
 
             animations.Add(name, animData);
         }
 
-        public void PlayAnimation(string name)
+        public bool PlayAnimation(string name)
         {
             if (!animations.ContainsKey(name))
-                return;
+                return false;
 
             // stop current animation if there is any
             StopAnimation();
@@ -131,6 +134,8 @@ namespace Silesian_Undergrounds.Engine.Components
                 time += currentAnimation.timestamps[i];
                 ScheduleAnimationFrame(i, time, max);
             }
+
+            return true;
         }
 
         private void ScheduleAnimationFrame(int i, int time, int max)
@@ -143,8 +148,6 @@ namespace Silesian_Undergrounds.Engine.Components
                     textureToDraw = currentAnimation.textures[index];
                 else
                     CallAnimationEnd();
-
-                Console.WriteLine("Event: " + index);
             });
         }
 
@@ -167,7 +170,11 @@ namespace Silesian_Undergrounds.Engine.Components
         {
             textureToDraw = orginalTexture;
             OnAnimationEnd.Invoke(this, currentAnimation.animationName);
-            currentAnimation = new AnimationData();
+
+            if (currentAnimation.isRepeatable)
+                PlayAnimation(currentAnimation.animationName);
+            else
+                currentAnimation = new AnimationData();
         }
     }
 }
