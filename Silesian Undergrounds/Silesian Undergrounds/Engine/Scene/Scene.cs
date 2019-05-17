@@ -26,6 +26,8 @@ namespace Silesian_Undergrounds.Engine.Scene
         public Camera camera { get; private set; }
         private Func<bool> OnPlayerWin;
 
+        private const float HUNGER_DECREASE_INTERVAL_CHANGED_BY_PERCENT = 0.8f;
+
         public bool isPaused { get; private set; }
         public bool isEnd { get; private set; }
         public bool lastScene { get; private set; }
@@ -81,6 +83,10 @@ namespace Silesian_Undergrounds.Engine.Scene
             this.OnPlayerWin += functionOnWin;
         }
 
+        public void DecreaseHungerDropInterval()
+        {
+            this.player.ChangerHungerDecreaseIntervalBy(HUNGER_DECREASE_INTERVAL_CHANGED_BY_PERCENT);
+        }
 
         public void SetEndGameButtonInPauseMenu(Func<bool> functionOnExitGame)
         {

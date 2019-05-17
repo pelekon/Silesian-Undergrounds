@@ -141,6 +141,8 @@ namespace Silesian_Undergrounds
 
             sceneToLoad.player.SetOnDeath(EndGamePlayerDie);
             sceneToLoad.SetEndGameButtonInPauseMenu(ReturnToMenu);
+            if(levelCounter > 1)
+                sceneToLoad.DecreaseHungerDropInterval();
 
             return sceneToLoad;
         }
