@@ -36,6 +36,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         private const int PLAYER_BASIC_DAMAGE = 10;
         private const int PLAYER_BASIC_KEY_AMOUNT = 0;
         private const int PLAYER_BASIC_MONEY_AMOUNT = 0;
+        public const float BASIC_HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
         #endregion
 
         public static Scene LoadScene(string sceneName, int tileSize)
@@ -51,7 +52,8 @@ namespace Silesian_Undergrounds.Engine.Scene
                 playerStatistic = new PlayerStatistic(PLAYER_BASIC_HEALTH, PLAYER_BASIC_MAX_HEALTH,
                     PLAYER_BASIC_HUNGER, PLAYER_BASIC_MAX_HUNGER,
                     PLAYER_BASIC_MOVEMENT_SPEED, PLAYER_BASIC_ATTACK_SPEED,
-                    PLAYER_BASIC_DAMAGE, PLAYER_BASIC_MONEY_AMOUNT, PLAYER_BASIC_KEY_AMOUNT);
+                    PLAYER_BASIC_DAMAGE, PLAYER_BASIC_MONEY_AMOUNT,
+                    PLAYER_BASIC_KEY_AMOUNT, BASIC_HUNGER_DECREASE_INTERVAL_IN_SECONDS);
             }
 
             var scene = new Scene(playerStatistic);

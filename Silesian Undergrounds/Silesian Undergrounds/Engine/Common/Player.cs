@@ -21,7 +21,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
 
         private Func<bool> OnPlayeDeath;
-        private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
+        
         private int HUNGER_DECREASE_VALUE = 5;
         private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
         private const int PLAYER_COLLIDER_BOX_WIDTH = 60;
@@ -77,6 +77,11 @@ namespace Silesian_Undergrounds.Engine.Common
                 return false;
 
             return true;
+        }
+
+        public void ChangerHungerDecreaseIntervalBy(float percentToChange)
+        {
+            this.statistics.HungerDecreaseInterval *= percentToChange;
         }
 
         public override void Update(GameTime gameTime)
@@ -309,7 +314,7 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             timeSinceHungerFall += deltaTime;
 
-            if (timeSinceHungerFall >= HUNGER_DECREASE_INTERVAL_IN_SECONDS)
+            if (timeSinceHungerFall >= this.statistics.HungerDecreaseInterval)
             {
                 DecreaseHungerValue(HUNGER_DECREASE_VALUE);
                 timeSinceHungerFall = 0;
