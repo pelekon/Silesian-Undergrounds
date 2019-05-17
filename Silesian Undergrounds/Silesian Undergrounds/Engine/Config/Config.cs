@@ -47,6 +47,8 @@ namespace Silesian_Undergrounds.Engine.Config
         public HeartConfig Heart { get; set; }
         [JsonProperty("attack-booster", Required = Required.Always)]
         public AttackBooster AttackBooster { get; set; }
+        [JsonProperty("hunger-booster", Required = Required.Always)]
+        public HungerBooster HungerBooster { get; set; }
     }
 
     public class HeartConfig
@@ -60,5 +62,10 @@ namespace Silesian_Undergrounds.Engine.Config
     {
         [JsonProperty("player-attack-increase-by", Required = Required.Always)]
         public float PlayerAttackIncreaseBy { get; set; }
-}
+    }
+    public class HungerBooster
+    {
+        [JsonProperty("player-max-hunger-value-increase-by", Required = Required.Always)]
+        public int PlayerMaxHungerValueIncreaseBy { get; set; }
+    }
 }

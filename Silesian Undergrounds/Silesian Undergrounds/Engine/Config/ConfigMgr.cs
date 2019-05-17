@@ -19,6 +19,7 @@ namespace Silesian_Undergrounds.Engine.Config
         public static PickableConfig PickableConfig => _config.Pickable;
         public static HeartConfig HeartConfig => _config.Pickable.Heart;
         public static AttackBooster AtackBoosterConfig => _config.Pickable.AttackBooster;
+        public static HungerBooster HungerBoosterConfig => _config.Pickable.HungerBooster;
 
         public static Config LoadConfig()
         {

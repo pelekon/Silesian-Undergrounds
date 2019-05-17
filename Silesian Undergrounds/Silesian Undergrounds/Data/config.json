@@ -20,6 +20,9 @@
     },
     "attack-booster": {
       "player-attack-increase-by": 1.0
+    },
+    "hunger-booster": {
+      "player-max-hunger-value-increase-by": 100
     }
   }
 }
