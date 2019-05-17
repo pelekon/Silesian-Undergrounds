@@ -24,6 +24,13 @@ namespace Silesian_Undergrounds.Engine.Components
         // Animator variables
         private Dictionary<string, AnimationData> animations;
 
+        public Animator(GameObject parent)
+        {
+            animations = new Dictionary<string, AnimationData>();
+
+            Parent = parent;
+        }
+
         public void CleanUp()
         {
             Parent = null;
