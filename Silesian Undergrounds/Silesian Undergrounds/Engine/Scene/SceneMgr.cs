@@ -11,6 +11,7 @@ using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Scene.RandomRooms;
 using System.Threading;
 using Microsoft.Xna.Framework;
+using Silesian_Undergrounds.Engine.Config;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -22,7 +23,6 @@ namespace Silesian_Undergrounds.Engine.Scene
         private static Scene _currentScene;
         public static Scene GetCurrentScene() { return _currentScene; }
         private static readonly TileMapRenderer Renderer = new TileMapRenderer();
-        private const string JsonFileExtension = ".json", DataDirectory = "Data";
         private static PlayerStatistic playerStatistic;
         #endregion
 
@@ -40,8 +40,8 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public static Scene LoadScene(string sceneName, int tileSize)
         {
-            var fileName = sceneName + JsonFileExtension;
-            var path = Path.Combine(DataDirectory, fileName);
+            var fileName = sceneName + Constants.JsonFileExtension;
+            var path = Path.Combine(Constants.DataDirectory, fileName);
         
 
             if (!File.Exists(path)) return null;
@@ -79,7 +79,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             }
             if (sceneFile.TileSets.Count < 1) return false;
-            var tileSetFile = Path.Combine(DataDirectory, sceneFile.TileSets[0].Source);
+            var tileSetFile = Path.Combine(Constants.DataDirectory, sceneFile.TileSets[0].Source);
 
             if (!File.Exists(tileSetFile)) return false;
 

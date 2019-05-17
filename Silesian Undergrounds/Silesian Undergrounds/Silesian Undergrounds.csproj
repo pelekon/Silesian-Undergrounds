@@ -64,6 +64,9 @@
     <Compile Include="Engine\Common\Unit.cs" />
     <Compile Include="Engine\Collisions\CollisionNotifyData.cs" />
     <Compile Include="Engine\Components\IComponent.cs" />
+    <Compile Include="Engine\Config\Config.cs" />
+    <Compile Include="Engine\Config\ConfigMgr.cs" />
+    <Compile Include="Engine\Config\Constants.cs" />
     <Compile Include="Engine\Enum\ItemPricesEnum.cs" />
     <Compile Include="Engine\Enum\GroundEnum.cs" />
     <Compile Include="Engine\Enum\LayerEnum.cs" />

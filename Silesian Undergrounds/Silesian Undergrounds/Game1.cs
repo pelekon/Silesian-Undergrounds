@@ -6,6 +6,7 @@ using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Views;
 using System;
 using System.Collections.Generic;
+using Silesian_Undergrounds.Engine.Config;
 
 namespace Silesian_Undergrounds
 {
@@ -62,6 +63,7 @@ namespace Silesian_Undergrounds
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
+            Config config = ConfigMgr.LoadConfig();
 
             scene = SetMainMenuScene();
 

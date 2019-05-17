@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Behaviours;
+using Silesian_Undergrounds.Engine.Config;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
@@ -20,11 +21,6 @@ namespace Silesian_Undergrounds.Engine.Common
         public event EventHandler<PropertyChangedArgs<int>> HungerMaxValueChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
 
-        private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
-        private int HUNGER_DECREASE_VALUE = 5;
-        private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
-        private const int PLAYER_COLLIDER_BOX_WIDTH = 60;
-        private const int PLAYER_COLLIDER_BOX_HEIGHT = 60;
 
         private float timeSinceHungerFall;
 
@@ -53,7 +49,7 @@ namespace Silesian_Undergrounds.Engine.Common
             //Plays our start animation
             PlayAnimation("IdleDown");
 
-            collider = new BoxCollider(this, PLAYER_COLLIDER_BOX_WIDTH, PLAYER_COLLIDER_BOX_HEIGHT, -2, -4, false);
+            collider = new BoxCollider(this, ConfigMgr.PlayerConfig.PlayerColliderBoxWidth, ConfigMgr.PlayerConfig.PlayerColliderBoxHeight, -2, -4, false);
             AddComponent(collider);
             statistics = globalPlayerStatistic;
             behaviour = new PlayerBehaviour(this);
@@ -169,7 +165,7 @@ namespace Silesian_Undergrounds.Engine.Common
             }
             else
             {
-                DecreaseLiveValue(LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO);
+                DecreaseLiveValue(ConfigMgr.PlayerConfig.LiveDecreaseValueWhenHungerIsZero);
             }
         }
 
@@ -302,9 +298,9 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             timeSinceHungerFall += deltaTime;
 
-            if (timeSinceHungerFall >= HUNGER_DECREASE_INTERVAL_IN_SECONDS)
+            if (timeSinceHungerFall >= ConfigMgr.PlayerConfig.HungerDecreaseIntervalInSeconds)
             {
-                DecreaseHungerValue(HUNGER_DECREASE_VALUE);
+                DecreaseHungerValue(ConfigMgr.PlayerConfig.HungerDecreaseValue);
                 timeSinceHungerFall = 0;
             }
         }
