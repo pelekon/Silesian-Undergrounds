@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Utils;
+using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Views;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,7 @@ namespace Silesian_Undergrounds
             scenes.Add("t");
             scenes.Add("drop");
             scenes.Add("drop2");
-            scenes.Add("drop3");
+            //scenes.Add("drop3");
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
@@ -127,7 +128,21 @@ namespace Silesian_Undergrounds
             System.Diagnostics.Debug.WriteLine("Current scene: " + sceneName);
             #endif
             levelCounter++;
-            return SceneManager.LoadScene(sceneName, 64);
+            Scene sceneToLoad;
+            if (levelCounter == scenes.Count)
+            {
+                sceneToLoad = SceneManager.LoadScene(sceneName, 64);
+                sceneToLoad.SetLastScene(true);
+                sceneToLoad.SetOnWin(EndGamePlayerWin);
+            }
+
+            else
+                sceneToLoad = SceneManager.LoadScene(sceneName, 64);
+
+            sceneToLoad.player.SetOnDeath(EndGamePlayerDie);
+            sceneToLoad.SetEndGameButtonInPauseMenu(ReturnToMenu);
+
+            return sceneToLoad;
         }
 
         protected bool StartGame()
@@ -136,11 +151,56 @@ namespace Silesian_Undergrounds
             return true;
         }
 
+        protected bool ExitGame()
+        {
+            this.Exit();
+            return true;
+        }
+
+        protected bool EndGamePlayerDie()
+        {
+            this.scene = SetEndGameScene(EndGameEnum.Lost);
+            return true;
+        }
+
+        protected bool EndGamePlayerWin()
+        {
+            this.scene = SetEndGameScene(EndGameEnum.Win);
+            return true;
+        }
+
+        protected bool ReturnToMenu()
+        {
+            levelCounter = 0;
+            SceneManager.ClearPlayerStatistics();
+            this.scene = SetMainMenuScene();
+            return true;
+        }
+
         protected Scene SetMainMenuScene()
         {
             MainMenuView mainMenu = new MainMenuView();
             mainMenu.GetStartGameButton().SetOnClick(StartGame);
+            mainMenu.GetExitButton().SetOnClick(ExitGame);
             return new Scene(mainMenu);
+        }
+
+        protected Scene SetEndGameScene(EndGameEnum endGameEnum)
+        {
+
+            if(endGameEnum == EndGameEnum.Lost)
+            {
+                PlayerDieView endGameWhenPlayerDie = new PlayerDieView();
+                endGameWhenPlayerDie.GetReturnToMenuButton().SetOnClick(ReturnToMenu);
+                return new Scene(endGameWhenPlayerDie);
+            }
+            else
+            {
+                PlayerWinView endGameWhenPlayerWin = new PlayerWinView();
+                endGameWhenPlayerWin.GetReturnToMenuButton().SetOnClick(ReturnToMenu);
+                return new Scene(endGameWhenPlayerWin);
+            }
+
         }
     }
 }

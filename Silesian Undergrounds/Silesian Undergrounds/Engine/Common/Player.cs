@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,6 +20,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public event EventHandler<PropertyChangedArgs<int>> HungerMaxValueChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
 
+        private Func<bool> OnPlayeDeath;
         private int HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
         private int HUNGER_DECREASE_VALUE = 5;
         private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
@@ -63,6 +64,11 @@ namespace Silesian_Undergrounds.Engine.Common
         public void SetPosition(Vector2 position)
         {
             this.position = position;
+        }
+
+        public void SetOnDeath(Func<bool> functionOnDeath)
+        {
+            OnPlayeDeath += functionOnDeath;
         }
 
         public bool checkIfEnoughMoney(int cost)
@@ -182,9 +188,10 @@ namespace Silesian_Undergrounds.Engine.Common
                 else
                     LiveValue = 0;
             }
-            else
+
+            if (LiveValue <= 0)
             {
-                //TODO player die
+                OnPlayeDeath.Invoke();
             }
         }
 
