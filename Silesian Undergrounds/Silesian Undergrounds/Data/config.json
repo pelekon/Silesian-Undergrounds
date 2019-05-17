@@ -14,9 +14,12 @@
     "range-of-spawn": 1
   },
   "pickable": {
-      "heart": {
-          "heart-increase-value": 10,
-          "live-regeneration-value": 25
-      }
+    "heart": {
+      "heart-increase-value": 10,
+      "live-regeneration-value": 25
+    },
+    "attack-booster": {
+      "player-attack-increase-by": 1.0
+    }
   }
 }

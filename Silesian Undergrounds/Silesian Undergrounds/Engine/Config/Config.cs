@@ -45,6 +45,8 @@ namespace Silesian_Undergrounds.Engine.Config
     {
         [JsonProperty("heart", Required = Required.Always)]
         public HeartConfig Heart { get; set; }
+        [JsonProperty("attack-booster", Required = Required.Always)]
+        public AttackBooster AttackBooster { get; set; }
     }
 
     public class HeartConfig
@@ -54,4 +56,9 @@ namespace Silesian_Undergrounds.Engine.Config
         [JsonProperty("live-regeneration-value", Required = Required.Always)]
         public int LiveRegenerationValue { get; set; }
     }
+    public class AttackBooster
+    {
+        [JsonProperty("player-attack-increase-by", Required = Required.Always)]
+        public float PlayerAttackIncreaseBy { get; set; }
+}
 }
