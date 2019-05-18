@@ -22,7 +22,7 @@ namespace Silesian_Undergrounds.Engine.Config
 
         public static Config LoadConfig()
         {
-            _config = ReadConfigFile();
+            _config = ReadConfigFile() ?? new Config();
             return _config;
         }
 
@@ -35,7 +35,7 @@ namespace Silesian_Undergrounds.Engine.Config
             using (var file = File.OpenText(configFilePath))
             {
                 try { configFile = (Config)new JsonSerializer().Deserialize(file, typeof(Config)); }
-                catch (JsonSerializationException e)
+                catch (JsonException e)
                 {
                     #if DEBUG
                         Console.WriteLine(e.Message);

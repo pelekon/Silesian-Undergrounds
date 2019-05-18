@@ -4,113 +4,121 @@ namespace Silesian_Undergrounds.Engine.Config
 {
     public class Config
     {
-        [JsonProperty("player", Required = Required.Always)]
-        public PlayerConfig Player { get; set; }
-        [JsonProperty("chest", Required = Required.Always)]
-        public ChestConfig Chest { get; set; }
-        [JsonProperty("pickable", Required = Required.Always)]
-        public PickableConfig Pickable { get; set; }
-        [JsonProperty("terrain", Required = Required.Always)]
-        public TerrainConfig Terrain { get; set; }
+        [JsonProperty("player")]
+        public PlayerConfig Player { get; set; } = new PlayerConfig();
+        [JsonProperty("chest")]
+        public ChestConfig Chest { get; set; } = new ChestConfig();
+        [JsonProperty("pickable")]
+        public PickableConfig Pickable { get; set; } = new PickableConfig();
+        [JsonProperty("terrain")]
+        public TerrainConfig Terrain { get; set; } = new TerrainConfig();
         
     }
 
     public class PlayerConfig
     {
-        [JsonProperty("hunger-decrese-interval-in-seconds", Required = Required.Always)]
-        public int HungerDecreaseIntervalInSeconds { get; set; }
-        [JsonProperty("hunger-decrease-value", Required = Required.Always)]
-        public int HungerDecreaseValue { get; set; }
-        [JsonProperty("live-decrease-value-when-hunger-is-zero", Required = Required.Always)]
-        public int LiveDecreaseValueWhenHungerIsZero { get; set; }
-        [JsonProperty("player-collider-box-width", Required = Required.Always)]
-        public int PlayerColliderBoxWidth { get; set; }
-        [JsonProperty("player-collider-box-height", Required = Required.Always)]
-        public int PlayerColliderBoxHeight { get; set; }
+        [JsonProperty("hunger-decrese-interval-in-seconds")]
+        public int HungerDecreaseIntervalInSeconds { get; set; } = 10;
 
-        [JsonProperty("health", Required = Required.Always)]
-        public int Health { get; set; }
+        [JsonProperty("hunger-decrease-value")]
+        public int HungerDecreaseValue { get; set; } = 5;
 
-        [JsonProperty("max-health", Required = Required.Always)]
-        public int MaxHealth { get; set; }
+        [JsonProperty("live-decrease-value-when-hunger-is-zero")]
+        public int LiveDecreaseValueWhenHungerIsZero { get; set; } = 20;
 
-        [JsonProperty("hunger", Required = Required.Always)]
-        public int Hunger { get; set; }
+        [JsonProperty("player-collider-box-width")]
+        public int PlayerColliderBoxWidth { get; set; } = 60;
 
-        [JsonProperty("max-hunger", Required = Required.Always)]
-        public int MaxHunger { get; set; }
+        [JsonProperty("player-collider-box-height")]
+        public int PlayerColliderBoxHeight { get; set; } = 60;
 
-        [JsonProperty("attack-speed", Required = Required.Always)]
-        public float AttackSpeed { get; set; }
+        [JsonProperty("health")]
+        public int Health { get; set; } = 100;
 
-        [JsonProperty("movement-speed", Required = Required.Always)]
-        public float MovementSpeed { get; set; }
+        [JsonProperty("max-health")]
+        public int MaxHealth { get; set; } = 150;
 
-        [JsonProperty("key-amount", Required = Required.Always)]
-        public int KeyAmount { get; set; }
+        [JsonProperty("hunger")]
+        public int Hunger { get; set; } = 100;
 
-        [JsonProperty("money-amount", Required = Required.Always)]
-        public int MoneyAmount { get; set; }
+        [JsonProperty("max-hunger")]
+        public int MaxHunger { get; set; } = 150;
 
-        [JsonProperty("damage", Required = Required.Always)]
-        public int Damage { get; set; }
+        [JsonProperty("attack-speed")]
+        public float AttackSpeed { get; set; } = 1.0f;
+
+        [JsonProperty("movement-speed")]
+        public float MovementSpeed { get; set; } = 2.0f;
+
+        [JsonProperty("key-amount")]
+        public int KeyAmount { get; set; } = 0;
+
+        [JsonProperty("money-amount")]
+        public int MoneyAmount { get; set; } = 0;
+
+        [JsonProperty("damage")]
+        public int Damage { get; set; } = 10;
     }
 
     public class ChestConfig
     {
-        [JsonProperty("number-of-chest-texture", Required = Required.Always)]
-        public int NumberOfChestTexture { get; set; }
-        [JsonProperty("number-of-possible-spawned-item", Required = Required.Always)]
-        public int NumberOfPossibleSpawnedItem { get; set; }
-        [JsonProperty("minimum-number-of-spawned-item", Required = Required.Always)]
-        public int MinimumNumberOfSpawnedItem { get; set; }
-        [JsonProperty("range-of-spawn", Required = Required.Always)]
-        public int RangeOfSpawn { get; set; }
+        [JsonProperty("number-of-chest-texture")]
+        public int NumberOfChestTexture { get; set; } = 4;
+
+        [JsonProperty("number-of-possible-spawned-item")]
+        public int NumberOfPossibleSpawnedItem { get; set; } = 6;
+
+        [JsonProperty("minimum-number-of-spawned-item")]
+        public int MinimumNumberOfSpawnedItem { get; set; } = 1;
+
+        [JsonProperty("range-of-spawn")]
+        public int RangeOfSpawn { get; set; } = 1;
     }
     public class PickableConfig
     {
-        [JsonProperty("heart", Required = Required.Always)]
-        public HeartConfig Heart { get; set; }
-        [JsonProperty("attack-booster", Required = Required.Always)]
-        public AttackBoosterConfig AttackBooster { get; set; }
-        [JsonProperty("hunger-booster", Required = Required.Always)]
-        public HungerBoosterConfig HungerBooster { get; set; }
-        [JsonProperty("live-booster", Required = Required.Always)]
-        public LiveBoosterConfig LiveBoosterConfig { get; set; }
-        [JsonProperty("movement-booster", Required = Required.Always)]
-        public MovementBoosterConfig MovementBoosterConfig { get; set; }
+        [JsonProperty("heart")]
+        public HeartConfig Heart { get; set; } = new HeartConfig();
+        [JsonProperty("attack-booster")]
+        public AttackBoosterConfig AttackBooster { get; set; } = new AttackBoosterConfig();
+        [JsonProperty("hunger-booster")]
+        public HungerBoosterConfig HungerBooster { get; set; } = new HungerBoosterConfig();
+        [JsonProperty("live-booster")]
+        public LiveBoosterConfig LiveBoosterConfig { get; set; } = new LiveBoosterConfig();
+        [JsonProperty("movement-booster")]
+        public MovementBoosterConfig MovementBoosterConfig { get; set; } = new MovementBoosterConfig();
     }
 
     public class HeartConfig
     {
-        [JsonProperty("heart-increase-value", Required = Required.Always)]
-        public int HeartIncreaseValue { get; set; }
-        [JsonProperty("live-regeneration-value", Required = Required.Always)]
-        public int LiveRegenerationValue { get; set; }
+        [JsonProperty("heart-increase-value")]
+        public int HeartIncreaseValue { get; set; } = 10;
+
+        [JsonProperty("live-regeneration-value")]
+        public int LiveRegenerationValue { get; set; } = 25;
     }
     public class AttackBoosterConfig
     {
-        [JsonProperty("player-attack-increase-by", Required = Required.Always)]
-        public float PlayerAttackIncreaseBy { get; set; }
+        [JsonProperty("player-attack-increase-by")]
+        public float PlayerAttackIncreaseBy { get; set; } = 1.0f;
     }
     public class HungerBoosterConfig
     {
-        [JsonProperty("player-max-hunger-value-increase-by", Required = Required.Always)]
-        public int PlayerMaxHungerValueIncreaseBy { get; set; }
+        [JsonProperty("player-max-hunger-value-increase-by")]
+        public int PlayerMaxHungerValueIncreaseBy { get; set; } = 100;
     }
     public class LiveBoosterConfig
     {
-        [JsonProperty("player-max-live-value-increase-by", Required = Required.Always)]
-        public int PlayerMaxLiveValueIncreaseBy { get; set; }
+        [JsonProperty("player-max-live-value-increase-by")]
+        public int PlayerMaxLiveValueIncreaseBy { get; set; } = 100;
     }
     public class MovementBoosterConfig
     {
-        [JsonProperty("player-movement-increase-by", Required = Required.Always)]
-        public float PlayerMovementIncreaseBy { get; set; }
+        [JsonProperty("player-movement-increase-by")]
+        public float PlayerMovementIncreaseBy { get; set; } = 1.0f;
     }
     public class TerrainConfig
     {
-        [JsonProperty("percentage-of-textures-with-things", Required = Required.Always)]
-        public int PercentageOfTexturesWithThings { get; set; }
+        [JsonProperty("percentage-of-textures-with-things")]
+        public int PercentageOfTexturesWithThings { get; set; } = 25;
     }
 }
