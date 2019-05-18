@@ -3,9 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Collisions;
+using Silesian_Undergrounds.Engine.Enum;
 
 namespace Silesian_Undergrounds.Engine.Scene {
-    class Tile : Gameobject
+    class Tile : GameObject
     {
         public Tile(Texture2D texture2D, Vector2 position, Vector2 size, int layer) : base(texture2D, position, size, layer)
         {
@@ -13,6 +15,12 @@ namespace Silesian_Undergrounds.Engine.Scene {
             this.position = position;
             this.size = size;
             this.layer = layer;
+
+            if (layer == (int)LayerEnum.Walls)
+            {
+                BoxCollider collider = new BoxCollider(this, size.X, size.Y, 0, 0, false);
+                AddComponent(collider);
+            }
         }
 
         public Rectangle Rectangle
@@ -25,7 +33,7 @@ namespace Silesian_Undergrounds.Engine.Scene {
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, layerDepth: layer);
+//            spriteBatch.Draw(texture: texture, destinationRectangle: Rectangle, layerDepth: layer);
         }
 
     }

@@ -3,6 +3,8 @@
         Ore,
         Key,
         Chest,
+        Food,
+        Hearth,
         None
     }
 }

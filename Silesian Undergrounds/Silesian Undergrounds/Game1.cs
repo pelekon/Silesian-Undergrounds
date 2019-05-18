@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
 using Silesian_Undergrounds.Engine.Scene;
-using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Utils;
-using Silesian_Undergrounds.Engine.HUD;
+using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Views;
+using System;
+using System.Collections.Generic;
 
 namespace Silesian_Undergrounds
 {
@@ -16,10 +17,12 @@ namespace Silesian_Undergrounds
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SpriteBatch HUDspriteBatch;
-        Scene scene;
 
-        public GameHUD gameHUD = new GameHUD(ResolutionMgr.TileSize);
+        public List<String> scenes = new List<String>();
+        public int levelCounter = 0;
+        public bool isPlayerInMaineMenu = true;
+
+        Scene scene;
 
         public Game1()
         {
@@ -35,17 +38,33 @@ namespace Silesian_Undergrounds
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            Window.AllowAltF4 = true;
+            #region GRAPHIC_SETTINGS_INIT
+            // Window.AllowAltF4 = true;
+            IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            ResolutionMgr.GameWidth = GraphicsDevice.DisplayMode.Width;
+            ResolutionMgr.GameWidth = graphics.PreferredBackBufferWidth;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            ResolutionMgr.GameHeight = GraphicsDevice.DisplayMode.Height;
+            ResolutionMgr.GameHeight = graphics.PreferredBackBufferHeight;
             //graphics.ToggleFullScreen();
             graphics.ApplyChanges();
-            TextureMgr.Instance.SetCurrentContentMgr(Content);
 
-            scene = SceneManager.LoadScene("drop", 64);
+            // Calculate inner unit value
+            ResolutionMgr.yAxisUnit = ResolutionMgr.GameHeight / 100.0f;
+            ResolutionMgr.xAxisUnit = ResolutionMgr.GameWidth / 100.0f;
+            #endregion
+
+            scenes.Add("level_1");
+            scenes.Add("level_2");
+            scenes.Add("level_3");
+            scenes.Add("t");
+            scenes.Add("drop");
+            scenes.Add("drop2");
+            //scenes.Add("drop3");
+
+            TextureMgr.Instance.SetCurrentContentMgr(Content);
+            FontMgr.Instance.SetCurrentContentMgr(Content);
+
+            scene = SetMainMenuScene();
 
             base.Initialize();
         }
@@ -58,9 +77,7 @@ namespace Silesian_Undergrounds
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            HUDspriteBatch = new SpriteBatch(GraphicsDevice);
-            gameHUD.Load(content: Content);
-            // TODO: use this.Content to load your game content here
+            Drawer.Initialize(spriteBatch, Content);
         }
 
         /// <summary>
@@ -79,14 +96,14 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                scene.OpenPauseMenu();
 
-            if (scene.isPaused)
-                return;
+            if (!scene.isEnd)
+                scene.Update(gameTime);
+            else
+            {
+                scene = LevelsManagement();
+            }
 
-            // TODO: Add your update logic here
-            scene.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -96,14 +113,96 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            Drawer.UpdateGameTime(gameTime);
             GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
-            spriteBatch.Begin(transformMatrix: scene.camera.Transform);            
-            scene.Draw(gameTime, spriteBatch);
-            spriteBatch.End();
-            gameHUD.Draw(HUDspriteBatch);
+            scene.Draw();
+
             base.Draw(gameTime);
+        }
+
+        protected Scene LevelsManagement()
+        {
+            var sceneName = scenes[levelCounter];
+            #if DEBUG
+            System.Diagnostics.Debug.WriteLine("Current scene: " + sceneName);
+            #endif
+            levelCounter++;
+            Scene sceneToLoad;
+            if (levelCounter == scenes.Count)
+            {
+                sceneToLoad = SceneManager.LoadScene(sceneName, 64);
+                sceneToLoad.SetLastScene(true);
+                sceneToLoad.SetOnWin(EndGamePlayerWin);
+            }
+
+            else
+                sceneToLoad = SceneManager.LoadScene(sceneName, 64);
+
+            sceneToLoad.player.SetOnDeath(EndGamePlayerDie);
+            sceneToLoad.SetEndGameButtonInPauseMenu(ReturnToMenu);
+            if(levelCounter > 1)
+                sceneToLoad.DecreaseHungerDropInterval();
+
+            return sceneToLoad;
+        }
+
+        protected bool StartGame()
+        {
+            scene = LevelsManagement();
+            return true;
+        }
+
+        protected bool ExitGame()
+        {
+            this.Exit();
+            return true;
+        }
+
+        protected bool EndGamePlayerDie()
+        {
+            this.scene = SetEndGameScene(EndGameEnum.Lost);
+            return true;
+        }
+
+        protected bool EndGamePlayerWin()
+        {
+            this.scene = SetEndGameScene(EndGameEnum.Win);
+            return true;
+        }
+
+        protected bool ReturnToMenu()
+        {
+            levelCounter = 0;
+            SceneManager.ClearPlayerStatistics();
+            this.scene = SetMainMenuScene();
+            return true;
+        }
+
+        protected Scene SetMainMenuScene()
+        {
+            MainMenuView mainMenu = new MainMenuView();
+            mainMenu.GetStartGameButton().SetOnClick(StartGame);
+            mainMenu.GetExitButton().SetOnClick(ExitGame);
+            return new Scene(mainMenu);
+        }
+
+        protected Scene SetEndGameScene(EndGameEnum endGameEnum)
+        {
+
+            if(endGameEnum == EndGameEnum.Lost)
+            {
+                PlayerDieView endGameWhenPlayerDie = new PlayerDieView();
+                endGameWhenPlayerDie.GetReturnToMenuButton().SetOnClick(ReturnToMenu);
+                return new Scene(endGameWhenPlayerDie);
+            }
+            else
+            {
+                PlayerWinView endGameWhenPlayerWin = new PlayerWinView();
+                endGameWhenPlayerWin.GetReturnToMenuButton().SetOnClick(ReturnToMenu);
+                return new Scene(endGameWhenPlayerWin);
+            }
+
         }
     }
 }

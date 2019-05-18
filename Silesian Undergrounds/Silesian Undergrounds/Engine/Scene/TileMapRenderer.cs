@@ -5,11 +5,36 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Enum;
+
 namespace Silesian_Undergrounds.Engine.Scene {
     class TileMapRenderer {
         private List<Tile> tiles = new List<Tile>();
-        private List<Gameobject> pickableItems = new List<Gameobject>();
+        private List<GameObject> pickableItems = new List<GameObject>();
+        private List<GameObject> shopPickableItems = new List<GameObject>();
+        private List<GameObject> traps = new List<GameObject>();
+        private List<GameObject> grounds = new List<GameObject>();
+        private List<Tile> transitions = new List<Tile>();
+        private List<GameObject> enemies = new List<GameObject>();
+        private List<GameObject> specialItems = new List<GameObject>();
+        public Vector2 position = new Vector2();
         private int width, height;
+
+        public List<GameObject> SpecialItems
+        {
+            get
+            {
+                return specialItems;
+            }
+        }
+
+        public List<Tile> Transitions
+        {
+            get
+            {
+                return transitions;
+            }
+        }
 
         public List<Tile> Tiles
         {
@@ -19,12 +44,41 @@ namespace Silesian_Undergrounds.Engine.Scene {
             }
         }
 
-        public List<Gameobject> Pickable
+        public List<GameObject> Traps
+        {
+            get
+            {
+                return traps;
+            }
+        }
+
+        public List<GameObject> ShopPickables
+        {
+            get
+            {
+                return shopPickableItems;
+            }
+        }
+
+        public List<GameObject> Pickable
         {
             get
             {
                 return pickableItems;
             }
+        }
+
+        public List<GameObject> Grounds
+        {
+            get
+            {
+                return grounds;
+            }
+        }
+
+        public List<GameObject> Enemies
+        {
+            get { return enemies; }
         }
 
         public int Width
@@ -39,8 +93,17 @@ namespace Silesian_Undergrounds.Engine.Scene {
 
         public void GenerateTileMap(Dictionary<int, Texture2D[][]> map, int size)
         {
+            tiles = new List<Tile>();
+            pickableItems = new List<GameObject>();
+            grounds = new List<GameObject>();
+            transitions = new List<Tile>();
+            traps = new List<GameObject>();
+            specialItems = new List<GameObject>();
+            enemies = new List<GameObject>();
+            shopPickableItems = new List<GameObject>();
+            position = new Vector2();
 
-            foreach(var item in map)
+            foreach (var item in map)
             {
                 Texture2D[][] array = item.Value;
 
@@ -52,15 +115,42 @@ namespace Silesian_Undergrounds.Engine.Scene {
                         if (array[y][x] == null)
                             continue;
 
-                        if (item.Key == 3)
-                            pickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
-                        else
-                            tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                        switch(item.Key)
+                        {
+                            case (int)LayerEnum.Background:
+                                grounds.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.Pickables: 
+                                pickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.Traps:
+                                traps.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.Transitions:
+                                transitions.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.Enemies:
+                                enemies.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.ShopPickables:
+                                shopPickableItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.SpecialItems:
+                                specialItems.Add(new Tile(null, new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                            case (int)LayerEnum.PlayerSpawn:
+                                this.position = new Vector2(x, y);
+                                break;
+                            case (int)LayerEnum.RandomRooms:
+                                // empty case, tile markers for random rooms shouldn't be rendered
+                                break;
+                            default:
+                                tiles.Add(new Tile(array[y][x], new Vector2(x * size, y * size), new Vector2(size, size), item.Key));
+                                break;
+                        }
 
                         width = (x + 1) * size;
                         height = (y + 1) * size;
-
-
                     }
                 }
             }

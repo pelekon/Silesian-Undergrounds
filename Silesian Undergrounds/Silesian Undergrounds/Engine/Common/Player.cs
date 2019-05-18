@@ -1,331 +1,370 @@
-﻿using System.Collections.Generic;
+﻿    using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Scene;
+using Silesian_Undergrounds.Engine.Collisions;
+using Silesian_Undergrounds.Engine.Behaviours;
+using Silesian_Undergrounds.Engine.Components;
+using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
-    public class Player : AnimatedGameObject
+    public class Player : GameObject
     {
+        public event EventHandler<PropertyChangedArgs<int>> MoneyChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> KeyChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> HungerChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> LiveChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> HungerMaxValueChangeEvent = delegate { };
+        public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
 
-        // determines if the player is in 'attacking' mode (now just digging)
-        bool attacking = false;
+        private Func<bool> OnPlayeDeath;
+        
+        private int HUNGER_DECREASE_VALUE = 5;
+        private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
+        private const int PLAYER_COLLIDER_BOX_WIDTH = 60;
+        private const int PLAYER_COLLIDER_BOX_HEIGHT = 60;
 
-        private Vector2 previousPosition;
-        // @TODO: refactor this
-        public static int moneyAmount;
-        public static int keyAmount;
+        private float timeSinceHungerFall;
 
-        public Player(Vector2 position, Vector2 size, int layer, Vector2 scale) : base(position, size, layer, scale)
+        private BoxCollider collider;
+        private PlayerStatistic statistics;
+        private PlayerBehaviour behaviour;
+        private Animator animator;
+        private Vector2 sDirection;
+
+        private readonly int textureSpacingX = 20;
+        private readonly int textureSpacingY = 24;
+
+        public Player(Vector2 position, Vector2 size, int layer, Vector2 scale, PlayerStatistic globalPlayerStatistic) : base(null, position, size, layer, scale)
         {
-            FramesPerSecond = 10;
-            previousPosition = position;
-            //Adds all the players animations
-            // AddAnimation(int frames, int yPos, int xStartFrame, string name, int width, int height, Vector2 offset)
-            // frames - number of frames of animation 
-            // y position is a position from left right cornder
-            // xStart frame is the x - sum of all widths
-            // 80x80
+            // SetUp texture
+            TextureMgr.Instance.LoadSingleTextureFromSpritescheet("minerCharacter", "PlayerTexture", 13, 6, 0, 4, textureSpacingX, textureSpacingY);
+            texture = TextureMgr.Instance.GetTexture("PlayerTexture");
 
-            AddAnimation(5, 25, 313, "Down", 22, 22, new Vector2(0, 0));
-            AddAnimation(1, 25, 313, "IdleDown", 22, 22, new Vector2(0, 0));
+            collider = new BoxCollider(this, PLAYER_COLLIDER_BOX_WIDTH, PLAYER_COLLIDER_BOX_HEIGHT, -2, -4, false);
+            AddComponent(collider);
+            statistics = globalPlayerStatistic;
+            behaviour = new PlayerBehaviour(this);
+            AddComponent(behaviour);
+            sDirection = Vector2.Zero;
+            animator = new Animator(this);
+            AddComponent(animator);
+            LoadAndSetUpAnimations();
+            speed = 50f;
+            #if DEBUG
+            statistics.MovementSpeed = 2.0f;
+            #endif
+            ChangeDrawAbility(false);
+        }
 
-            //margins abovw and to the right/left are 25
-            AddAnimation(5, 25, 25, "Up", 22, 22, new Vector2(0, 0));
-            AddAnimation(1, 25, 25, "IdleUp", 22, 22, new Vector2(0, 0));
+        public void SetPosition(Vector2 position)
+        {
+            this.position = position;
+        }
 
-            AddAnimation(5, 25, 385, "Left", 22, 22, new Vector2(0, 0));
-            AddAnimation(1, 25, 385, "IdleLeft", 22, 22, new Vector2(0, 0));
+        public void SetOnDeath(Func<bool> functionOnDeath)
+        {
+            OnPlayeDeath += functionOnDeath;
+        }
 
-            AddAnimation(5, 25, 169, "Right", 22, 22, new Vector2(0, 0));
-            AddAnimation(1, 25, 169, "IdleRight", 22, 22, new Vector2(0, 0));
-            //Plays our start animation
-            PlayAnimation("IdleDown");
+        public bool checkIfEnoughMoney(int cost)
+        {
+            if (cost > statistics.Money)
+                return false;
+
+            return true;
+        }
+
+        public void ChangerHungerDecreaseIntervalBy(float percentToChange)
+        {
+            this.statistics.HungerDecreaseInterval *= percentToChange;
         }
 
         public override void Update(GameTime gameTime)
         {
             sDirection = Vector2.Zero;
 
-        
             HandleInput(Keyboard.GetState());
 
-         
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            previousPosition = position;
+
+            if (!this.statistics.ImmuniteToHunger)
+            {
+                HandleHungerDecrasing(deltaTime);
+            }
 
             sDirection *= speed;
+            sDirection *= deltaTime;
 
-            position += (sDirection * deltaTime);
+            collider.Move(sDirection);
 
             base.Update(gameTime);
-
-        }
-
-        // TODO: Remove this and split collisions to 2 sparate components:
-        // Collision Box and Collider
-        public void Collision(List<Gameobject> gameobjects)
-        {
-            foreach (Gameobject gameobject in gameobjects)
-            {
-                if (TouchingBottom(gameobject) || TouchingLeftSide(gameobject) || TouchingRightSide(gameobject) || TouchingTop(gameobject))
-                {
-                    gameobject.NotifyCollision(this);
-
-                    if (gameobject is Tile && gameobject.layer == 1)
-                    {
-
-                        if (gameobject.Rectangle.Intersects(this.Rectangle))
-                        {
-                            Vector2 temp = previousPosition;
-
-                            Gameobject left = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(-1, 0) * this.size), 1);
-                            Gameobject right = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(1, 0) * this.size), 1);
-                            Gameobject top = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(0, -1) * this.size), 1);
-                            Gameobject bottom = GetGameobjectAtPosition(gameobjects, this.GetTileWhereStanding() + (new Vector2(0, 1) * this.size), 1);
-
-                            if (left != null)
-                            {
-                                if (Keyboard.GetState().IsKeyDown(Keys.S) && Keyboard.GetState().IsKeyDown(Keys.A))
-                                    temp = previousPosition + new Vector2(0, 1);
-
-                                if (Keyboard.GetState().IsKeyDown(Keys.W) && Keyboard.GetState().IsKeyDown(Keys.A))
-                                    temp = previousPosition + new Vector2(0, -1);
-                            }
-
-                            if (top != null)
-                            {
-                                if (Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.W))
-                                    temp = previousPosition + new Vector2(-1, 0);
-
-                                if (Keyboard.GetState().IsKeyDown(Keys.D) && Keyboard.GetState().IsKeyDown(Keys.W))
-                                    temp = previousPosition + new Vector2(1, 0);
-
-                                if (Keyboard.GetState().IsKeyDown(Keys.W) && Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.S))
-                                    temp = previousPosition;
-                            }
-
-                            if (right != null)
-                            {
-                                if (Keyboard.GetState().IsKeyDown(Keys.W) && Keyboard.GetState().IsKeyDown(Keys.D))
-                                    temp = previousPosition + new Vector2(0, -1);
-
-                                if (Keyboard.GetState().IsKeyDown(Keys.S) && Keyboard.GetState().IsKeyDown(Keys.D))
-                                    temp = previousPosition + new Vector2(0, 1);
-                            }
-
-                            if (bottom != null)
-                            {
-                                if (Keyboard.GetState().IsKeyDown(Keys.D) && Keyboard.GetState().IsKeyDown(Keys.S))
-                                    temp = previousPosition + new Vector2(1, 0);
-
-                                if (Keyboard.GetState().IsKeyDown(Keys.A) && Keyboard.GetState().IsKeyDown(Keys.S))
-                                    temp = previousPosition + new Vector2(-1, 0);
-                            }
-
-                            if (left != null && top != null)
-                            {
-                                if (TouchingBottom(top) && !TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.A)))
-                                    if (left.position.X + 1 <= System.Math.Round(this.position.X) && left.position.Y + size.Y >= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(-1, 0);
-
-                                if (!TouchingBottom(top) && TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.W)))
-                                    if (top.position.X >= System.Math.Round(this.position.X) && top.position.Y + size.Y <= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(0, -1);
-
-                                if (TouchingBottom(top) && TouchingRightSide(left))
-                                    temp = previousPosition + new Vector2(1, 1);
-                            }
-
-                            if (right != null && top != null)
-                            {
-                                if (TouchingBottom(top) && !TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.D)))
-                                    if (right.position.X - 1 >= System.Math.Round(this.position.X) && right.position.Y + size.Y >= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(1, 0);
-
-                                if (!TouchingBottom(top) && TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.W)))
-                                    if (top.position.X <= System.Math.Round(this.position.X) && top.position.Y + size.Y + 1 <= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(0, -1);
-
-                                if (TouchingBottom(top) && TouchingLeftSide(right))
-
-                                    temp = previousPosition + new Vector2(-1, 1);
-                            }
-
-                            if (right != null && bottom != null)
-                            {
-                                if (TouchingTop(bottom) && !TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.D)))
-                                    if (right.position.X - 1 >= System.Math.Round(this.position.X) && right.position.Y + size.Y <= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(1, 0);
-
-                                if (!TouchingTop(bottom) && TouchingLeftSide(right) && (Keyboard.GetState().IsKeyDown(Keys.S)))
-                                    if (bottom.position.X <= System.Math.Round(this.position.X) && bottom.position.Y + size.Y + 1 >= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(0, 1);
-
-                                if (TouchingTop(bottom) && TouchingLeftSide(right))
-                                    temp = previousPosition + new Vector2(-1, -1);
-                            }
-
-                            if (left != null && bottom != null)
-                            {
-                                if (TouchingTop(bottom) && !TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.A)))
-                                    if (left.position.X + 1 <= System.Math.Round(this.position.X) && left.position.Y + size.Y <= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(-1, 0);
-
-                                if (!TouchingTop(bottom) && TouchingRightSide(left) && (Keyboard.GetState().IsKeyDown(Keys.S)))
-                                    if (bottom.position.X >= System.Math.Round(this.position.X) && bottom.position.Y + size.Y + 1 >= System.Math.Round(this.position.Y))
-                                        temp = previousPosition + new Vector2(0, 1);
-
-                                if (TouchingTop(bottom) && TouchingRightSide(left))
-                                    temp = previousPosition + new Vector2(1, -1);
-                            }
-                            this.position = temp;
-                            }
-                        }
-                    }
-            }
-        }
-
-        private Gameobject GetGameobjectAtPosition(List<Gameobject> gameobjects, Vector2 position, int layer)
-        {
-            foreach (Gameobject gam in gameobjects)
-                if (gam.position == position && gam.layer == layer)
-                    return gam;
-            return null;
         }
 
         public void Initialize()
         {
-            moneyAmount = 0;
-            keyAmount = 0;
+            timeSinceHungerFall = 0;
         }
 
         public void AddMoney(int moneyToAdd)
         {
-            moneyAmount += moneyToAdd;
+            MoneyAmount += moneyToAdd;
         }
 
         public void RemoveMoney(int moneyToRemove)
         {
-            if (moneyToRemove > moneyAmount)
-                moneyAmount = 0;
+            if (moneyToRemove > statistics.Money)
+                MoneyAmount = 0;
             else
-                moneyAmount -= moneyToRemove;
+                MoneyAmount -= moneyToRemove;
+        }
+
+        public void AddKey(int keyNumbers)
+        {
+            KeyAmount += keyNumbers;
+        }
+
+        public void RefilHunger(int hungerValueToRefil)
+        {
+            if (statistics.Hunger + hungerValueToRefil > statistics.MaxHunger)
+                HungerValue += (statistics.MaxHunger - statistics.Hunger);
+            else
+                HungerValue += hungerValueToRefil;
+        }
+
+        public bool CanRefilHunger(int hungerValueToRefil)
+        {
+            if (statistics.Hunger + hungerValueToRefil > statistics.MaxHunger)
+                return false;
+
+            return true;
+        }
+
+
+        public void RefilLive(int liveValueToRefil)
+        {
+            if (statistics.Health + liveValueToRefil > statistics.MaxHealth)
+                LiveValue += (statistics.MaxHealth - statistics.Health);
+            else
+                LiveValue += liveValueToRefil;
+        }
+
+        public bool CanRefilLive(int liveValueToRefil)
+        {
+            if (statistics.Health + liveValueToRefil > statistics.MaxHealth)
+                return false;
+
+            return true;
+        }
+
+        public void RemoveKey(int numberKeysToRemove)
+        {
+            if (numberKeysToRemove > statistics.Key)
+                KeyAmount = 0;
+            else
+                KeyAmount -= numberKeysToRemove;
+        }
+
+        public void DecreaseHungerValue(int hungerValueToDecrease)
+        {
+            if(statistics.Hunger > 0)
+            {
+                if (HungerValue >= hungerValueToDecrease)
+                    HungerValue -= hungerValueToDecrease;
+                else
+                    HungerValue = 0;
+            }
+            else
+            {
+                DecreaseLiveValue(LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO);
+            }
+        }
+
+        public void DecreaseLiveValue(int liveValueToDecrease)
+        {
+            if(statistics.Health > 0)
+            {
+                if (LiveValue >= liveValueToDecrease)
+                    LiveValue -= liveValueToDecrease;
+                else
+                    LiveValue = 0;
+            }
+
+            if (LiveValue <= 0)
+            {
+                OnPlayeDeath.Invoke();
+            }
+        }
+
+        public void IncreaseLiveMaxValueBy(int liveMaxValueToIncrease)
+        {
+            MaxLiveValue = MaxLiveValue + liveMaxValueToIncrease;
+        }
+
+        public void IncreaseMovementSpped(float movementSpeedValueToIncrease)
+        {
+            this.statistics.MovementSpeed += movementSpeedValueToIncrease;
+        }
+
+        public void GrandPickupDouble()
+        {
+            this.statistics.PickupDouble = true;
+        }
+
+        public void GrandChestDropBooster()
+        {
+            this.statistics.ChestDropBooster = true;
+        }
+
+        public PlayerStatistic PlayerStatistic
+        {
+            get { return this.statistics;  }
+        }
+
+        public void IncreaseHungerMaxValueBy(int hungerMaxValueToIncrease)
+        {
+            MaxHungerValue = MaxHungerValue + hungerMaxValueToIncrease;
+        }
+
+        public void IncreaseAttackValueBy(float attackValueToIncrease)
+        {
+            this.statistics.AttackSpeed += attackValueToIncrease;
+        }
+
+        public int MaxHungerValue
+        {
+            get { return statistics.MaxHunger;  }
+            private set
+            {
+                HungerMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
+                statistics.MaxHunger = value;
+            }
+        }
+
+        public int MaxLiveValue
+        {
+            get { return statistics.MaxHealth;  }
+            private set
+            {
+                LiveMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHealth, value));
+                statistics.MaxHealth = value;
+            }
+        }
+
+        public int MoneyAmount
+        {
+            get { return statistics.Money; }
+            private set
+            {
+                MoneyChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.Money, value));
+                statistics.Money = value;
+            }
+        }
+
+        public int KeyAmount
+        {
+            get { return statistics.Key; }
+            private set
+            {
+                KeyChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.Key, value));
+                statistics.Key = value;
+            }
+        }
+
+        public int HungerValue
+        {
+            get { return statistics.Hunger; }
+            private set
+            {
+                HungerChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.Hunger, value));
+                statistics.Hunger = value;
+            }
+        }
+
+        public int LiveValue
+        {
+            get { return statistics.Health; }
+            private set
+            {
+                LiveChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.Health, value));
+                statistics.Health = value;
+            }
+        }
+
+        public int LiveMaxValue
+        {
+            get { return statistics.MaxHealth; }
+        }
+
+        public int HungerMaxValue
+        {
+            get { return statistics.MaxHunger; }
+            private set
+            {
+                HungerMaxValueChangeEvent.Invoke(this, new PropertyChangedArgs<int>(statistics.MaxHunger, value));
+                statistics.MaxHunger = value;
+            }
+        }
+
+        private void HandleHungerDecrasing(float deltaTime)
+        {
+            timeSinceHungerFall += deltaTime;
+
+            if (timeSinceHungerFall >= this.statistics.HungerDecreaseInterval)
+            {
+                DecreaseHungerValue(HUNGER_DECREASE_VALUE);
+                timeSinceHungerFall = 0;
+            }
         }
 
         private void HandleInput(KeyboardState keyState)
         {
-            if (!attacking)
+            if (keyState.IsKeyDown(Keys.W))
             {
-                if (keyState.IsKeyDown(Keys.W))
-                {
-                    sDirection += new Vector2(0, -1);
-                    PlayAnimation("Up");
-                    currentDirection = movementDirection.up;
+                sDirection += new Vector2(0, -1 * this.statistics.MovementSpeed);
+                animator.PlayAnimation("MoveUp");
+                behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_NORTH);
 
-                }
-                if (keyState.IsKeyDown(Keys.A))
-                {
-                    sDirection += new Vector2(-1, 0);
-                    PlayAnimation("Left");
-                    currentDirection = movementDirection.left;
-
-                }
-                if (keyState.IsKeyDown(Keys.S))
-                { 
-                    sDirection += new Vector2(0, 1);
-                    PlayAnimation("Down");
-                    currentDirection = movementDirection.down;
-
-                }
-                if (keyState.IsKeyDown(Keys.D))
-                {
-                    sDirection += new Vector2(1, 0);
-                    PlayAnimation("Right");
-                    currentDirection = movementDirection.right;
-
-                }
             }
-      
+            if (keyState.IsKeyDown(Keys.A))
+            {
+                sDirection += new Vector2(-1 * this.statistics.MovementSpeed, 0);
+                animator.PlayAnimation("MoveLeft");
+                behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_WEST);
 
-        currentDirection = movementDirection.standstill;
-            
+            }
+            if (keyState.IsKeyDown(Keys.S))
+            {
+                sDirection += new Vector2(0, 1 * this.statistics.MovementSpeed);
+                animator.PlayAnimation("MoveDown");
+                behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_SOUTH);
+
+            }
+            if (keyState.IsKeyDown(Keys.D))
+            {
+                sDirection += new Vector2(1 * this.statistics.MovementSpeed, 0);
+                animator.PlayAnimation("MoveRight");
+                behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_EAST);
+            }
         }
 
-        public override void AnimationDone(string animation)
+        private void LoadAndSetUpAnimations()
         {
-           if (animation.Contains("Attack"))
-           {
-               Debug.WriteLine("Attack!");
-               attacking = false;
-           } else if(IsAnimationMovement(animation))
-           {
-                currentAnimation = "Idle" + animation;
-                Debug.WriteLine(currentAnimation);
-           }
-           
+            // Load necessary textures
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveUp", 13, 6, 0, 5, textureSpacingX, textureSpacingY, false, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveDown", 13, 6, 4, 5, textureSpacingX, textureSpacingY, false, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveLeft", 13, 6, 5, 5, textureSpacingX, textureSpacingY, false, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveRight", 13, 6, 2, 5, textureSpacingX, textureSpacingY, false, true);
 
+            animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("PlayerMoveUp"), 1000, false, true);
+            animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("PlayerMoveDown"), 1000, false, true);
+            animator.AddAnimation("MoveLeft", TextureMgr.Instance.GetAnimation("PlayerMoveLeft"), 1000, false, true);
+            animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("PlayerMoveRight"), 1000, false, true);
         }
-
-        // determines if current animation is up/donw/right/left
-        private bool IsAnimationMovement(string animation)
-        {
-            // we all love Clean Code <3 
-            if((animation.Contains("Up") || animation.Contains("Left") || animation.Contains("Down") || animation.Contains("Right")) && !animation.Contains("Idle")) return true;
-           
-            return false;
-        }
-
-        private void Move()
-        {
-            KeyboardState state = Keyboard.GetState();
-
-            if (state.IsKeyDown(Keys.Left))
-                AddForce(-1, 0);
-            else if (state.IsKeyDown(Keys.Right))
-                AddForce(1, 0);
-            if (state.IsKeyDown(Keys.Up))
-                AddForce(0, -1);
-            else if (state.IsKeyDown(Keys.Down))
-                AddForce(0, 1);
-        }
-
-        #region RectangleCollisionDetection
-
-        private bool TouchingLeftSide(Gameobject gameobjects)
-        {
-            return this.Rectangle.Right > gameobjects.Rectangle.Left &&
-              this.Rectangle.Left < gameobjects.Rectangle.Left &&
-              this.Rectangle.Bottom > gameobjects.Rectangle.Top &&
-              this.Rectangle.Top < gameobjects.Rectangle.Bottom;
-        }
-
-        private bool TouchingRightSide(Gameobject gameobjects)
-        {
-            return this.Rectangle.Left < gameobjects.Rectangle.Right &&
-              this.Rectangle.Right > gameobjects.Rectangle.Right &&
-              this.Rectangle.Bottom > gameobjects.Rectangle.Top &&
-              this.Rectangle.Top < gameobjects.Rectangle.Bottom;
-        }
-
-        private bool TouchingTop(Gameobject gameobjects)
-        {
-            return this.Rectangle.Bottom > gameobjects.Rectangle.Top &&
-              this.Rectangle.Top < gameobjects.Rectangle.Top &&
-              this.Rectangle.Right > gameobjects.Rectangle.Left &&
-              this.Rectangle.Left < gameobjects.Rectangle.Right;
-        }
-
-        private bool TouchingBottom(Gameobject gameobjects)
-        {
-            return this.Rectangle.Top < gameobjects.Rectangle.Bottom &&
-              this.Rectangle.Bottom > gameobjects.Rectangle.Bottom &&
-              this.Rectangle.Right > gameobjects.Rectangle.Left &&
-              this.Rectangle.Left < gameobjects.Rectangle.Right;
-        }
-        #endregion
     }
 }

@@ -1,28 +1,103 @@
 ﻿using System;
-using System.IO;
-using System.Xml;
-using System.Collections.Generic;
-
 using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Silesian_Undergrounds.Engine.Scene;
-using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.Utils;
+using Silesian_Undergrounds.Engine.Collisions;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Silesian_Undergrounds.Engine.Item {
-    class Chest : PickableItem {
 
-        public Chest(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene) : base(texture, position, size, layer, scene)
+namespace Silesian_Undergrounds.Engine.Item
+{
+    public class Chest : PickableItem
+    {
+        private const int NUMBER_OF_CHEST_TEXTURE = 4;
+        private const int NUMBER_OF_POSSIBLE_SPAWNED_ITEM = 6;
+        private const int MINIMUM_NUMBER_OF_SPAWNED_ITEM = 1;
+        private const int RANGE_OF_SPAWN = 1;
+        // time since last frame change
+        private double timeSinceLastFrameChange;
+        // time it takes to update theframe
+        private double timeToUpdateFrame;
+        // FPS
+        public int FramesPerSecond
         {
+            set { timeToUpdateFrame = (1f / value); }
+        }
+        private int CurrentFrame = 1;
+        private Boolean WasPicked = false;
+        private Player player = null;
+        private Random random = new Random();
+
+        public Chest(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene, bool isBuyable = false) : base(texture, position, size, layer, scene, isBuyable)
+        {
+            TextureMgr.Instance.LoadIfNeeded("Items/Chests/chest_2");
+            TextureMgr.Instance.LoadIfNeeded("Items/Chests/chest_3");
+            TextureMgr.Instance.LoadIfNeeded("Items/Chests/chest_4");
+
+            FramesPerSecond = 10;
+            BoxCollider collider = new BoxCollider(this, 59, 46, 0, 0, false);
+            AddComponent(collider);
         }
 
-        public override void NotifyCollision(Gameobject obj)
+        public override void NotifyCollision(GameObject obj, ICollider source)
         {
-            if (obj is Player)
+            base.NotifyCollision(obj, source);
+
+            if (obj is Player && !isBuyable)
             {
-                // TODO implement chest opening, player keys counter decrease, spawn pickable items != chest
-                this.scene.DeleteObject(this);
+                Player plr = obj as Player;
+                this.player = plr;
+                if (!WasPicked && plr.KeyAmount > 0)
+                {
+                    WasPicked = true;
+                    plr.RemoveKey(1);
+                }
             }
         }
+
+        public override void Update(GameTime gameTime)
+        {
+            if(WasPicked)
+            {
+                timeSinceLastFrameChange += gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (timeSinceLastFrameChange > timeToUpdateFrame && CurrentFrame <= NUMBER_OF_CHEST_TEXTURE)
+                {
+                    timeSinceLastFrameChange -= timeToUpdateFrame;
+                    CurrentFrame++;
+                    this.texture = TextureMgr.Instance.GetTexture("Items/Chests/chest_" + CurrentFrame);
+                } else if(CurrentFrame == NUMBER_OF_CHEST_TEXTURE)
+                {
+                    List<GameObject> list = new List<GameObject>();
+
+                    int itemAmount = random.Next(MINIMUM_NUMBER_OF_SPAWNED_ITEM, NUMBER_OF_POSSIBLE_SPAWNED_ITEM);
+
+                    foreach (var obj in this.scene.GameObjects.Where(obj => obj.layer == 2).ToList())
+                    {
+                        
+                        if (Math.Abs(obj.position.X - this.position.X) <= RANGE_OF_SPAWN * this.size.X && Math.Abs(obj.position.Y - this.position.Y) <= RANGE_OF_SPAWN * this.size.X)
+                        {
+                            if (obj.position != (this.scene.player.GetTileWhereStanding()) && itemAmount > 0)
+                            {
+                                list.Add(obj);
+                                itemAmount--;
+                            }
+                        }
+                    }
+
+                    foreach (var obj in GameObjectFactory.ScenePickableItemsFactory(list, this.scene, player.PlayerStatistic, generateChest: false))
+                    {
+                        this.scene.AddObject(obj);
+                    }
+
+                    this.scene.DeleteObject(this);
+                }
+           }
+
+            base.Update(gameTime);
+        }
+
     }
 }

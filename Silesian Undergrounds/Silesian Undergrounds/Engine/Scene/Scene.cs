@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
+using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Utils;
+using Silesian_Undergrounds.Engine.UI;
+using Silesian_Undergrounds.Views;
+using Silesian_Undergrounds.Engine.Collisions;
+using Silesian_Undergrounds.Engine.Enum;
+using System;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -16,42 +15,109 @@ namespace Silesian_Undergrounds.Engine.Scene
     {
 
         #region SCENE_VARIABLES
+        private List<GameObject> gameObjects;
+        private List<GameObject> objectsToDelete;
+        private List<GameObject> objectsToAdd;
+        private List<GameObject> transitions;
 
-        private List<Gameobject> gameobjects;
         public Player player;
-        private List<Gameobject> objectsToDelete;
-        private List<Gameobject> objectsToAdd;
+        private UIArea ui;
+        private UIArea pauseMenu;
         public Camera camera { get; private set; }
-  
+        private Func<bool> OnPlayerWin;
+
+        private const float HUNGER_DECREASE_INTERVAL_CHANGED_BY_PERCENT = 0.8f;
+
         public bool isPaused { get; private set; }
+        public bool isEnd { get; private set; }
+        public bool lastScene { get; private set; }
+        private readonly bool canUnPause;
 
         #endregion
 
-        public Scene()
+        public Scene(PlayerStatistic playerStatistic)
         {
-            // Inittialize variables
-            gameobjects = new List<Gameobject>();
-            objectsToDelete = new List<Gameobject>();
-            objectsToAdd = new List<Gameobject>();
-            isPaused = false;
-            player = new Player(new Vector2(100, 100), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f));
+            CollisionSystem.CleanUp();
 
+            InitLists();
+            isPaused = false;
+            player = new Player(new Vector2(200, 200), new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 1, new Vector2(2.5f, 2.5f), playerStatistic);
 
             TextureMgr.Instance.LoadIfNeeded("minerCharacter");
             player.texture = TextureMgr.Instance.GetTexture("minerCharacter");
-            gameobjects.Add(player);
-    
+            player.Initialize();
+            gameObjects.Add(player);
+            this.lastScene = lastScene;
             camera = new Camera(player);
+            ui = new InGameUI(player);
+            pauseMenu = CreatePauseMenu();
+            canUnPause = true;
         }
 
+        private PauseView CreatePauseMenu()
+        {
+            PauseView pauseView = new PauseView();
+            pauseView.GetResumeButton().SetOnClick(ResumeGame);
+            return pauseView;
+        }
+        public Scene(UIArea area)
+        {
+            pauseMenu = area;
+            isPaused = true;
+            canUnPause = false;
+            camera = new Camera(null);
+            InitLists();
+        }
+
+        void InitLists()
+        {
+            gameObjects = new List<GameObject>();
+            objectsToDelete = new List<GameObject>();
+            objectsToAdd = new List<GameObject>();
+            transitions = new List<GameObject>();
+        }
         #region SCENE_OBJECTS_MANAGMENT_METHODS
 
-        public void AddObject(Gameobject obj)
+        public void SetOnWin(Func<bool> functionOnWin)
+        {
+            this.OnPlayerWin += functionOnWin;
+        }
+
+        public void DecreaseHungerDropInterval()
+        {
+            this.player.ChangerHungerDecreaseIntervalBy(HUNGER_DECREASE_INTERVAL_CHANGED_BY_PERCENT);
+        }
+
+        public void SetEndGameButtonInPauseMenu(Func<bool> functionOnExitGame)
+        {
+            PauseView pV = (PauseView)this.pauseMenu;
+            pV.GetEndGameButton().SetOnClick(functionOnExitGame);
+            this.pauseMenu = pV;
+        }
+
+        public bool ResumeGame()
+        {
+            this.isPaused = false;
+            return true;
+        }
+
+        public void SetLastScene(bool isLastScene)
+        {
+            this.lastScene = isLastScene;
+        }
+
+        public void AddTransition(GameObject obj)
+        {
+            transitions.Add(obj);
+            objectsToAdd.Add(obj);
+        }
+
+        public void AddObject(GameObject obj)
         {
             objectsToAdd.Add(obj);
         }
 
-        public void DeleteObject(Gameobject obj)
+        public void DeleteObject(GameObject obj)
         {
             objectsToDelete.Add(obj);
         }
@@ -59,7 +125,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         private void AddObjects()
         {
             foreach (var obj in objectsToAdd)
-                gameobjects.Add(obj);
+                gameObjects.Add(obj);
 
             objectsToAdd.Clear();
         }
@@ -67,56 +133,142 @@ namespace Silesian_Undergrounds.Engine.Scene
         private void DeleteObjects()
         {
             foreach (var obj in objectsToDelete)
-                gameobjects.Remove(obj);
+            {
+                obj.RemoveAllComponents();
+                gameObjects.Remove(obj);
+            }  
 
             objectsToDelete.Clear();
         }
 
+        public List<GameObject> GameObjects
+        {
+            get { return gameObjects; }
+        }
+
         #endregion
-
-
 
         public void Update(GameTime gameTime)
         {
-            // Operation of add or remove from gameobjects list has to appear before updating gameobjects
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                if (isPaused && canUnPause)
+                    isPaused = false;
+                else
+                    isPaused = true;
+            }
+
+            if (isPaused)
+            {
+                pauseMenu.Update(gameTime);
+                return;
+            }
+            
+            // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
             DeleteObjects();
 
-            foreach (var obj in gameobjects)
+            foreach (var obj in gameObjects)
                 obj.Update(gameTime);
 
             camera.Update(gameTime);
-            player.Collision(this.gameobjects);
+
+            ui.Update(gameTime);
+
+            DetectPlayerOnTransition();
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw()
         {
-            foreach (var obj in gameobjects)
+            Drawer.Shaders.DrawGrayScaleEffect((spriteBatch, gameTime) =>
             {
-                if (obj is Player)
-                    continue;
-
-                if (obj.layer != 3)
+                foreach (var obj in gameObjects)
                 {
+                    if (obj is Player)
+                        continue;
+
+                    if (obj.layer != 3)
+                        obj.Draw(spriteBatch);
+                }
+            }, transformMatrix: camera.Transform);
+
+            Drawer.Draw((spriteBatch, gameTime) =>
+            {
+                foreach (var obj in gameObjects)
+                {
+                    if (obj is Player)
+                        continue;
+
                     obj.Draw(spriteBatch);
                 }
-            }     
+            }, transformMatrix: camera.Transform);
 
-            foreach (var obj in gameobjects)
-                if (obj.layer == 3)
-                    obj.Draw(spriteBatch);
+            Drawer.Shaders.DrawBrightShader((spritebatch, gametime) =>
+            {
+                foreach (var obj in gameObjects)
+                {
+                    if (obj.layer == (int)LayerEnum.ShopPickables)
+                    {
+                        obj.Draw(spritebatch);
+                    }
 
-            player.Draw(spriteBatch);
+                }
+
+            }, transformMatrix: camera.Transform);
+
+            if (player != null)
+            {
+                Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
+                {
+                    foreach (var obj in gameObjects)
+                        if (obj.layer == 3)
+                            obj.Draw(spriteBatch);
+                }, transformMatrix: camera.Transform, lightSource: player.position);
+            }
+
+            Drawer.Draw((spriteBatch, gameTime) =>
+            {
+                if (player != null)
+                    player.Draw(spriteBatch);
+
+                foreach(var obj in gameObjects)
+                {
+                    if (obj.layer == 6)
+                        obj.Draw(spriteBatch);
+                }
+
+            }, transformMatrix: camera.Transform);
+            Drawer.Draw((spriteBatch, gameTime) =>
+            {
+                if (isPaused)
+                    pauseMenu.Draw(spriteBatch);
+                else
+                    ui.Draw(spriteBatch);
+            }, null);
         }
 
-        public void OpenPauseMenu()
+        private void DetectPlayerOnTransition()
         {
+            foreach (var transition in transitions)
+                if (player.GetTileWhereStanding() == transition.GetTileWhereStanding())
+                {
+                    foreach (var obj in gameObjects)
+                        DeleteObject(obj);
 
-        }
+                    foreach (var obj in transitions)
+                        DeleteObject(obj);
 
-        public void PauseGame()
-        {
-            isPaused = true;
+                    foreach (var obj in objectsToAdd)
+                        DeleteObject(obj);
+
+                    DeleteObjects();
+                    isEnd = true;
+                    if (lastScene)
+                    {
+                        OnPlayerWin.Invoke();
+                    }
+                }
         }
     }
 }
+

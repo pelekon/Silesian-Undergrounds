@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
-    public abstract class AnimatedGameObject : Gameobject
+    public abstract class AnimatedGameObject : GameObject
     {
 
         #region AnimationVariables
@@ -66,7 +66,6 @@ namespace Silesian_Undergrounds.Engine.Common
             //Makes sure we won't start a new annimation unless it differs from our current animation
             if (currentAnimation != name && currentDirection == movementDirection.standstill)
             {
-                Debug.WriteLine("Current animation is: " + name);
                 currentAnimation = name;
                 numberFrames = 0;
             }
@@ -90,11 +89,17 @@ namespace Silesian_Undergrounds.Engine.Common
                     numberFrames = 0;
                 }
             }
+
+            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture: texture, position: position + animOffsets[currentAnimation], sourceRectangle: animationDic[currentAnimation][numberFrames], color: Color.White, scale: scale);
+
+            // Temp code
+            foreach (var component in components)
+                component.Draw(spriteBatch);
         }
 
         // callback called every time animation is finished

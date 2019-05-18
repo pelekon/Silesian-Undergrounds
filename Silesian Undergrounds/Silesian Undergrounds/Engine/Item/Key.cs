@@ -1,26 +1,35 @@
 ﻿using System;
-using System.IO;
-using System.Xml;
-using System.Collections.Generic;
-
 using Silesian_Undergrounds.Engine.Common;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using Silesian_Undergrounds.Engine.Scene;
-using Silesian_Undergrounds.Engine.Enum;
-namespace Silesian_Undergrounds.Engine.Item {
-    class Key : PickableItem {
+using Silesian_Undergrounds.Engine.Collisions;
 
-        public Key(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene) : base(texture, position, size, layer, scene)
+namespace Silesian_Undergrounds.Engine.Item {
+    public class Key : PickableItem {
+
+        private int KEY_AMOUNT_TO_ADD_PLAYER = 1;
+
+        public Key(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene, bool isBuyable = false) : base(texture, position, size, layer, scene, isBuyable)
         {
+            BoxCollider collider = new BoxCollider(this, 35, 45, 0, -4, true);
+            AddComponent(collider);
         }
 
-
-        public override void NotifyCollision(Gameobject obj)
+        public override void NotifyCollision(GameObject obj, ICollider source)
         {
-            if (obj is Player)
+            base.NotifyCollision(obj, source);
+
+            if (obj is Player && !isBuyable)
             {
-                //TODO increase player keys counter by 1
+                Player pl = (Player)obj;
+                if (pl.PlayerStatistic.PickupDouble)
+                {
+                    pl.AddKey(2);
+                }
+                else
+                {
+                    pl.AddKey(1);
+                }
                 this.scene.DeleteObject(this);
             }
         }
