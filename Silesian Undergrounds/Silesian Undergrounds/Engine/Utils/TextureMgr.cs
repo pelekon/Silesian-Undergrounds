@@ -110,8 +110,8 @@ namespace Silesian_Undergrounds.Engine.Utils
             if (!contain)
                 animations.Add(animName, list);
 
-            int pixelsPerRow = spritesheet.Height / spritesheetRows;
-            int pixelsPerColumn = spritesheet.Width / spritesheetColumns;
+            int pixelsPerRow = (spritesheet.Height - ((spacingX * 2) * spritesheetRows)) / spritesheetRows;
+            int pixelsPerColumn = (spritesheet.Width - ((spacingY * 2) * spritesheetColumns)) / spritesheetColumns;
 
             // copy information about pixels from texture containing our spriteshieet
             Color[] colorSourceOrg = new Color[spritesheet.Height * spritesheet.Width];
@@ -148,8 +148,8 @@ namespace Silesian_Undergrounds.Engine.Utils
 
             Texture2D spritesheet = contentMgr.Load<Texture2D>(fileName);
 
-            int pixelsPerRow = spritesheet.Height / spritesheetRows - spacingX;
-            int pixelsPerColumn = spritesheet.Width / spritesheetColumns - spacingY;
+            int pixelsPerRow = (spritesheet.Height - ((spacingX * 2) * spritesheetRows)) / spritesheetRows;
+            int pixelsPerColumn = (spritesheet.Width - ((spacingY * 2) * spritesheetColumns)) / spritesheetColumns;
 
             Color[] colorSourceOrg = new Color[spritesheet.Height * spritesheet.Width];
             spritesheet.GetData(colorSourceOrg);
@@ -167,21 +167,22 @@ namespace Silesian_Undergrounds.Engine.Utils
         private Color[] CreateFrameColorArray(int w, int h, Color[][] source, int pivot, int current, int spacingX, int spacingY, bool loadByColumn)
         {
             Color[] frameData = new Color[w * h];
-            int heightWithSpacing = h + spacingX;
-            int widthWithSpacing = w + spacingY;
+            // calculate space of previous elements, spacing from both sides of texture + texture size on proper axis
+            int heightWithSpacing = h + spacingX + spacingX;
+            int widthWithSpacing = w + spacingY + spacingY;
 
             // select proper pixels from source array and put them to created data
-            int startX = pivot * heightWithSpacing;
+            int startX = pivot * heightWithSpacing + spacingX;
             int endX = startX + h;
-            int startY = current * widthWithSpacing;
+            int startY = current * widthWithSpacing + spacingY;
             int endY = startY + w;
             int index = 0;
 
             if (loadByColumn)
             {
-                startX = current * heightWithSpacing;
+                startX = current * heightWithSpacing + spacingX;
                 endX = startX + h;
-                startY = pivot * widthWithSpacing;
+                startY = pivot * widthWithSpacing + spacingY;
                 endY = startY + w;
             }
 

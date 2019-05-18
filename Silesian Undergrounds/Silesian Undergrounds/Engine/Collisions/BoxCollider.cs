@@ -189,7 +189,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
         public void Draw(SpriteBatch batch)
         {
             #if DEBUG
-            batch.Draw(boxTexture, destinationRectangle: Rect, color: Color.White, layerDepth: Parent.layer);
+            batch.Draw(boxTexture, destinationRectangle: Rect, color: Color.White, layerDepth: 1);
             #endif
         }
 

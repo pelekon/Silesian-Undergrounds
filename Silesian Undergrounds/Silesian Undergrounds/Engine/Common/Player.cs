@@ -35,12 +35,14 @@ namespace Silesian_Undergrounds.Engine.Common
         private PlayerBehaviour behaviour;
         private Animator animator;
         private Vector2 sDirection;
-        private MovementDirectionEnum currentDirection;
+
+        private readonly int textureSpacingX = 20;
+        private readonly int textureSpacingY = 24;
 
         public Player(Vector2 position, Vector2 size, int layer, Vector2 scale, PlayerStatistic globalPlayerStatistic) : base(null, position, size, layer, scale)
         {
             // SetUp texture
-            TextureMgr.Instance.LoadSingleTextureFromSpritescheet("minerCharacter", "PlayerTexture", 9, 6, 0, 4, 20);
+            TextureMgr.Instance.LoadSingleTextureFromSpritescheet("minerCharacter", "PlayerTexture", 13, 6, 0, 4, textureSpacingX, textureSpacingY);
             texture = TextureMgr.Instance.GetTexture("PlayerTexture");
 
             collider = new BoxCollider(this, PLAYER_COLLIDER_BOX_WIDTH, PLAYER_COLLIDER_BOX_HEIGHT, -2, -4, false);
@@ -50,9 +52,13 @@ namespace Silesian_Undergrounds.Engine.Common
             AddComponent(behaviour);
             sDirection = Vector2.Zero;
             animator = new Animator(this);
+            AddComponent(animator);
             LoadAndSetUpAnimations();
             speed = 50f;
+            #if DEBUG
             statistics.MovementSpeed = 2.0f;
+            #endif
+            ChangeDrawAbility(false);
         }
 
         public void SetPosition(Vector2 position)
@@ -87,11 +93,6 @@ namespace Silesian_Undergrounds.Engine.Common
             collider.Move(sDirection);
 
             base.Update(gameTime);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            animator.Draw(spriteBatch);
         }
 
         public void Initialize()
@@ -314,46 +315,39 @@ namespace Silesian_Undergrounds.Engine.Common
             if (keyState.IsKeyDown(Keys.W))
             {
                 sDirection += new Vector2(0, -1 * this.statistics.MovementSpeed);
-                //animator.PlayAnimation("MoveUp");
-                currentDirection = MovementDirectionEnum.DIRECTION_UP;
+                animator.PlayAnimation("MoveUp");
                 behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_NORTH);
 
             }
             if (keyState.IsKeyDown(Keys.A))
             {
                 sDirection += new Vector2(-1 * this.statistics.MovementSpeed, 0);
-                //animator.PlayAnimation("MoveLeft");
-                currentDirection = MovementDirectionEnum.DIRECTION_LEFT;
+                animator.PlayAnimation("MoveLeft");
                 behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_WEST);
 
             }
             if (keyState.IsKeyDown(Keys.S))
             {
                 sDirection += new Vector2(0, 1 * this.statistics.MovementSpeed);
-                //animator.PlayAnimation("MoveDown");
-                currentDirection = MovementDirectionEnum.DIRECTION_DOWN;
+                animator.PlayAnimation("MoveDown");
                 behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_SOUTH);
 
             }
             if (keyState.IsKeyDown(Keys.D))
             {
                 sDirection += new Vector2(1 * this.statistics.MovementSpeed, 0);
-                //animator.PlayAnimation("MoveRight");
-                currentDirection = MovementDirectionEnum.DIRECTION_RIGHT;
+                animator.PlayAnimation("MoveRight");
                 behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_EAST);
             }
-
-            // @TODO: vierify this shit
-            //currentDirection = movementDirection.standstill;
         }
 
         private void LoadAndSetUpAnimations()
         {
             // Load necessary textures
-            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveUp", 9, 6, 0, 5, 0, 0, false, true);
-            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveDown", 9, 6, 4, 5, 0, 0, false, true);
-            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveLeft", 9, 6, 5, 5, 0, 0, false, true);
-            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveRight", 9, 6, 2, 5, 0, 0, false, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveUp", 13, 6, 0, 5, textureSpacingX, textureSpacingY, false, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveDown", 13, 6, 4, 5, textureSpacingX, textureSpacingY, false, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveLeft", 13, 6, 5, 5, textureSpacingX, textureSpacingY, false, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveRight", 13, 6, 2, 5, textureSpacingX, textureSpacingY, false, true);
 
             animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("PlayerMoveUp"), 1000, false, true);
             animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("PlayerMoveDown"), 1000, false, true);

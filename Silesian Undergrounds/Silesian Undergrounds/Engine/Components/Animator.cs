@@ -60,7 +60,8 @@ namespace Silesian_Undergrounds.Engine.Components
 
         public void Draw(SpriteBatch batch)
         {
-            batch.Draw(texture: textureToDraw, destinationRectangle: Parent.Rectangle, scale: Parent.scale, color: Parent.color);
+            //spriteBatch.Draw(texture: texture, position: position + animOffsets[currentAnimation], sourceRectangle: animationDic[currentAnimation][numberFrames], color: Color.White, scale: scale);
+            batch.Draw(texture: textureToDraw, destinationRectangle: Parent.Rectangle, sourceRectangle: textureToDraw.Bounds, scale: Parent.scale, color: Parent.color, layerDepth: 0);
         }
 
         public void AddAnimation(string name, List<Texture2D> textures, int animDuration, bool repeatable = false, bool useFirstFrameAsTexture = false)
