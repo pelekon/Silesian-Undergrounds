@@ -33,20 +33,10 @@ namespace Silesian_Undergrounds.Engine.Scene
         
 
             if (!File.Exists(path)) return null;
-            Console.WriteLine(ConfigMgr.PlayerConfig);
             if(playerStatistic == null)
             {
-                playerStatistic = new PlayerStatistic(
-                    health: ConfigMgr.PlayerConfig.Health,
-                    maxHealth: ConfigMgr.PlayerConfig.MaxHealth,
-                    hunger: ConfigMgr.PlayerConfig.Hunger,
-                    maxHunger: ConfigMgr.PlayerConfig.MaxHunger,
-                    movementSpeed: ConfigMgr.PlayerConfig.MovementSpeed,
-                    attackSpeed: ConfigMgr.PlayerConfig.AttackSpeed,
-                    baseDamage: ConfigMgr.PlayerConfig.Damage,
-                    moneyAmount: ConfigMgr.PlayerConfig.MoneyAmount,
-                    keyAmount: ConfigMgr.PlayerConfig.KeyAmount
-                );
+                var initPlayerConfig = ConfigMgr.PlayerConfig;
+                playerStatistic = new PlayerStatistic(initPlayerConfig);
             }
 
             var scene = new Scene(playerStatistic);
@@ -64,7 +54,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             using (var file = File.OpenText(filePath))
             {
                 try  { sceneFile = (SceneFile)new JsonSerializer().Deserialize(file, typeof(SceneFile)); }
-                catch (Newtonsoft.Json.JsonSerializationException e)
+                catch (JsonSerializationException e)
                 {
                     #if DEBUG
                         Console.WriteLine(e.Message);

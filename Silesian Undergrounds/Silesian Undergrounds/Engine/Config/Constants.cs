@@ -2,6 +2,7 @@
 {
     public class Constants
     {
+        // global constants
         public const string 
             JsonFileExtension = ".json", 
             DataDirectory = "Data",
