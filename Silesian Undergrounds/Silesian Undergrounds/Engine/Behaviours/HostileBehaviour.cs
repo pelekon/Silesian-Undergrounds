@@ -6,6 +6,7 @@ using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Components;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Utils;
+using Silesian_Undergrounds.Engine.Enum;
 
 namespace Silesian_Undergrounds.Engine.Behaviours
 {
@@ -31,6 +32,11 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private int health;
         private int maxHealth;
         private int moneyReward;
+        public Animator Animator { get; private set; }
+        private MovementDirectionEnum currentDirection;
+        private MovementDirectionEnum previousDirection;
+        private bool needStandAnimUpdate;
+        private bool isMovementLockedByAnim;
 
         public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, int moneyRew, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
@@ -56,6 +62,14 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             this.health = health;
             maxHealth = health;
             moneyReward = moneyRew;
+
+            Animator = new Animator(Parent);
+            Parent.AddComponent(Animator);
+            Animator.OnAnimationEnd += OnAnimationEnd;
+            
+            Parent.ChangeDrawAbility(false);
+            needStandAnimUpdate = false;
+            isMovementLockedByAnim = false;
         }
 
         public void CleanUp()
@@ -66,7 +80,10 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             collider = null;
         }
 
-        public void Draw(SpriteBatch batch) { }
+        public void Draw(SpriteBatch batch)
+        {
+            Animator.Draw(batch);
+        }
 
         public void RegisterSelf() { }
 
@@ -81,17 +98,34 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             }
         }
 
-        public void GetDamage(int dmg)
+        private void OnAnimationEnd(object sender, string animName)
+        {
+            switch (animName)
+            {
+                case "Attack":
+                    isMovementLockedByAnim = false;
+                    break;
+                case "Death":
+                    Scene.SceneManager.GetCurrentScene().DeleteObject(Parent);
+                    break;
+            }
+        }
+
+        public void RegisterIncomeDmg(int dmg, GameObject source)
         {
             health -= dmg;
+
+            if (!IsInCombat && source is Player)
+                StartCombatWith(source);
 
             if (health <= 0)
             {
                 Player plr = enemy as Player;
                 plr.AddMoney(moneyReward);
                 DropCombat();
-                // TODO: swap this code with proper handler working wiht on death anim
-                Scene.SceneManager.GetCurrentScene().DeleteObject(Parent);
+
+                if (!Animator.PlayAnimation("Death"))
+                    Scene.SceneManager.GetCurrentScene().DeleteObject(Parent);
             }
         }
 
@@ -109,20 +143,23 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             if (!IsInCombat && data.source == aggroArea)
             {
                 if (data.obj is Player)
-                {
-                    IsInCombat = true;
-                    enemy = data.obj;
-                    enemyCollider = enemy.GetComponent<BoxCollider>();
-                    CheckDistanceToEnemy();
-                    events.ScheduleEvent(50, true, UpdateMovement);
-                    PrepareAttackEvents();
-                }
+                    StartCombatWith(data.obj);
             }
+        }
+
+        public void StartCombatWith(GameObject obj)
+        {
+            IsInCombat = true;
+            enemy = obj;
+            enemyCollider = enemy.GetComponent<BoxCollider>();
+            CheckDistanceToEnemy();
+            events.ScheduleEvent(50, true, UpdateMovement);
+            PrepareAttackEvents();
         }
 
         private void UpdateMovement()
         {
-            if (!IsMoveNeeded)
+            if (!IsMoveNeeded || isMovementLockedByAnim)
                 return;
 
             Vector2 moveForce = new Vector2(0, 0);
@@ -137,8 +174,39 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             else
                 moveForce.Y = 1;
 
+            SelectMovementAnimation(moveForce);
+
             moveForce *= (Parent.speed + BonusMoveSpeed);
             collider.Move(moveForce);
+        }
+
+        private void SelectMovementAnimation(Vector2 moveForce)
+        {
+            if (moveForce.Y == -1) // UP anim
+            {
+                Animator.PlayAnimation("MoveUp");
+                previousDirection = currentDirection;
+                currentDirection = MovementDirectionEnum.DIRECTION_UP;
+
+            }
+            else if (moveForce.Y == 1) // DOWN anim
+            {
+                Animator.PlayAnimation("MoveDown");
+                previousDirection = currentDirection;
+                currentDirection = MovementDirectionEnum.DIRECTION_DOWN;
+            }
+            else if (moveForce.X == -1) // LEFT anim
+            {
+                Animator.PlayAnimation("MoveLeft");
+                previousDirection = currentDirection;
+                currentDirection = MovementDirectionEnum.DIRECTION_LEFT;
+            }
+            else if (moveForce.X == 1) // RIGHT anim
+            {
+                Animator.PlayAnimation("MoveRight");
+                previousDirection = currentDirection;
+                currentDirection = MovementDirectionEnum.DIRECTION_RIGHT;
+            }
         }
 
         private float GetDistToEnemy()
@@ -166,33 +234,38 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
         private void PrepareAttackEvents()
         {
-            foreach(var attack in attackPattern.attacks)
+            foreach (var attack in attackPattern.attacks)
+                ScheduleAttack(attack);
+        }
+
+        private void ScheduleAttack(AttackData attack)
+        {
+            events.ScheduleEvent(attack.AttackTimer, attack.IsRepeatable, () =>
             {
-                events.ScheduleEvent(attack.AttackTimer, attack.IsRepeatable, () =>
-                {
-                    // Additional check just for safety
-                    if (enemy == null)
-                        return;
+                // Additional check just for safety
+                if (enemy == null)
+                    return;
 
-                    AttackData att = attack;
-                    // Do not handle melee attack while unit is during movement to enemy
-                    if (att.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
-                        return;
+                // Do not handle melee attack while unit is during movement to enemy
+                if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
+                    return;
 
-                    // Check distance between unit and enemy in order to validate attack with its data
-                    float dist = GetDistToEnemy();
-                    // validate attack
-                    if (att.MinRange > 0.0f && dist < att.MinRange)
-                        return;
-                    if (att.MaxRange < dist)
-                        return;
+                // Check distance between unit and enemy in order to validate attack with its data
+                float dist = GetDistToEnemy();
+                // validate attack
+                if (attack.MinRange > 0.0f && dist < attack.MinRange)
+                    return;
+                if (attack.MaxRange < dist)
+                    return;
 
-                    Random rng = new Random();
-                    int dmgValue = rng.Next(att.MinDamage, att.MaxDamage);
-                    Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
-                    plr.DecreaseLiveValue(dmgValue);
-                });
-            }
+                Random rng = new Random();
+                int dmgValue = rng.Next(attack.MinDamage, attack.MaxDamage);
+                Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
+                plr.DecreaseLiveValue(dmgValue);
+
+                if (attack.type == AttackType.ATTACK_TYPE_MELEE && Animator.PlayAnimation("Attack"))
+                    isMovementLockedByAnim = true;
+            });
         }
     }
 }

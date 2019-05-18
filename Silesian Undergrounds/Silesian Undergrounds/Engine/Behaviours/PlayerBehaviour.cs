@@ -112,7 +112,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             Player plr = Parent as Player;
             int dmg = plr.PlayerStatistic.BaseDamage;
-            hostileBehaviour.GetDamage(dmg);
+            hostileBehaviour.RegisterIncomeDmg(dmg, Parent);
         }
     }
 }
