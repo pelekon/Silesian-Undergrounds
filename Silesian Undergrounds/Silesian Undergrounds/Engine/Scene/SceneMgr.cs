@@ -48,6 +48,11 @@ namespace Silesian_Undergrounds.Engine.Scene
             return scene;
         }
 
+        public static void ClearPlayerStatistics()
+        {
+            playerStatistic = null;
+        }
+
         private static bool LoadSceneFile(string filePath, Scene scene, int tileSize)
         {
             SceneFile sceneFile;

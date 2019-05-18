@@ -1167,7 +1167,7 @@
 /processorParam:TextureFormat=Color
 /build:minerCharacter.png
 
-#begin rays_map.png
+#begin Monsters/128x80Minotaur_FullSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1177,7 +1177,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:rays_map.png
+/build:Monsters/128x80Minotaur_FullSheet.png
+
+#begin Monsters/48x48Worm_FullSheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Monsters/48x48Worm_FullSheet.png
 
 #begin rays_map.png
 /importer:TextureImporter

@@ -18,7 +18,7 @@ namespace Silesian_Undergrounds.Engine.Config
     public class PlayerConfig
     {
         [JsonProperty("hunger-decrese-interval-in-seconds")]
-        public int HungerDecreaseIntervalInSeconds { get; set; } = 10;
+        public float HungerDecreaseIntervalInSeconds { get; set; } = 10.0f;
 
         [JsonProperty("hunger-decrease-value")]
         public int HungerDecreaseValue { get; set; } = 5;

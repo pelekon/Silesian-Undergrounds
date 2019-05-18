@@ -8,6 +8,7 @@ namespace Silesian_Undergrounds.Engine.Common {
             Key = playerConfig.KeyAmount;
             Hunger = playerConfig.Hunger;
             MaxHunger = playerConfig.MaxHunger;
+            HungerDecreaseInterval = playerConfig.HungerDecreaseIntervalInSeconds;
         }
 
         public int Hunger { get; set; }
@@ -17,5 +18,6 @@ namespace Silesian_Undergrounds.Engine.Common {
         public bool PickupDouble { get; set; } = false;
         public bool ChestDropBooster { get; set; } = false;
         public bool ImmuniteToHunger { get; set; } = false;
+        public float HungerDecreaseInterval { get; set; }
     }
 }

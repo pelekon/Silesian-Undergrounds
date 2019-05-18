@@ -1,18 +1,20 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Behaviours;
 using Silesian_Undergrounds.Engine.Config;
+using Silesian_Undergrounds.Engine.Components;
+using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
-    public class Player : AnimatedGameObject
+    public class Player : GameObject
     {
         public event EventHandler<PropertyChangedArgs<int>> MoneyChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> KeyChangeEvent = delegate { };
@@ -21,44 +23,49 @@ namespace Silesian_Undergrounds.Engine.Common
         public event EventHandler<PropertyChangedArgs<int>> HungerMaxValueChangeEvent = delegate { };
         public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
 
+        private Func<bool> OnPlayeDeath;
 
         private float timeSinceHungerFall;
 
         private BoxCollider collider;
-
         private PlayerStatistic statistics;
-
         private PlayerBehaviour behaviour;
+        private Animator animator;
+        private Vector2 sDirection;
 
-        public Player(Vector2 position, Vector2 size, int layer, Vector2 scale, PlayerStatistic globalPlayerStatistic) : base(position, size, layer, scale)
+        private readonly int textureSpacingX = 20;
+        private readonly int textureSpacingY = 24;
+
+        public Player(Vector2 position, Vector2 size, int layer, Vector2 scale, PlayerStatistic globalPlayerStatistic) : base(null, position, size, layer, scale)
         {
-            FramesPerSecond = 10;
-
-            AddAnimation(5, 25, 313, "Down", 22, 22, new Vector2(0, 0));
-            AddAnimation(1, 25, 313, "IdleDown", 22, 22, new Vector2(0, 0));
-
-            //margins abovw and to the right/left are 25
-            AddAnimation(5, 25, 25, "Up", 22, 22, new Vector2(0, 0));
-            AddAnimation(1, 25, 25, "IdleUp", 22, 22, new Vector2(0, 0));
-
-            AddAnimation(5, 25, 385, "Left", 22, 22, new Vector2(0, 0));
-            AddAnimation(1, 25, 385, "IdleLeft", 22, 22, new Vector2(0, 0));
-
-            AddAnimation(5, 25, 169, "Right", 22, 22, new Vector2(0, 0));
-            AddAnimation(1, 25, 169, "IdleRight", 22, 22, new Vector2(0, 0));
-            //Plays our start animation
-            PlayAnimation("IdleDown");
+            // SetUp texture
+            TextureMgr.Instance.LoadSingleTextureFromSpritescheet("minerCharacter", "PlayerTexture", 13, 6, 0, 4, textureSpacingX, textureSpacingY);
+            texture = TextureMgr.Instance.GetTexture("PlayerTexture");
 
             collider = new BoxCollider(this, ConfigMgr.PlayerConfig.PlayerColliderBoxWidth, ConfigMgr.PlayerConfig.PlayerColliderBoxHeight, -2, -4, false);
             AddComponent(collider);
             statistics = globalPlayerStatistic;
             behaviour = new PlayerBehaviour(this);
             AddComponent(behaviour);
+            sDirection = Vector2.Zero;
+            animator = new Animator(this);
+            AddComponent(animator);
+            LoadAndSetUpAnimations();
+            speed = 50f;
+            #if DEBUG
+            statistics.MovementSpeed = 2.0f;
+            #endif
+            ChangeDrawAbility(false);
         }
 
         public void SetPosition(Vector2 position)
         {
             this.position = position;
+        }
+
+        public void SetOnDeath(Func<bool> functionOnDeath)
+        {
+            OnPlayeDeath += functionOnDeath;
         }
 
         public bool checkIfEnoughMoney(int cost)
@@ -67,6 +74,11 @@ namespace Silesian_Undergrounds.Engine.Common
                 return false;
 
             return true;
+        }
+
+        public void ChangerHungerDecreaseIntervalBy(float percentToChange)
+        {
+            this.statistics.HungerDecreaseInterval *= percentToChange;
         }
 
         public override void Update(GameTime gameTime)
@@ -178,9 +190,10 @@ namespace Silesian_Undergrounds.Engine.Common
                 else
                     LiveValue = 0;
             }
-            else
+
+            if (LiveValue <= 0)
             {
-                //TODO player die
+                OnPlayeDeath.Invoke();
             }
         }
 
@@ -298,7 +311,7 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             timeSinceHungerFall += deltaTime;
 
-            if (timeSinceHungerFall >= ConfigMgr.PlayerConfig.HungerDecreaseIntervalInSeconds)
+            if (timeSinceHungerFall >= this.statistics.HungerDecreaseInterval)
             {
                 DecreaseHungerValue(ConfigMgr.PlayerConfig.HungerDecreaseValue);
                 timeSinceHungerFall = 0;
@@ -310,69 +323,44 @@ namespace Silesian_Undergrounds.Engine.Common
             if (keyState.IsKeyDown(Keys.W))
             {
                 sDirection += new Vector2(0, -1 * this.statistics.MovementSpeed);
-                PlayAnimation("Up");
-                currentDirection = movementDirection.up;
+                animator.PlayAnimation("MoveUp");
                 behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_NORTH);
 
             }
             if (keyState.IsKeyDown(Keys.A))
             {
                 sDirection += new Vector2(-1 * this.statistics.MovementSpeed, 0);
-                PlayAnimation("Left");
-                currentDirection = movementDirection.left;
+                animator.PlayAnimation("MoveLeft");
                 behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_WEST);
 
             }
             if (keyState.IsKeyDown(Keys.S))
             {
                 sDirection += new Vector2(0, 1 * this.statistics.MovementSpeed);
-                PlayAnimation("Down");
-                currentDirection = movementDirection.down;
+                animator.PlayAnimation("MoveDown");
                 behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_SOUTH);
 
             }
             if (keyState.IsKeyDown(Keys.D))
             {
                 sDirection += new Vector2(1 * this.statistics.MovementSpeed, 0);
-                PlayAnimation("Right");
-                currentDirection = movementDirection.right;
+                animator.PlayAnimation("MoveRight");
                 behaviour.SetOwnerOrientation(PlayerOrientation.ORIENTATION_EAST);
             }
-
-            currentDirection = movementDirection.standstill;
         }
 
-        public override void AnimationDone(string animation)
+        private void LoadAndSetUpAnimations()
         {
-           if (animation.Contains("Attack"))
-           {
-               Debug.WriteLine("Attack!");
-           } else if(IsAnimationMovement(animation))
-           {
-                currentAnimation = "Idle" + animation;
-           }
-        }
+            // Load necessary textures
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveUp", 13, 6, 0, 5, textureSpacingX, textureSpacingY, false, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveDown", 13, 6, 4, 5, textureSpacingX, textureSpacingY, false, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveLeft", 13, 6, 5, 5, textureSpacingX, textureSpacingY, false, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("minerCharacter", "PlayerMoveRight", 13, 6, 2, 5, textureSpacingX, textureSpacingY, false, true);
 
-        // determines if current animation is up/donw/right/left
-        private bool IsAnimationMovement(string animation)
-        {
-            if((animation.Contains("Up") || animation.Contains("Left") || animation.Contains("Down") || animation.Contains("Right")) && !animation.Contains("Idle")) return true;
-
-            return false;
-        }
-
-        private void Move()
-        {
-            KeyboardState state = Keyboard.GetState();
-
-            if (state.IsKeyDown(Keys.Left))
-                AddForce(-1, 0);
-            else if (state.IsKeyDown(Keys.Right))
-                AddForce(1, 0);
-            if (state.IsKeyDown(Keys.Up))
-                AddForce(0, -1);
-            else if (state.IsKeyDown(Keys.Down))
-                AddForce(0, 1);
+            animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("PlayerMoveUp"), 1000, false, true);
+            animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("PlayerMoveDown"), 1000, false, true);
+            animator.AddAnimation("MoveLeft", TextureMgr.Instance.GetAnimation("PlayerMoveLeft"), 1000, false, true);
+            animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("PlayerMoveRight"), 1000, false, true);
         }
     }
 }

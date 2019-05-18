@@ -33,5 +33,10 @@ namespace Silesian_Undergrounds.Views
         public Button GetStartGameButton() {
             return this.startGameButton;
         }
+
+        public Button GetExitButton()
+        {
+            return this.exitButton;
+        }
     }
 }

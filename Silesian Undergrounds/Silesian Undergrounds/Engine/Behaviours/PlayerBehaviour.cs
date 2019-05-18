@@ -28,7 +28,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private TimedEventsScheduler eventsScheduler;
         private bool isAttackOnCooldown;
 
-        private readonly int attackCooldown = 3000;
+        private readonly int attackCooldown = 2000;
 
         public PlayerBehaviour(GameObject parent)
         {
@@ -112,7 +112,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             Player plr = Parent as Player;
             int dmg = plr.PlayerStatistic.BaseDamage;
-            hostileBehaviour.GetDamage(dmg);
+            hostileBehaviour.RegisterIncomeDmg(dmg, Parent);
         }
     }
 }
