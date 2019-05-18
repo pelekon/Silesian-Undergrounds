@@ -67,11 +67,34 @@ namespace Silesian_Undergrounds.Engine.Utils
             foreach (var txt in list)
                 LoadIfNeeded(txt);
         }
-
-        // Function to create animation's texture array
-        // It loads whole spritesheet and creates Texture2D objects with frames
-        // @param int row: index of row, starts from 0
-        public bool LoadAnimationFromSpritesheet(string fileName, string animName, int spritesheetRows, int spritesheetColumns, int row, int columns, bool canAddToExisting)
+        //
+        // Summary:
+        //     Function to create animation's texture array
+        //     It loads whole spritesheet and creates Texture2D objects with frames
+        //
+        // Parameters:
+        //   index:
+        //     index of row/column, starts from 0
+        public bool LoadAnimationFromSpritesheet(string fileName, string animName, int spritesheetRows, int spritesheetColumns, int index, int amount)
+        {
+            return LoadAnimationFromSpritesheet(fileName, animName, spritesheetRows, spritesheetColumns, index, amount, 0, 0, false);
+        }
+        //
+        // Summary:
+        //     Function to create animation's texture array
+        //     It loads whole spritesheet and creates Texture2D objects with frames
+        //
+        // Parameters:
+        //   index:
+        //     index of row/column, starts from 0
+        //   spacingX:
+        //     define amount of spacing pixels between two separate textures in row
+        //   spacingY:
+        //     define amount of spacing pixels between two separate textures in column
+        //   loadByColumn:
+        //     if true function will load textures present in column instead of row
+        public bool LoadAnimationFromSpritesheet(string fileName, string animName, int spritesheetRows, int spritesheetColumns, int index, int amount,
+            int spacingX, int spacingY, bool canAddToExisting = false, bool loadByColumn = false)
         {
             bool contain = false;
             if (animations.ContainsKey(animName))
@@ -83,7 +106,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             }
 
             Texture2D spritesheet = contentMgr.Load<Texture2D>(fileName);
-            List<Texture2D> list = contain ? animations[animName] : new List<Texture2D>(columns);
+            List<Texture2D> list = contain ? animations[animName] : new List<Texture2D>(amount);
             if (!contain)
                 animations.Add(animName, list);
 
@@ -95,10 +118,10 @@ namespace Silesian_Undergrounds.Engine.Utils
             spritesheet.GetData(colorSourceOrg);
             Color[][] colorSource = MakeTwoDimColorArray(colorSourceOrg, spritesheet.Width, spritesheet.Height);
 
-            for (int i = 0; i < columns; ++i)
+            for (int i = 0; i < amount; ++i)
             {
                 // Create color data array which will let frame get information about its pixel
-                Color[] frameData = CreateFrameColorArray(pixelsPerColumn, pixelsPerRow, colorSource, row, i);
+                Color[] frameData = CreateFrameColorArray(pixelsPerColumn, pixelsPerRow, colorSource, index, i, spacingX, spacingY, loadByColumn);
 
                 Texture2D frame = new Texture2D(spritesheet.GraphicsDevice, pixelsPerColumn, pixelsPerRow);
                 frame.SetData(0, new Rectangle(0, 0, pixelsPerColumn, pixelsPerRow), frameData, 0, pixelsPerColumn * pixelsPerRow);
@@ -118,22 +141,22 @@ namespace Silesian_Undergrounds.Engine.Utils
             animations[animName].Add(frame);
         }
 
-        public void LoadSingleTextureFromSpritescheet(string fileName, string name, int spritesheetRows, int spritesheetColumns, int row, int column)
+        public void LoadSingleTextureFromSpritescheet(string fileName, string name, int spritesheetRows, int spritesheetColumns, int row, int column, int spacingX = 0, int spacingY = 0)
         {
             if (textures.ContainsKey(name))
                 return;
 
             Texture2D spritesheet = contentMgr.Load<Texture2D>(fileName);
 
-            int pixelsPerRow = spritesheet.Height / spritesheetRows;
-            int pixelsPerColumn = spritesheet.Width / spritesheetColumns;
+            int pixelsPerRow = spritesheet.Height / spritesheetRows - spacingX;
+            int pixelsPerColumn = spritesheet.Width / spritesheetColumns - spacingY;
 
             Color[] colorSourceOrg = new Color[spritesheet.Height * spritesheet.Width];
             spritesheet.GetData(colorSourceOrg);
             Color[][] colorSource = MakeTwoDimColorArray(colorSourceOrg, spritesheet.Width, spritesheet.Height);
 
             // Create color data array which will let frame get information about its pixel
-            Color[] frameData = CreateFrameColorArray(pixelsPerColumn, pixelsPerRow, colorSource, row, column);
+            Color[] frameData = CreateFrameColorArray(pixelsPerColumn, pixelsPerRow, colorSource, row, column, spacingX, spacingY, false);
 
             Texture2D frame = new Texture2D(spritesheet.GraphicsDevice, pixelsPerColumn, pixelsPerRow);
             frame.SetData(0, new Rectangle(0, 0, pixelsPerColumn, pixelsPerRow), frameData, 0, pixelsPerColumn * pixelsPerRow);
@@ -141,15 +164,26 @@ namespace Silesian_Undergrounds.Engine.Utils
             textures.Add(name, frame);
         }
 
-        private Color[] CreateFrameColorArray(int w, int h, Color[][] source, int row, int column)
+        private Color[] CreateFrameColorArray(int w, int h, Color[][] source, int pivot, int current, int spacingX, int spacingY, bool loadByColumn)
         {
             Color[] frameData = new Color[w * h];
+            int heightWithSpacing = h + spacingX;
+            int widthWithSpacing = w + spacingY;
+
             // select proper pixels from source array and put them to created data
-            int startX = row * h;
+            int startX = pivot * heightWithSpacing;
             int endX = startX + h;
-            int startY = column * w;
+            int startY = current * widthWithSpacing;
             int endY = startY + w;
             int index = 0;
+
+            if (loadByColumn)
+            {
+                startX = current * heightWithSpacing;
+                endX = startX + h;
+                startY = pivot * widthWithSpacing;
+                endY = startY + w;
+            }
 
             for (int x = startX; x < endX; ++x)
             {

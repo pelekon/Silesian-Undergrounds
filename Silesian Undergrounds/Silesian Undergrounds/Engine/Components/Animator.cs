@@ -14,6 +14,7 @@ namespace Silesian_Undergrounds.Engine.Components
             internal string animationName;
             internal int duration;
             internal bool isRepeatable;
+            internal bool setFirstFrameAsTexture;
             internal List<Texture2D> textures;
             internal List<int> timestamps;
         }
@@ -62,7 +63,7 @@ namespace Silesian_Undergrounds.Engine.Components
             batch.Draw(texture: textureToDraw, destinationRectangle: Parent.Rectangle, scale: Parent.scale, color: Parent.color);
         }
 
-        public void AddAnimation(string name, List<Texture2D> textures, int animDuration, bool repeatable = false)
+        public void AddAnimation(string name, List<Texture2D> textures, int animDuration, bool repeatable = false, bool useFirstFrameAsTexture = false)
         {
             if (animations.ContainsKey(name))
                 return;
@@ -78,10 +79,11 @@ namespace Silesian_Undergrounds.Engine.Components
                 animData.timestamps.Add(frameLenght);
 
             animData.isRepeatable = repeatable;
+            animData.setFirstFrameAsTexture = useFirstFrameAsTexture;
             animations.Add(name, animData);
         }
 
-        public void AddAnimation(string name, List<Texture2D> textures, int animDuration, List<int> timestamps, bool repeatable = false)
+        public void AddAnimation(string name, List<Texture2D> textures, int animDuration, List<int> timestamps, bool repeatable = false, bool useFirstFrameAsTexture = false)
         {
             if (animations.ContainsKey(name))
                 return;
@@ -109,6 +111,7 @@ namespace Silesian_Undergrounds.Engine.Components
             animData.textures = textures;
             animData.timestamps = timestamps;
             animData.isRepeatable = repeatable;
+            animData.setFirstFrameAsTexture = useFirstFrameAsTexture;
 
             animations.Add(name, animData);
         }
@@ -116,6 +119,10 @@ namespace Silesian_Undergrounds.Engine.Components
         public bool PlayAnimation(string name)
         {
             if (!animations.ContainsKey(name))
+                return false;
+
+            // Do not play same animation as this one which is currently played
+            if (name == currentAnimation.animationName)
                 return false;
 
             // stop current animation if there is any
@@ -168,7 +175,11 @@ namespace Silesian_Undergrounds.Engine.Components
 
         private void CallAnimationEnd()
         {
-            textureToDraw = orginalTexture;
+            if (currentAnimation.setFirstFrameAsTexture && !currentAnimation.isRepeatable)
+                textureToDraw = currentAnimation.textures[0];
+            else
+                textureToDraw = orginalTexture;
+
             OnAnimationEnd.Invoke(this, currentAnimation.animationName);
 
             if (currentAnimation.isRepeatable)
