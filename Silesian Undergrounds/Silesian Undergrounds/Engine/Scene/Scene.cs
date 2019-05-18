@@ -47,8 +47,6 @@ namespace Silesian_Undergrounds.Engine.Scene
             ui = new InGameUI(player);
             pauseMenu = new UIArea(); // TEMP SET EMPTY PAUSE MENU
             canUnPause = true;
-
-            AddObject(EnemyFactory.MinotaurFactory(new Vector2(100, 100)));
         }
 
 

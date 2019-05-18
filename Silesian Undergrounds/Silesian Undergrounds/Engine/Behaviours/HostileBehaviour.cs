@@ -111,9 +111,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             }
         }
 
-        public void GetDamage(int dmg)
+        public void RegisterIncomeDmg(int dmg, GameObject source)
         {
             health -= dmg;
+
+            if (!IsInCombat && source is Player)
+                StartCombatWith(source);
 
             if (health <= 0)
             {
@@ -140,15 +143,18 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             if (!IsInCombat && data.source == aggroArea)
             {
                 if (data.obj is Player)
-                {
-                    IsInCombat = true;
-                    enemy = data.obj;
-                    enemyCollider = enemy.GetComponent<BoxCollider>();
-                    CheckDistanceToEnemy();
-                    events.ScheduleEvent(50, true, UpdateMovement);
-                    PrepareAttackEvents();
-                }
+                    StartCombatWith(data.obj);
             }
+        }
+
+        public void StartCombatWith(GameObject obj)
+        {
+            IsInCombat = true;
+            enemy = obj;
+            enemyCollider = enemy.GetComponent<BoxCollider>();
+            CheckDistanceToEnemy();
+            events.ScheduleEvent(50, true, UpdateMovement);
+            PrepareAttackEvents();
         }
 
         private void UpdateMovement()

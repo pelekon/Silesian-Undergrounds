@@ -60,8 +60,9 @@ namespace Silesian_Undergrounds.Engine.Components
 
         public void Draw(SpriteBatch batch)
         {
-            //spriteBatch.Draw(texture: texture, position: position + animOffsets[currentAnimation], sourceRectangle: animationDic[currentAnimation][numberFrames], color: Color.White, scale: scale);
-            batch.Draw(texture: textureToDraw, destinationRectangle: Parent.Rectangle, sourceRectangle: textureToDraw.Bounds, scale: Parent.scale, color: Parent.color, layerDepth: 0);
+            // @TODO: remove this haxfix, made in order to render enemy units
+            int layer = Parent.layer == 6 ? 1 : Parent.layer;
+            batch.Draw(texture: textureToDraw, destinationRectangle: Parent.Rectangle, sourceRectangle: textureToDraw.Bounds, scale: Parent.scale, color: Parent.color, layerDepth: layer);
         }
 
         public void AddAnimation(string name, List<Texture2D> textures, int animDuration, bool repeatable = false, bool useFirstFrameAsTexture = false)

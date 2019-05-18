@@ -140,7 +140,20 @@ namespace Silesian_Undergrounds.Engine.Utils
             Texture2D frame = contentMgr.Load<Texture2D>(fileName);
             animations[animName].Add(frame);
         }
-
+        //
+        // Summary:
+        //     Function to create animation's texture array
+        //     It loads whole spritesheet and creates Texture2D objects with frames
+        //
+        // Parameters:
+        //   row:
+        //     index of row, starts from 0
+        //   column:
+        //     index of column, starts from 0
+        //   spacingX:
+        //     define amount of spacing pixels between two separate textures in row
+        //   spacingY:
+        //     define amount of spacing pixels between two separate textures in column
         public void LoadSingleTextureFromSpritescheet(string fileName, string name, int spritesheetRows, int spritesheetColumns, int row, int column, int spacingX = 0, int spacingY = 0)
         {
             if (textures.ContainsKey(name))
