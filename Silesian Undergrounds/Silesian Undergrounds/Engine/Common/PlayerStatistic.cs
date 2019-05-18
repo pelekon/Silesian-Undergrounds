@@ -11,17 +11,19 @@ namespace Silesian_Undergrounds.Engine.Common {
         private int keyAmount;
         private int hungerValue;
         private int hungerMaxValue;
+        private float hungerDecreaseInterval;
         private bool havePickupDouble = false;
         private bool haveChestDropBooster = false;
         private bool isImmuniteToHunger = false;
    
 
-        public PlayerStatistic(int health, int maxHealth, int hunger, int maxHunger, float movementSpeed, float attackSpeed, int baseDamage, int moneyAmount, int keyAmount) : base(health, maxHealth, movementSpeed, attackSpeed, baseDamage)
+        public PlayerStatistic(int health, int maxHealth, int hunger, int maxHunger, float movementSpeed, float attackSpeed, int baseDamage, int moneyAmount, int keyAmount, float hungerDecreaseInterval) : base(health, maxHealth, movementSpeed, attackSpeed, baseDamage)
         {
             this.moneyAmount = moneyAmount;
             this.keyAmount = keyAmount;
             this.hungerValue = hunger;
             this.hungerMaxValue = maxHunger;
+            this.hungerDecreaseInterval = hungerDecreaseInterval;
         }
 
         public int Hunger { get => hungerValue; set => hungerValue = value; }
@@ -31,5 +33,6 @@ namespace Silesian_Undergrounds.Engine.Common {
         public bool PickupDouble { get => havePickupDouble; set => havePickupDouble = value; }
         public bool ChestDropBooster { get => haveChestDropBooster; set => haveChestDropBooster = value; }
         public bool ImmuniteToHunger { get => isImmuniteToHunger; set => isImmuniteToHunger = value; }
+        public float HungerDecreaseInterval { get => hungerDecreaseInterval; set => hungerDecreaseInterval = value; }
     }
 }
