@@ -17,8 +17,6 @@ namespace Silesian_Undergrounds.Engine.Config
 
     public class PlayerConfig
     {
-        [JsonProperty("player-speed", Required = Required.Always)]
-        public int PlayerSpeed { get; set; }
         [JsonProperty("hunger-decrese-interval-in-seconds", Required = Required.Always)]
         public int HungerDecreaseIntervalInSeconds { get; set; }
         [JsonProperty("hunger-decrease-value", Required = Required.Always)]

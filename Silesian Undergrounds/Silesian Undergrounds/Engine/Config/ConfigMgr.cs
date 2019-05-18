@@ -35,7 +35,7 @@ namespace Silesian_Undergrounds.Engine.Config
             using (var file = File.OpenText(configFilePath))
             {
                 try { configFile = (Config)new JsonSerializer().Deserialize(file, typeof(Config)); }
-                catch (Newtonsoft.Json.JsonSerializationException e)
+                catch (JsonSerializationException e)
                 {
                     #if DEBUG
                         Console.WriteLine(e.Message);
@@ -43,7 +43,6 @@ namespace Silesian_Undergrounds.Engine.Config
                     return null;
                 }
             }
-            Console.WriteLine("PlayerSpeed: " + configFile.Player.PlayerSpeed);
             return configFile;
         }
     }
