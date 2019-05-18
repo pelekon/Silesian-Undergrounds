@@ -1,4 +1,4 @@
-# Here is all needed information to create config.json file
+# Here is all needed information to create the config.json file
 `config.json` file should be placed in the `Data` directory, but it is not required, when `config.json` file does not exist default values are used. There is also no need of declaring whole config.json file with all fields, you can change as many as you want also only one field, for example:
 ```json
 {
@@ -11,7 +11,7 @@ be aware that when your JSON file will contain errors which will make your file 
 
 # Config information
 
-## `player` - keeps all required player config
+## `player` - keeps player config
   - `hunger-decrese-interval-in-seconds` float, default: `10.0f`
   - `hunger-decrease-value` int, default: `5`
   - `live-decrease-value-when-hunger-is-zero` int, default: `20`
@@ -48,8 +48,14 @@ be aware that when your JSON file will contain errors which will make your file 
   - `player-max-live-value-increase-by` int, default: `100`
 - ### `movement-booster`
   - `player-movement-increase-by` int, default: `1.0f`
-
-
+  
+## `ore` - keeps ore config
+  when the sum of ore occurrence percentage is larger than `100` default values are used for all of the ores  
+  when the sum of ore occurrence percentage is lower than `100` coal ore is used to fill a gap
+  - `coal-occurrence-percentage` int, default: `60`
+  - `silver-occurrence-percentage` int, default: `30`
+  - `gold-occurrence-percentage` int, default: `10`
+  
 ### Here is a full `config.json` file with all fields set to default values: 
 
 ```json
@@ -95,7 +101,12 @@ be aware that when your JSON file will contain errors which will make your file 
     },
     "movement-booster": {
       "player-movement-increase-by": 1.0
-    }
+    },
+    "ore": {
+      "coal-occurrence-percentage": 60,
+      "silver-occurrence-percentage": 30,
+      "gold-occurrence-percentage":  10 
+    } 
   }
 }
 ```

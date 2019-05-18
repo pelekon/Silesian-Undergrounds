@@ -10,7 +10,7 @@
     "hunger": 100,
     "max-hunger": 150,
     "attack-speed": 1.0,
-    "movement-speed": 2.0,
+    "movement-speed": 10.0,
     "damage": 10,
     "key-amount": 0,
     "money-amount": 0
@@ -40,6 +40,11 @@
     },
     "movement-booster": {
       "player-movement-increase-by": 1.0
-    }
+    },
+    "ore": {
+      "coal-occurrence-percentage": 60,
+      "silver-occurrence-percentage": 30,
+      "gold-occurrence-percentage":  10 
+    } 
   }
 }

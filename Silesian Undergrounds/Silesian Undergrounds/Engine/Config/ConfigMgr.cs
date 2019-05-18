@@ -18,11 +18,21 @@ namespace Silesian_Undergrounds.Engine.Config
         public static HungerBoosterConfig HungerBoosterConfig => _config.Pickable.HungerBooster;
         public static LiveBoosterConfig LiveBoosterConfig => _config.Pickable.LiveBoosterConfig;
         public static MovementBoosterConfig MovementBoosterConfig => _config.Pickable.MovementBoosterConfig;
+        public static OreConfig OreConfig => _config.Pickable.OreConfig;
         public static TerrainConfig TerrainConfig => _config.Terrain;
 
         public static Config LoadConfig()
         {
             _config = ReadConfigFile() ?? new Config();
+            if (_config.Pickable.OreConfig.GoldOccurrencePercentage +
+                _config.Pickable.OreConfig.SilverOccurrencePercentage +
+                _config.Pickable.OreConfig.CoalOccurrencePercentage > 100)
+            {
+                #if DEBUG
+                    Console.WriteLine("the sum of ore occurrence percentage is larger than 100% - using defalut values");
+                #endif
+                _config.Pickable.OreConfig = new OreConfig();
+            }
             return _config;
         }
 

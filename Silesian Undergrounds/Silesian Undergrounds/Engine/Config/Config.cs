@@ -86,6 +86,8 @@ namespace Silesian_Undergrounds.Engine.Config
         public LiveBoosterConfig LiveBoosterConfig { get; set; } = new LiveBoosterConfig();
         [JsonProperty("movement-booster")]
         public MovementBoosterConfig MovementBoosterConfig { get; set; } = new MovementBoosterConfig();
+        [JsonProperty("ore")]
+        public OreConfig OreConfig{ get; set; } = new OreConfig();
     }
 
     public class HeartConfig
@@ -120,5 +122,16 @@ namespace Silesian_Undergrounds.Engine.Config
     {
         [JsonProperty("percentage-of-textures-with-things")]
         public int PercentageOfTexturesWithThings { get; set; } = 25;
+    }
+    public class OreConfig
+    {
+        [JsonProperty("coal-occurrence-percentage")]
+        public int CoalOccurrencePercentage { get; set; } = 60;
+
+        [JsonProperty("silver-occurrence-percentage")]
+        public int SilverOccurrencePercentage { get; set; } = 30;
+
+        [JsonProperty("gold-occurrence-percentage")]
+        public int GoldOccurrencePercentage { get; set; } = 10;
     }
 }
