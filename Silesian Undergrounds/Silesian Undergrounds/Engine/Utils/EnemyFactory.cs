@@ -22,10 +22,12 @@ namespace Silesian_Undergrounds.Engine.Utils
             foreach(var pos in positionSource)
             {
                 int chance = rng.Next(0, 100);
-                if (chance <= 50)
-                    list.Add(MinotaurFactory(pos.position));
-                else
-                    list.Add(WormFactory(pos.position));
+                //if (chance <= 50)
+                //  list.Add(MinotaurFactory(pos.position));
+                //  else
+                //  list.Add(WormFactory(pos.position));
+                //TODO: change this
+                list.Add(RatFactory(pos.position));
             }
 
             return list;
@@ -39,12 +41,50 @@ namespace Silesian_Undergrounds.Engine.Utils
             if (TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/128x80Minotaur_FullSheet", "Monsters/Minotaur_Attack", 6, 8, 2, 8, 0, 15, false))
                 TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/128x80Minotaur_FullSheet", "Monsters/Minotaur_Attack", 6, 8, 3, 8, 0, 15, true);
 
+            
             GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
             AttackPattern attackPattern = new AttackPattern();
             HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
             obj.AddComponent(behaviour);
             behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_Attack"), 1000);
 
+            return obj;
+        }
+
+       public static GameObject RatFactory(Vector2 position)
+        {
+            TextureMgr.Instance.LoadSingleTextureFromSpritescheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat", 4, 8, 0, 0, 0, 5);
+            Texture2D texture = TextureMgr.Instance.GetTexture("Monsters/Rat");
+
+            GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
+            AttackPattern attackPattern = new AttackPattern();
+            //bool isRepeatable, int minDamage, int maxDamage, int attackTimer, AttackType type, float minRange, float maxRange
+            AttackData attackData = new AttackData(true, 10, 15, 1000, AttackType.ATTACK_TYPE_MELEE, 20, 20);
+            attackPattern.AddAttack(attackData);
+
+            HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
+            
+
+            if (TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_MoveRight", 4, 8, 1, 8, 0, 5, false))
+                TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_MoveRight", 4, 8, 1, 8, 0, 5, true);
+
+            if (TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_Attack", 4, 8, 3, 8, 0, 5, false))
+                TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_Attack", 4, 8, 3, 8, 0, 5, true);
+
+            behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), 100);
+            behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), 100);
+            behaviour.Animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), 100);
+            behaviour.Animator.AddAnimation("MoveLeft", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), 100);
+
+            behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Rat_Attack"), 1000);
+           // behaviour.Animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
+          // behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
+           // behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
+
+
+
+
+            obj.AddComponent(behaviour);          
             return obj;
         }
 

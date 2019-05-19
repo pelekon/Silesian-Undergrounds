@@ -7,6 +7,7 @@ using Silesian_Undergrounds.Engine.Components;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Enum;
+using System.Diagnostics;
 
 namespace Silesian_Undergrounds.Engine.Behaviours
 {
@@ -192,6 +193,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             else if (moveForce.Y == 1) // DOWN anim
             {
                 Animator.PlayAnimation("MoveDown");
+
                 previousDirection = currentDirection;
                 currentDirection = MovementDirectionEnum.DIRECTION_DOWN;
             }
@@ -203,7 +205,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             }
             else if (moveForce.X == 1) // RIGHT anim
             {
-                Animator.PlayAnimation("MoveRight");
+                bool returnedValue = Animator.PlayAnimation("MoveRight");
                 previousDirection = currentDirection;
                 currentDirection = MovementDirectionEnum.DIRECTION_RIGHT;
             }
@@ -235,7 +237,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private void PrepareAttackEvents()
         {
             foreach (var attack in attackPattern.attacks)
-                ScheduleAttack(attack);
+               ScheduleAttack(attack);
         }
 
         private void ScheduleAttack(AttackData attack)
@@ -247,14 +249,14 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                     return;
 
                 // Do not handle melee attack while unit is during movement to enemy
-                if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
-                    return;
+               if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
+                  return;
 
                 // Check distance between unit and enemy in order to validate attack with its data
                 float dist = GetDistToEnemy();
                 // validate attack
-                if (attack.MinRange > 0.0f && dist < attack.MinRange)
-                    return;
+               if (attack.MinRange > 0.0f && dist < attack.MinRange)
+                   return;
                 if (attack.MaxRange < dist)
                     return;
 
@@ -263,6 +265,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
                 plr.DecreaseLiveValue(dmgValue);
 
+                for (int i = 0; i < 6; i++)
+                    Debug.WriteLine(attack.type);
+
+                bool returnedValue = Animator.PlayAnimation("Attack");
+                for(int i = 0; i < 50; i ++)
+                    Debug.WriteLine(returnedValue);
                 if (attack.type == AttackType.ATTACK_TYPE_MELEE && Animator.PlayAnimation("Attack"))
                     isMovementLockedByAnim = true;
             });

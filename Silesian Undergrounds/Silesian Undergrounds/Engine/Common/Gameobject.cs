@@ -61,8 +61,6 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 if (texture.Name == "Items/Food/meat_with_label")
                 {
-                    //thi
-
                     spriteBatch.Draw(texture: texture, destinationRectangle: new Rectangle((int)position.X, (int)position.Y, (int)size.X * 2, (int)size.Y * 2), scale: new Vector2(2f, 2f), color: color);
                 }
                 else
