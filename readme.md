@@ -140,6 +140,6 @@ Podczas swojej wędrówki gracz będzie musiał walczyć z różnymi przeciwnika
 ### Spis użytych ścieżek dzwiękowych:
 | Nazwa pliku w folderze Content  | Autor/Źródło |
 | ------------- | ------------- |
-| sample.mp3  | ?  |
-| sample.mp3 | ?  |
+| background_game.mp3  | [opengameart](https://opengameart.org/content/enchanted-tiki-86) |
+| chest_opening.wav | [opengameart](https://opengameart.org/content/open-chest) |
 
