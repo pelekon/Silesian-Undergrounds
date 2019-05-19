@@ -22,12 +22,14 @@ namespace Silesian_Undergrounds.Engine.Utils
             foreach(var pos in positionSource)
             {
                 int chance = rng.Next(0, 100);
-                //if (chance <= 50)
-                //  list.Add(MinotaurFactory(pos.position));
-                //  else
-                //  list.Add(WormFactory(pos.position));
-                //TODO: change this
-                list.Add(RatFactory(pos.position));
+               if (chance <= 25)
+                 list.Add(RatFactory(pos.position));
+               else if(chance > 25 && chance <= 50)
+                  list.Add(MinotaurFactory(pos.position));
+               else
+                    list.Add(WormFactory(pos.position));
+
+
             }
 
             return list;
@@ -62,20 +64,21 @@ namespace Silesian_Undergrounds.Engine.Utils
             attackPattern.AddAttack(attackData);
 
             HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
-            
 
-            if (TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_MoveRight", 4, 8, 1, 8, 0, 5, false))
-                TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_MoveRight", 4, 8, 1, 8, 0, 5, true);
 
-            if (TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_Attack", 4, 8, 3, 8, 0, 5, false))
-                TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_Attack", 4, 8, 3, 8, 0, 5, true);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/rat_odbity_test", "Monsters/Rat_MoveRight", 5, 8, 1, 6, 0, 0, false); 
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/rat_odbity_test", "Monsters/Rat_Attack", 5, 8, 3, 8, 0, 0, false);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/rat_odbity_test", "Monsters/Rat_MoveLeft", 5, 8, 4, 6, 0, 0, false);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/rat_odbity_test", "Monsters/Rat_dead", 5, 8, 2, 6, 0, 0, false);
 
             behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), 1000);
             behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), 1000);
-            behaviour.Animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), 1000);
-            behaviour.Animator.AddAnimation("MoveLeft", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), 1000);
+
+            behaviour.Animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveLeft"), 1000);
+            behaviour.Animator.AddAnimation("MoveLeft", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveLeft"), 1000);
 
             behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Rat_Attack"), 1000);
+            behaviour.Animator.AddAnimation("Dead", TextureMgr.Instance.GetAnimation("Monsters/Rat_dead"), 1000);
 
             obj.AddComponent(behaviour);          
             return obj;
