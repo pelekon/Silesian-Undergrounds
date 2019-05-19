@@ -38,6 +38,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private MovementDirectionEnum previousDirection;
         private bool needStandAnimUpdate;
         private bool isMovementLockedByAnim;
+        private bool isMeelAttacking;
 
         public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, int moneyRew, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
@@ -71,6 +72,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             Parent.ChangeDrawAbility(false);
             needStandAnimUpdate = false;
             isMovementLockedByAnim = false;
+            isMeelAttacking = false;
         }
 
         public void CleanUp()
@@ -249,15 +251,16 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                     return;
 
                 // Do not handle melee attack while unit is during movement to enemy
-               if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
-                  return;
+                // ????
+              // if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
+               //   return;
 
                 // Check distance between unit and enemy in order to validate attack with its data
                 float dist = GetDistToEnemy();
                 // validate attack
                if (attack.MinRange > 0.0f && dist < attack.MinRange)
                    return;
-                if (attack.MaxRange < dist)
+               if (attack.MaxRange < dist)
                     return;
 
                 Random rng = new Random();
@@ -265,13 +268,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
                 plr.DecreaseLiveValue(dmgValue);
 
-                for (int i = 0; i < 6; i++)
-                    Debug.WriteLine(attack.type);
-
-                bool returnedValue = Animator.PlayAnimation("Attack");
-                for(int i = 0; i < 50; i ++)
-                    Debug.WriteLine(returnedValue);
-                if (attack.type == AttackType.ATTACK_TYPE_MELEE && Animator.PlayAnimation("Attack"))
+               if (attack.type == AttackType.ATTACK_TYPE_MELEE && Animator.PlayAnimation("Attack"))
                     isMovementLockedByAnim = true;
             });
         }
