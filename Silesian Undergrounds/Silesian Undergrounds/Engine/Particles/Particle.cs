@@ -5,6 +5,7 @@ using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Scene;
+using Silesian_Undergrounds.Engine.Components;
 
 namespace Silesian_Undergrounds.Engine.Particles
 {
@@ -22,6 +23,7 @@ namespace Silesian_Undergrounds.Engine.Particles
         private Vector2 startingPos;
         private bool isWaitingForDelete;
         private bool isLaunched;
+        public Animator Animator { get; private set; }
 
         public Particle(string textureName, float w, float h, Vector2 startPos, Vector2 force, float travelSpeed, float travelDist, GameObject emiter) 
             : base(null, startPos, new Vector2(w * ResolutionMgr.TileSize, h * ResolutionMgr.TileSize))
@@ -38,6 +40,9 @@ namespace Silesian_Undergrounds.Engine.Particles
 
             isWaitingForDelete = false;
             isLaunched = false;
+
+            Animator = new Animator(this);
+            AddComponent(Animator);
         }
 
         public void Launch()
@@ -70,7 +75,7 @@ namespace Silesian_Undergrounds.Engine.Particles
         {
             if (gameobject == emiter || isWaitingForDelete)
                 return;
-
+            Animator.PlayAnimation("OnHit");
             OnParticleHit.Invoke(this, new CollisionNotifyData(gameobject, source));
             OnParticleTravelEnd.Invoke(this, null);
             ScheduleDelete();
