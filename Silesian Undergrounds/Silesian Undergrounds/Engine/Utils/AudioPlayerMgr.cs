@@ -39,7 +39,6 @@ namespace Silesian_Undergrounds.Engine.Utils
         }
 
         // background music 
-        //"Music\background-game\background_game"
         public void PlayBackgroundMusic(string name)
         {
             backgroundSong = SoundMgr.Instance.GetSong(name);

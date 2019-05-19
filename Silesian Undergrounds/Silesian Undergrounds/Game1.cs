@@ -63,6 +63,7 @@ namespace Silesian_Undergrounds
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
+            SoundMgr.Instance.SetCurrentContentMgr(Content);
 
             scene = SetMainMenuScene();
 
@@ -103,6 +104,8 @@ namespace Silesian_Undergrounds
             {
                 scene = LevelsManagement();
             }
+            // play all enqueued soundeffects
+            AudioPlayerMgr.Instance.Update();
 
             base.Update(gameTime);
         }
@@ -151,6 +154,7 @@ namespace Silesian_Undergrounds
         {
             scene = LevelsManagement();
             // start playing the music
+            AudioPlayerMgr.Instance.PlayBackgroundMusic("Music/background-game/background_game");
             return true;
         }
 
