@@ -14,7 +14,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public Vector2 position;
         public int layer;
         public float rotation { get; protected set; }
-        public float speed { get; protected set; }
+        public float speed { get; set; }
         public Vector2 size;
         public Vector2? scale;
         public Color color = Color.White;

@@ -250,7 +250,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 if (enemy == null)
                     return;
 
-                // Do not handle melee attack while unit is during movement to enemy
+                
                 // ????
               // if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
                //   return;
