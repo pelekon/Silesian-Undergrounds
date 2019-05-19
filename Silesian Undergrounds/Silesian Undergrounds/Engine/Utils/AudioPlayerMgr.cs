@@ -10,19 +10,15 @@ namespace Silesian_Undergrounds.Engine.Utils
 {
     public sealed class AudioPlayerMgr
     {
+        #region SOUND_CONSTANTS
+        //TODO: add this in settings
+        public const float BACKGROUND_MUSIC_VOLUME = 0.5f;
+        public const float SOUND_EFFECT_VOLUME = 1.0f;
+        #endregion
         private Song backgroundSong = null;
         // for "optimization" reasons
         private const int MaxSoundTriggersPerFrame = 15;
-        Queue<PlayInfo> soundEffectsQueue = new Queue<PlayInfo>();
-
-        public struct PlayInfo
-        {
-            public SoundEffect soundEffect;
-            public float volume;
-            public float pitch;
-            public float pan;
-        }
-
+        Queue<SoundEffect> soundEffectsQueue = new Queue<SoundEffect>();
         private static AudioPlayerMgr instance = null;
 
         private AudioPlayerMgr() { }
@@ -42,6 +38,7 @@ namespace Silesian_Undergrounds.Engine.Utils
         public void PlayBackgroundMusic(string name)
         {
             backgroundSong = SoundMgr.Instance.GetSong(name);
+            MediaPlayer.Volume = BACKGROUND_MUSIC_VOLUME;
             MediaPlayer.Play(backgroundSong);
             MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
         }
@@ -61,15 +58,11 @@ namespace Silesian_Undergrounds.Engine.Utils
             } 
         }
 
-        public void AddSoundEffect(SoundEffect soundEffect, float volume, float pitch, float pan)
+        public void AddSoundEffect(string soundEffectName)
         {
-            soundEffectsQueue.Enqueue(new PlayInfo()
-            {
-                soundEffect = soundEffect,
-                volume = volume,
-                pitch = pitch,
-                pan = pan
-            });
+            SoundEffect soundEffect = SoundMgr.Instance.GetSoundEffect(soundEffectName);
+
+            soundEffectsQueue.Enqueue(soundEffect);
         }
 
         public void Update()
@@ -78,8 +71,8 @@ namespace Silesian_Undergrounds.Engine.Utils
 
             while (soundEffectsQueue.Count > 0 && playCount <= MaxSoundTriggersPerFrame)
             {
-                var playInfo = soundEffectsQueue.Dequeue();
-                playInfo.soundEffect.Play(playInfo.volume, playInfo.pitch, playInfo.pan);
+                var soundEffect = soundEffectsQueue.Dequeue();
+                soundEffect.Play(SOUND_EFFECT_VOLUME, 0.0f, 0.0f);
             }
         }
     }

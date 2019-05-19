@@ -89,19 +89,21 @@ namespace Silesian_Undergrounds.Engine.Utils
                 if (playerStatistic.ChestDropBooster)
                     maxRandValue += 20;
 
-            int randed = random.Next(0, maxRandValue);
-            if (randed <= 10)
-                return PickableEnum.None;
-            else if (randed > 10 && randed <= 25)
-                return PickableEnum.Hearth;
-            else if (randed > 25 && randed <= 45)
-                return PickableEnum.Food;
-            else if (randed > 45 && randed <= 90)
-                return PickableEnum.Ore;
-            else if (randed > 90 && randed <= 95)
-                return PickableEnum.Key;
-            else
-                return generateChest ? PickableEnum.Chest : PickableEnum.Ore;
+            return PickableEnum.Chest;
+            //TODO: uncomment this
+            //int randed = random.Next(0, maxRandValue);
+            //if (randed <= 10)
+            //    return PickableEnum.None;
+            //else if (randed > 10 && randed <= 25)
+            //    return PickableEnum.Hearth;
+            //else if (randed > 25 && randed <= 45)
+            //    return PickableEnum.Food;
+            //else if (randed > 45 && randed <= 90)
+            //    return PickableEnum.Ore;
+            //else if (randed > 90 && randed <= 95)
+            //    return PickableEnum.Key;
+            //else
+            //    return generateChest ? PickableEnum.Chest : PickableEnum.Ore;
         }
 
         #endregion
