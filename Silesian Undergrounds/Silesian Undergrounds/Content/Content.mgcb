@@ -1191,6 +1191,18 @@
 /processorParam:TextureFormat=Color
 /build:Monsters/48x48Worm_FullSheet.png
 
+#begin Music/background-game/background_game.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/background-game/background_game.mp3
+
+#begin Music/chest/chest_opening.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/chest/chest_opening.wav
+
 #begin rays_map.png
 /importer:TextureImporter
 /processor:TextureProcessor

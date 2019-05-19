@@ -65,6 +65,7 @@
     <Compile Include="Engine\Collisions\CollisionNotifyData.cs" />
     <Compile Include="Engine\Components\Animator.cs" />
     <Compile Include="Engine\Components\IComponent.cs" />
+    <Compile Include="Engine\Enemies\Minotaur.cs" />
     <Compile Include="Engine\Enum\EndGameEnum.cs" />
     <Compile Include="Engine\Enum\ItemPricesEnum.cs" />
     <Compile Include="Engine\Enum\GroundEnum.cs" />

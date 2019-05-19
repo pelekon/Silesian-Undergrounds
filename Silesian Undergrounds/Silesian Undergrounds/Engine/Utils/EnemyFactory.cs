@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Behaviours;
 using Silesian_Undergrounds.Engine.Scene;
+using Silesian_Undergrounds.Engine.Enemies;
 
 namespace Silesian_Undergrounds.Engine.Utils
 {

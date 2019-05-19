@@ -150,6 +150,7 @@ namespace Silesian_Undergrounds
         protected bool StartGame()
         {
             scene = LevelsManagement();
+            // start playing the music
             return true;
         }
 
