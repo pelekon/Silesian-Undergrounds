@@ -7,6 +7,7 @@ using Silesian_Undergrounds.Engine.Components;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.Particles;
 
 namespace Silesian_Undergrounds.Engine.Behaviours
 {
@@ -260,12 +261,54 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
                 Random rng = new Random();
                 int dmgValue = rng.Next(attack.MinDamage, attack.MaxDamage);
-                Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
-                plr.DecreaseLiveValue(dmgValue);
+
+                if (attack.type == AttackType.ATTACK_TYPE_RANGED && attack.particleTextureName != null)
+                {
+                    Particle particle = new Particle(attack.particleTextureName, 0.5f, 0.5f, collider.Position, CalculateParticleForce(), 1.5f, 20.0f, Parent);
+                    if (attack.particleAnim != null)
+                        particle.Animator.AddAnimation("OnHit", attack.particleAnim, 1000);
+
+                    SetRangedAttackDmg(dmgValue, particle);
+                    particle.Launch();
+                }
+                else
+                {
+                    Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
+                    plr.DecreaseLiveValue(dmgValue);
+                }
 
                 if (attack.type == AttackType.ATTACK_TYPE_MELEE && Animator.PlayAnimation("Attack"))
                     isMovementLockedByAnim = true;
             });
+        }
+
+        private Vector2 CalculateParticleForce()
+        {
+            Vector2 vector = new Vector2();
+
+            if (enemy.position.X > Parent.position.X)
+                vector.X = 1;
+            else if (enemy.position.X > Parent.position.X)
+                vector.X = -1;
+
+            if (enemy.position.Y > Parent.position.Y)
+                vector.Y = 1;
+            else if (enemy.position.Y > Parent.position.Y)
+                vector.Y = -1;
+
+            return vector;
+        }
+
+        private void SetRangedAttackDmg(int dmg, Particle particle)
+        {
+            particle.OnParticleHit += (sender, data) =>
+            {
+                if (data.obj == enemy)
+                {
+                    Player plr = enemy as Player;
+                    plr.DecreaseLiveValue(dmg);
+                }
+            };
         }
     }
 }
