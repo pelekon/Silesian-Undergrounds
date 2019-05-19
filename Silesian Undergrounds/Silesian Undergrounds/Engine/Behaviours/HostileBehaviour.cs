@@ -288,12 +288,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             if (enemy.position.X > Parent.position.X)
                 vector.X = 1;
-            else if (enemy.position.X > Parent.position.X)
+            else if (enemy.position.X < Parent.position.X)
                 vector.X = -1;
 
             if (enemy.position.Y > Parent.position.Y)
                 vector.Y = 1;
-            else if (enemy.position.Y > Parent.position.Y)
+            else if (enemy.position.Y < Parent.position.Y)
                 vector.Y = -1;
 
             return vector;
