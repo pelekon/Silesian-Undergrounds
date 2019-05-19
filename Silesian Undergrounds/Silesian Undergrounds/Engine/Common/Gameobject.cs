@@ -14,7 +14,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public Vector2 position;
         public int layer;
         public float rotation { get; protected set; }
-        public float speed { get; protected set; }
+        public float speed { get; set; }
         public Vector2 size;
         public Vector2? scale;
         public Color color = Color.White;
@@ -61,8 +61,6 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 if (texture.Name == "Items/Food/meat_with_label")
                 {
-                    //thi
-
                     spriteBatch.Draw(texture: texture, destinationRectangle: new Rectangle((int)position.X, (int)position.Y, (int)size.X * 2, (int)size.Y * 2), scale: new Vector2(2f, 2f), color: color);
                 }
                 else

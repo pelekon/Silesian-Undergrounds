@@ -9,6 +9,7 @@ using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Particles;
 
+
 namespace Silesian_Undergrounds.Engine.Behaviours
 {
     public class HostileBehaviour : IComponent
@@ -193,6 +194,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             else if (moveForce.Y == 1) // DOWN anim
             {
                 Animator.PlayAnimation("MoveDown");
+
                 previousDirection = currentDirection;
                 currentDirection = MovementDirectionEnum.DIRECTION_DOWN;
             }
@@ -247,15 +249,16 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 if (enemy == null)
                     return;
 
-                // Do not handle melee attack while unit is during movement to enemy
-                if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
-                    return;
+                
+                // ????
+              // if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
+               //   return;
 
                 // Check distance between unit and enemy in order to validate attack with its data
                 float dist = GetDistToEnemy();
                 // validate attack
                 if (attack.MinRange > 0.0f && dist < attack.MinRange)
-                    return;
+                   return;
                 if (attack.MaxRange < dist)
                     return;
 
