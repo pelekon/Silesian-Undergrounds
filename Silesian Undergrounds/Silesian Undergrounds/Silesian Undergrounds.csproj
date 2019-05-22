@@ -124,6 +124,7 @@
     <Compile Include="Views\InGameUI.cs" />
     <Compile Include="Views\MainMenuView.cs" />
     <Compile Include="Views\PlayerWinView.cs" />
+    <Compile Include="Views\StartView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic.Compatibility" />

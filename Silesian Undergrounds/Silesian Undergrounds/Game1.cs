@@ -171,6 +171,12 @@ namespace Silesian_Undergrounds
             return true;
         }
 
+        protected bool StartView()
+        {
+            this.scene = SetStartView();
+            return true;
+        }
+
         protected bool ReturnToMenu()
         {
             levelCounter = 0;
@@ -182,9 +188,16 @@ namespace Silesian_Undergrounds
         protected Scene SetMainMenuScene()
         {
             MainMenuView mainMenu = new MainMenuView();
-            mainMenu.GetStartGameButton().SetOnClick(StartGame);
+            mainMenu.GetStartGameButton().SetOnClick(StartView);
             mainMenu.GetExitButton().SetOnClick(ExitGame);
             return new Scene(mainMenu);
+        }
+
+        protected Scene SetStartView()
+        {
+            StartView startView = new StartView();
+            startView.GetNextButton().SetOnClick(StartGame);
+            return new Scene(startView);
         }
 
         protected Scene SetEndGameScene(EndGameEnum endGameEnum)
