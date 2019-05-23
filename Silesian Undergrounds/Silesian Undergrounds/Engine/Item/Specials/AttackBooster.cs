@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Config;
 using Silesian_Undergrounds.Engine.Collisions;
 
 namespace Silesian_Undergrounds.Engine.Item.Specials {
     class AttackBooster : SpecialItem {
-
-        private const float PLAYER_ATTACK_INCREASE_BY = 1.0f;
 
         public AttackBooster(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene) : base(texture, position, size, layer, scene)
         {
@@ -21,7 +20,7 @@ namespace Silesian_Undergrounds.Engine.Item.Specials {
             if (obj is Player)
             {
                 Player pl = (Player)obj;
-                pl.IncreaseAttackValueBy(PLAYER_ATTACK_INCREASE_BY);
+                pl.IncreaseAttackValueBy(ConfigMgr.AtackBoosterConfig.PlayerAttackIncreaseBy);
                 this.scene.DeleteObject(this);
             }
         }

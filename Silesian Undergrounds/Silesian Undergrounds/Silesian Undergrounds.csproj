@@ -65,6 +65,9 @@
     <Compile Include="Engine\Collisions\CollisionNotifyData.cs" />
     <Compile Include="Engine\Components\Animator.cs" />
     <Compile Include="Engine\Components\IComponent.cs" />
+    <Compile Include="Engine\Config\Config.cs" />
+    <Compile Include="Engine\Config\ConfigMgr.cs" />
+    <Compile Include="Engine\Config\Constants.cs" />
     <Compile Include="Engine\Enum\EndGameEnum.cs" />
     <Compile Include="Engine\Enum\ItemPricesEnum.cs" />
     <Compile Include="Engine\Enum\GroundEnum.cs" />
@@ -197,6 +200,9 @@
   <ItemGroup>
     <None Include="Data\camera.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Data\drop2.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
