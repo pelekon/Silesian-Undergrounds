@@ -7,6 +7,7 @@ using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Views;
 using System;
 using System.Collections.Generic;
+using Silesian_Undergrounds.Engine.Config;
 
 namespace Silesian_Undergrounds
 {
@@ -41,6 +42,9 @@ namespace Silesian_Undergrounds
         /// </summary>
         protected override void Initialize()
         {
+            #region LOAD_CONFIG
+            ConfigMgr.LoadConfig();
+            #endregion
             #region GRAPHIC_SETTINGS_INIT
             // Window.AllowAltF4 = true;
             IsMouseVisible = true;

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Traps;
 using Silesian_Undergrounds.Engine.Item.Specials;
 using Microsoft.Xna.Framework.Graphics;
+using Silesian_Undergrounds.Engine.Config;
 
 namespace Silesian_Undergrounds.Engine.Utils
 {
@@ -22,13 +23,13 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         private static OreEnum RandOreType(Random random)
         {
+
             int randed = random.Next(1, 100);
-            if (randed > 40 && randed <= 70)
-                return OreEnum.Coal;
-            else if (randed > 70 && randed <= 90)
-                return OreEnum.Silver;
-            else
+            if (randed <= ConfigMgr.OreConfig.GoldOccurrencePercentage)
                 return OreEnum.Gold;
+            if (randed <= (ConfigMgr.OreConfig.GoldOccurrencePercentage + ConfigMgr.OreConfig.SilverOccurrencePercentage))
+                return OreEnum.Silver;
+            return OreEnum.Coal;
 
         }
 

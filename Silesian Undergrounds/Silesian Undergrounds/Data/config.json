@@ -1,0 +1,50 @@
+﻿{
+  "player": {
+    "hunger-decrese-interval-in-seconds": 10.0,
+    "hunger-decrease-value": 5,
+    "live-decrease-value-when-hunger-is-zero": 20,
+    "player-collider-box-width": 60,
+    "player-collider-box-height": 60,
+    "health": 100,
+    "max-health": 150,
+    "hunger": 100,
+    "max-hunger": 150,
+    "attack-speed": 1.0,
+    "movement-speed": 10.0,
+    "damage": 10,
+    "key-amount": 0,
+    "money-amount": 0
+  },
+  "terrain": {
+    "percentage-of-textures-with-things": 25
+  },
+  "chest": {
+    "number-of-chest-texture": 4,
+    "number-of-possible-spawned-item": 6,
+    "minimum-number-of-spawned-item": 1,
+    "range-of-spawn": 1
+  },
+  "pickable": {
+    "heart": {
+      "heart-increase-value": 10,
+      "live-regeneration-value": 25
+    },
+    "attack-booster": {
+      "player-attack-increase-by": 1.0
+    },
+    "hunger-booster": {
+      "player-max-hunger-value-increase-by": 100
+    },
+    "live-booster": {
+      "player-max-live-value-increase-by": 100
+    },
+    "movement-booster": {
+      "player-movement-increase-by": 1.0
+    },
+    "ore": {
+      "coal-occurrence-percentage": 60,
+      "silver-occurrence-percentage": 30,
+      "gold-occurrence-percentage":  10 
+    } 
+  }
+}

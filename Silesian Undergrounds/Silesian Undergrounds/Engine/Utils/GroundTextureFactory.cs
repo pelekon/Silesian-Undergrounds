@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Item;
+using Silesian_Undergrounds.Engine.Config;
 
 namespace Silesian_Undergrounds.Engine.Utils
 {
@@ -13,8 +14,7 @@ namespace Silesian_Undergrounds.Engine.Utils
         private const int BasicTextureIndex = 1;
         private const int StartWithThingsTextureIndex = 2;
         private const int EndWithThingsTextureIndex = 25;
-        private const int PercentageOfTexturesWithThings = 25;
-        private static GroundEnum RandGround(Random random) => random.Next(1, 100) >= PercentageOfTexturesWithThings ? GroundEnum.Basic : GroundEnum.WithThings;
+        private static GroundEnum RandGround(Random random) => random.Next(1, 100) >= ConfigMgr.TerrainConfig.PercentageOfTexturesWithThings ? GroundEnum.Basic : GroundEnum.WithThings;
         public static List<Ground> GroundFactory(List<GameObject> positionSources)
         {
             var list = new List<Ground>();

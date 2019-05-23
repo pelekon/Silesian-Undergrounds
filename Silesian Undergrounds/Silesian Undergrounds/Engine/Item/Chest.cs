@@ -6,16 +6,13 @@ using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Collisions;
 using System.Collections.Generic;
 using System.Linq;
+using Silesian_Undergrounds.Engine.Config;
 
 
 namespace Silesian_Undergrounds.Engine.Item
 {
     public class Chest : PickableItem
     {
-        private const int NUMBER_OF_CHEST_TEXTURE = 4;
-        private const int NUMBER_OF_POSSIBLE_SPAWNED_ITEM = 6;
-        private const int MINIMUM_NUMBER_OF_SPAWNED_ITEM = 1;
-        private const int RANGE_OF_SPAWN = 1;
         // time since last frame change
         private double timeSinceLastFrameChange;
         // time it takes to update theframe
@@ -63,21 +60,21 @@ namespace Silesian_Undergrounds.Engine.Item
             {
                 timeSinceLastFrameChange += gameTime.ElapsedGameTime.TotalSeconds;
 
-                if (timeSinceLastFrameChange > timeToUpdateFrame && CurrentFrame <= NUMBER_OF_CHEST_TEXTURE)
+                if (timeSinceLastFrameChange > timeToUpdateFrame && CurrentFrame <= ConfigMgr.ChestConfig.NumberOfChestTexture)
                 {
                     timeSinceLastFrameChange -= timeToUpdateFrame;
                     CurrentFrame++;
                     this.texture = TextureMgr.Instance.GetTexture("Items/Chests/chest_" + CurrentFrame);
-                } else if(CurrentFrame == NUMBER_OF_CHEST_TEXTURE)
+                } else if(CurrentFrame == ConfigMgr.ChestConfig.NumberOfChestTexture)
                 {
                     List<GameObject> list = new List<GameObject>();
 
-                    int itemAmount = random.Next(MINIMUM_NUMBER_OF_SPAWNED_ITEM, NUMBER_OF_POSSIBLE_SPAWNED_ITEM);
+                    int itemAmount = random.Next( ConfigMgr.ChestConfig.MinimumNumberOfSpawnedItem,ConfigMgr.ChestConfig.NumberOfPossibleSpawnedItem);
 
                     foreach (var obj in this.scene.GameObjects.Where(obj => obj.layer == 2).ToList())
                     {
                         
-                        if (Math.Abs(obj.position.X - this.position.X) <= RANGE_OF_SPAWN * this.size.X && Math.Abs(obj.position.Y - this.position.Y) <= RANGE_OF_SPAWN * this.size.X)
+                        if (Math.Abs(obj.position.X - this.position.X) <= ConfigMgr.ChestConfig.RangeOfSpawn * this.size.X && Math.Abs(obj.position.Y - this.position.Y) <= ConfigMgr.ChestConfig.RangeOfSpawn * this.size.X)
                         {
                             if (obj.position != (this.scene.player.GetTileWhereStanding()) && itemAmount > 0)
                             {

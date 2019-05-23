@@ -4,6 +4,7 @@ using Silesian_Undergrounds.Engine.Item;
 using Silesian_Undergrounds.Engine.Enum;
 using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Collisions;
+using Silesian_Undergrounds.Engine.Config;
 
 namespace Silesian_Undergrounds.Engine.Common
 {
@@ -81,9 +82,9 @@ namespace Silesian_Undergrounds.Engine.Common
                 player.RemoveMoney(itemPrice);
                 player.RefilHunger(((Food)this).hungerRefil);
             }
-            else if (this is Heart && player.CanRefilLive(Heart.HEART_INCREASE_VALUE))
+            else if (this is Heart && player.CanRefilLive(ConfigMgr.HeartConfig.HeartIncreaseValue))
             {
-                player.RefilLive(Heart.HEART_INCREASE_VALUE);
+                player.RefilLive(ConfigMgr.HeartConfig.HeartIncreaseValue);
                 player.RemoveMoney(itemPrice);
             }
             else if (this is Key)
