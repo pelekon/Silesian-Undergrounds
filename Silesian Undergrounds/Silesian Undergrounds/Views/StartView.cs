@@ -8,7 +8,8 @@ using System;
 namespace Silesian_Undergrounds.Views {
     class StartView : UIArea{
 
-        private Button nextButton;
+        private Button readyButton;
+        private Button controlsButton;
         private Label story;
 
         protected override void Initialize()
@@ -27,15 +28,22 @@ namespace Silesian_Undergrounds.Views {
                 "Good luck!" + Environment.NewLine 
                 , 50, 20, 0, 0, Color.WhiteSmoke, this);
 
-            this.nextButton = new Button("I am ready!", 43, 60, 15, 8, buttonBg, "box", "File", this);
+            this.readyButton = new Button("I am ready!", 53, 60, 15, 8, buttonBg, "box", "File", this);
+            this.controlsButton = new Button("Show me controls", 33, 60, 15, 8, buttonBg, "box", "File", this);
 
-            AddElement(this.nextButton);
+            AddElement(this.readyButton);
+            AddElement(this.controlsButton);
             AddElement(this.story);
         }
 
-        public Button GetNextButton()
+        public Button GetReadyButton()
         {
-            return this.nextButton;
+            return this.readyButton;
+        }
+
+        public Button GetControlsButton()
+        {
+            return this.controlsButton;
         }
     }
 }
