@@ -7,6 +7,7 @@ using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Views;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Silesian_Undergrounds
 {
@@ -21,6 +22,9 @@ namespace Silesian_Undergrounds
         public List<String> scenes = new List<String>();
         public int levelCounter = 0;
         public bool isPlayerInMaineMenu = true;
+
+        Scene loadingScene;
+        SceneStatusEnum sceneStatus = SceneStatusEnum.Loading;
 
         Scene scene;
 
@@ -61,8 +65,12 @@ namespace Silesian_Undergrounds
             scenes.Add("drop2");
             //scenes.Add("drop3");
 
+            
+
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
+
+            loadingScene = new Scene(new LoadingView(), true);
 
             scene = SetMainMenuScene();
 
@@ -101,7 +109,17 @@ namespace Silesian_Undergrounds
                 scene.Update(gameTime);
             else
             {
-                scene = LevelsManagement();
+                if(sceneStatus == SceneStatusEnum.Loading)
+                {
+                    scene = loadingScene;
+                    sceneStatus = SceneStatusEnum.Loaded;
+                }
+                else
+                {
+                    scene = LevelsManagement();
+                    sceneStatus = SceneStatusEnum.Loading;
+                }
+
             }
 
             base.Update(gameTime);
@@ -121,6 +139,11 @@ namespace Silesian_Undergrounds
             base.Draw(gameTime);
         }
 
+        void Temp()
+        {
+            this.scene = loadingScene;
+        }
+
         protected Scene LevelsManagement()
         {
             var sceneName = scenes[levelCounter];
@@ -128,21 +151,24 @@ namespace Silesian_Undergrounds
             System.Diagnostics.Debug.WriteLine("Current scene: " + sceneName);
             #endif
             levelCounter++;
+
             Scene sceneToLoad;
-            if (levelCounter == scenes.Count)
-            {
-                sceneToLoad = SceneManager.LoadScene(sceneName, 64);
-                sceneToLoad.SetLastScene(true);
-                sceneToLoad.SetOnWin(EndGamePlayerWin);
-            }
 
-            else
-                sceneToLoad = SceneManager.LoadScene(sceneName, 64);
+                System.Diagnostics.Debug.WriteLine("Loading");
+                if (levelCounter == scenes.Count)
+                {
+                    sceneToLoad = SceneManager.LoadScene(sceneName, 64);
+                    sceneToLoad.SetLastScene(true);
+                    sceneToLoad.SetOnWin(EndGamePlayerWin);
+                }
 
-            sceneToLoad.player.SetOnDeath(EndGamePlayerDie);
-            sceneToLoad.SetEndGameButtonInPauseMenu(ReturnToMenu);
-            if(levelCounter > 1)
-                sceneToLoad.DecreaseHungerDropInterval();
+                else
+                    sceneToLoad = SceneManager.LoadScene(sceneName, 64);
+
+                sceneToLoad.player.SetOnDeath(EndGamePlayerDie);
+                sceneToLoad.SetEndGameButtonInPauseMenu(ReturnToMenu);
+                if (levelCounter > 1)
+                    sceneToLoad.DecreaseHungerDropInterval();
 
             return sceneToLoad;
         }
