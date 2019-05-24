@@ -23,6 +23,9 @@ namespace Silesian_Undergrounds
         public int levelCounter = 0;
         public bool isPlayerInMaineMenu = true;
 
+        Scene loadingScene;
+        SceneStatusEnum sceneStatus = SceneStatusEnum.Loading;
+
         Scene scene;
 
         public Game1()
@@ -67,6 +70,9 @@ namespace Silesian_Undergrounds
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
+
+            loadingScene = new Scene(new LoadingView(), true);
+
             scene = SetMainMenuScene();
 
             base.Initialize();
@@ -104,7 +110,16 @@ namespace Silesian_Undergrounds
                 scene.Update(gameTime);
             else
             {
-                scene = LevelsManagement();
+                if(sceneStatus == SceneStatusEnum.Loading)
+                {
+                    scene = loadingScene;
+                    sceneStatus = SceneStatusEnum.Loaded;
+                }
+                else
+                {
+                    scene = LevelsManagement();
+                    sceneStatus = SceneStatusEnum.Loading;
+                }
             }
 
             base.Update(gameTime);
@@ -132,13 +147,12 @@ namespace Silesian_Undergrounds
             #endif
             levelCounter++;
             Scene sceneToLoad;
-            if (levelCounter == scenes.Count)
+            if(levelCounter == scenes.Count)
             {
                 sceneToLoad = SceneManager.LoadScene(sceneName, 64);
                 sceneToLoad.SetLastScene(true);
                 sceneToLoad.SetOnWin(EndGamePlayerWin);
             }
-
             else
                 sceneToLoad = SceneManager.LoadScene(sceneName, 64);
 
@@ -174,6 +188,19 @@ namespace Silesian_Undergrounds
             return true;
         }
 
+        protected bool StartView()
+        {
+            this.scene = SetStartView();
+            return true;
+        }
+
+        protected bool ControlsView()
+        {
+            this.scene = SetControlsView();
+            return true;
+
+        }
+
         protected bool ReturnToMenu()
         {
             levelCounter = 0;
@@ -185,9 +212,24 @@ namespace Silesian_Undergrounds
         protected Scene SetMainMenuScene()
         {
             MainMenuView mainMenu = new MainMenuView();
-            mainMenu.GetStartGameButton().SetOnClick(StartGame);
+            mainMenu.GetStartGameButton().SetOnClick(StartView);
             mainMenu.GetExitButton().SetOnClick(ExitGame);
             return new Scene(mainMenu);
+        }
+
+        protected Scene SetStartView()
+        {
+            StartView startView = new StartView();
+            startView.GetReadyButton().SetOnClick(StartGame);
+            startView.GetControlsButton().SetOnClick(ControlsView);
+            return new Scene(startView);
+        }
+
+        protected Scene SetControlsView()
+        {
+            ControlsDisplayView controlsDisplayView = new ControlsDisplayView();
+            controlsDisplayView.GetNextButton().SetOnClick(StartGame);
+            return new Scene(controlsDisplayView);
         }
 
         protected Scene SetEndGameScene(EndGameEnum endGameEnum)

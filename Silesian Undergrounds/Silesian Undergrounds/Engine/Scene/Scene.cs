@@ -60,8 +60,9 @@ namespace Silesian_Undergrounds.Engine.Scene
             pauseView.GetResumeButton().SetOnClick(ResumeGame);
             return pauseView;
         }
-        public Scene(UIArea area)
+        public Scene(UIArea area, bool setSceneIsEnd = false)
         {
+            isEnd = setSceneIsEnd;
             pauseMenu = area;
             isPaused = true;
             canUnPause = false;
