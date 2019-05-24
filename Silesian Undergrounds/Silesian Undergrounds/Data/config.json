@@ -1,6 +1,7 @@
 ﻿{
   "player": {
     "hunger-decrese-interval-in-seconds": 10.0,
+    "hunger-decrease-interval-changed-by-percent": 0.8,
     "hunger-decrease-value": 5,
     "live-decrease-value-when-hunger-is-zero": 20,
     "player-collider-box-width": 60,

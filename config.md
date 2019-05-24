@@ -13,6 +13,7 @@ be aware that when your JSON file will contain errors which will make your file 
 
 ## `player` - keeps player config
   - `hunger-decrese-interval-in-seconds` float, default: `10.0f`
+  - `hunger-decrease-interval-changed-by-percent` float, default: `0.8f`
   - `hunger-decrease-value` int, default: `5`
   - `live-decrease-value-when-hunger-is-zero` int, default: `20`
   - `player-collider-box-width` int, default: `60`
@@ -62,6 +63,7 @@ be aware that when your JSON file will contain errors which will make your file 
 {
   "player": {
     "hunger-decrese-interval-in-seconds": 10.0,
+    "hunger-decrease-interval-changed-by-percent": 0.8,
     "hunger-decrease-value": 5,
     "live-decrease-value-when-hunger-is-zero": 20,
     "player-collider-box-width": 60,
