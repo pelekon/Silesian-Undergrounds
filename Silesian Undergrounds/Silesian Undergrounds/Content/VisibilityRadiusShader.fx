@@ -34,23 +34,6 @@ float getDistance(float2 point1, float2 point2)
 }
 
 
-float2 getXY(float2 point1, float2 point2, float segment)
-{
-    float2 fisrt = point1;
-    float2 second = point2;
-    if (point1.x > point2.x)
-    {
-        fisrt = point2;
-        second = point1;
-    }
-    float distance = getDistance(point1, point2);
-    float ratio = segment / distance;
-    float x3 = ratio * point2.x + (1 - ratio) * point1.x;
-    float y3 = ratio * point2.y + (1 - ratio) * point1.y;
-    return float2(x3, y3);
-}
-
-
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
     float4 currentFragmentColor = tex2D(s0, input.TextureCoordinates);
