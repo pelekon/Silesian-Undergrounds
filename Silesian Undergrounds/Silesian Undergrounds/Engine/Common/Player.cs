@@ -53,7 +53,7 @@ namespace Silesian_Undergrounds.Engine.Common
             LoadAndSetUpAnimations();
             speed = 50f;
             #if DEBUG
-            statistics.MovementSpeed = 2.0f;
+            statistics.MovementSpeed = 6.0f;
             #endif
             ChangeDrawAbility(false);
         }

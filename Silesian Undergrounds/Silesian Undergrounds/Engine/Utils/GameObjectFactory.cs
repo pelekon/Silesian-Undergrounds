@@ -270,7 +270,17 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         public static Chest ChestFactory(Vector2 position, Vector2 size, Scene.Scene scene, bool isBuyable = false)
         {
-            return new Chest(TextureMgr.Instance.GetTexture("Items/Chests/chest_1"), position, size, 3, scene, isBuyable: isBuyable);
+            Chest chest = new Chest(TextureMgr.Instance.GetTexture("Items/Chests/chest_1"), position, size, 1, scene, isBuyable: isBuyable);
+
+            if (TextureMgr.Instance.LoadSingleAnimFrame("Items/Chests/chest_2", "ChestOpen"))
+            {
+                TextureMgr.Instance.LoadSingleAnimFrame("Items/Chests/chest_3", "ChestOpen", true);
+                TextureMgr.Instance.LoadSingleAnimFrame("Items/Chests/chest_4", "ChestOpen", true);
+            }
+
+            chest.Animator.AddAnimation("Open", TextureMgr.Instance.GetAnimation("ChestOpen"), 1000);
+
+            return chest;
         }
 
         public static Key KeyFactory(Vector2 position, Vector2 size, Scene.Scene scene, int layer = 3, bool isBuyable = false)
@@ -295,7 +305,14 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         public static Spike SpikeFactory(Vector2 position, Vector2 size, Scene.Scene scene)
         {
-            return new Spike(TextureMgr.Instance.GetTexture("Items/Traps/temporary_spike_1"), position, size, 4, scene);
+            Spike spike = new Spike(TextureMgr.Instance.GetTexture("Items/Traps/temporary_spike_1"), position, size, 1, scene);
+
+            if (TextureMgr.Instance.LoadSingleAnimFrame("Items/Traps/temporary_spike_2", "SpikeActivate"))
+                TextureMgr.Instance.LoadSingleAnimFrame("Items/Traps/temporary_spike_3", "SpikeActivate", true);
+
+            spike.Animator.AddAnimation("Activate", TextureMgr.Instance.GetAnimation("SpikeActivate"), 1000);
+
+            return spike;
         }
     }
 }
