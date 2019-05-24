@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Config;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.UI;
 using Silesian_Undergrounds.Views;
@@ -25,8 +26,6 @@ namespace Silesian_Undergrounds.Engine.Scene
         private UIArea pauseMenu;
         public Camera camera { get; private set; }
         private Func<bool> OnPlayerWin;
-
-        private const float HUNGER_DECREASE_INTERVAL_CHANGED_BY_PERCENT = 0.8f;
 
         public bool isPaused { get; private set; }
         public bool isEnd { get; private set; }
@@ -86,7 +85,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void DecreaseHungerDropInterval()
         {
-            this.player.ChangerHungerDecreaseIntervalBy(HUNGER_DECREASE_INTERVAL_CHANGED_BY_PERCENT);
+            this.player.ChangerHungerDecreaseIntervalBy(ConfigMgr.PlayerConfig.HungerDecreaseIntervalChangedByPercent);
         }
 
         public void SetEndGameButtonInPauseMenu(Func<bool> functionOnExitGame)
