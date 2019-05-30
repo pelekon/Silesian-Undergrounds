@@ -22,11 +22,11 @@ namespace Silesian_Undergrounds.Engine.Utils
             foreach(var pos in positionSource)
             {
                int chance = rng.Next(0, 100);
-               //if (chance <= 25)
-                // list.Add(RatFactory(pos.position));
-              // else if(chance > 25 && chance <= 50)
-                //  list.Add(MinotaurFactory(pos.position));
-              //else
+               if (chance <= 25)
+                list.Add(RatFactory(pos.position));
+               else if(chance > 25 && chance <= 50)
+                list.Add(MinotaurFactory(pos.position));
+               else
                 list.Add(WormFactory(pos.position));
             }
 
