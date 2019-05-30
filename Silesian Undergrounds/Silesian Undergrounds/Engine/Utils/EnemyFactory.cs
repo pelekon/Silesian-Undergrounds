@@ -98,12 +98,13 @@ namespace Silesian_Undergrounds.Engine.Utils
             obj.speed = 3.0f;
             HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
 
-            //string fileName, string animName, int spritesheetRows, int spritesheetColumns, int index, int amount,
-            //int spacingX, int spacingY, bool canAddToExisting = false, bool loadByColumn = false
+
             TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Worm_FullSheet", "Monsters/Worm_MoveRight", 4, 8, 1, 6, 0, 5, false);
             TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Worm_FullSheet", "Monsters/Worm_Attack", 4, 8, 3, 6, 0, 5, false);
             //TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/rat_odbity_test", "Monsters/Rat_MoveLeft", 5, 8, 4, 6, 0, 0, false);
-            // TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/rat_odbity_test", "Monsters/Rat_dead", 5, 8, 2, 6, 0, 0, false);
+            //string fileName, string animName, int spritesheetRows, int spritesheetColumns, int index, int amount,
+            //int spacingX, int spacingY, bool canAddToExisting = false, bool loadByColumn = false
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Worm_FullSheet", "Monsters/Worm_dead", 4, 8, 2, 6, 0, 5, false);
 
             behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Worm_MoveRight"), 1000);
             behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Worm_MoveRight"), 1000);
@@ -112,7 +113,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             behaviour.Animator.AddAnimation("MoveLeft", TextureMgr.Instance.GetAnimation("Monsters/Worm_MoveRight"), 1000);
 
             behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Worm_Attack"), 1000);
-            behaviour.Animator.AddAnimation("Dead", TextureMgr.Instance.GetAnimation("Monsters/Worm_MoveRight"), 1000);
+            behaviour.Animator.AddAnimation("Dead", TextureMgr.Instance.GetAnimation("Monsters/Worm_dead"), 1000);
             
             obj.AddComponent(behaviour);
 
