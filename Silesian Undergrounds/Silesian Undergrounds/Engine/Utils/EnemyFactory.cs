@@ -44,21 +44,17 @@ namespace Silesian_Undergrounds.Engine.Utils
             
             GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
             AttackPattern attackPattern = new AttackPattern();
-            //TODO: change this
-            AttackData attackData = new AttackData(true, 10, 15, 1000, AttackType.ATTACK_TYPE_MELEE, 5, 30);
+            AttackData attackData = new AttackData(true, 10, 20, 1000, AttackType.ATTACK_TYPE_MELEE, 5, 30);
             attackPattern.AddAttack(attackData);
 
-            obj.speed = 3.0f;
+            obj.speed = 2.0f;
 
             HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
 
-            //string fileName, string animName, int spritesheetRows, int spritesheetColumns, int index, int amount,
-            //int spacingX, int spacingY, bool canAddToExisting = false, bool loadByColumn = false
-
             TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_MoveRight", 7, 8, 1, 8, 0, 0, false);
-            //TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/rat_odbity_test", "Monsters/Rat_Attack", 5, 8, 3, 8, 0, 0, false);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_Attack", 7, 8, 3, 8, 0, 0, false);
             TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_MoveLeft", 7, 8, 6, 8, 0, 0, false);
-            //TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/rat_odbity_test", "Monsters/Rat_dead", 5, 8, 2, 6, 0, 0, false);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_dead", 7, 8, 5, 3, 0, 0, false);
 
             behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
             behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
@@ -66,8 +62,8 @@ namespace Silesian_Undergrounds.Engine.Utils
             behaviour.Animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveLeft"), 1000);
             behaviour.Animator.AddAnimation("MoveLeft", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveLeft"), 1000);
 
-            behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
-            behaviour.Animator.AddAnimation("Dead", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
+            behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_Attack"), 1000);
+            behaviour.Animator.AddAnimation("Dead", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveLeft"), 1000);
 
             obj.AddComponent(behaviour);
             return obj;
