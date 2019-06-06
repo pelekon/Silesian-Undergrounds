@@ -30,6 +30,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         public bool isPaused { get; private set; }
         public bool isEnd { get; private set; }
         public bool lastScene { get; private set; }
+        private bool isBoosterPicked;
         private readonly bool canUnPause;
 
         #endregion
@@ -51,6 +52,13 @@ namespace Silesian_Undergrounds.Engine.Scene
             ui = new InGameUI(player);
             pauseMenu = CreatePauseMenu();
             canUnPause = true;
+        }
+
+        public bool PlayerPickedBooster()
+        {
+            this.isBoosterPicked = true;
+            System.Diagnostics.Debug.WriteLine("SADASDSADSADASDASD");
+            return true;
         }
 
         private PauseView CreatePauseMenu()
