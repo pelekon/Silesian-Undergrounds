@@ -57,7 +57,6 @@ namespace Silesian_Undergrounds.Engine.Scene
         public bool PlayerPickedBooster()
         {
             this.isBoosterPicked = true;
-            System.Diagnostics.Debug.WriteLine("SADASDSADSADASDASD");
             return true;
         }
 
@@ -253,6 +252,16 @@ namespace Silesian_Undergrounds.Engine.Scene
                 else
                     ui.Draw(spriteBatch);
             }, null);
+
+            System.Diagnostics.Debug.WriteLine(isBoosterPicked);
+
+            if (isBoosterPicked && player != null)
+            {
+                Drawer.Shaders.DrawBoosterPickupShader((spriteBatch, gameTime) =>
+                {
+                    player.Draw(spriteBatch);
+                }, transformMatrix: camera.Transform);
+            }
         }
 
         private void DetectPlayerOnTransition()
