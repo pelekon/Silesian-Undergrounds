@@ -31,6 +31,8 @@ namespace Silesian_Undergrounds.Engine.Scene
         public bool isEnd { get; private set; }
         public bool lastScene { get; private set; }
         private bool isBoosterPicked;
+        private const float shaderDelayInSeconds = 50;
+        private float remainingShaderDelayInSeconds = shaderDelayInSeconds;
         private readonly bool canUnPause;
 
         #endregion
@@ -170,7 +172,16 @@ namespace Silesian_Undergrounds.Engine.Scene
                 pauseMenu.Update(gameTime);
                 return;
             }
-            
+
+            var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            remainingShaderDelayInSeconds -= timer;
+
+            if (remainingShaderDelayInSeconds <= 0)
+            {
+                remainingShaderDelayInSeconds = shaderDelayInSeconds;
+                isBoosterPicked = false;
+            }
+
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
             DeleteObjects();
@@ -252,8 +263,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                 else
                     ui.Draw(spriteBatch);
             }, null);
-
-            System.Diagnostics.Debug.WriteLine(isBoosterPicked);
 
             if (isBoosterPicked && player != null)
             {
