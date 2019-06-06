@@ -12,6 +12,13 @@ namespace Silesian_Undergrounds.Engine.Common {
 
         public Scene.Scene scene;
 
+        private Func<bool> OnPlayerPicked;
+
+        public void SetOnPicked(Func<bool> functionOnPicked)
+        {
+            OnPlayerPicked += functionOnPicked;
+        }
+
         public SpecialItem(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene) : base(texture, position, size, layer)
         {
             this.scene = scene;
@@ -19,7 +26,7 @@ namespace Silesian_Undergrounds.Engine.Common {
 
         public override void NotifyCollision(GameObject gameobject, ICollider source)
         {
-            
+            OnPlayerPicked.Invoke();
         }
     }
 }

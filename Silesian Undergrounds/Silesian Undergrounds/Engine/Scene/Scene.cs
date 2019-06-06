@@ -30,6 +30,9 @@ namespace Silesian_Undergrounds.Engine.Scene
         public bool isPaused { get; private set; }
         public bool isEnd { get; private set; }
         public bool lastScene { get; private set; }
+        private bool isBoosterPicked;
+        private const float shaderDelayInSeconds = 50;
+        private float remainingShaderDelayInSeconds = shaderDelayInSeconds;
         private readonly bool canUnPause;
 
         #endregion
@@ -51,6 +54,12 @@ namespace Silesian_Undergrounds.Engine.Scene
             ui = new InGameUI(player);
             pauseMenu = CreatePauseMenu();
             canUnPause = true;
+        }
+
+        public bool PlayerPickedBooster()
+        {
+            this.isBoosterPicked = true;
+            return true;
         }
 
         private PauseView CreatePauseMenu()
@@ -163,7 +172,16 @@ namespace Silesian_Undergrounds.Engine.Scene
                 pauseMenu.Update(gameTime);
                 return;
             }
-            
+
+            var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            remainingShaderDelayInSeconds -= timer;
+
+            if (remainingShaderDelayInSeconds <= 0)
+            {
+                remainingShaderDelayInSeconds = shaderDelayInSeconds;
+                isBoosterPicked = false;
+            }
+
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
             DeleteObjects();
@@ -245,6 +263,14 @@ namespace Silesian_Undergrounds.Engine.Scene
                 else
                     ui.Draw(spriteBatch);
             }, null);
+
+            if (isBoosterPicked && player != null)
+            {
+                Drawer.Shaders.DrawBoosterPickupShader((spriteBatch, gameTime) =>
+                {
+                    player.Draw(spriteBatch);
+                }, transformMatrix: camera.Transform);
+            }
         }
 
         private void DetectPlayerOnTransition()

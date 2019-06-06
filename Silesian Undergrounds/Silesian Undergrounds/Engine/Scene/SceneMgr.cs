@@ -177,6 +177,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             List<SpecialItem> specialItems = GameObjectFactory.SceneSpecialItemsFactory(Renderer.SpecialItems, scene, playerStatistic);
             foreach (var item in specialItems)
             {
+                item.SetOnPicked(scene.PlayerPickedBooster);
                 scene.AddObject(item);
             }
 
