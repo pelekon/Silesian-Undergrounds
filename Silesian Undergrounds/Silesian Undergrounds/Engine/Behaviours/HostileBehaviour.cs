@@ -9,7 +9,6 @@ using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Particles;
 
-
 namespace Silesian_Undergrounds.Engine.Behaviours
 {
     public class HostileBehaviour : IComponent
@@ -178,8 +177,31 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             SelectMovementAnimation(moveForce);
 
+            Pathfinding.PathfindingSystem.GetInstance().GetPathWithCallback(Parent.position, enemy.position, OnPathFound);
+
             moveForce *= (Parent.speed + BonusMoveSpeed);
             collider.Move(moveForce);
+        }
+
+        private void OnPathFound(List<Vector2> path)
+        {
+            Console.WriteLine("Zaleziono sciezke!");
+
+            foreach (var point in path)
+                Console.WriteLine("X: " + point.X + " Y: " + point.Y);
+
+            Console.WriteLine("Enemy pos:");
+            Console.WriteLine("X: " + enemy.position.X + " Y: " + enemy.position.Y);
+        }
+
+        private void OnWaypathStart()
+        {
+
+        }
+
+        private void OnWaypathEnd()
+        {
+
         }
 
         private void SelectMovementAnimation(Vector2 moveForce)

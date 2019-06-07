@@ -10,8 +10,10 @@ using Silesian_Undergrounds.Engine.Item;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Scene.RandomRooms;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Config;
+using Silesian_Undergrounds.Engine.Pathfinding;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -147,6 +149,11 @@ namespace Silesian_Undergrounds.Engine.Scene
                 scene.AddObject(ground);
             }
 
+            // start thread worker for initial pathfinding data
+            SceneGridCornersWorker worker = new SceneGridCornersWorker();
+            Thread pathfindingWorker = new Thread(new ThreadStart(() => worker.DoInitialWork(generatedGround, Renderer.Tiles)));
+            pathfindingWorker.Start();
+
             List<PickableItem> generatedItems = GameObjectFactory.ScenePickableItemsFactory(Renderer.Pickable, scene);
             foreach(var obj in generatedItems)
             {
@@ -180,17 +187,33 @@ namespace Silesian_Undergrounds.Engine.Scene
                 scene.AddObject(item);
             }
 
+            List<List<GameObject>> randomRoomsGameobjects = null;
+
             if (roomGenerator != null)
             {
                 while (!roomGenerator.isJobDone) { }
 
                 foreach (var room in roomGenerator.result)
                 {
+                    if (randomRoomsGameobjects == null)
+                        randomRoomsGameobjects = new List<List<GameObject>>();
+
                     var list = room.BuildGameObjectsList();
                     foreach (var obj in list)
                         scene.AddObject(obj);
+
+                    randomRoomsGameobjects.Add(list);
                 }
             }
+
+            // make sure that thread already end its job
+            pathfindingWorker.Join();
+            // Recheck bound with additional tiles generated from random rooms
+            if (randomRoomsGameobjects != null)
+                worker.CheckCornersWithRandRoomData(randomRoomsGameobjects);
+
+            // forward parsed data to pathfinding system in order to generate grid
+            PathfindingSystem.GetInstance().SetupSystemData(worker.dim, Renderer.Tiles, randomRoomsGameobjects);
 
             tileFile.Close();
             return true;
