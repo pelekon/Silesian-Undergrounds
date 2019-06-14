@@ -187,7 +187,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 scene.AddObject(item);
             }
 
-            List<List<GameObject>> randomRoomsGameobjects = null;
+            List<List<GameObject>> randomRoomsGameobjects = new List<List<GameObject>>();
 
             if (roomGenerator != null)
             {
@@ -195,9 +195,6 @@ namespace Silesian_Undergrounds.Engine.Scene
 
                 foreach (var room in roomGenerator.result)
                 {
-                    if (randomRoomsGameobjects == null)
-                        randomRoomsGameobjects = new List<List<GameObject>>();
-
                     var list = room.BuildGameObjectsList();
                     foreach (var obj in list)
                         scene.AddObject(obj);

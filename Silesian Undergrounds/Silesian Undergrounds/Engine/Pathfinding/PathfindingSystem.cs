@@ -43,7 +43,7 @@ namespace Silesian_Undergrounds.Engine.Pathfinding
             sizeX *= 2;
             sizeY *= 2;
 
-            grid = new Grid(sizeY, sizeX);
+            grid = new Grid(sizeX, sizeY);
         }
 
         private void PopulateGridWithObstacles(List<Tile> tiles, List<List<GameObject>> randomRoomsGameobjects)
@@ -58,7 +58,7 @@ namespace Silesian_Undergrounds.Engine.Pathfinding
 
             foreach (var room in randomRoomsGameobjects)
             {
-                foreach (var tile in tiles)
+                foreach (var tile in room)
                 {
                     if (tile.layer == wallLayer)
                         MarkObstacle(tile);
@@ -74,10 +74,10 @@ namespace Silesian_Undergrounds.Engine.Pathfinding
             posX *= 2;
             posY *= 2;
 
-            grid.BlockCell(new Position(posY, posX));
-            grid.BlockCell(new Position(posY + 1, posX));
-            grid.BlockCell(new Position(posY, posX + 1));
-            grid.BlockCell(new Position(posY + 1, posX + 1));
+            grid.BlockCell(new Position(posX, posY));
+            grid.BlockCell(new Position(posX + 1, posY));
+            grid.BlockCell(new Position(posX, posY + 1));
+            grid.BlockCell(new Position(posX + 1, posY + 1));
         }
 
         // Calculates and returns path which will be used to move to destinated point
@@ -86,8 +86,9 @@ namespace Silesian_Undergrounds.Engine.Pathfinding
             //DebugPrint();
             Position source = GetGridPosFromGlobalPos(sourcePos);
             Position dest = GetGridPosFromGlobalPos(destination);
-
-            GetPath(source, dest, callBack);
+            //DebugPrintPositions(sourcePos, destination, source, dest);
+            //PrintDebugFragment(source, dest);
+             GetPath(source, dest, callBack);
         }
 
         private void GetPath(Position source, Position dest, Action<List<Vector2>> callBack)
@@ -119,7 +120,7 @@ namespace Silesian_Undergrounds.Engine.Pathfinding
             float posXF = pos.X / ResolutionMgr.TileSize;
             float posYF = pos.Y / ResolutionMgr.TileSize;
             posXF *= 2;
-            posXF *= 2;
+            posYF *= 2;
 
             int posX = Convert.ToInt32(posXF);
             int posY = Convert.ToInt32(posYF);
@@ -129,15 +130,15 @@ namespace Silesian_Undergrounds.Engine.Pathfinding
         
         private void DebugPrint()
         {
-            for (int x = 0; x < grid.DimX; ++x)
+            for (int y = 0; y < grid.DimY; ++y)
             {
-                for (int y = 0; y < grid.DimY; ++y)
+                for (int x = 0; x < grid.DimX; ++x)
                 {
                     float display = 1;
                     if (float.IsInfinity(grid.GetCellCost(new Position(x, y))))
                         display = 0;
 
-                    if (y + 1 == grid.DimY)
+                    if (x + 1 == grid.DimX)
                         Console.WriteLine(display);
                     else
                     {
@@ -145,6 +146,41 @@ namespace Silesian_Undergrounds.Engine.Pathfinding
                         Console.Write(" ");
                     }  
                 }
+            }
+        }
+
+        private void DebugPrintPositions(Vector2 s, Vector2 d, Position so, Position de)
+        {
+            Console.WriteLine("Source");
+            Console.WriteLine("X: " + s.X + " Y: " + s.Y);
+            Console.WriteLine("X: " + so.X + " Y: " + so.Y);
+            Console.WriteLine("Destination");
+            Console.WriteLine("X: " + d.X + " Y: " + d.Y);
+            Console.WriteLine("X: " + de.X + " Y: " + de.Y);
+        }
+
+        private void PrintDebugFragment(Position source, Position dest)
+        {
+            int startX = source.X - 10;
+            if (startX < 0)
+                startX = 0;
+
+            int startY = source.Y - 10;
+            if (startY < 0)
+                startY = 0;
+
+            for (int x = startX; x <= startX + 20; ++x)
+            {
+                for (int y = startY; y <= startY + 20; ++y)
+                {
+                    int cost = 1;
+                    if (float.IsInfinity(grid.GetCellCost(new Position(x, y))))
+                        cost = 0;
+
+                    Console.Write(cost + " ");
+                }
+
+                Console.WriteLine("");
             }
         }
     }

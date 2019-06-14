@@ -36,8 +36,10 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         public Animator Animator { get; private set; }
         private MovementDirectionEnum currentDirection;
         private MovementDirectionEnum previousDirection;
-        private bool needStandAnimUpdate;
         private bool isMovementLockedByAnim;
+        private bool isMovingOnPath;
+        private int currentPathNode;
+        private List<Vector2> waypath;
 
         public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, int moneyRew, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
@@ -69,8 +71,10 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             Animator.OnAnimationEnd += OnAnimationEnd;
             
             Parent.ChangeDrawAbility(false);
-            needStandAnimUpdate = false;
             isMovementLockedByAnim = false;
+            isMovingOnPath = false;
+            currentPathNode = 0;
+            waypath = null;
         }
 
         public void CleanUp()
@@ -163,6 +167,32 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             if (!IsMoveNeeded || isMovementLockedByAnim)
                 return;
 
+            if (!isMovingOnPath && !CheckMovePathCond())
+                MoveWithoutPath();
+            else
+            {
+                if (!isMovingOnPath)
+                {
+                    isMovingOnPath = true;
+                    Pathfinding.PathfindingSystem.GetInstance().GetPathWithCallback(Parent.position, enemy.position, OnPathFound);
+                }
+                else
+                    MoveOnPath();
+            }
+        }
+
+        private bool CheckMovePathCond()
+        {
+            double dist = Vector2.Distance(Parent.position, enemy.position);
+
+            if (dist > ResolutionMgr.TileSize)
+                return true;
+
+            return false;
+        }
+
+        private void MoveWithoutPath()
+        {
             Vector2 moveForce = new Vector2(0, 0);
 
             if (enemy.position.X < Parent.position.X)
@@ -175,14 +205,49 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             else
                 moveForce.Y = 1;
 
-            SelectMovementAnimation(moveForce);
+            DoMovementByForce(moveForce);
+        }
 
-            Pathfinding.PathfindingSystem.GetInstance().GetPathWithCallback(Parent.position, enemy.position, OnPathFound);
+        private void MoveOnPath()
+        {
+            if (waypath == null)
+                return;
+
+            Vector2 currentNode = waypath[currentPathNode];
+            Vector2 moveForce = new Vector2(0, 0);
+
+            if (currentNode.X + 1 < Parent.position.X)
+                moveForce.X = -1;
+            else if (currentNode.X - 1 > Parent.position.X)
+                moveForce.X = 1;
+
+            if (currentNode.Y + 1 < Parent.position.Y)
+                moveForce.Y = -1;
+            else if (currentNode.Y - 1 > Parent.position.Y)
+                moveForce.Y = 1;
+
+            if (moveForce.X == 0 && moveForce.Y == 0)
+            {
+                ++currentPathNode;
+
+                if (currentPathNode == waypath.Count)
+                {
+                    OnWaypathEnd();
+                    return;
+                }
+            }
+
+            DoMovementByForce(moveForce);
+        }
+
+        private void DoMovementByForce(Vector2 moveForce)
+        {
+            SelectMovementAnimation(moveForce);
 
             moveForce *= (Parent.speed + BonusMoveSpeed);
             collider.Move(moveForce);
         }
-
+        
         private void OnPathFound(List<Vector2> path)
         {
             Console.WriteLine("Zaleziono sciezke!");
@@ -192,6 +257,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             Console.WriteLine("Enemy pos:");
             Console.WriteLine("X: " + enemy.position.X + " Y: " + enemy.position.Y);
+
+            waypath = path;
         }
 
         private void OnWaypathStart()
@@ -201,7 +268,9 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
         private void OnWaypathEnd()
         {
-
+            isMovingOnPath = false;
+            currentPathNode = 0;
+            waypath = null;
         }
 
         private void SelectMovementAnimation(Vector2 moveForce)

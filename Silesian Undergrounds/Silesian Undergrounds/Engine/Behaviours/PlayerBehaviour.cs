@@ -58,7 +58,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         {
             playerOrientation = orientation;
         }
-
+        
         private void HandleAttack()
         {
             // Do not send attack when its on cooldown period
