@@ -27,6 +27,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private PlayerOrientation playerOrientation;
         private TimedEventsScheduler eventsScheduler;
         private bool isAttackOnCooldown;
+        private Animator animator;
 
         private readonly int attackCooldown = 2000;
 
@@ -35,6 +36,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             Parent = parent;
             isAttackOnCooldown = false;
             eventsScheduler = new TimedEventsScheduler();
+            animator = new Animator(parent);
+            LoadAnimations();
         }
 
         public void RegisterSelf() { }
@@ -101,6 +104,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             Particle particle = new Particle("test", 0.5f, 0.5f, particlePos, particleForce, 1.5f, 15.0f, Parent);
             particle.OnParticleHit += OnParticleHit;
+            particle.Animator.AddAnimation("PickAtackAnimation", TextureMgr.Instance.GetAnimation("pickAtack"), 1000, false, true);
+            particle.Animator.PlayAnimation("PickAtackAnimation");
             particle.Launch();
         }
 
@@ -113,6 +118,28 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             Player plr = Parent as Player;
             int dmg = plr.PlayerStatistic.BaseDamage;
             hostileBehaviour.RegisterIncomeDmg(dmg, Parent);
+        }
+
+        public Animator GetAnimator() {
+            return animator;
+        }
+
+        private void LoadAnimations()
+        {
+            
+            TextureMgr.Instance.LoadAnimationFromSpritesheet(
+                fileName: "pick_sprite",
+                animName: "pickAtack",
+                spritesheetRows: 1,
+                spritesheetColumns: 4,
+                index: 0, amount: 4,
+                spacingX: 0,
+                spacingY: 0, 
+                canAddToExisting: false, 
+                loadByColumn: false
+            );
+
+
         }
     }
 }

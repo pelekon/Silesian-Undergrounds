@@ -1233,18 +1233,6 @@
 /processorParam:TextureFormat=Color
 /build:Monsters/rat_odbity.png
 
-#begin Monsters/rat_odbity.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Monsters/rat_odbity.png
-
 #begin Monsters/rat_odbity_test.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1268,6 +1256,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Monsters/worm_obrocony.png
+
+#begin pick_sprite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:pick_sprite.png
 
 #begin rainbow.png
 /importer:TextureImporter

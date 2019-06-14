@@ -27,7 +27,6 @@ namespace Silesian_Undergrounds.Engine.Item
 
             Animator = new Animator(this);
             AddComponent(Animator);
-            ChangeDrawAbility(false);
         }
 
         public override void NotifyCollision(GameObject obj, ICollider source)
