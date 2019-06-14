@@ -1221,7 +1221,7 @@
 /processorParam:TextureFormat=Color
 /build:Monsters/minotaur_obrocony.png
 
-#begin Monsters/rat_odbity.png
+#begin Monsters/rat.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1231,19 +1231,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Monsters/rat_odbity.png
-
-#begin Monsters/rat_odbity_test.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Monsters/rat_odbity_test.png
+/build:Monsters/rat.png
 
 #begin Monsters/worm_obrocony.png
 /importer:TextureImporter
