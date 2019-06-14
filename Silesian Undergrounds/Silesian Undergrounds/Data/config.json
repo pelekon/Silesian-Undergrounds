@@ -43,9 +43,12 @@
       "player-movement-increase-by": 1.0
     },
     "ore": {
-      "coal-occurrence-percentage": 60,
-      "silver-occurrence-percentage": 30,
-      "gold-occurrence-percentage":  10 
-    } 
-  }
+      "coal-occurrence-percentage": 80,
+      "silver-occurrence-percentage": 15,
+      "gold-occurrence-percentage":  5 
+    },
+	"food": {
+	  "meat-occurrence-percentage": 75,
+	  "steak-occurrence-percentage": 25
+	}
 }
