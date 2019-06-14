@@ -19,15 +19,15 @@ namespace Silesian_Undergrounds.Engine.Utils
 
             Random rng = new Random();
 
-            foreach(var pos in positionSource)
+            foreach (var pos in positionSource)
             {
-               int chance = rng.Next(0, 100);
-               if (chance <= 25)
-                list.Add(RatFactory(pos.position));
-               else if(chance > 25 && chance <= 50)
-                list.Add(MinotaurFactory(pos.position));
-               else
-                list.Add(WormFactory(pos.position));
+                int chance = rng.Next(0, 100);
+                if (chance <= 25)
+                    list.Add(RatFactory(pos.position));
+                else if (chance > 25 && chance <= 50)
+                    list.Add(MinotaurFactory(pos.position));
+                else
+                    list.Add(WormFactory(pos.position));
             }
 
             return list;
@@ -41,7 +41,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             if (TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/128x80Minotaur_FullSheet", "Monsters/Minotaur_Attack", 6, 8, 2, 8, 0, 15, false))
                 TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/128x80Minotaur_FullSheet", "Monsters/Minotaur_Attack", 6, 8, 3, 8, 0, 15, true);
 
-            
+
             GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
             AttackPattern attackPattern = new AttackPattern();
             AttackData attackData = new AttackData(true, 10, 20, 1000, AttackType.ATTACK_TYPE_MELEE, 5, 30);
@@ -69,9 +69,10 @@ namespace Silesian_Undergrounds.Engine.Utils
             return obj;
         }
 
-       public static GameObject RatFactory(Vector2 position)
+        public static GameObject RatFactory(Vector2 position)
         {
-            TextureMgr.Instance.LoadSingleTextureFromSpritescheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat", 4, 8, 0, 0, 0, 5);
+
+            TextureMgr.Instance.LoadSingleTextureFromSpritescheet("Monsters/rat", "Monsters/Rat", 1, 52, 0, 0, 0, 0);
             Texture2D texture = TextureMgr.Instance.GetTexture("Monsters/Rat");
 
             GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
@@ -83,11 +84,50 @@ namespace Silesian_Undergrounds.Engine.Utils
 
             HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
 
-
-            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_MoveRight", 5, 8, 1, 6, 0, 0, false); 
-            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_Attack", 5, 8, 3, 8, 0, 0, false);
-            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_MoveLeft", 5, 8, 4, 6, 0, 0, false);
-            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_dead", 5, 8, 2, 6, 0, 0, false);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet(
+                fileName: "Monsters/rat",
+                animName: "Monsters/Rat_MoveRight",
+                spritesheetRows: 1,
+                spritesheetColumns: 52,
+                index: 0, amount: 10,
+                spacingX: 0,
+                spacingY: 0,
+                canAddToExisting: false,
+                loadByColumn: false
+            );
+            TextureMgr.Instance.LoadAnimationFromSpritesheet(
+                fileName: "Monsters/rat",
+                animName: "Monsters/Rat_Attack",
+                spritesheetRows: 1,
+                spritesheetColumns: 52,
+                index: 0, amount: 10,
+                spacingX: 0,
+                spacingY: 0,
+                canAddToExisting: false,
+                loadByColumn: false
+            );
+            TextureMgr.Instance.LoadAnimationFromSpritesheet(
+                fileName: "Monsters/rat",
+                animName: "Monsters/Rat_MoveLeft",
+                spritesheetRows: 1,
+                spritesheetColumns: 52,
+                index: 0, amount: 10,
+                spacingX: 0,
+                spacingY: 0,
+                canAddToExisting: false,
+                loadByColumn: false
+            );
+            TextureMgr.Instance.LoadAnimationFromSpritesheet(
+                fileName: "Monsters/rat",
+                animName: "Monsters/Rat_dead",
+                spritesheetRows: 1,
+                spritesheetColumns: 52,
+                index: 0, amount: 10,
+                spacingX: 0,
+                spacingY: 0,
+                canAddToExisting: false,
+                loadByColumn: false
+            );
 
             behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), 1000);
             behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), 1000);
@@ -98,7 +138,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Rat_Attack"), 1000);
             behaviour.Animator.AddAnimation("Dead", TextureMgr.Instance.GetAnimation("Monsters/Rat_dead"), 1000);
 
-            obj.AddComponent(behaviour);          
+            obj.AddComponent(behaviour);
             return obj;
         }
 
@@ -130,7 +170,7 @@ namespace Silesian_Undergrounds.Engine.Utils
 
             behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Worm_Attack"), 1000);
             behaviour.Animator.AddAnimation("Dead", TextureMgr.Instance.GetAnimation("Monsters/Worm_dead"), 1000);
-            
+
             obj.AddComponent(behaviour);
 
             return obj;
