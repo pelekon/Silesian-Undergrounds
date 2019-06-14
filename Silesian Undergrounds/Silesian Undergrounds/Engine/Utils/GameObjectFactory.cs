@@ -46,7 +46,7 @@ namespace Silesian_Undergrounds.Engine.Utils
 
         private static SpecialItemEnum RandSpecialItem(Random random, PlayerStatistic playerStatistic = null)
         {
-            int randed = random.Next(4, 4 + 1);
+            int randed = random.Next((int)SpecialItemEnum.LiveBooster, (int)SpecialItemEnum.ChestsDropBooster + 1);
 
             // ensure to not to rand special item whose second pickup will not change statistics
             if (playerStatistic != null)
