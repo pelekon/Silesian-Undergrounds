@@ -15,14 +15,17 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public static class Shaders
         {
-            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect, _boosterPickupShader;
+            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect, _boosterPickupShader, _playerSpawningEffect;
             private static Texture2D _brightningTexture, _rainbow;
 
-            public static void DrawBrightShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
-            {      
-                _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _brightEffect);
-                _brightEffect.Parameters["lightRaysMask"].SetValue(_brightningTexture);
-                drawer.Invoke(_spriteBatch, _gameTime);
+
+            public static void DrawPlayerSpawningShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
+            {
+                // time is used as a seed for random number generation
+                _playerSpawningEffect.Parameters["rnd"].SetValue((float)_gameTime.TotalGameTime.Seconds);
+                //sortMode: SpriteSortMode.BackToFront, blendState: BlendState.AlphaBlend
+                _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _playerSpawningEffect);
+                 drawer.Invoke(_spriteBatch, _gameTime);
                 _spriteBatch.End();
             }
 
@@ -69,6 +72,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 _brightEffect = content.Load<Effect>("BrighteningShader");
                 _rainbow = TextureMgr.Instance.GetTexture("rainbow");
                 _boosterPickupShader = content.Load<Effect>("BoosterPickupShader");
+                _playerSpawningEffect = content.Load<Effect>("ShopItem");
             }
 
         }

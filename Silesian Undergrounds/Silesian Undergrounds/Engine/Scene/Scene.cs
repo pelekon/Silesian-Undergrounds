@@ -221,19 +221,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                 }
             }, transformMatrix: camera.Transform);
 
-            Drawer.Shaders.DrawBrightShader((spritebatch, gametime) =>
-            {
-                foreach (var obj in gameObjects)
-                {
-                    if (obj.layer == (int)LayerEnum.ShopPickables)
-                    {
-                        obj.Draw(spritebatch);
-                    }
-
-                }
-
-            }, transformMatrix: camera.Transform);
-
             if (player != null)
             {
                 Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
@@ -271,6 +258,19 @@ namespace Silesian_Undergrounds.Engine.Scene
                     player.Draw(spriteBatch);
                 }, transformMatrix: camera.Transform);
             }
+
+            if(player != null)
+            {
+                // nie ruszac tego stad bo bug
+                Drawer.Shaders.DrawPlayerSpawningShader((spritebatch, gametime) =>
+                {
+                    player.Draw(spritebatch);
+
+                }, transformMatrix: camera.Transform);
+            }
+
+
+
         }
 
         private void DetectPlayerOnTransition()

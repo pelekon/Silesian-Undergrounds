@@ -1341,6 +1341,12 @@
 /processorParam:DebugMode=Auto
 /build:ShadowShader.fx
 
+#begin ShopItem.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ShopItem.fx
+
 #begin test.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1394,6 +1400,12 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:VisibilityRadiusShader.fx
+
+#begin witam.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:witam.fx
 
 #begin x.png
 /importer:TextureImporter
