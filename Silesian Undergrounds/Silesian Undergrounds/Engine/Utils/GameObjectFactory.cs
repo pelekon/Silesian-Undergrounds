@@ -15,7 +15,7 @@ namespace Silesian_Undergrounds.Engine.Utils
     {
 
         #region GENERATION_PARAMETERS
-        private static double trapPropability = 0.5;
+        private static double trapPropability = 0.65;
         private static int NUMBER_OF_SHOP_ITEMS_TYPES = 3;
         #endregion
 
@@ -91,13 +91,13 @@ namespace Silesian_Undergrounds.Engine.Utils
                     maxRandValue += 20;
 
             int randed = random.Next(0, maxRandValue);
-            if (randed <= 10)
+            if (randed <= 40)
                 return PickableEnum.None;
-            else if (randed > 10 && randed <= 25)
+            else if (randed > 40 && randed <= 50)
                 return PickableEnum.Hearth;
-            else if (randed > 25 && randed <= 45)
+            else if (randed > 50 && randed <= 60)
                 return PickableEnum.Food;
-            else if (randed > 45 && randed <= 90)
+            else if (randed > 60 && randed <= 90)
                 return PickableEnum.Ore;
             else if (randed > 90 && randed <= 95)
                 return PickableEnum.Key;

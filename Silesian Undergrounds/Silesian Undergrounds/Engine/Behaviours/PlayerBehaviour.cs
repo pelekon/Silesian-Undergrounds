@@ -24,16 +24,21 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         public Rectangle Rect { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public GameObject Parent { get; private set; }
         // PlayerBehaviour variables
+        private Player playerOwner { get; }
         private PlayerOrientation playerOrientation;
         private TimedEventsScheduler eventsScheduler;
         private bool isAttackOnCooldown;
         private Animator animator;
 
-        private readonly int attackCooldown = 2000;
+        private int attackCooldown = 2000;
+        private float attackSpeed = 1f;
 
         public PlayerBehaviour(GameObject parent)
         {
             Parent = parent;
+            playerOwner = Parent as Player;
+            attackSpeed = playerOwner.PlayerStatistic.AttackSpeed;
+            attackCooldown = (int) (2000 / attackSpeed);
             isAttackOnCooldown = false;
             eventsScheduler = new TimedEventsScheduler();
             animator = new Animator(parent);
@@ -60,6 +65,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         public void SetOwnerOrientation(PlayerOrientation orientation)
         {
             playerOrientation = orientation;
+        }
+
+        public void ChangeAttackSpeed(float newValueOfPlayerAttackSpeed)
+        {
+            attackSpeed = newValueOfPlayerAttackSpeed;
+            attackCooldown = (int)(2000 / attackSpeed);
         }
 
         private void HandleAttack()
