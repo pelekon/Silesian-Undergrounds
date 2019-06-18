@@ -280,6 +280,8 @@ namespace Silesian_Undergrounds.Engine.Scene
                 }, transformMatrix: camera.Transform);
             }
 
+
+
             if(isPlayerNewlySpawned && player != null)
             {
                 // nie ruszac tego stad bo bug

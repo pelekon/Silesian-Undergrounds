@@ -39,8 +39,6 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             public static void DrawShadowEffect(Action<SpriteBatch, GameTime> drawer, Vector2 lightSource, Matrix? transformMatrix = null)
             {
-                // TODO: Add dynamic shadows
-//                _shadowEffect.Parameters["lightSource"].SetValue(new Vector2(960,540));
                 _spriteBatch.Begin(blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _shadowEffect);
                 drawer.Invoke(_spriteBatch, _gameTime);
                 _spriteBatch.End();

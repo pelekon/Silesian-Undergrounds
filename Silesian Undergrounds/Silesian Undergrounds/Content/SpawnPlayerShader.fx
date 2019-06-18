@@ -16,7 +16,6 @@ sampler2D SpriteTextureSampler = sampler_state
 	Texture = <SpriteTexture>;
 };
 
-
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
@@ -25,24 +24,29 @@ struct VertexShaderOutput
 };
 
 float rand(float2 co){
-    return frac(sin(dot(co.xy ,float2(12.9898, 78.233))) * 43758.5453);
+    return frac(sin(dot(co.xy, float2(12.9898, 78.233))) * 43758.5453);
 }
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-	float intensity = 10.0f;
+	float intensity = 0.3f;
 	float colorswap = 0.0f;
 
-	float f = max(0, rand(float2(input.TextCoord.y, input.TextCoord.x+rnd)) - rand(float2(0, input.TextCoord.x+rnd))*intensity);
+	float f = max(0, rand(float2(input.TextCoord.y, input.TextCoord.x + rnd)) - rand(float2(0, input.TextCoord.x+rnd))*intensity);
 
-	float4 color = float4(0, f, 0, tex2D(s0, input.TextCoord.xy).w * input.Color.w * f);
+	float4 color = float4(0, f, 0, tex2D(SpriteTextureSampler, input.TextCoord.xy).w * input.Color.w * f);
 
 	float4 c = tex2D(s0, input.TextCoord.xy);
+
+	// render only on the player by checking alpha
+	if(c.a < 1.0f)
+		return c;
+
 	float r = c.r;
 	float b = c.b;
 	float g = c.g;
 
-	float swap2 = (0.5f - abs(0.5f - colorswap))*2.0f;
+	float swap2 = (0.5f - abs(0.5f - colorswap)) * 2.0f;
 	c.r = r * ( 1.0f - swap2) + g * swap2;
 	c.b = b * (1.0f - swap2) + g * swap2;
 	c.g = g * (1.0f- swap2) + b * swap2;
@@ -51,8 +55,8 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	r = c.r;
 	b = c.b;
 
-	c.r = r*(1.0f-swap1) + b*swap1;
-	c.b = b*(1.0f-swap1) + r*swap1;
+     c.r = r * (1.0f - swap1) + b * swap1;
+	c.b = b * (1.0f - swap1) + r * swap1;
 
 	float4 c1 = c * input.Color;
 

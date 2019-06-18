@@ -84,6 +84,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public override void Draw(SpriteBatch spriteBatch)
         {
             this.color = new Color(Color.White, this.PlayerVisiblity);
+
             base.Draw(spriteBatch);
         }
 

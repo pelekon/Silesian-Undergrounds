@@ -1401,12 +1401,6 @@
 /processorParam:DebugMode=Auto
 /build:VisibilityRadiusShader.fx
 
-#begin witam.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:witam.fx
-
 #begin x.png
 /importer:TextureImporter
 /processor:TextureProcessor
