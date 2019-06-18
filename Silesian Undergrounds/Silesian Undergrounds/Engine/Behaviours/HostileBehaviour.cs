@@ -184,21 +184,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
         private void SelectMovementAnimation(Vector2 moveForce)
         {
-            if (moveForce.Y == -1) // UP anim
-            {
-                Animator.PlayAnimation("MoveUp");
-                previousDirection = currentDirection;
-                currentDirection = MovementDirectionEnum.DIRECTION_UP;
-
-            }
-            else if (moveForce.Y == 1) // DOWN anim
-            {
-                Animator.PlayAnimation("MoveDown");
-
-                previousDirection = currentDirection;
-                currentDirection = MovementDirectionEnum.DIRECTION_DOWN;
-            }
-            else if (moveForce.X == -1) // LEFT anim
+            if (moveForce.X == -1) // LEFT anim
             {
                 Animator.PlayAnimation("MoveLeft");
                 previousDirection = currentDirection;
@@ -209,6 +195,17 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 Animator.PlayAnimation("MoveRight");
                 previousDirection = currentDirection;
                 currentDirection = MovementDirectionEnum.DIRECTION_RIGHT;
+            }else if (moveForce.Y == -1) // UP anim
+            {
+                Animator.PlayAnimation("MoveUp");
+                previousDirection = currentDirection;
+                currentDirection = MovementDirectionEnum.DIRECTION_UP;
+            }
+            else if (moveForce.Y == 1) // DOWN anim
+            {
+                Animator.PlayAnimation("MoveDown");
+                previousDirection = currentDirection;
+                currentDirection = MovementDirectionEnum.DIRECTION_DOWN;
             }
         }
 
