@@ -31,6 +31,8 @@ namespace Silesian_Undergrounds.Engine.Scene
         public bool isEnd { get; private set; }
         public bool lastScene { get; private set; }
         private bool isBoosterPicked;
+        private bool isPlayerNewlySpawned = true;
+        private double playerSpawnShaderDurationInSeconds = 500.0;
         private const float shaderDelayInSeconds = 50;
         private float remainingShaderDelayInSeconds = shaderDelayInSeconds;
         private readonly bool canUnPause;
@@ -159,6 +161,14 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Update(GameTime gameTime)
         {
+            if(isPlayerNewlySpawned)
+            {
+                playerSpawnShaderDurationInSeconds -= gameTime.TotalGameTime.TotalSeconds;
+                if (playerSpawnShaderDurationInSeconds <= 0.0)
+                    isPlayerNewlySpawned = false;
+            }
+           
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 if (isPaused && canUnPause)
@@ -259,7 +269,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 }, transformMatrix: camera.Transform);
             }
 
-            if(player != null)
+            if(isPlayerNewlySpawned && player != null)
             {
                 // nie ruszac tego stad bo bug
                 Drawer.Shaders.DrawPlayerSpawningShader((spritebatch, gametime) =>

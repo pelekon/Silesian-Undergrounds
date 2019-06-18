@@ -23,7 +23,6 @@ namespace Silesian_Undergrounds.Engine.Scene
             {
                 // time is used as a seed for random number generation
                 _playerSpawningEffect.Parameters["rnd"].SetValue((float)_gameTime.TotalGameTime.Seconds);
-                //sortMode: SpriteSortMode.BackToFront, blendState: BlendState.AlphaBlend
                 _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _playerSpawningEffect);
                  drawer.Invoke(_spriteBatch, _gameTime);
                 _spriteBatch.End();
