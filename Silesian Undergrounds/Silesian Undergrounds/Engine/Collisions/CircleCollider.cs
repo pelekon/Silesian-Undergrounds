@@ -89,7 +89,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
             return false;
         }
 
-        public bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides sides)
+        public bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides sides, Vector2 moveForce)
         {
             if (CheckConditions(collider))
                 return false;

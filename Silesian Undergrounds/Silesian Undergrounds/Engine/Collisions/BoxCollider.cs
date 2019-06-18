@@ -81,12 +81,15 @@ namespace Silesian_Undergrounds.Engine.Collisions
                 bool isColliding = false;
 
                 if (collider is BoxCollider)
-                    isColliding = IsCollidingWith(collider as BoxCollider, ref collisionSides);
+                    isColliding = IsCollidingWith(collider as BoxCollider, ref collisionSides, moveForce);
                 else
                     isColliding = IsCollidingWith(collider as CircleCollider);
 
                 if (isColliding)
                 {
+                    Console.WriteLine("Kolizja: ");
+                    Console.WriteLine(collisionSides);
+
                     collider.Parent.NotifyCollision(Parent, collider);
                     Parent.NotifyCollision(collider.Parent, this);
                 }
@@ -114,14 +117,14 @@ namespace Silesian_Undergrounds.Engine.Collisions
             return false;
         }
 
-        public bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides collisionSides)
+        public bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides collisionSides, Vector2 moveForce)
         {
             if (CheckConditions(collider))
                 return false;
 
             bool isColliding = false;
 
-            if (TouchingBottom(collider) && Rect.Intersects(collider.Rect))
+            if (TouchingBottom(collider, moveForce))
             {
                 isColliding = true;
 
@@ -129,7 +132,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
                     collisionSides = collisionSides | RectCollisionSides.SIDE_BOTTOM;
             }
 
-            if (TouchingLeftSide(collider) && Rect.Intersects(collider.Rect))
+            if (TouchingLeftSide(collider, moveForce))
             {
                 isColliding = true;
 
@@ -137,7 +140,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
                     collisionSides = collisionSides | RectCollisionSides.SIDE_LEFT;
             }
 
-            if (TouchingRightSide(collider) && Rect.Intersects(collider.Rect))
+            if (TouchingRightSide(collider, moveForce))
             {
                 isColliding = true;
 
@@ -145,7 +148,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
                     collisionSides = collisionSides | RectCollisionSides.SIDE_RIGHT;
             }
 
-            if (TouchingTop(collider) && Rect.Intersects(collider.Rect))
+            if (TouchingTop(collider, moveForce))
             {
                 isColliding = true;
 
@@ -167,33 +170,43 @@ namespace Silesian_Undergrounds.Engine.Collisions
             return false;
         }
 
-        private bool TouchingLeftSide(BoxCollider collider)
+        private bool TouchingLeftSide(BoxCollider collider, Vector2 moveForce)
         {
-            return Rect.Right > collider.Rect.Left &&
+            return Rect.Right + moveForce.X > collider.Rect.Left &&
               Rect.Left < collider.Rect.Left &&
               Rect.Bottom > collider.Rect.Top &&
               Rect.Top < collider.Rect.Bottom;
         }
 
-        private bool TouchingRightSide(BoxCollider collider)
+        private bool TouchingRightSide(BoxCollider collider, Vector2 moveForce)
         {
-            return Rect.Left < collider.Rect.Right &&
+            return Rect.Left + moveForce.X < collider.Rect.Right &&
               Rect.Right > collider.Rect.Right &&
               Rect.Bottom > collider.Rect.Top &&
               Rect.Top < collider.Rect.Bottom;
         }
 
-        private bool TouchingTop(BoxCollider collider)
+        private bool TouchingTop(BoxCollider collider, Vector2 moveForce)
         {
-            return Rect.Bottom > collider.Rect.Top &&
+            /* return collider.Rect.Bottom > Rect.Top &&
+                collider.Rect.Top < Rect.Top &&
+                collider.Rect.Right > Rect.Left &&
+                collider.Rect.Left < Rect.Right; */
+
+            return Rect.Bottom + moveForce.Y > collider.Rect.Top &&
               Rect.Top < collider.Rect.Top &&
               Rect.Right > collider.Rect.Left &&
               Rect.Left < collider.Rect.Right;
         }
 
-        private bool TouchingBottom(BoxCollider collider)
+        private bool TouchingBottom(BoxCollider collider, Vector2 moveForce)
         {
-            return Rect.Top < collider.Rect.Bottom &&
+            /*return collider.Rect.Top < Rect.Bottom &&
+                collider.Rect.Bottom > Rect.Bottom &&
+                collider.Rect.Right > Rect.Left &&
+                collider.Rect.Left < Rect.Right; */
+
+            return Rect.Top + moveForce.Y < collider.Rect.Bottom &&
               Rect.Bottom > collider.Rect.Bottom &&
               Rect.Right > collider.Rect.Left &&
               Rect.Left < collider.Rect.Right;

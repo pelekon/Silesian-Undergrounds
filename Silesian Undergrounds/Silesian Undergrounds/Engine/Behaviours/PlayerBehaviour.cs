@@ -115,7 +115,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             Particle particle = new Particle("test", 0.5f, 0.5f, particlePos, particleForce, 1.5f, 15.0f, Parent);
             particle.OnParticleHit += OnParticleHit;
-            particle.Animator.AddAnimation("PickAtackAnimation", TextureMgr.Instance.GetAnimation("pickAtack"), 1000, false, true);
+            particle.Animator.AddAnimation("PickAtackAnimation", TextureMgr.Instance.GetAnimation("pickAtack"), 1000, true, false);
             particle.Animator.PlayAnimation("PickAtackAnimation");
             particle.Launch();
         }
