@@ -33,7 +33,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
             OffsetX = offsetX;
             OffsetY = offsetY;
             CalculatePosition();
-            boxTexture = TextureMgr.Instance.GetTexture("debug_box");
+           boxTexture = TextureMgr.Instance.GetTexture("debug_box");
         }
 
         public void RegisterSelf()
