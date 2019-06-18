@@ -29,9 +29,9 @@ namespace Silesian_Undergrounds.Engine.Item
             AddComponent(Animator);
         }
 
-        public override void NotifyCollision(GameObject obj, ICollider source)
+        public override void NotifyCollision(GameObject obj, ICollider source, RectCollisionSides collisionSides)
         {
-            base.NotifyCollision(obj, source);
+            base.NotifyCollision(obj, source, collisionSides);
 
             if (obj is Player && !isBuyable)
             {

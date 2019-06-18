@@ -40,6 +40,11 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private bool isMovingOnPath;
         private int currentPathNode;
         private List<Vector2> waypath;
+        private Vector2 collisionDerivedMoveForce;
+        private Vector2 lastMoveForce;
+
+        // DEBUG TO DELETE!!!!!!!!!
+        private bool hasMovedOnPath = false;
 
         public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, int moneyRew, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
@@ -76,6 +81,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             isMovingOnPath = false;
             currentPathNode = 0;
             waypath = null;
+            collisionDerivedMoveForce = new Vector2();
+            lastMoveForce = new Vector2();
         }
 
         public void CleanUp()
@@ -151,6 +158,9 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 if (data.obj is Player)
                     StartCombatWith(data.obj);
             }
+
+            if (isMovingOnPath)
+                PathMovementCollisionHelper(data.collisionSides);
         }
 
         public void StartCombatWith(GameObject obj)
@@ -172,7 +182,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 MoveWithoutPath();
             else
             {
-                if (!isMovingOnPath)
+                if (!isMovingOnPath && !hasMovedOnPath)
                 {
                     isMovingOnPath = true;
                     Pathfinding.PathfindingSystem.GetInstance().GetPathWithCallback(Parent.position, enemy.position, OnPathFound);
@@ -227,6 +237,26 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             else if (currentNode.Y - 1 > Parent.position.Y)
                 moveForce.Y = 1;
 
+            Console.WriteLine("Additional Force:");
+            Console.WriteLine("X: " + collisionDerivedMoveForce.X);
+            Console.WriteLine("Y: " + collisionDerivedMoveForce.Y);
+
+            if (Parent.Rectangle.Contains(currentNode))
+            {
+                Console.WriteLine("Zawiera punkt");
+                moveForce.X = 0;
+                moveForce.Y = 0;
+            }
+
+            if (collisionDerivedMoveForce.X != 0 || collisionDerivedMoveForce.Y != 0)
+            {
+                moveForce.X = collisionDerivedMoveForce.X;
+                moveForce.Y = collisionDerivedMoveForce.Y;
+
+                collisionDerivedMoveForce.X = 0;
+                collisionDerivedMoveForce.Y = 0;
+            }
+
             if (moveForce.X == 0 && moveForce.Y == 0)
             {
                 ++currentPathNode;
@@ -238,6 +268,11 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 }
             }
 
+            lastMoveForce.X = moveForce.X;
+            lastMoveForce.Y = moveForce.Y;
+
+            Console.WriteLine("Final MoveForce:");
+            Console.WriteLine("X: " + moveForce.X + " Y: " + moveForce.Y);
             DoMovementByForce(moveForce);
         }
 
@@ -251,10 +286,16 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         
         private void OnPathFound(List<Vector2> path)
         {
-            Console.WriteLine("Zaleziono sciezke!");
-
             waypath = path;
             OnWaypathStart();
+
+            // VERY DEBUG CODE!!!!!!!!!
+            foreach (var point in path)
+            {
+                Texture2D text = TextureMgr.Instance.GetTexture("kolejne");
+                GameObject go = new GameObject(text, point, new Vector2(16, 16));
+                Scene.SceneManager.GetCurrentScene().AddObject(go);
+            }
         }
 
         private void OnWaypathStart()
@@ -267,6 +308,32 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             isMovingOnPath = false;
             currentPathNode = 0;
             waypath = null;
+            hasMovedOnPath = true;
+        }
+
+        private void PathMovementCollisionHelper(RectCollisionSides collisionSides)
+        {
+            Console.WriteLine("CollisionSides: " + collisionSides);
+
+            if ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0 ||
+                (collisionSides & RectCollisionSides.SIDE_LEFT) != 0)
+            {
+                Console.WriteLine("Lewo/Prawo");
+                if (lastMoveForce.Y > 0.0f)
+                    collisionDerivedMoveForce.Y = 0.8f;
+                else if (lastMoveForce.Y <= 0.0f)
+                    collisionDerivedMoveForce.Y = -0.8f;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_UP) != 0 ||
+                (collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0)
+            {
+                Console.WriteLine("Gora/Dol");
+                if (lastMoveForce.X > 0.0f)
+                    collisionDerivedMoveForce.X = 0.8f;
+                else if (lastMoveForce.X <= 0.0f)
+                    collisionDerivedMoveForce.X = -0.8f;
+            }
         }
 
         private void SelectMovementAnimation(Vector2 moveForce)

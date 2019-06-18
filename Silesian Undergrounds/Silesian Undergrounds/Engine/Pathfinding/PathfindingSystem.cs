@@ -106,6 +106,10 @@ namespace Silesian_Undergrounds.Engine.Pathfinding
                     x *= ResolutionMgr.TileSize;
                     y *= ResolutionMgr.TileSize;
 
+                    //TEST CODE
+                    x += 5;
+                    y += 5;
+
                     list.Add(new Vector2(x, y));
                 }
 

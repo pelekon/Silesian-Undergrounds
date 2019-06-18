@@ -90,8 +90,8 @@ namespace Silesian_Undergrounds.Engine.Collisions
                     Console.WriteLine("Kolizja: ");
                     Console.WriteLine(collisionSides);
 
-                    collider.Parent.NotifyCollision(Parent, collider);
-                    Parent.NotifyCollision(collider.Parent, this);
+                    collider.Parent.NotifyCollision(Parent, collider, new RectCollisionSides());
+                    Parent.NotifyCollision(collider.Parent, this, collisionSides);
                 }
             }
 
@@ -129,7 +129,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
                 isColliding = true;
 
                 if (!collider.triggerOnly)
-                    collisionSides = collisionSides | RectCollisionSides.SIDE_BOTTOM;
+                    collisionSides = collisionSides | RectCollisionSides.SIDE_UP;
             }
 
             if (TouchingLeftSide(collider, moveForce))
@@ -137,7 +137,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
                 isColliding = true;
 
                 if (!collider.triggerOnly)
-                    collisionSides = collisionSides | RectCollisionSides.SIDE_LEFT;
+                    collisionSides = collisionSides | RectCollisionSides.SIDE_RIGHT;
             }
 
             if (TouchingRightSide(collider, moveForce))
@@ -145,7 +145,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
                 isColliding = true;
 
                 if (!collider.triggerOnly)
-                    collisionSides = collisionSides | RectCollisionSides.SIDE_RIGHT;
+                    collisionSides = collisionSides | RectCollisionSides.SIDE_LEFT;
             }
 
             if (TouchingTop(collider, moveForce))
@@ -153,7 +153,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
                 isColliding = true;
 
                 if (!collider.triggerOnly)
-                    collisionSides = collisionSides | RectCollisionSides.SIDE_UP;
+                    collisionSides = collisionSides | RectCollisionSides.SIDE_BOTTOM;
             }
 
             return isColliding;
@@ -188,11 +188,6 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
         private bool TouchingTop(BoxCollider collider, Vector2 moveForce)
         {
-            /* return collider.Rect.Bottom > Rect.Top &&
-                collider.Rect.Top < Rect.Top &&
-                collider.Rect.Right > Rect.Left &&
-                collider.Rect.Left < Rect.Right; */
-
             return Rect.Bottom + moveForce.Y > collider.Rect.Top &&
               Rect.Top < collider.Rect.Top &&
               Rect.Right > collider.Rect.Left &&
@@ -201,11 +196,6 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
         private bool TouchingBottom(BoxCollider collider, Vector2 moveForce)
         {
-            /*return collider.Rect.Top < Rect.Bottom &&
-                collider.Rect.Bottom > Rect.Bottom &&
-                collider.Rect.Right > Rect.Left &&
-                collider.Rect.Left < Rect.Right; */
-
             return Rect.Top + moveForce.Y < collider.Rect.Bottom &&
               Rect.Bottom > collider.Rect.Bottom &&
               Rect.Right > collider.Rect.Left &&
@@ -214,14 +204,14 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
         private void AdjustMoveForceAndMoveParent(Vector2 force, RectCollisionSides collisionSides)
         {
-            if (force.X < 0 && ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0))
+            if (force.X > 0 && ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0))
                 force.X = 0;
-            else if (force.X > 0 && ((collisionSides & RectCollisionSides.SIDE_LEFT) != 0))
+            else if (force.X < 0 && ((collisionSides & RectCollisionSides.SIDE_LEFT) != 0))
                 force.X = 0;
 
-            if (force.Y < 0 && ((collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0))
+            if (force.Y > 0 && ((collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0))
                 force.Y = 0;
-            else if (force.Y > 0 && ((collisionSides & RectCollisionSides.SIDE_UP) != 0))
+            else if (force.Y < 0 && ((collisionSides & RectCollisionSides.SIDE_UP) != 0))
                 force.Y = 0;
 
             Parent.position += force;

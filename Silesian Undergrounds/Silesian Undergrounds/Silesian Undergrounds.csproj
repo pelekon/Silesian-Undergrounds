@@ -60,7 +60,6 @@
     <Compile Include="Engine\Common\PropertyChangedArgs.cs" />
     <Compile Include="Engine\Common\SpecialItem.cs" />
     <Compile Include="Engine\Common\StatisticHolder.cs" />
-    <Compile Include="Engine\Common\Unit.cs" />
     <Compile Include="Engine\Collisions\CollisionNotifyData.cs" />
     <Compile Include="Engine\Components\Animator.cs" />
     <Compile Include="Engine\Components\IComponent.cs" />
