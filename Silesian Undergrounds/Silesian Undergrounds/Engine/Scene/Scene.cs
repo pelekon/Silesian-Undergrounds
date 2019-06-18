@@ -9,6 +9,7 @@ using Silesian_Undergrounds.Views;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
 using System;
+using System.Diagnostics;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -161,11 +162,20 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Update(GameTime gameTime)
         {
-            if(isPlayerNewlySpawned)
+            if (player != null && isPlayerNewlySpawned)
             {
                 playerSpawnShaderDurationInSeconds -= gameTime.TotalGameTime.TotalSeconds;
+                this.player.PlayerVisiblity += 0.00001f;
+
                 if (playerSpawnShaderDurationInSeconds <= 0.0)
+                {
                     isPlayerNewlySpawned = false;
+                    player.CanMove(true);
+                    this.player.PlayerVisiblity = 1.0f;
+                } else
+                {
+                    player.CanMove(false);
+                }
             }
            
 
@@ -190,6 +200,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             {
                 remainingShaderDelayInSeconds = shaderDelayInSeconds;
                 isBoosterPicked = false;
+          
             }
 
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
@@ -275,7 +286,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                 Drawer.Shaders.DrawPlayerSpawningShader((spritebatch, gametime) =>
                 {
                     player.Draw(spritebatch);
-
                 }, transformMatrix: camera.Transform);
             }
 

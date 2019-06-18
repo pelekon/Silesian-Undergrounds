@@ -16,6 +16,7 @@ sampler2D SpriteTextureSampler = sampler_state
 	Texture = <SpriteTexture>;
 };
 
+
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
@@ -42,12 +43,13 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	float g = c.g;
 
 	float swap2 = (0.5f - abs(0.5f - colorswap))*2.0f;
-	c.r = r*(1.0f-swap2) + g*swap2;
-	c.b = b*(1.0f-swap2) + g*swap2;
-	c.g = g*(1.0f-swap2) + b*swap2;
+	c.r = r * ( 1.0f - swap2) + g * swap2;
+	c.b = b * (1.0f - swap2) + g * swap2;
+	c.g = g * (1.0f- swap2) + b * swap2;
 
 	float swap1 = colorswap * (1.0f - swap2);
-	r = c.r; b = c.b;
+	r = c.r;
+	b = c.b;
 
 	c.r = r*(1.0f-swap1) + b*swap1;
 	c.b = b*(1.0f-swap1) + r*swap1;

@@ -24,6 +24,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
 
         private Func<bool> OnPlayeDeath;
+        private Boolean isPlayerMoving = false;
 
         private float timeSinceHungerFall;
 
@@ -32,6 +33,23 @@ namespace Silesian_Undergrounds.Engine.Common
         private PlayerBehaviour behaviour;
         private Animator animator;
         private Vector2 sDirection;
+        private float playerVisibility = 0.0f;
+        public float PlayerVisiblity
+        {
+            get
+            {
+                return playerVisibility;
+            }
+
+            set
+            {
+                if(!(value > 1.0f || value < 0.0f))
+                {
+                    playerVisibility = value;
+                }
+            }
+        }
+
 
         private readonly int textureSpacingX = 20;
         private readonly int textureSpacingY = 24;
@@ -63,6 +81,12 @@ namespace Silesian_Undergrounds.Engine.Common
             this.position = position;
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            this.color = new Color(Color.White, this.PlayerVisiblity);
+            base.Draw(spriteBatch);
+        }
+
         public void SetOnDeath(Func<bool> functionOnDeath)
         {
             OnPlayeDeath += functionOnDeath;
@@ -85,7 +109,8 @@ namespace Silesian_Undergrounds.Engine.Common
         {
             sDirection = Vector2.Zero;
 
-            HandleInput(Keyboard.GetState());
+            if(isPlayerMoving)
+                HandleInput(Keyboard.GetState());
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -94,12 +119,20 @@ namespace Silesian_Undergrounds.Engine.Common
                 HandleHungerDecrasing(deltaTime);
             }
 
-            sDirection *= speed;
-            sDirection *= deltaTime;
+            if (isPlayerMoving)
+            {
+                sDirection *= speed;
+                sDirection *= deltaTime;
 
-            collider.Move(sDirection);
+                collider.Move(sDirection);
+            }
 
             base.Update(gameTime);
+        }
+
+        public void CanMove(Boolean canMove)
+        {
+            this.isPlayerMoving = canMove;
         }
 
         public void Initialize()
