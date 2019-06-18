@@ -198,18 +198,6 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Draw()
         {
-            Drawer.Shaders.DrawGrayScaleEffect((spriteBatch, gameTime) =>
-            {
-                foreach (var obj in gameObjects)
-                {
-                    if (obj is Player)
-                        continue;
-
-                    if (obj.layer != 3)
-                        obj.Draw(spriteBatch);
-                }
-            }, transformMatrix: camera.Transform);
-
             Drawer.Draw((spriteBatch, gameTime) =>
             {
                 foreach (var obj in gameObjects)
@@ -220,6 +208,27 @@ namespace Silesian_Undergrounds.Engine.Scene
                     obj.Draw(spriteBatch);
                 }
             }, transformMatrix: camera.Transform);
+
+            Drawer.Draw((spriteBatch, gameTime) =>
+            {
+                if (player != null)
+                    player.Draw(spriteBatch);
+
+                foreach(var obj in gameObjects)
+                {
+                    if (obj.layer == 6)
+                        obj.Draw(spriteBatch);
+                }
+
+            }, transformMatrix: camera.Transform);
+
+            if (isBoosterPicked && player != null)
+            {
+                Drawer.Shaders.DrawBoosterPickupShader((spriteBatch, gameTime) =>
+                {
+                    player.Draw(spriteBatch);
+                }, transformMatrix: camera.Transform);
+            }
 
             Drawer.Shaders.DrawBrightShader((spritebatch, gametime) =>
             {
@@ -246,31 +255,11 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             Drawer.Draw((spriteBatch, gameTime) =>
             {
-                if (player != null)
-                    player.Draw(spriteBatch);
-
-                foreach(var obj in gameObjects)
-                {
-                    if (obj.layer == 6)
-                        obj.Draw(spriteBatch);
-                }
-
-            }, transformMatrix: camera.Transform);
-            Drawer.Draw((spriteBatch, gameTime) =>
-            {
                 if (isPaused)
                     pauseMenu.Draw(spriteBatch);
                 else
                     ui.Draw(spriteBatch);
             }, null);
-
-            if (isBoosterPicked && player != null)
-            {
-                Drawer.Shaders.DrawBoosterPickupShader((spriteBatch, gameTime) =>
-                {
-                    player.Draw(spriteBatch);
-                }, transformMatrix: camera.Transform);
-            }
         }
 
         private void DetectPlayerOnTransition()
