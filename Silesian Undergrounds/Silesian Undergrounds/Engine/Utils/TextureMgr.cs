@@ -41,7 +41,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                 if (!textures.ContainsKey(name))
                     return null;
             }
-            
+
             return textures[name];
         }
 
@@ -94,7 +94,7 @@ namespace Silesian_Undergrounds.Engine.Utils
         //   loadByColumn:
         //     if true function will load textures present in column instead of row
         public bool LoadAnimationFromSpritesheet(string fileName, string animName, int spritesheetRows, int spritesheetColumns, int index, int amount,
-            int spacingX, int spacingY, bool canAddToExisting = false, bool loadByColumn = false)
+            int spacingX, int spacingY, bool canAddToExisting = false, bool loadByColumn = false, int skip = 0)
         {
             bool contain = false;
             if (animations.ContainsKey(animName))
@@ -118,7 +118,7 @@ namespace Silesian_Undergrounds.Engine.Utils
             spritesheet.GetData(colorSourceOrg);
             Color[][] colorSource = MakeTwoDimColorArray(colorSourceOrg, spritesheet.Width, spritesheet.Height);
 
-            for (int i = 0; i < amount; ++i)
+            for (int i = skip; i < amount + skip; ++i)
             {
                 // Create color data array which will let frame get information about its pixel
                 Color[] frameData = CreateFrameColorArray(pixelsPerColumn, pixelsPerRow, colorSource, index, i, spacingX, spacingY, loadByColumn);
@@ -193,18 +193,25 @@ namespace Silesian_Undergrounds.Engine.Utils
             int heightWithSpacing = h + spacingX + spacingX;
             int widthWithSpacing = w + spacingY + spacingY;
 
-            // select proper pixels from source array and put them to created data
-            int startX = pivot * heightWithSpacing + spacingX;
-            int endX = startX + h;
-            int startY = current * widthWithSpacing + spacingY;
-            int endY = startY + w;
+            int startX;
+            int endX;
+            int startY;
+            int endY;
             int index = 0;
 
+            // select proper pixels from source array and put them to created data
             if (loadByColumn)
             {
                 startX = current * heightWithSpacing + spacingX;
                 endX = startX + h;
                 startY = pivot * widthWithSpacing + spacingY;
+                endY = startY + w;
+            }
+            else
+            {
+                startX = pivot * heightWithSpacing + spacingX;
+                endX = startX + h;
+                startY = current * widthWithSpacing + spacingY;
                 endY = startY + w;
             }
 
