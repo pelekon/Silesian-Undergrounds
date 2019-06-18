@@ -35,7 +35,7 @@ namespace Silesian_Undergrounds.Engine.Particles
             this.emiter = emiter;
             startingPos = new Vector2(startPos.X, startPos.Y);
 
-            collider = new BoxCollider(this, size.X, size.Y, 0, 0, true);
+            collider = new BoxCollider(this, size.X, size.Y, 0, 0, true, true);
             AddComponent(collider);
 
             isWaitingForDelete = false;

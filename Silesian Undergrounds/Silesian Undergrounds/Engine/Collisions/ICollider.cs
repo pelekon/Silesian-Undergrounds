@@ -12,5 +12,12 @@ namespace Silesian_Undergrounds.Engine.Collisions
         bool IsCollidingWith(CircleCollider collider);
 
         void Move(Vector2 moveForce);
+
+        bool triggerOnly { get; }
+        bool canIgnoreTraps { get; }
+        bool isAggroArea { get; }
+        bool ignoreAggroArea { get; }
+
+        void MarkAsAggroArea();
     }
 }

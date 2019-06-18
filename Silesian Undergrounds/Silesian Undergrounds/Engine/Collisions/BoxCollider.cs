@@ -21,10 +21,12 @@ namespace Silesian_Undergrounds.Engine.Collisions
         private float Height;
         public float OffsetX { get; private set; }
         public float OffsetY { get; private set; }
+        public bool canIgnoreTraps { get; private set; }
+        public bool triggerOnly { get; private set; }
+        public bool isAggroArea { get; private set; }
+        public bool ignoreAggroArea { get; private set; }
 
-        private bool triggerOnly;
-
-        public BoxCollider(GameObject owner, float w, float h, float offsetX, float offsetY, bool trigger)
+        public BoxCollider(GameObject owner, float w, float h, float offsetX, float offsetY, bool trigger, bool ignoreTraps = false, bool ignoreAggroArea = true)
         {
             Parent = owner;
             triggerOnly = trigger;
@@ -34,6 +36,10 @@ namespace Silesian_Undergrounds.Engine.Collisions
             OffsetY = offsetY;
             CalculatePosition();
             boxTexture = TextureMgr.Instance.GetTexture("debug_box");
+
+            canIgnoreTraps = ignoreTraps;
+            isAggroArea = false;
+            this.ignoreAggroArea = ignoreAggroArea;
         }
 
         public void RegisterSelf()
@@ -50,6 +56,11 @@ namespace Silesian_Undergrounds.Engine.Collisions
         {
             Parent = null;
             boxTexture = null;
+        }
+
+        public void MarkAsAggroArea()
+        {
+            isAggroArea = true;
         }
 
         public void Update(GameTime gameTime) { }
@@ -87,6 +98,9 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
         public bool IsCollidingWith(CircleCollider collider)
         {
+            if (CheckConditions(collider))
+                return false;
+
             // look for closest point in rectangle of collider
             float posX = MathHelper.Clamp(collider.Position.X, Rect.Left, Rect.Right);
             float posY = MathHelper.Clamp(collider.Position.Y, Rect.Top, Rect.Bottom);
@@ -102,6 +116,9 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
         public bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides collisionSides)
         {
+            if (CheckConditions(collider))
+                return false;
+
             bool isColliding = false;
 
             if (TouchingBottom(collider) && Rect.Intersects(collider.Rect))
@@ -137,6 +154,17 @@ namespace Silesian_Undergrounds.Engine.Collisions
             }
 
             return isColliding;
+        }
+
+        private bool CheckConditions(ICollider collider)
+        {
+            if (collider.isAggroArea && ignoreAggroArea)
+                return true;
+
+            if (canIgnoreTraps && collider.Parent is Traps.Spike)
+                return true;
+
+            return false;
         }
 
         private bool TouchingLeftSide(BoxCollider collider)

@@ -53,7 +53,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             MinDistToEnemy = minDist;
             BonusMoveSpeed = bonusMoveSpeed;
 
-            aggroArea = new CircleCollider(Parent, 70, 0, 0);
+            aggroArea = new CircleCollider(Parent, 70, 0, 0, true);
+            aggroArea.MarkAsAggroArea();
             collider = new BoxCollider(Parent, 70, 70, 0, 0, false);
             Parent.AddComponent(collider);
             Parent.AddComponent(aggroArea);
@@ -252,13 +253,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         {
             Console.WriteLine("Zaleziono sciezke!");
 
-            foreach (var point in path)
-                Console.WriteLine("X: " + point.X + " Y: " + point.Y);
-
-            Console.WriteLine("Enemy pos:");
-            Console.WriteLine("X: " + enemy.position.X + " Y: " + enemy.position.Y);
-
             waypath = path;
+            OnWaypathStart();
         }
 
         private void OnWaypathStart()
