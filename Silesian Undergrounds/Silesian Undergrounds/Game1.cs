@@ -105,6 +105,7 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            Input.Update();
 
             if (!scene.isEnd)
                 scene.Update(gameTime);
