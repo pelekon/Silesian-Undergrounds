@@ -55,7 +55,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	r = c.r;
 	b = c.b;
 
-     c.r = r * (1.0f - swap1) + b * swap1;
+    c.r = r * (1.0f - swap1) + b * swap1;
 	c.b = b * (1.0f - swap1) + r * swap1;
 
 	float4 c1 = c * input.Color;
