@@ -165,14 +165,19 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 return;
 
             Vector2 moveForce = new Vector2(0, 0);
-
-            if (enemy.position.X < Parent.position.X)
+            float distanceX = Math.Abs(enemy.position.X - Parent.position.X);
+            float distanceY = Math.Abs(enemy.position.Y - Parent.position.Y);
+            if (distanceX <= 1)
+                Parent.position.X = enemy.position.X;
+            else if (enemy.position.X < Parent.position.X)
                 moveForce.X = -1;
             else if (enemy.position.X > Parent.position.X)
                 moveForce.X = 1;
             else moveForce.X = 0;
 
-            if (enemy.position.Y < Parent.position.Y)
+            if (distanceY <= 1)
+                Parent.position.Y = enemy.position.Y;
+            else if (enemy.position.Y < Parent.position.Y)
                 moveForce.Y = -1;
             else if (enemy.position.Y > Parent.position.Y)
                 moveForce.Y = 1;
