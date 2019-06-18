@@ -68,7 +68,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             Animator = new Animator(Parent);
             Parent.AddComponent(Animator);
             Animator.OnAnimationEnd += OnAnimationEnd;
-            
+
             Parent.ChangeDrawAbility(false);
             needStandAnimUpdate = false;
             isMovementLockedByAnim = false;
@@ -168,13 +168,16 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             if (enemy.position.X < Parent.position.X)
                 moveForce.X = -1;
-            else
+            else if (enemy.position.X > Parent.position.X)
                 moveForce.X = 1;
+            else moveForce.X = 0;
 
             if (enemy.position.Y < Parent.position.Y)
                 moveForce.Y = -1;
-            else
+            else if (enemy.position.Y > Parent.position.Y)
                 moveForce.Y = 1;
+            else
+                moveForce.Y = 0;
 
             SelectMovementAnimation(moveForce);
 
@@ -195,7 +198,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 Animator.PlayAnimation("MoveRight");
                 previousDirection = currentDirection;
                 currentDirection = MovementDirectionEnum.DIRECTION_RIGHT;
-            }else if (moveForce.Y == -1) // UP anim
+            }
+            else if (moveForce.Y == -1) // UP anim
             {
                 Animator.PlayAnimation("MoveUp");
                 previousDirection = currentDirection;
@@ -246,16 +250,16 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 if (enemy == null)
                     return;
 
-                
+
                 // ????
-              // if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
-               //   return;
+                // if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
+                //   return;
 
                 // Check distance between unit and enemy in order to validate attack with its data
                 float dist = GetDistToEnemy();
                 // validate attack
                 if (attack.MinRange > 0.0f && dist < attack.MinRange)
-                   return;
+                    return;
                 if (attack.MaxRange < dist)
                     return;
 
