@@ -15,7 +15,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public static class Shaders
         {
-            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect, _boosterPickupShader;
+            private static Effect _shadowEffect, _visibilityRadiusShader, _brightEffect, _boosterPickupShader;
             private static Texture2D _brightningTexture, _rainbow;
 
             public static void DrawBrightShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
@@ -44,13 +44,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                 _spriteBatch.End();
             }
 
-            public static void DrawGrayScaleEffect(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
-            {
-                _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _grayScaleEffect);
-                drawer.Invoke(_spriteBatch, _gameTime);
-                _spriteBatch.End();
-            }
-
             public static void DrawBoosterPickupShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
             {
                 _boosterPickupShader.Parameters["gameTime"].SetValue(_gameTime.TotalGameTime.Seconds);
@@ -63,7 +56,6 @@ namespace Silesian_Undergrounds.Engine.Scene
             internal static void LoadShaders(ContentManager content)
             {
                 _shadowEffect = content.Load<Effect>("ShadowShader");
-                _grayScaleEffect = content.Load<Effect>("GrayScaleShader");
                 _visibilityRadiusShader = content.Load<Effect>("VisibilityRadiusShader");
                 _brightningTexture = TextureMgr.Instance.GetTexture("rays_map");
                 _brightEffect = content.Load<Effect>("BrighteningShader");

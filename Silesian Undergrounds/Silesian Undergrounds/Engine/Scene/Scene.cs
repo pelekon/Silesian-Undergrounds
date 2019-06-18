@@ -202,11 +202,24 @@ namespace Silesian_Undergrounds.Engine.Scene
             {
                 foreach (var obj in gameObjects)
                 {
-                    if (obj is Player)
+                    if (obj is Player && obj.layer == 6)
                         continue;
 
                     obj.Draw(spriteBatch);
                 }
+            }, transformMatrix: camera.Transform);
+
+            Drawer.Shaders.DrawBrightShader((spritebatch, gametime) =>
+            {
+                foreach (var obj in gameObjects)
+                {
+                    if (obj.layer == (int)LayerEnum.ShopPickables)
+                    {
+                        obj.Draw(spritebatch);
+                    }
+
+                }
+
             }, transformMatrix: camera.Transform);
 
             Drawer.Draw((spriteBatch, gameTime) =>
@@ -229,19 +242,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                     player.Draw(spriteBatch);
                 }, transformMatrix: camera.Transform);
             }
-
-            Drawer.Shaders.DrawBrightShader((spritebatch, gametime) =>
-            {
-                foreach (var obj in gameObjects)
-                {
-                    if (obj.layer == (int)LayerEnum.ShopPickables)
-                    {
-                        obj.Draw(spritebatch);
-                    }
-
-                }
-
-            }, transformMatrix: camera.Transform);
 
             if (player != null)
             {
