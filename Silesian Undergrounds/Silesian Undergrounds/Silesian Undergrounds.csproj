@@ -96,6 +96,7 @@
     <Compile Include="Engine\Utils\FontMgr.cs" />
     <Compile Include="Engine\Utils\GameObjectFactory.cs" />
     <Compile Include="Engine\Utils\GroundTextureFactory.cs" />
+    <Compile Include="Engine\Utils\Input.cs" />
     <Compile Include="Engine\Utils\TextureMgr.cs" />
     <Compile Include="Engine\Enum\FoodEnum.cs" />
     <Compile Include="Engine\Enum\OreEnum.cs" />
