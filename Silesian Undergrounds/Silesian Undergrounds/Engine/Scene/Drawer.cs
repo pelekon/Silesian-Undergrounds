@@ -71,7 +71,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 _brightEffect = content.Load<Effect>("BrighteningShader");
                 _rainbow = TextureMgr.Instance.GetTexture("rainbow");
                 _boosterPickupShader = content.Load<Effect>("BoosterPickupShader");
-                _playerSpawningEffect = content.Load<Effect>("ShopItem");
+                _playerSpawningEffect = content.Load<Effect>("SpawnPlayerShader");
             }
 
         }

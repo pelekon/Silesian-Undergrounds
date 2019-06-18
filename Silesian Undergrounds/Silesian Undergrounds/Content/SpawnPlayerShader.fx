@@ -16,12 +16,6 @@ sampler2D SpriteTextureSampler = sampler_state
 	Texture = <SpriteTexture>;
 };
 
-struct VertexShaderInput
-{
-	float4 Position : POSITION0;
-	float2 TextCoord : TEXCOORD0;
-};
-
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
