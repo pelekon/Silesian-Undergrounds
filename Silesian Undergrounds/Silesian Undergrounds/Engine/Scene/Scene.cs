@@ -32,8 +32,6 @@ namespace Silesian_Undergrounds.Engine.Scene
         public bool isEnd { get; private set; }
         public bool lastScene { get; private set; }
         private bool isBoosterPicked;
-        private bool isPlayerNewlySpawned = true;
-        private double playerSpawnShaderDurationInSeconds = 500.0;
         private const float shaderDelayInSeconds = 50;
         private float remainingShaderDelayInSeconds = shaderDelayInSeconds;
         private readonly bool canUnPause;
@@ -162,23 +160,6 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Update(GameTime gameTime)
         {
-            if (player != null && isPlayerNewlySpawned)
-            {
-                playerSpawnShaderDurationInSeconds -= gameTime.TotalGameTime.TotalSeconds;
-                this.player.PlayerVisiblity += 0.00001f;
-
-                if (playerSpawnShaderDurationInSeconds <= 0.0)
-                {
-                    isPlayerNewlySpawned = false;
-                    player.CanMove(true);
-                    this.player.PlayerVisiblity = 1.0f;
-                } else
-                {
-                    player.CanMove(false);
-                }
-            }
-           
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 if (isPaused && canUnPause)
@@ -280,19 +261,12 @@ namespace Silesian_Undergrounds.Engine.Scene
                 }, transformMatrix: camera.Transform);
             }
 
-
-
-            if(isPlayerNewlySpawned && player != null)
+            Drawer.Shaders.DrawShopNeonShader((spritebatch, gametime) =>
             {
-                // nie ruszac tego stad bo bug
-                Drawer.Shaders.DrawPlayerSpawningShader((spritebatch, gametime) =>
-                {
-                    player.Draw(spritebatch);
-                }, transformMatrix: camera.Transform);
-            }
-
-
-
+               foreach (var obj in gameObjects)
+                  if (obj.layer == (int)LayerEnum.ShopPickables)
+                       obj.Draw(spritebatch);
+            }, transformMatrix: camera.Transform);
         }
 
         private void DetectPlayerOnTransition()

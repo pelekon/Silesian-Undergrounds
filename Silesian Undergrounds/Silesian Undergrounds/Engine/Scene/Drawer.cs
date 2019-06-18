@@ -15,15 +15,13 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public static class Shaders
         {
-            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect, _boosterPickupShader, _playerSpawningEffect;
+            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect, _boosterPickupShader, _shopNeonEffect;
             private static Texture2D _brightningTexture, _rainbow;
 
 
-            public static void DrawPlayerSpawningShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
+            public static void DrawShopNeonShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
             {
-                // time is used as a seed for random number generation
-                _playerSpawningEffect.Parameters["rnd"].SetValue((float)_gameTime.TotalGameTime.Seconds);
-                _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _playerSpawningEffect);
+                _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _shopNeonEffect);
                  drawer.Invoke(_spriteBatch, _gameTime);
                 _spriteBatch.End();
             }
@@ -69,7 +67,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 _brightEffect = content.Load<Effect>("BrighteningShader");
                 _rainbow = TextureMgr.Instance.GetTexture("rainbow");
                 _boosterPickupShader = content.Load<Effect>("BoosterPickupShader");
-                _playerSpawningEffect = content.Load<Effect>("SpawnPlayerShader");
+                _shopNeonEffect = content.Load<Effect>("ShopNeonShader");
             }
 
         }

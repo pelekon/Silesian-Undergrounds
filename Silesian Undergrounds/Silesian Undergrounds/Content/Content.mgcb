@@ -1341,11 +1341,11 @@
 /processorParam:DebugMode=Auto
 /build:ShadowShader.fx
 
-#begin SpawnPlayerShader.fx
+#begin ShopNeonShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:SpawnPlayerShader.fx
+/build:ShopNeonShader.fx
 
 #begin test.png
 /importer:TextureImporter
