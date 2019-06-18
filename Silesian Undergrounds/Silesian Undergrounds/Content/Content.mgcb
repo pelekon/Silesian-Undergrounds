@@ -25,6 +25,12 @@
 /processorParam:TextureFormat=Color
 /build:background.png
 
+#begin BoosterPickupShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:BoosterPickupShader.fx
+
 #begin bottom.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1203,6 +1209,18 @@
 /processorParam:TextureFormat=Color
 /build:Monsters/48x48Worm_FullSheet.png
 
+#begin Monsters/minotaur_obrocony.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Monsters/minotaur_obrocony.png
+
 #begin Monsters/rat_odbity.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1238,6 +1256,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Monsters/worm_obrocony.png
+
+#begin pick_sprite.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:pick_sprite.png
+
+#begin rainbow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:rainbow.png
 
 #begin rays_map.png
 /importer:TextureImporter

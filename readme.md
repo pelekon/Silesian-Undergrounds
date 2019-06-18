@@ -121,7 +121,7 @@ Podczas swojej wędrówki gracz będzie musiał walczyć z różnymi przeciwnika
 | libe-booster.png | Kamil Klyta |
 | movement-booster.png | Kamil Klyta |
 | pickup-double-booster.png | Kamil Klyta |
-| temporary_spike_1.png | Tomasz Kot |
+| temporary_spike_1.png | Bartłomiej Wloczyk |
 | temporary_spike_2.png | [opengameart](https://opengameart.org/content/bevouliin-free-game-obstacle-spikes) |
 | temporary_spike_3.png | [opengameart](https://opengameart.org/content/bevouliin-free-game-obstacle-spikes) |
 | temporary_spike_4.png | [opengameart](https://opengameart.org/content/bevouliin-free-game-obstacle-spikes) |

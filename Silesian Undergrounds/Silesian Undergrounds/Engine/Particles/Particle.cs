@@ -43,6 +43,7 @@ namespace Silesian_Undergrounds.Engine.Particles
 
             Animator = new Animator(this);
             AddComponent(Animator);
+            ChangeDrawAbility(false);
         }
 
         public void Launch()

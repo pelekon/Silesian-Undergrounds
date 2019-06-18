@@ -22,12 +22,12 @@ namespace Silesian_Undergrounds.Engine.Utils
             foreach(var pos in positionSource)
             {
                int chance = rng.Next(0, 100);
-               if (chance <= 25)
+               if (chance <= 30)
                 list.Add(RatFactory(pos.position));
-               else if(chance > 25 && chance <= 50)
+               else if(chance > 30 && chance <= 50)
                 list.Add(MinotaurFactory(pos.position));
-               else
-                list.Add(WormFactory(pos.position));
+               else if (chance > 50 && chance <= 90)
+                    list.Add(WormFactory(pos.position));
             }
 
             return list;
@@ -44,10 +44,28 @@ namespace Silesian_Undergrounds.Engine.Utils
             
             GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
             AttackPattern attackPattern = new AttackPattern();
-            HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
-            obj.AddComponent(behaviour);
-            behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_Attack"), 1000);
+            AttackData attackData = new AttackData(true, 15, 30, 3000, AttackType.ATTACK_TYPE_MELEE, 5, 30);
+            attackPattern.AddAttack(attackData);
 
+            obj.speed = 2.0f;
+
+            HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 150, 10);
+
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_MoveRight", 7, 8, 1, 8, 0, 0, false);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_Attack", 7, 8, 3, 8, 0, 0, false);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_MoveLeft", 7, 8, 6, 8, 0, 0, false);
+            TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_dead", 7, 8, 5, 3, 0, 0, false);
+
+            behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
+            behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
+
+            behaviour.Animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveLeft"), 1000);
+            behaviour.Animator.AddAnimation("MoveLeft", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveLeft"), 1000);
+
+            behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_Attack"), 1000);
+            behaviour.Animator.AddAnimation("Dead", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveLeft"), 1000);
+
+            obj.AddComponent(behaviour);
             return obj;
         }
 
@@ -58,12 +76,12 @@ namespace Silesian_Undergrounds.Engine.Utils
 
             GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
             AttackPattern attackPattern = new AttackPattern();
-            AttackData attackData = new AttackData(true, 10, 15, 1000, AttackType.ATTACK_TYPE_MELEE, 5, 30);
+            AttackData attackData = new AttackData(true, 8, 13, 2000, AttackType.ATTACK_TYPE_MELEE, 5, 20);
             attackPattern.AddAttack(attackData);
 
             obj.speed = 3.0f;
 
-            HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
+            HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 70, 5);
 
 
             TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/48x48Rat_FullSheet", "Monsters/Rat_MoveRight", 5, 8, 1, 6, 0, 0, false); 
@@ -92,11 +110,11 @@ namespace Silesian_Undergrounds.Engine.Utils
             GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
             AttackPattern attackPattern = new AttackPattern();
 
-            AttackData attackData = new AttackData(true, 20, 30, 1000, AttackType.ATTACK_TYPE_MELEE, 5, 20);
+            AttackData attackData = new AttackData(true, 5, 10, 1000, AttackType.ATTACK_TYPE_MELEE, 5, 15);
             attackPattern.AddAttack(attackData);
 
             obj.speed = 1.0f;
-            HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 100, 10);
+            HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 40, 1);
 
 
             TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/worm_obrocony", "Monsters/Worm_MoveRight", 5, 8, 1, 6, 0, 5, false);
