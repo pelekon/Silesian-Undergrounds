@@ -93,23 +93,23 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             {
                 case PlayerOrientation.ORIENTATION_NORTH:
                     particleForce = new Vector2(0, -1);
-                    particlePos.X = Parent.position.X + (Parent.Rectangle.Width / 2);
+                    particlePos.X = Parent.position.X + (Parent.Rectangle.Width / 4);
                     particlePos.Y = Parent.position.Y - 2;
                     break;
                 case PlayerOrientation.ORIENTATION_SOUTH:
                     particleForce = new Vector2(0, 1);
-                    particlePos.X = Parent.position.X + (Parent.Rectangle.Width / 2);
+                    particlePos.X = Parent.position.X + (Parent.Rectangle.Width / 4);
                     particlePos.Y = Parent.position.Y + Parent.Rectangle.Height + 2;
                     break;
                 case PlayerOrientation.ORIENTATION_EAST:
                     particleForce = new Vector2(1, 0);
                     particlePos.X = Parent.position.X + Parent.Rectangle.Width + 2;
-                    particlePos.Y = Parent.position.Y + (Parent.Rectangle.Height / 2);
+                    particlePos.Y = Parent.position.Y + (Parent.Rectangle.Height / 4);
                     break;
                 case PlayerOrientation.ORIENTATION_WEST:
                     particleForce = new Vector2(-1, 0);
                     particlePos.X = Parent.position.X - 2;
-                    particlePos.Y = Parent.position.Y + (Parent.Rectangle.Height / 2);
+                    particlePos.Y = Parent.position.Y + (Parent.Rectangle.Height / 4);
                     break;
             }
 
