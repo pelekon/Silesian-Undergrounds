@@ -87,9 +87,6 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
                 if (isColliding)
                 {
-                    Console.WriteLine("Kolizja: ");
-                    Console.WriteLine(collisionSides);
-
                     collider.Parent.NotifyCollision(Parent, collider, new RectCollisionSides());
                     Parent.NotifyCollision(collider.Parent, this, collisionSides);
                 }

@@ -462,11 +462,6 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 if (enemy == null)
                     return;
 
-                
-                // ????
-              // if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
-               //   return;
-
                 // Check distance between unit and enemy in order to validate attack with its data
                 float dist = GetDistToEnemy();
                 // validate attack
