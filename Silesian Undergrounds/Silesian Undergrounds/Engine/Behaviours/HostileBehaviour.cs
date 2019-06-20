@@ -13,6 +13,14 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 {
     public class HostileBehaviour : IComponent
     {
+        private enum PosComparisionSide
+        {
+            CORNER_LEFT,
+            CORNER_RIGHT,
+            CORNER_BOTTOM_LEFT,
+            CORNER_BOTTOM_RIGHT,
+        }
+
         // Component inherited
         public Vector2 Position { get; set; }
         public Rectangle Rect { get; set; }
@@ -42,9 +50,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private List<Vector2> waypath;
         private Vector2 collisionDerivedMoveForce;
         private Vector2 lastMoveForce;
-
-        // DEBUG TO DELETE!!!!!!!!!
-        private bool hasMovedOnPath = false;
+        private PosComparisionSide posComparisionSide;
 
         public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, int moneyRew, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
@@ -159,8 +165,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                     StartCombatWith(data.obj);
             }
 
+            // Call helpers if object is moving on path
             if (isMovingOnPath)
+            {
+                UpdateComparisonSide(data.collisionSides);
                 PathMovementCollisionHelper(data.collisionSides);
+            }
         }
 
         public void StartCombatWith(GameObject obj)
@@ -182,7 +192,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 MoveWithoutPath();
             else
             {
-                if (!isMovingOnPath && !hasMovedOnPath)
+                if (!isMovingOnPath)
                 {
                     isMovingOnPath = true;
                     Pathfinding.PathfindingSystem.GetInstance().GetPathWithCallback(Parent.position, enemy.position, OnPathFound);
@@ -226,24 +236,20 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
             Vector2 currentNode = waypath[currentPathNode];
             Vector2 moveForce = new Vector2(0, 0);
+            Vector2 sourcePos = GetSourcePosByComparisionSide();
 
-            if (currentNode.X + 1 < Parent.position.X)
+            if (currentNode.X + 1 < sourcePos.X)
                 moveForce.X = -1;
-            else if (currentNode.X - 1 > Parent.position.X)
+            else if (currentNode.X - 1 > sourcePos.X)
                 moveForce.X = 1;
 
-            if (currentNode.Y + 1 < Parent.position.Y)
+            if (currentNode.Y + 1 < sourcePos.Y)
                 moveForce.Y = -1;
-            else if (currentNode.Y - 1 > Parent.position.Y)
+            else if (currentNode.Y - 1 > sourcePos.Y)
                 moveForce.Y = 1;
-
-            Console.WriteLine("Additional Force:");
-            Console.WriteLine("X: " + collisionDerivedMoveForce.X);
-            Console.WriteLine("Y: " + collisionDerivedMoveForce.Y);
 
             if (Parent.Rectangle.Contains(currentNode))
             {
-                Console.WriteLine("Zawiera punkt");
                 moveForce.X = 0;
                 moveForce.Y = 0;
             }
@@ -271,8 +277,6 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             lastMoveForce.X = moveForce.X;
             lastMoveForce.Y = moveForce.Y;
 
-            Console.WriteLine("Final MoveForce:");
-            Console.WriteLine("X: " + moveForce.X + " Y: " + moveForce.Y);
             DoMovementByForce(moveForce);
         }
 
@@ -284,18 +288,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             collider.Move(moveForce);
         }
         
+        // Callback function executed by Pathfinding System after found path during async task
+        // and forward path to object which scheduled job of finding path
         private void OnPathFound(List<Vector2> path)
         {
             waypath = path;
             OnWaypathStart();
-
-            // VERY DEBUG CODE!!!!!!!!!
-            foreach (var point in path)
-            {
-                Texture2D text = TextureMgr.Instance.GetTexture("kolejne");
-                GameObject go = new GameObject(text, point, new Vector2(16, 16));
-                Scene.SceneManager.GetCurrentScene().AddObject(go);
-            }
         }
 
         private void OnWaypathStart()
@@ -308,17 +306,18 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             isMovingOnPath = false;
             currentPathNode = 0;
             waypath = null;
-            hasMovedOnPath = true;
+            posComparisionSide = PosComparisionSide.CORNER_LEFT;
         }
 
+        // Function to add additional force while object is moving on path
+        // this is one of 2 methods to prevent object get stuck on corner tile.
+        // It use movementForce used during previous movement update(saved in lastMoveForce variable)
+        // to deduct amount of additional force
         private void PathMovementCollisionHelper(RectCollisionSides collisionSides)
         {
-            Console.WriteLine("CollisionSides: " + collisionSides);
-
             if ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0 ||
                 (collisionSides & RectCollisionSides.SIDE_LEFT) != 0)
             {
-                Console.WriteLine("Lewo/Prawo");
                 if (lastMoveForce.Y > 0.0f)
                     collisionDerivedMoveForce.Y = 0.8f;
                 else if (lastMoveForce.Y <= 0.0f)
@@ -328,12 +327,72 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             if ((collisionSides & RectCollisionSides.SIDE_UP) != 0 ||
                 (collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0)
             {
-                Console.WriteLine("Gora/Dol");
                 if (lastMoveForce.X > 0.0f)
                     collisionDerivedMoveForce.X = 0.8f;
                 else if (lastMoveForce.X <= 0.0f)
                     collisionDerivedMoveForce.X = -0.8f;
             }
+        }
+
+        // Function called on collision while object is moving on path.
+        // It use last movement force to deduct which corner of object rectangle
+        // should get used in order to calculate movement force in current movement update
+        private void UpdateComparisonSide(RectCollisionSides collisionSides)
+        {
+            if ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0)
+            {
+                if (lastMoveForce.Y < 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_RIGHT;
+                else if (lastMoveForce.Y > 0 && posComparisionSide != PosComparisionSide.CORNER_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_RIGHT;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_LEFT) != 0)
+            {
+                if (lastMoveForce.Y < 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_LEFT;
+                else if (lastMoveForce.Y > 0 && posComparisionSide != PosComparisionSide.CORNER_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_LEFT;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_UP) != 0)
+            {
+                if (lastMoveForce.X < 0 && posComparisionSide != PosComparisionSide.CORNER_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_RIGHT;
+                else if (lastMoveForce.X > 0 && posComparisionSide != PosComparisionSide.CORNER_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_LEFT;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0)
+            {
+                if (lastMoveForce.X < 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_RIGHT;
+                else if (lastMoveForce.X > 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_LEFT;
+            }
+        }
+
+        // Returns point used to calculate movement force based on currently
+        // currently set state of posComparisionSide variable
+        private Vector2 GetSourcePosByComparisionSide()
+        {
+            Vector2 pos = new Vector2(Parent.position.X, Parent.position.Y);
+
+            switch (posComparisionSide)
+            {
+                case PosComparisionSide.CORNER_RIGHT:
+                    pos.X += Parent.Rectangle.Width;
+                    break;
+                case PosComparisionSide.CORNER_BOTTOM_LEFT:
+                    pos.Y += Parent.Rectangle.Height;
+                    break;
+                case PosComparisionSide.CORNER_BOTTOM_RIGHT:
+                    pos.X += Parent.Rectangle.Width;
+                    pos.Y += Parent.Rectangle.Height;
+                    break;
+            }
+
+            return pos;
         }
 
         private void SelectMovementAnimation(Vector2 moveForce)
