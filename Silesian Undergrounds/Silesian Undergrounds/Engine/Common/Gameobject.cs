@@ -101,9 +101,9 @@ namespace Silesian_Undergrounds.Engine.Common
             return default(T);
         }
         
-        public virtual void NotifyCollision(GameObject gameobject, ICollider source)
+        public virtual void NotifyCollision(GameObject gameobject, ICollider source, RectCollisionSides collisionSides)
         {
-            OnCollision.Invoke(this, new CollisionNotifyData(gameobject, source));
+            OnCollision.Invoke(this, new CollisionNotifyData(gameobject, source, collisionSides));
         }
 
         public void ChangeDrawAbility(bool val) { canDrawItself = val; }

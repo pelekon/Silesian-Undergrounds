@@ -60,7 +60,6 @@
     <Compile Include="Engine\Common\PropertyChangedArgs.cs" />
     <Compile Include="Engine\Common\SpecialItem.cs" />
     <Compile Include="Engine\Common\StatisticHolder.cs" />
-    <Compile Include="Engine\Common\Unit.cs" />
     <Compile Include="Engine\Collisions\CollisionNotifyData.cs" />
     <Compile Include="Engine\Components\Animator.cs" />
     <Compile Include="Engine\Components\IComponent.cs" />
@@ -75,7 +74,7 @@
     <Compile Include="Engine\Enum\SceneStatusEnum.cs" />
     <Compile Include="Engine\Enum\SpecialItemEnum.cs" />
     <Compile Include="Engine\Enum\TrapsDamageEnum.cs" />
-    <Compile Include="Engine\Item\Ground.cs" />
+    <Compile Include="Engine\Scene\Ground.cs" />
     <Compile Include="Engine\Item\Heart.cs" />
     <Compile Include="Engine\Item\Specials\AttackBooster.cs" />
     <Compile Include="Engine\Item\Specials\ChestsDropBooster.cs" />
@@ -85,6 +84,9 @@
     <Compile Include="Engine\Item\Specials\MovementBooster.cs" />
     <Compile Include="Engine\Item\Specials\PickupDouble.cs" />
     <Compile Include="Engine\Particles\Particle.cs" />
+    <Compile Include="Engine\Pathfinding\PathfindingSystem.cs" />
+    <Compile Include="Engine\Pathfinding\SceneGridCornerPivots.cs" />
+    <Compile Include="Engine\Pathfinding\SceneGridCornersWorker.cs" />
     <Compile Include="Engine\Scene\RandomRooms\GeneratedRoom.cs" />
     <Compile Include="Engine\Scene\RandomRooms\RoomEntryPassage.cs" />
     <Compile Include="Engine\Scene\RandomRooms\RoomGenerator.cs" />
@@ -199,6 +201,9 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="RoyT.AStar">
+      <Version>2.1.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

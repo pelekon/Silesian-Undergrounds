@@ -24,7 +24,7 @@ namespace Silesian_Undergrounds.Engine.Common {
             this.scene = scene;
         }
 
-        public override void NotifyCollision(GameObject gameobject, ICollider source)
+        public override void NotifyCollision(GameObject gameobject, ICollider source, RectCollisionSides collisionSides)
         {
             OnPlayerPicked.Invoke();
         }

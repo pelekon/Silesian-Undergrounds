@@ -9,11 +9,18 @@ using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Particles;
 
-
 namespace Silesian_Undergrounds.Engine.Behaviours
 {
     public class HostileBehaviour : IComponent
     {
+        private enum PosComparisionSide
+        {
+            CORNER_LEFT,
+            CORNER_RIGHT,
+            CORNER_BOTTOM_LEFT,
+            CORNER_BOTTOM_RIGHT,
+        }
+
         // Component inherited
         public Vector2 Position { get; set; }
         public Rectangle Rect { get; set; }
@@ -37,8 +44,13 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         public Animator Animator { get; private set; }
         private MovementDirectionEnum currentDirection;
         private MovementDirectionEnum previousDirection;
-        private bool needStandAnimUpdate;
         private bool isMovementLockedByAnim;
+        private bool isMovingOnPath;
+        private int currentPathNode;
+        private List<Vector2> waypath;
+        private Vector2 collisionDerivedMoveForce;
+        private Vector2 lastMoveForce;
+        private PosComparisionSide posComparisionSide;
 
         public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, int moneyRew, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
@@ -52,7 +64,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             MinDistToEnemy = minDist;
             BonusMoveSpeed = bonusMoveSpeed;
 
-            aggroArea = new CircleCollider(Parent, 70, 0, 0);
+            aggroArea = new CircleCollider(Parent, 70, 0, 0, true);
+            aggroArea.MarkAsAggroArea();
             collider = new BoxCollider(Parent, 70, 70, 0, 0, false);
             Parent.AddComponent(collider);
             Parent.AddComponent(aggroArea);
@@ -70,8 +83,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             Animator.OnAnimationEnd += OnAnimationEnd;
             
             Parent.ChangeDrawAbility(false);
-            needStandAnimUpdate = false;
             isMovementLockedByAnim = false;
+            isMovingOnPath = false;
+            currentPathNode = 0;
+            waypath = null;
+            collisionDerivedMoveForce = new Vector2();
+            lastMoveForce = new Vector2();
         }
 
         public void CleanUp()
@@ -147,6 +164,13 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 if (data.obj is Player)
                     StartCombatWith(data.obj);
             }
+
+            // Call helpers if object is moving on path
+            if (isMovingOnPath)
+            {
+                UpdateComparisonSide(data.collisionSides);
+                PathMovementCollisionHelper(data.collisionSides);
+            }
         }
 
         public void StartCombatWith(GameObject obj)
@@ -164,6 +188,32 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             if (!IsMoveNeeded || isMovementLockedByAnim)
                 return;
 
+            if (!isMovingOnPath && !CheckMovePathCond())
+                MoveWithoutPath();
+            else
+            {
+                if (!isMovingOnPath)
+                {
+                    isMovingOnPath = true;
+                    Pathfinding.PathfindingSystem.GetInstance().GetPathWithCallback(Parent.position, enemy.position, OnPathFound);
+                }
+                else
+                    MoveOnPath();
+            }
+        }
+
+        private bool CheckMovePathCond()
+        {
+            double dist = Vector2.Distance(Parent.position, enemy.position);
+
+            if (dist > ResolutionMgr.TileSize)
+                return true;
+
+            return false;
+        }
+
+        private void MoveWithoutPath()
+        {
             Vector2 moveForce = new Vector2(0, 0);
 
             if (enemy.position.X < Parent.position.X)
@@ -176,10 +226,173 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             else
                 moveForce.Y = 1;
 
+            DoMovementByForce(moveForce);
+        }
+
+        private void MoveOnPath()
+        {
+            if (waypath == null)
+                return;
+
+            Vector2 currentNode = waypath[currentPathNode];
+            Vector2 moveForce = new Vector2(0, 0);
+            Vector2 sourcePos = GetSourcePosByComparisionSide();
+
+            if (currentNode.X + 1 < sourcePos.X)
+                moveForce.X = -1;
+            else if (currentNode.X - 1 > sourcePos.X)
+                moveForce.X = 1;
+
+            if (currentNode.Y + 1 < sourcePos.Y)
+                moveForce.Y = -1;
+            else if (currentNode.Y - 1 > sourcePos.Y)
+                moveForce.Y = 1;
+
+            if (Parent.Rectangle.Contains(currentNode))
+            {
+                moveForce.X = 0;
+                moveForce.Y = 0;
+            }
+
+            if (collisionDerivedMoveForce.X != 0 || collisionDerivedMoveForce.Y != 0)
+            {
+                moveForce.X = collisionDerivedMoveForce.X;
+                moveForce.Y = collisionDerivedMoveForce.Y;
+
+                collisionDerivedMoveForce.X = 0;
+                collisionDerivedMoveForce.Y = 0;
+            }
+
+            if (moveForce.X == 0 && moveForce.Y == 0)
+            {
+                ++currentPathNode;
+
+                if (currentPathNode == waypath.Count)
+                {
+                    OnWaypathEnd();
+                    return;
+                }
+            }
+
+            lastMoveForce.X = moveForce.X;
+            lastMoveForce.Y = moveForce.Y;
+
+            DoMovementByForce(moveForce);
+        }
+
+        private void DoMovementByForce(Vector2 moveForce)
+        {
             SelectMovementAnimation(moveForce);
 
             moveForce *= (Parent.speed + BonusMoveSpeed);
             collider.Move(moveForce);
+        }
+        
+        // Callback function executed by Pathfinding System after found path during async task
+        // and forward path to object which scheduled job of finding path
+        private void OnPathFound(List<Vector2> path)
+        {
+            waypath = path;
+            OnWaypathStart();
+        }
+
+        private void OnWaypathStart()
+        {
+
+        }
+
+        private void OnWaypathEnd()
+        {
+            isMovingOnPath = false;
+            currentPathNode = 0;
+            waypath = null;
+            posComparisionSide = PosComparisionSide.CORNER_LEFT;
+        }
+
+        // Function to add additional force while object is moving on path
+        // this is one of 2 methods to prevent object get stuck on corner tile.
+        // It use movementForce used during previous movement update(saved in lastMoveForce variable)
+        // to deduct amount of additional force
+        private void PathMovementCollisionHelper(RectCollisionSides collisionSides)
+        {
+            if ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0 ||
+                (collisionSides & RectCollisionSides.SIDE_LEFT) != 0)
+            {
+                if (lastMoveForce.Y > 0.0f)
+                    collisionDerivedMoveForce.Y = 0.8f;
+                else if (lastMoveForce.Y <= 0.0f)
+                    collisionDerivedMoveForce.Y = -0.8f;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_UP) != 0 ||
+                (collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0)
+            {
+                if (lastMoveForce.X > 0.0f)
+                    collisionDerivedMoveForce.X = 0.8f;
+                else if (lastMoveForce.X <= 0.0f)
+                    collisionDerivedMoveForce.X = -0.8f;
+            }
+        }
+
+        // Function called on collision while object is moving on path.
+        // It use last movement force to deduct which corner of object rectangle
+        // should get used in order to calculate movement force in current movement update
+        private void UpdateComparisonSide(RectCollisionSides collisionSides)
+        {
+            if ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0)
+            {
+                if (lastMoveForce.Y < 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_RIGHT;
+                else if (lastMoveForce.Y > 0 && posComparisionSide != PosComparisionSide.CORNER_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_RIGHT;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_LEFT) != 0)
+            {
+                if (lastMoveForce.Y < 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_LEFT;
+                else if (lastMoveForce.Y > 0 && posComparisionSide != PosComparisionSide.CORNER_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_LEFT;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_UP) != 0)
+            {
+                if (lastMoveForce.X < 0 && posComparisionSide != PosComparisionSide.CORNER_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_RIGHT;
+                else if (lastMoveForce.X > 0 && posComparisionSide != PosComparisionSide.CORNER_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_LEFT;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0)
+            {
+                if (lastMoveForce.X < 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_RIGHT;
+                else if (lastMoveForce.X > 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_LEFT;
+            }
+        }
+
+        // Returns point used to calculate movement force based on currently
+        // currently set state of posComparisionSide variable
+        private Vector2 GetSourcePosByComparisionSide()
+        {
+            Vector2 pos = new Vector2(Parent.position.X, Parent.position.Y);
+
+            switch (posComparisionSide)
+            {
+                case PosComparisionSide.CORNER_RIGHT:
+                    pos.X += Parent.Rectangle.Width;
+                    break;
+                case PosComparisionSide.CORNER_BOTTOM_LEFT:
+                    pos.Y += Parent.Rectangle.Height;
+                    break;
+                case PosComparisionSide.CORNER_BOTTOM_RIGHT:
+                    pos.X += Parent.Rectangle.Width;
+                    pos.Y += Parent.Rectangle.Height;
+                    break;
+            }
+
+            return pos;
         }
 
         private void SelectMovementAnimation(Vector2 moveForce)
@@ -248,11 +461,6 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 // Additional check just for safety
                 if (enemy == null)
                     return;
-
-                
-                // ????
-              // if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
-               //   return;
 
                 // Check distance between unit and enemy in order to validate attack with its data
                 float dist = GetDistToEnemy();
