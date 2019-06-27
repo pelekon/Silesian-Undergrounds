@@ -189,7 +189,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
                 if (amountOfItems == 0 && !isCenterSpawned)
                 {
                     int roll = rng.Next(0, 100);
-                    if (roll <= 48)
+                    if (roll <= 40)
                         amountOfItems = 1;
                 }
             }
@@ -201,16 +201,16 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
                 switch(i)
                 {
                     case 0:
-                        x = (1 + matrix.offset.X) * ResolutionMgr.TileSize;
-                        y = (1 + matrix.offset.Y) * ResolutionMgr.TileSize;
+                        x = (2 + matrix.offset.X) * ResolutionMgr.TileSize;
+                        y = (2 + matrix.offset.Y) * ResolutionMgr.TileSize;
                         break;
                     case 1:
                         x = (2 + matrix.offset.X) * ResolutionMgr.TileSize;
-                        y = (sizeY - 1 + matrix.offset.Y) * ResolutionMgr.TileSize;
+                        y = (sizeY - 2 + matrix.offset.Y) * ResolutionMgr.TileSize;
                         break;
                     case 2:
-                        x = (sizeX - 1 + matrix.offset.X) * ResolutionMgr.TileSize;
-                        y = (sizeY - 1 + matrix.offset.Y) * ResolutionMgr.TileSize;
+                        x = (sizeX - 2 + matrix.offset.X) * ResolutionMgr.TileSize;
+                        y = (sizeY - 2 + matrix.offset.Y) * ResolutionMgr.TileSize;
                         break;
                 }
 
