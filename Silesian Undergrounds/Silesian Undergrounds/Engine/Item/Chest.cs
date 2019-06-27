@@ -16,7 +16,6 @@ namespace Silesian_Undergrounds.Engine.Item
         private int CurrentFrame = 1;
         private bool WasPicked = false;
         private Player player = null;
-        private Random random = new Random();
 
         public Animator Animator { get; private set; }
 
@@ -57,7 +56,8 @@ namespace Silesian_Undergrounds.Engine.Item
         {
             List<GameObject> list = new List<GameObject>();
 
-            int itemAmount = random.Next(ConfigMgr.ChestConfig.MinimumNumberOfSpawnedItem, ConfigMgr.ChestConfig.NumberOfPossibleSpawnedItem);
+            Random rng = TrueRng.GetInstance().GetRandom(); ;
+            int itemAmount = rng.Next(ConfigMgr.ChestConfig.MinimumNumberOfSpawnedItem, ConfigMgr.ChestConfig.NumberOfPossibleSpawnedItem);
 
             foreach (var obj in this.scene.GameObjects.Where(obj => obj.layer == 2).ToList())
             {

@@ -470,7 +470,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 if (attack.MaxRange < dist)
                     return;
 
-                Random rng = new Random();
+                Random rng = TrueRng.GetInstance().GetRandom();
                 int dmgValue = rng.Next(attack.MinDamage, attack.MaxDamage);
 
                 if (attack.type == AttackType.ATTACK_TYPE_RANGED && attack.particleTextureName != null)
