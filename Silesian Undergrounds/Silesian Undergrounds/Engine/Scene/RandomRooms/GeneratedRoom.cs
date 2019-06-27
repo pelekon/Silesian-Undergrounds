@@ -170,20 +170,22 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             {
                 int chestChance = rng.Next(0, 100);
 
-                if (chestChance <= 40)
+                if (chestChance <= 32)
                 {
                     content.Add(GameObjectFactory.ChestFactory(center, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), scene));
                     isCenterSpawned = true;
                 }
             }
 
-            int amountOfItems = rng.Next(0, 60);
+            int amountOfItems = rng.Next(0, 80);
             double temp = amountOfItems / 10;
             temp = Math.Floor(temp);
             amountOfItems = (int)temp;
 
-            if (amountOfItems > 3)
-                amountOfItems = 3;
+            if (amountOfItems > 6)
+                amountOfItems = 0;
+            else if (amountOfItems > 2)
+                amountOfItems = 2;
             else
             {
                 if (amountOfItems == 0 && !isCenterSpawned)

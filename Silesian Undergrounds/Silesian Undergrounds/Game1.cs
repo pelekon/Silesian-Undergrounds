@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Threading;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Enum;
@@ -30,7 +29,6 @@ namespace Silesian_Undergrounds
 
         public Game1()
         {
-            Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
