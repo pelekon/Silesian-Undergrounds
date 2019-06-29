@@ -260,7 +260,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
                 Random rng = new Random();
                 int dmgValue = rng.Next(attack.MinDamage, attack.MaxDamage);
-                Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
+                Player plr = enemy as Player; // TODO: Change it to more flex(ible) code via some kind of system
+                AudioPlayerMgr.Instance.AddSoundEffect("Music/monster/damage_sound");
                 plr.DecreaseLiveValue(dmgValue);
 
                 if (attack.type == AttackType.ATTACK_TYPE_MELEE && Animator.PlayAnimation("Attack"))
