@@ -89,7 +89,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                 if (playerStatistic.ChestDropBooster)
                     maxRandValue += 20;
 
-            return PickableEnum.Chest;
+            return PickableEnum.Food;
             //TODO: uncomment this
             //int randed = random.Next(0, maxRandValue);
             //if (randed <= 10)

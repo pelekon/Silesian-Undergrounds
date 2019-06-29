@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Item {
     public class Food : PickableItem {
@@ -33,6 +34,7 @@ namespace Silesian_Undergrounds.Engine.Item {
                 Player pl = (Player)obj;
                 if (pl.MaxHungerValue > pl.HungerValue)
                 {
+                    AudioPlayerMgr.Instance.AddSoundEffect("Music/food/eating_sound");
                     if (pl.PlayerStatistic.PickupDouble)
                     {
                         pl.RefilHunger(this.hungerRefil * 2);
