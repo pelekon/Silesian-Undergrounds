@@ -1257,6 +1257,30 @@
 /processorParam:TextureFormat=Color
 /build:Monsters/worm_obrocony.png
 
+#begin Music/background-game/background_game.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/background-game/background_game.mp3
+
+#begin Music/chest/chest_opening.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/chest/chest_opening.wav
+
+#begin Music/food/eating_sound.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/food/eating_sound.mp3
+
+#begin Music/monster/damage_sound.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/monster/damage_sound.mp3
+
 #begin pick_sprite.png
 /importer:TextureImporter
 /processor:TextureProcessor
