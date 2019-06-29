@@ -1281,6 +1281,18 @@
 /processorParam:Quality=Best
 /build:Music/items/item_picking.wav
 
+#begin Music/menu/mouse_click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/menu/mouse_click.wav
+
+#begin Music/menu/mouse_click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/menu/mouse_click.wav
+
 #begin Music/monster/damage_sound.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
