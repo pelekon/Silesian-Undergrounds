@@ -30,7 +30,7 @@ namespace Silesian_Undergrounds.Engine.Common
             scene = s;
         }
 
-        public override void NotifyCollision(GameObject gameobject, ICollider source) {
+        public override void NotifyCollision(GameObject gameobject, ICollider source, RectCollisionSides collisionSides) {
             if (!wasBought && isBuyable && (gameobject is Player))
             {
                 wasBought = true;

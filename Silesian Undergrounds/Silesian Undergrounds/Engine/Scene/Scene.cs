@@ -160,7 +160,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Input.KeyPressed(Keys.Escape))
             {
                 if (isPaused && canUnPause)
                     isPaused = false;
