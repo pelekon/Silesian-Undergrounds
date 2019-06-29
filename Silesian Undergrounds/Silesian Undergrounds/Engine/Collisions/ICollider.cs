@@ -8,9 +8,16 @@ namespace Silesian_Undergrounds.Engine.Collisions
         float OffsetX { get; }
         float OffsetY { get; }
 
-        bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides sides);
+        bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides sides, Vector2 moveForce);
         bool IsCollidingWith(CircleCollider collider);
 
         void Move(Vector2 moveForce);
+
+        bool triggerOnly { get; }
+        bool canIgnoreTraps { get; }
+        bool isAggroArea { get; }
+        bool ignoreAggroArea { get; }
+
+        void MarkAsAggroArea();
     }
 }

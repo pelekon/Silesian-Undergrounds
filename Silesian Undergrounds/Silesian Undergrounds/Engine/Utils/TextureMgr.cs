@@ -132,13 +132,22 @@ namespace Silesian_Undergrounds.Engine.Utils
             return true;
         }
 
-        public void LoadSingleAnimFrame(string fileName, string animName)
+        public bool LoadSingleAnimFrame(string fileName, string animName, bool addToExisting = false)
         {
+            bool contains = true;
             if (!animations.ContainsKey(animName))
+            {
                 animations.Add(animName, new List<Texture2D>());
+                contains = false;
+            }
+
+            if (!addToExisting && contains)
+                return false;
 
             Texture2D frame = contentMgr.Load<Texture2D>(fileName);
             animations[animName].Add(frame);
+
+            return true;
         }
         //
         // Summary:

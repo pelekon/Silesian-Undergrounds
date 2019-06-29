@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Silesian_Undergrounds.Engine.Behaviours
 {
@@ -14,7 +11,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
 
     public struct AttackData
     {
-        public AttackData(bool isRepeatable, int minDamage, int maxDamage, int attackTimer, AttackType type, float minRange, float maxRange)
+        public AttackData(bool isRepeatable, int minDamage, int maxDamage, int attackTimer, AttackType type, float minRange, float maxRange, string pTexture = null, List<Texture2D> particleAnim = null)
         {
             IsRepeatable = isRepeatable;
             MinDamage = minDamage;
@@ -23,6 +20,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             this.type = type;
             MinRange = minRange;
             MaxRange = maxRange;
+            this.particleAnim = particleAnim;
+            particleTextureName = pTexture;
         }
 
         public bool IsRepeatable { get; private set; }
@@ -32,6 +31,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         public AttackType type { get; private set; }
         public float MinRange { get; private set; }
         public float MaxRange { get; private set; }
-        // public List<Texture2D> attackAnim { get; private set; }
+        // animation used to play when attack hit target
+        public List<Texture2D> particleAnim { get; private set; }
+        public string particleTextureName { get; private set; }
     }
 }

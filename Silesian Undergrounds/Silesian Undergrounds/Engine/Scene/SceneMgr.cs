@@ -10,7 +10,10 @@ using Silesian_Undergrounds.Engine.Item;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Scene.RandomRooms;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Silesian_Undergrounds.Engine.Config;
+using Silesian_Undergrounds.Engine.Pathfinding;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -22,38 +25,20 @@ namespace Silesian_Undergrounds.Engine.Scene
         private static Scene _currentScene;
         public static Scene GetCurrentScene() { return _currentScene; }
         private static readonly TileMapRenderer Renderer = new TileMapRenderer();
-        private const string JsonFileExtension = ".json", DataDirectory = "Data";
         private static PlayerStatistic playerStatistic;
-        #endregion
-
-        #region PLAYER_BASIC_STATISTICS
-        private const int PLAYER_BASIC_HEALTH = 100;
-        private const int PLAYER_BASIC_MAX_HEALTH = 150;
-        private const int PLAYER_BASIC_HUNGER = 100;
-        private const int PLAYER_BASIC_MAX_HUNGER = 150;
-        private const float PLAYER_BASIC_ATTACK_SPEED = 1.0f;
-        private const float PLAYER_BASIC_MOVEMENT_SPEED = 2.0f;
-        private const int PLAYER_BASIC_DAMAGE = 10;
-        private const int PLAYER_BASIC_KEY_AMOUNT = 0;
-        private const int PLAYER_BASIC_MONEY_AMOUNT = 0;
-        public const float BASIC_HUNGER_DECREASE_INTERVAL_IN_SECONDS = 10;
         #endregion
 
         public static Scene LoadScene(string sceneName, int tileSize)
         {
-            var fileName = sceneName + JsonFileExtension;
-            var path = Path.Combine(DataDirectory, fileName);
+            var fileName = sceneName + Constants.JsonFileExtension;
+            var path = Path.Combine(Constants.DataDirectory, fileName);
         
 
             if (!File.Exists(path)) return null;
-
             if(playerStatistic == null)
             {
-                playerStatistic = new PlayerStatistic(PLAYER_BASIC_HEALTH, PLAYER_BASIC_MAX_HEALTH,
-                    PLAYER_BASIC_HUNGER, PLAYER_BASIC_MAX_HUNGER,
-                    PLAYER_BASIC_MOVEMENT_SPEED, PLAYER_BASIC_ATTACK_SPEED,
-                    PLAYER_BASIC_DAMAGE, PLAYER_BASIC_MONEY_AMOUNT,
-                    PLAYER_BASIC_KEY_AMOUNT, BASIC_HUNGER_DECREASE_INTERVAL_IN_SECONDS);
+                var initPlayerConfig = ConfigMgr.PlayerConfig;
+                playerStatistic = new PlayerStatistic(initPlayerConfig);
             }
 
             var scene = new Scene(playerStatistic);
@@ -76,7 +61,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             using (var file = File.OpenText(filePath))
             {
                 try  { sceneFile = (SceneFile)new JsonSerializer().Deserialize(file, typeof(SceneFile)); }
-                catch (Newtonsoft.Json.JsonSerializationException e)
+                catch (JsonSerializationException e)
                 {
                     #if DEBUG
                         Console.WriteLine(e.Message);
@@ -86,7 +71,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             }
             if (sceneFile.TileSets.Count < 1) return false;
-            var tileSetFile = Path.Combine(DataDirectory, sceneFile.TileSets[0].Source);
+            var tileSetFile = Path.Combine(Constants.DataDirectory, sceneFile.TileSets[0].Source);
 
             if (!File.Exists(tileSetFile)) return false;
 
@@ -164,6 +149,11 @@ namespace Silesian_Undergrounds.Engine.Scene
                 scene.AddObject(ground);
             }
 
+            // start thread worker for initial pathfinding data
+            SceneGridCornersWorker worker = new SceneGridCornersWorker();
+            Thread pathfindingWorker = new Thread(new ThreadStart(() => worker.DoInitialWork(generatedGround, Renderer.Tiles)));
+            pathfindingWorker.Start();
+
             List<PickableItem> generatedItems = GameObjectFactory.ScenePickableItemsFactory(Renderer.Pickable, scene);
             foreach(var obj in generatedItems)
             {
@@ -194,8 +184,11 @@ namespace Silesian_Undergrounds.Engine.Scene
             List<SpecialItem> specialItems = GameObjectFactory.SceneSpecialItemsFactory(Renderer.SpecialItems, scene, playerStatistic);
             foreach (var item in specialItems)
             {
+                item.SetOnPicked(scene.PlayerPickedBooster);
                 scene.AddObject(item);
             }
+
+            List<List<GameObject>> randomRoomsGameobjects = new List<List<GameObject>>();
 
             if (roomGenerator != null)
             {
@@ -206,8 +199,19 @@ namespace Silesian_Undergrounds.Engine.Scene
                     var list = room.BuildGameObjectsList();
                     foreach (var obj in list)
                         scene.AddObject(obj);
+
+                    randomRoomsGameobjects.Add(list);
                 }
             }
+
+            // make sure that thread already end its job
+            pathfindingWorker.Join();
+            // Recheck bound with additional tiles generated from random rooms
+            if (randomRoomsGameobjects != null)
+                worker.CheckCornersWithRandRoomData(randomRoomsGameobjects);
+
+            // forward parsed data to pathfinding system in order to generate grid
+            PathfindingSystem.GetInstance().SetupSystemData(worker.dim, Renderer.Tiles, randomRoomsGameobjects);
 
             tileFile.Close();
             return true;

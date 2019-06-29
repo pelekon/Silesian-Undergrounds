@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Common;
+using Silesian_Undergrounds.Engine.Config;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.UI;
 using Silesian_Undergrounds.Views;
@@ -26,11 +27,12 @@ namespace Silesian_Undergrounds.Engine.Scene
         public Camera camera { get; private set; }
         private Func<bool> OnPlayerWin;
 
-        private const float HUNGER_DECREASE_INTERVAL_CHANGED_BY_PERCENT = 0.8f;
-
         public bool isPaused { get; private set; }
         public bool isEnd { get; private set; }
         public bool lastScene { get; private set; }
+        private bool isBoosterPicked;
+        private const float shaderDelayInSeconds = 50;
+        private float remainingShaderDelayInSeconds = shaderDelayInSeconds;
         private readonly bool canUnPause;
 
         #endregion
@@ -54,14 +56,21 @@ namespace Silesian_Undergrounds.Engine.Scene
             canUnPause = true;
         }
 
+        public bool PlayerPickedBooster()
+        {
+            this.isBoosterPicked = true;
+            return true;
+        }
+
         private PauseView CreatePauseMenu()
         {
             PauseView pauseView = new PauseView();
             pauseView.GetResumeButton().SetOnClick(ResumeGame);
             return pauseView;
         }
-        public Scene(UIArea area)
+        public Scene(UIArea area, bool setSceneIsEnd = false)
         {
+            isEnd = setSceneIsEnd;
             pauseMenu = area;
             isPaused = true;
             canUnPause = false;
@@ -85,7 +94,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void DecreaseHungerDropInterval()
         {
-            this.player.ChangerHungerDecreaseIntervalBy(HUNGER_DECREASE_INTERVAL_CHANGED_BY_PERCENT);
+            this.player.ChangerHungerDecreaseIntervalBy(ConfigMgr.PlayerConfig.HungerDecreaseIntervalChangedByPercent);
         }
 
         public void SetEndGameButtonInPauseMenu(Func<bool> functionOnExitGame)
@@ -150,7 +159,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Input.KeyPressed(Keys.Escape))
             {
                 if (isPaused && canUnPause)
                     isPaused = false;
@@ -163,7 +172,16 @@ namespace Silesian_Undergrounds.Engine.Scene
                 pauseMenu.Update(gameTime);
                 return;
             }
-            
+
+            var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            remainingShaderDelayInSeconds -= timer;
+
+            if (remainingShaderDelayInSeconds <= 0)
+            {
+                remainingShaderDelayInSeconds = shaderDelayInSeconds;
+                isBoosterPicked = false;
+            }
+
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects
             AddObjects();
             DeleteObjects();
@@ -245,6 +263,14 @@ namespace Silesian_Undergrounds.Engine.Scene
                 else
                     ui.Draw(spriteBatch);
             }, null);
+
+            if (isBoosterPicked && player != null)
+            {
+                Drawer.Shaders.DrawBoosterPickupShader((spriteBatch, gameTime) =>
+                {
+                    player.Draw(spriteBatch);
+                }, transformMatrix: camera.Transform);
+            }
         }
 
         private void DetectPlayerOnTransition()

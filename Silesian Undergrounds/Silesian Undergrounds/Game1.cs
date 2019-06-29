@@ -7,6 +7,7 @@ using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Views;
 using System;
 using System.Collections.Generic;
+using Silesian_Undergrounds.Engine.Config;
 
 namespace Silesian_Undergrounds
 {
@@ -21,6 +22,9 @@ namespace Silesian_Undergrounds
         public List<String> scenes = new List<String>();
         public int levelCounter = 0;
         public bool isPlayerInMaineMenu = true;
+
+        Scene loadingScene;
+        SceneStatusEnum sceneStatus = SceneStatusEnum.Loading;
 
         Scene scene;
 
@@ -38,6 +42,9 @@ namespace Silesian_Undergrounds
         /// </summary>
         protected override void Initialize()
         {
+            #region LOAD_CONFIG
+            ConfigMgr.LoadConfig();
+            #endregion
             #region GRAPHIC_SETTINGS_INIT
             // Window.AllowAltF4 = true;
             IsMouseVisible = true;
@@ -64,6 +71,8 @@ namespace Silesian_Undergrounds
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
             SoundMgr.Instance.SetCurrentContentMgr(Content);
+
+            loadingScene = new Scene(new LoadingView(), true);
 
             scene = SetMainMenuScene();
 
@@ -97,12 +106,22 @@ namespace Silesian_Undergrounds
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            Input.Update();
 
             if (!scene.isEnd)
                 scene.Update(gameTime);
             else
             {
-                scene = LevelsManagement();
+                if(sceneStatus == SceneStatusEnum.Loading)
+                {
+                    scene = loadingScene;
+                    sceneStatus = SceneStatusEnum.Loaded;
+                }
+                else
+                {
+                    scene = LevelsManagement();
+                    sceneStatus = SceneStatusEnum.Loading;
+                }
             }
             // play all enqueued soundeffects
             AudioPlayerMgr.Instance.Update();
@@ -132,13 +151,12 @@ namespace Silesian_Undergrounds
             #endif
             levelCounter++;
             Scene sceneToLoad;
-            if (levelCounter == scenes.Count)
+            if(levelCounter == scenes.Count)
             {
                 sceneToLoad = SceneManager.LoadScene(sceneName, 64);
                 sceneToLoad.SetLastScene(true);
                 sceneToLoad.SetOnWin(EndGamePlayerWin);
             }
-
             else
                 sceneToLoad = SceneManager.LoadScene(sceneName, 64);
 
@@ -176,6 +194,19 @@ namespace Silesian_Undergrounds
             return true;
         }
 
+        protected bool StartView()
+        {
+            this.scene = SetStartView();
+            return true;
+        }
+
+        protected bool ControlsView()
+        {
+            this.scene = SetControlsView();
+            return true;
+
+        }
+
         protected bool ReturnToMenu()
         {
             levelCounter = 0;
@@ -187,9 +218,24 @@ namespace Silesian_Undergrounds
         protected Scene SetMainMenuScene()
         {
             MainMenuView mainMenu = new MainMenuView();
-            mainMenu.GetStartGameButton().SetOnClick(StartGame);
+            mainMenu.GetStartGameButton().SetOnClick(StartView);
             mainMenu.GetExitButton().SetOnClick(ExitGame);
             return new Scene(mainMenu);
+        }
+
+        protected Scene SetStartView()
+        {
+            StartView startView = new StartView();
+            startView.GetReadyButton().SetOnClick(StartGame);
+            startView.GetControlsButton().SetOnClick(ControlsView);
+            return new Scene(startView);
+        }
+
+        protected Scene SetControlsView()
+        {
+            ControlsDisplayView controlsDisplayView = new ControlsDisplayView();
+            controlsDisplayView.GetNextButton().SetOnClick(StartGame);
+            return new Scene(controlsDisplayView);
         }
 
         protected Scene SetEndGameScene(EndGameEnum endGameEnum)

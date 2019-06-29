@@ -5,6 +5,7 @@ using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Scene;
+using Silesian_Undergrounds.Engine.Components;
 
 namespace Silesian_Undergrounds.Engine.Particles
 {
@@ -22,6 +23,7 @@ namespace Silesian_Undergrounds.Engine.Particles
         private Vector2 startingPos;
         private bool isWaitingForDelete;
         private bool isLaunched;
+        public Animator Animator { get; private set; }
 
         public Particle(string textureName, float w, float h, Vector2 startPos, Vector2 force, float travelSpeed, float travelDist, GameObject emiter) 
             : base(null, startPos, new Vector2(w * ResolutionMgr.TileSize, h * ResolutionMgr.TileSize))
@@ -33,11 +35,15 @@ namespace Silesian_Undergrounds.Engine.Particles
             this.emiter = emiter;
             startingPos = new Vector2(startPos.X, startPos.Y);
 
-            collider = new BoxCollider(this, size.X, size.Y, 0, 0, true);
+            collider = new BoxCollider(this, size.X, size.Y, 0, 0, true, true);
             AddComponent(collider);
 
             isWaitingForDelete = false;
             isLaunched = false;
+
+            Animator = new Animator(this);
+            AddComponent(Animator);
+            ChangeDrawAbility(false);
         }
 
         public void Launch()
@@ -66,12 +72,12 @@ namespace Silesian_Undergrounds.Engine.Particles
             }
         }
 
-        public override void NotifyCollision(GameObject gameobject, ICollider source)
+        public override void NotifyCollision(GameObject gameobject, ICollider source, RectCollisionSides collisionSides)
         {
             if (gameobject == emiter || isWaitingForDelete)
                 return;
-
-            OnParticleHit.Invoke(this, new CollisionNotifyData(gameobject, source));
+            Animator.PlayAnimation("OnHit");
+            OnParticleHit.Invoke(this, new CollisionNotifyData(gameobject, source, collisionSides));
             OnParticleTravelEnd.Invoke(this, null);
             ScheduleDelete();
         }
