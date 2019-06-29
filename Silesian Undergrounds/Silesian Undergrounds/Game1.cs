@@ -171,6 +171,7 @@ namespace Silesian_Undergrounds
         protected bool StartGame()
         {
             scene = LevelsManagement();
+           
             // start playing the music
             AudioPlayerMgr.Instance.PlayBackgroundMusic("Music/background-game/background_game");
             return true;
@@ -218,6 +219,7 @@ namespace Silesian_Undergrounds
         protected Scene SetMainMenuScene()
         {
             MainMenuView mainMenu = new MainMenuView();
+            AudioPlayerMgr.Instance.PlayBackgroundMusic("Music/menu/menu_theme");
             mainMenu.GetStartGameButton().SetOnClick(StartView);
             mainMenu.GetExitButton().SetOnClick(ExitGame);
             return new Scene(mainMenu);

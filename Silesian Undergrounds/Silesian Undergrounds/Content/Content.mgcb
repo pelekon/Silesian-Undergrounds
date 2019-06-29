@@ -1281,11 +1281,11 @@
 /processorParam:Quality=Best
 /build:Music/items/item_picking.wav
 
-#begin Music/menu/mouse_click.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
+#begin Music/menu/menu_theme.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
 /processorParam:Quality=Best
-/build:Music/menu/mouse_click.wav
+/build:Music/menu/menu_theme.mp3
 
 #begin Music/menu/mouse_click.wav
 /importer:WavImporter
