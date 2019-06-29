@@ -92,8 +92,6 @@ namespace Silesian_Undergrounds.Engine.Utils
 
             int randed = random.Next(0, maxRandValue);
 
-            return PickableEnum.Food;
-
             if (randed <= 40)
                 return PickableEnum.None;
             else if (randed > 40 && randed <= 50)

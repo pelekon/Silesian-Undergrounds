@@ -5,8 +5,7 @@ namespace Silesian_Undergrounds.Engine.Common {
         public PlayerStatistic(PlayerConfig playerConfig) : base(health: playerConfig.Health, maxHealth: playerConfig.MaxHealth, movementSpeed: playerConfig.MovementSpeed, attackSpeed: playerConfig.AttackSpeed, baseDamage: playerConfig.Damage)
         {
             Money = playerConfig.MoneyAmount;
-            //Key = playerConfig.KeyAmount;
-            Key = 500;
+            Key = playerConfig.KeyAmount;
             Hunger = playerConfig.Hunger;
             MaxHunger = playerConfig.MaxHunger;
             HungerDecreaseInterval = playerConfig.HungerDecreaseIntervalInSeconds;

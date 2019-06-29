@@ -1275,6 +1275,12 @@
 /processorParam:Quality=Best
 /build:Music/food/eating_sound.mp3
 
+#begin Music/items/item_picking.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/items/item_picking.wav
+
 #begin Music/monster/damage_sound.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
