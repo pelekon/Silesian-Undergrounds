@@ -121,6 +121,7 @@
     <Compile Include="Engine\Scene\Drawer.cs" />
     <Compile Include="Engine\Utils\TimedEvent.cs" />
     <Compile Include="Engine\Utils\TimedEventsScheduler.cs" />
+    <Compile Include="Engine\Utils\TrueRng.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Engine\Utils\ResolutionMgr.cs" />
     <Compile Include="Program.cs" />

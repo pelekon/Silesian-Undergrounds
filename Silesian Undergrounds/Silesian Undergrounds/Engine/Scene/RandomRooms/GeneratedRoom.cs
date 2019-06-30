@@ -19,7 +19,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             this.passage = passage;
         }
 
-        public List<GameObject> BuildGameObjectsList()
+        public List<GameObject> BuildGameObjectsList(Scene scene)
         {
             int sizeX = matrix.data.Length;
             int sizeY = matrix.data[0].Length;
@@ -83,6 +83,9 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
                 }
             }
 
+            var content = BuildRoomContentList(sizeX, sizeY, scene);
+            objs.AddRange(content);
+
             return objs;
         }
 
@@ -145,6 +148,94 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
             }
 
             return passageTile;
+        }
+
+        private List<GameObject> BuildRoomContentList(int sizeX, int sizeY, Scene scene)
+        {
+            List<GameObject> content = new List<GameObject>();
+            Random rng = TrueRng.GetInstance().GetRandom();
+
+            int enemyChance = rng.Next(0, 100);
+            bool isEnemySpawned = enemyChance <= 40;
+            Vector2 center = GetRoomCenterPosition(sizeX, sizeY);
+
+            bool isCenterSpawned = false;
+
+            if (isEnemySpawned)
+            {
+                isCenterSpawned = true;
+                content.Add(EnemyFactory.GetRandomEnemy(center));
+            } 
+            else
+            {
+                int chestChance = rng.Next(0, 100);
+
+                if (chestChance <= 32)
+                {
+                    content.Add(GameObjectFactory.ChestFactory(center, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), scene));
+                    isCenterSpawned = true;
+                }
+            }
+
+            int amountOfItems = rng.Next(0, 80);
+            double temp = amountOfItems / 10;
+            temp = Math.Floor(temp);
+            amountOfItems = (int)temp;
+
+            if (amountOfItems > 6)
+                amountOfItems = 0;
+            else if (amountOfItems > 2)
+                amountOfItems = 2;
+            else
+            {
+                if (amountOfItems == 0 && !isCenterSpawned)
+                {
+                    int roll = rng.Next(0, 100);
+                    if (roll <= 40)
+                        amountOfItems = 1;
+                }
+            }
+
+            for(int i = 0; i < amountOfItems; ++i)
+            {
+                int x = 0;
+                int y = 0;
+                switch(i)
+                {
+                    case 0:
+                        x = (2 + matrix.offset.X) * ResolutionMgr.TileSize;
+                        y = (2 + matrix.offset.Y) * ResolutionMgr.TileSize;
+                        break;
+                    case 1:
+                        x = (2 + matrix.offset.X) * ResolutionMgr.TileSize;
+                        y = (sizeY - 2 + matrix.offset.Y) * ResolutionMgr.TileSize;
+                        break;
+                    case 2:
+                        x = (sizeX - 2 + matrix.offset.X) * ResolutionMgr.TileSize;
+                        y = (sizeY - 2 + matrix.offset.Y) * ResolutionMgr.TileSize;
+                        break;
+                }
+
+                var ob = GameObjectFactory.GetRandomPickableItem(new Vector2(x, y), scene);
+                if (ob != null)
+                    content.Add(ob);
+            }
+
+            return content;
+        }
+
+        private Vector2 GetRoomCenterPosition(int sizeX, int sizeY)
+        {
+            int x = sizeX / 2;
+            int y = sizeY / 2;
+
+            x += matrix.offset.X;
+            y += matrix.offset.Y;
+
+            x *= ResolutionMgr.TileSize;
+            y *= ResolutionMgr.TileSize;
+
+            return new Vector2(x, y);
         }
     }
 }
