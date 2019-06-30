@@ -9,6 +9,8 @@ using Silesian_Undergrounds.Views;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
 using System;
+using System.Diagnostics;
+using Silesian_Undergrounds.Engine.UI.Controls;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -31,6 +33,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         public bool isEnd { get; private set; }
         public bool lastScene { get; private set; }
         private bool isBoosterPicked;
+        private bool isNonGameScene = false;
         private const float shaderDelayInSeconds = 50;
         private float remainingShaderDelayInSeconds = shaderDelayInSeconds;
         private readonly bool canUnPause;
@@ -68,11 +71,12 @@ namespace Silesian_Undergrounds.Engine.Scene
             pauseView.GetResumeButton().SetOnClick(ResumeGame);
             return pauseView;
         }
-        public Scene(UIArea area, bool setSceneIsEnd = false)
+        public Scene(UIArea area, bool setSceneIsEnd = false, bool isNonGameScene = false)
         {
             isEnd = setSceneIsEnd;
             pauseMenu = area;
             isPaused = true;
+            this.isNonGameScene = isNonGameScene;
             canUnPause = false;
             camera = new Camera(null);
             InitLists();
@@ -249,20 +253,42 @@ namespace Silesian_Undergrounds.Engine.Scene
                 if (player != null)
                     player.Draw(spriteBatch);
 
-                foreach(var obj in gameObjects)
+                foreach (var obj in gameObjects)
                 {
                     if (obj.layer == 6)
                         obj.Draw(spriteBatch);
                 }
 
             }, transformMatrix: camera.Transform);
+
             Drawer.Draw((spriteBatch, gameTime) =>
             {
-                if (isPaused)
-                    pauseMenu.Draw(spriteBatch);
-                else
+                if (!isPaused)
                     ui.Draw(spriteBatch);
             }, null);
+
+            if (isNonGameScene)
+            {
+                Drawer.Shaders.DrawFoggEffect((spriteBatch, gameTime) =>
+                {
+                    // draw fogg shader
+                    Image bgImage = pauseMenu.BackgroundImage;
+                    bgImage.Draw(spriteBatch);
+                }, transformMatrix: camera.Transform);
+
+                Drawer.Draw((spriteBatch, gameTime) =>
+                {
+                    foreach (var el in pauseMenu.Elements)
+                    {
+                        // draw other elements not to be affected
+                        // by fogg shader
+                        if (el is Image)
+                            continue;
+
+                        el.Draw(spriteBatch);
+                    }
+                }, null);
+            }
 
             if (isBoosterPicked && player != null)
             {
@@ -271,6 +297,9 @@ namespace Silesian_Undergrounds.Engine.Scene
                     player.Draw(spriteBatch);
                 }, transformMatrix: camera.Transform);
             }
+
+
+
         }
 
         private void DetectPlayerOnTransition()

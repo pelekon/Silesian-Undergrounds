@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,8 +16,16 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public static class Shaders
         {
-            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect, _boosterPickupShader;
+            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect, _boosterPickupShader, _noiseEffect;
             private static Texture2D _brightningTexture, _rainbow;
+
+            public static void DrawFoggEffect(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
+            {
+                _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _noiseEffect);
+                _noiseEffect.Parameters["rnd_time"].SetValue(_gameTime.TotalGameTime.Seconds);
+                drawer.Invoke(_spriteBatch, _gameTime);
+                _spriteBatch.End();
+            }
 
             public static void DrawBrightShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
             {      
@@ -69,6 +78,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 _brightEffect = content.Load<Effect>("BrighteningShader");
                 _rainbow = TextureMgr.Instance.GetTexture("rainbow");
                 _boosterPickupShader = content.Load<Effect>("BoosterPickupShader");
+                _noiseEffect = content.Load<Effect>("NoiseShader");
             }
 
         }

@@ -17,6 +17,9 @@ namespace Silesian_Undergrounds.Views {
 
             Texture2D buttonBg = TextureMgr.Instance.GetTexture("box_lit");
 
+            Texture2D background = TextureMgr.Instance.GetTexture("background_2");
+            base.AddBackground(new Image(0, 0, 100, 100, background, this));
+
             this.controls = new Label("Controls" + Environment.NewLine + Environment.NewLine + Environment.NewLine +
                 "W - move up " + Environment.NewLine + Environment.NewLine +
                 "S - move down " + Environment.NewLine + Environment.NewLine +

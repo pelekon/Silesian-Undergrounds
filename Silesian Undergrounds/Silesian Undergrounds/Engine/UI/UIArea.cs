@@ -6,17 +6,33 @@ using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Silesian_Undergrounds.Engine.UI.Controls;
 
 namespace Silesian_Undergrounds.Engine.UI
 {
     public class UIArea : UIElement
     {
+        public Image BackgroundImage;
         private List<UIElement> _elements;
+        public List<UIElement> Elements
+        {
+            get
+            {
+                return _elements;
+            }
+        }
         
-        public UIArea() : base(0, 0, 100, 100, null, null)
+        public UIArea(Image BackgroundImage = null) : base(0, 0, 100, 100, null, null)
         {
             _elements = new List<UIElement>();
             Initialize();
+        }
+
+       protected void AddBackground(Image BackgroundImage)
+        {
+            this.BackgroundImage = BackgroundImage;
+            if (BackgroundImage != null)
+                AddElement(BackgroundImage);
         }
 
         protected virtual void Initialize() { }
