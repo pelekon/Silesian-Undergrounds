@@ -181,7 +181,6 @@ namespace Silesian_Undergrounds.Engine.Scene
             {
                 remainingShaderDelayInSeconds = shaderDelayInSeconds;
                 isBoosterPicked = false;
-          
             }
 
             // Operation of add or remove from gameObjects list has to appear before updating gameObjects

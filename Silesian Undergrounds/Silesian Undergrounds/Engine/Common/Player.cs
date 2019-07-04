@@ -92,7 +92,6 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 HandleHungerDecrasing(deltaTime);
             }
-
              sDirection *= speed;
              sDirection *= deltaTime;
 
