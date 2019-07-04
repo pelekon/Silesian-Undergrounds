@@ -5,7 +5,7 @@ using Silesian_Undergrounds.Engine.Utils;
 using Microsoft.Xna.Framework;
 
 namespace Silesian_Undergrounds.Views {
-    class PlayerDieView : UIArea {
+    class PlayerDieView : UIShaderedBackgroundArea {
 
         private Button returnToMenuButton;
         private Label message;

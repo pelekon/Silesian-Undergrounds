@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 namespace Silesian_Undergrounds.Views {
-    class StartView : UIArea {
+    class StartView : UIShaderedBackgroundArea {
 
         private Button readyButton;
         private Button controlsButton;

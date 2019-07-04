@@ -5,7 +5,7 @@ using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Views
 {
-    class MainMenuView : UIArea
+    class MainMenuView : UIShaderedBackgroundArea
     {
 
         private Button startGameButton;

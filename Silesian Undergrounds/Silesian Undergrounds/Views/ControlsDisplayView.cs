@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 namespace Silesian_Undergrounds.Views {
-    class ControlsDisplayView : UIArea {
+    class ControlsDisplayView : UIShaderedBackgroundArea {
 
         private Button nextButton;
         private Label controls;

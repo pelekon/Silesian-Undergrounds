@@ -215,7 +215,7 @@ namespace Silesian_Undergrounds
             MainMenuView mainMenu = new MainMenuView();
             mainMenu.GetStartGameButton().SetOnClick(StartView);
             mainMenu.GetExitButton().SetOnClick(ExitGame);
-            return new Scene(mainMenu, isNonGameScene: true);
+            return new Scene(mainMenu);
         }
 
         protected Scene SetStartView()
@@ -223,14 +223,14 @@ namespace Silesian_Undergrounds
             StartView startView = new StartView();
             startView.GetReadyButton().SetOnClick(StartGame);
             startView.GetControlsButton().SetOnClick(ControlsView);
-            return new Scene(startView, isNonGameScene: true);
+            return new Scene(startView);
         }
 
         protected Scene SetControlsView()
         {
             ControlsDisplayView controlsDisplayView = new ControlsDisplayView();
             controlsDisplayView.GetNextButton().SetOnClick(StartGame);
-            return new Scene(controlsDisplayView, isNonGameScene: true);
+            return new Scene(controlsDisplayView);
         }
 
         protected Scene SetEndGameScene(EndGameEnum endGameEnum)
@@ -240,13 +240,13 @@ namespace Silesian_Undergrounds
             {
                 PlayerDieView endGameWhenPlayerDie = new PlayerDieView();
                 endGameWhenPlayerDie.GetReturnToMenuButton().SetOnClick(ReturnToMenu);
-                return new Scene(endGameWhenPlayerDie, isNonGameScene: true);
+                return new Scene(endGameWhenPlayerDie);
             }
             else
             {
                 PlayerWinView endGameWhenPlayerWin = new PlayerWinView();
                 endGameWhenPlayerWin.GetReturnToMenuButton().SetOnClick(ReturnToMenu);
-                return new Scene(endGameWhenPlayerWin, isNonGameScene: true);
+                return new Scene(endGameWhenPlayerWin);
             }
 
         }

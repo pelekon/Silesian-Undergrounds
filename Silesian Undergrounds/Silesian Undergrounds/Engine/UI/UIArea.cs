@@ -13,14 +13,7 @@ namespace Silesian_Undergrounds.Engine.UI
     public class UIArea : UIElement
     {
         public Image BackgroundImage;
-        private List<UIElement> _elements;
-        public List<UIElement> Elements
-        {
-            get
-            {
-                return _elements;
-            }
-        }
+        protected List<UIElement> _elements;
         
         public UIArea(Image BackgroundImage = null) : base(0, 0, 100, 100, null, null)
         {

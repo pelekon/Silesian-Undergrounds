@@ -5,7 +5,7 @@ using Silesian_Undergrounds.Engine.Utils;
 using Microsoft.Xna.Framework;
 
 namespace Silesian_Undergrounds.Views {
-    class PlayerWinView : UIArea
+    class PlayerWinView : UIShaderedBackgroundArea
     {
 
         private Button returnToMenuButton;

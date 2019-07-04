@@ -33,7 +33,6 @@ namespace Silesian_Undergrounds.Engine.Scene
         public bool isEnd { get; private set; }
         public bool lastScene { get; private set; }
         private bool isBoosterPicked;
-        private bool isNonGameScene = false;
         private const float shaderDelayInSeconds = 50;
         private float remainingShaderDelayInSeconds = shaderDelayInSeconds;
         private readonly bool canUnPause;
@@ -71,12 +70,11 @@ namespace Silesian_Undergrounds.Engine.Scene
             pauseView.GetResumeButton().SetOnClick(ResumeGame);
             return pauseView;
         }
-        public Scene(UIArea area, bool setSceneIsEnd = false, bool isNonGameScene = false)
+        public Scene(UIArea area, bool setSceneIsEnd = false)
         {
             isEnd = setSceneIsEnd;
             pauseMenu = area;
             isPaused = true;
-            this.isNonGameScene = isNonGameScene;
             canUnPause = false;
             camera = new Camera(null);
             InitLists();
@@ -261,34 +259,23 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             }, transformMatrix: camera.Transform);
 
-            Drawer.Draw((spriteBatch, gameTime) =>
+            Drawer.Shaders.DrawFoggEffect((spriteBatch, gameTime) =>
             {
-                if (!isPaused)
-                    ui.Draw(spriteBatch);
-            }, null);
-
-            if (isNonGameScene)
-            {
-                Drawer.Shaders.DrawFoggEffect((spriteBatch, gameTime) =>
+                if (pauseMenu != null && pauseMenu.BackgroundImage != null)
                 {
                     // draw fogg shader
                     Image bgImage = pauseMenu.BackgroundImage;
                     bgImage.Draw(spriteBatch);
-                }, transformMatrix: camera.Transform);
+                }
+            }, transformMatrix: camera.Transform);
 
-                Drawer.Draw((spriteBatch, gameTime) =>
-                {
-                    foreach (var el in pauseMenu.Elements)
-                    {
-                        // draw other elements not to be affected
-                        // by fogg shader
-                        if (el is Image)
-                            continue;
-
-                        el.Draw(spriteBatch);
-                    }
-                }, null);
-            }
+            Drawer.Draw((spriteBatch, gameTime) =>
+            {
+                if (isPaused)
+                    pauseMenu.Draw(spriteBatch);
+                else
+                    ui.Draw(spriteBatch);
+            }, null);
 
             if (isBoosterPicked && player != null)
             {
