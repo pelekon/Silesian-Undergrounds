@@ -5,6 +5,7 @@ using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Config;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Utils
 {
@@ -18,8 +19,8 @@ namespace Silesian_Undergrounds.Engine.Utils
         public static List<Ground> GroundFactory(List<GameObject> positionSources)
         {
             var list = new List<Ground>();
-            var random = new Random();
-            foreach(var source in positionSources)
+            var random = TrueRng.GetInstance().GetRandom();
+            foreach (var source in positionSources)
             {
                 Console.WriteLine("Name: " + source.texture.Name);
                 switch(source.texture.Name)

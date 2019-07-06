@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Enum;
@@ -70,6 +69,7 @@ namespace Silesian_Undergrounds
 
             TextureMgr.Instance.SetCurrentContentMgr(Content);
             FontMgr.Instance.SetCurrentContentMgr(Content);
+            SoundMgr.Instance.SetCurrentContentMgr(Content);
 
             loadingScene = new Scene(new LoadingView(), true);
 
@@ -122,6 +122,8 @@ namespace Silesian_Undergrounds
                     sceneStatus = SceneStatusEnum.Loading;
                 }
             }
+            // play all enqueued soundeffects
+            AudioPlayerMgr.Instance.Update();
 
             base.Update(gameTime);
         }
@@ -168,6 +170,9 @@ namespace Silesian_Undergrounds
         protected bool StartGame()
         {
             scene = LevelsManagement();
+           
+            // start playing the music
+            AudioPlayerMgr.Instance.PlayBackgroundMusic("Music/background-game/background_game");
             return true;
         }
 
@@ -213,6 +218,7 @@ namespace Silesian_Undergrounds
         protected Scene SetMainMenuScene()
         {
             MainMenuView mainMenu = new MainMenuView();
+            AudioPlayerMgr.Instance.PlayBackgroundMusic("Music/menu/menu_theme");
             mainMenu.GetStartGameButton().SetOnClick(StartView);
             mainMenu.GetExitButton().SetOnClick(ExitGame);
             return new Scene(mainMenu);

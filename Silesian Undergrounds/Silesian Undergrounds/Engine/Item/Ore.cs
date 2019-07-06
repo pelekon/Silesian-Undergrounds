@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Item
 {
@@ -38,6 +39,7 @@ namespace Silesian_Undergrounds.Engine.Item
             if (obj is Player)
             {
                 Player pl = (Player)obj;
+                AudioPlayerMgr.Instance.AddSoundEffect("Music/items/item_picking");
                 if (pl.PlayerStatistic.PickupDouble)
                 {
                     pl.AddMoney(this.value * 2);

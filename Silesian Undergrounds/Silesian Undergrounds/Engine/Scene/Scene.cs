@@ -10,6 +10,7 @@ using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
 using System;
 using System.Diagnostics;
+using Silesian_Undergrounds.Engine.UI.Controls;
 
 namespace Silesian_Undergrounds.Engine.Scene
 {
@@ -146,7 +147,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             {
                 obj.RemoveAllComponents();
                 gameObjects.Remove(obj);
-            }  
+            }
 
             objectsToDelete.Clear();
         }
@@ -237,13 +238,24 @@ namespace Silesian_Undergrounds.Engine.Scene
                 if (player != null)
                     player.Draw(spriteBatch);
 
-                foreach(var obj in gameObjects)
+                foreach (var obj in gameObjects)
                 {
                     if (obj.layer == 6)
                         obj.Draw(spriteBatch);
                 }
 
             }, transformMatrix: camera.Transform);
+
+            Drawer.Shaders.DrawFoggEffect((spriteBatch, gameTime) =>
+            {
+                if (pauseMenu != null && pauseMenu.BackgroundImage != null)
+                {
+                    // draw fogg shader
+                    Image bgImage = pauseMenu.BackgroundImage;
+                    bgImage.Draw(spriteBatch);
+                }
+            }, transformMatrix: camera.Transform);
+
             Drawer.Draw((spriteBatch, gameTime) =>
             {
                 if (isPaused)

@@ -32,6 +32,7 @@ namespace Silesian_Undergrounds.Engine.Traps
                 // add damage
                 WasPicked = true;
                 Player player = obj as Player;
+                AudioPlayerMgr.Instance.AddSoundEffect("Music/monster/damage_sound");
                 player.DecreaseLiveValue((int)TrapsDamageEnum.Spikes);
 
                 Animator.OnAnimationEnd += (sender, data) =>

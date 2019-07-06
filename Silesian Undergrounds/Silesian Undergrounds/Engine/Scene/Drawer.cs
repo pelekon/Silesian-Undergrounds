@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,14 +16,29 @@ namespace Silesian_Undergrounds.Engine.Scene
 
         public static class Shaders
         {
-            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect, _boosterPickupShader, _shopNeonEffect;
+            private static Effect _shadowEffect, _grayScaleEffect, _visibilityRadiusShader, _brightEffect, _boosterPickupShader, _shopNeonEffect, _noiseEffect;
             private static Texture2D _brightningTexture, _rainbow;
-
 
             public static void DrawShopNeonShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
             {
                 _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _shopNeonEffect);
-                 drawer.Invoke(_spriteBatch, _gameTime);
+                drawer.Invoke(_spriteBatch, _gameTime);
+                _spriteBatch.End();
+            }
+
+            public static void DrawFoggEffect(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
+            {
+                _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _noiseEffect);
+                _noiseEffect.Parameters["rnd_time"].SetValue(_gameTime.TotalGameTime.Seconds);
+                drawer.Invoke(_spriteBatch, _gameTime);
+                _spriteBatch.End();
+            }
+
+            public static void DrawBrightShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
+            {
+                _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend, transformMatrix: transformMatrix, effect: _brightEffect);
+                _brightEffect.Parameters["lightRaysMask"].SetValue(_brightningTexture);
+                drawer.Invoke(_spriteBatch, _gameTime);
                 _spriteBatch.End();
             }
 
@@ -68,6 +84,7 @@ namespace Silesian_Undergrounds.Engine.Scene
                 _rainbow = TextureMgr.Instance.GetTexture("rainbow");
                 _boosterPickupShader = content.Load<Effect>("BoosterPickupShader");
                 _shopNeonEffect = content.Load<Effect>("ShopNeonShader");
+                _noiseEffect = content.Load<Effect>("NoiseShader");
             }
 
         }
