@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LevelData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Player>
+    <position>
+      <X>300</X>
+      <Y>1650</Y>
+    </position>
+    <tintColor>
+      <B>255</B>
+      <G>255</G>
+      <R>255</R>
+      <A>255</A>
+      <PackedValue>4294967295</PackedValue>
+    </tintColor>
+    <scale>1</scale>
+    <rotation>0</rotation>
+    <layerDepth>0.5</layerDepth>
+    <active>true</active>
+    <isCollidable>true</isCollidable>
+    <startPosition>
+      <X>300</X>
+      <Y>1500</Y>
+    </startPosition>
+    <velocity>
+      <X>0</X>
+      <Y>0</Y>
+    </velocity>
+  </Player>
+  <Enemy>
+  </Enemy>
+  <walls>
+  </walls>
+  <decorations>
+  </decorations>
+  <mapWidth>15</mapWidth>
+  <mapHeight>9</mapHeight>
+</LevelData>
