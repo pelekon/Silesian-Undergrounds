@@ -30,16 +30,16 @@ struct VertexShaderOutput
 	float2 TextureCoordinates : TEXCOORD0;
 };
 
- 
+
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	float4 color = tex2D(s0, input.TextureCoordinates);
-	
+
 	float4 lightcolor = float4(0.0, 0.0, 0.0, 0.0);
-	
+
 	float rand = random(gameTime);
-	
-	if(rand > 0.0 && rand <= 0.2){ 
+
+	if(rand > 0.0 && rand <= 0.2){
 		lightcolor = tex2D(rainbow_sampler, input.TextureCoordinates.xy + random(gameTime));
 	}
 	else if (rand > 0.2 && rand <= 0.4){
@@ -54,15 +54,15 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 	else{
 		lightcolor = tex2D(rainbow_sampler, input.TextureCoordinates.xy + random(gameTime));
 	}
-	
+
 	lightcolor.a = 1;
-	
+
 	if(input.TextureCoordinates.x == 0.5 && input.TextureCoordinates.y == 0.5){
 		color.rgb = float3(0.0, 0.0, 0.0);
 		lightcolor.a = 0;
 		return color;
 	}
-	
+
 	return color * lightcolor;
 }
 

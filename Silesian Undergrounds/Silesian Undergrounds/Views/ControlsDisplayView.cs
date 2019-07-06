@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 namespace Silesian_Undergrounds.Views {
-    class ControlsDisplayView : UIArea {
+    class ControlsDisplayView : UIShaderedBackgroundArea {
 
         private Button nextButton;
         private Label controls;
@@ -16,6 +16,9 @@ namespace Silesian_Undergrounds.Views {
             base.Initialize();
 
             Texture2D buttonBg = TextureMgr.Instance.GetTexture("box_lit");
+
+            Texture2D background = TextureMgr.Instance.GetTexture("background_2");
+            base.AddBackground(new Image(0, 0, 100, 100, background, this));
 
             this.controls = new Label("Controls" + Environment.NewLine + Environment.NewLine + Environment.NewLine +
                 "W - move up " + Environment.NewLine + Environment.NewLine +

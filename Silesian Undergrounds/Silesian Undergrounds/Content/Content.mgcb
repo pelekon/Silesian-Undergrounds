@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:background.png
 
+#begin background_2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:background_2.png
+
 #begin BoosterPickupShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -132,6 +144,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:default.png
+
+#begin File.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:File.fx
 
 #begin File.spritefont
 /importer:FontDescriptionImporter
@@ -1256,6 +1274,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Monsters/worm_obrocony.png
+
+#begin NoiseShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:NoiseShader.fx
 
 #begin Music/background-game/background_game.mp3
 /importer:Mp3Importer

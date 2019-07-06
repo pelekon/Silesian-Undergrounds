@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 namespace Silesian_Undergrounds.Views {
-    class StartView : UIArea{
+    class StartView : UIShaderedBackgroundArea {
 
         private Button readyButton;
         private Button controlsButton;
@@ -15,6 +15,9 @@ namespace Silesian_Undergrounds.Views {
         protected override void Initialize()
         {
             base.Initialize();
+
+            Texture2D background = TextureMgr.Instance.GetTexture("background_2");
+            base.AddBackground(new Image(0, 0, 100, 100, background, this));
 
             Texture2D buttonBg = TextureMgr.Instance.GetTexture("box_lit");
 

@@ -94,6 +94,7 @@
     <Compile Include="Engine\Scene\RandomRooms\RoomSplitSide.cs" />
     <Compile Include="Engine\Traps\Spike.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
+    <Compile Include="Engine\UI\UIShaderedBackgroundArea.cs" />
     <Compile Include="Engine\Utils\AudioPlayerMgr.cs" />
     <Compile Include="Engine\Utils\EnemyFactory.cs" />
     <Compile Include="Engine\Utils\FontMgr.cs" />
