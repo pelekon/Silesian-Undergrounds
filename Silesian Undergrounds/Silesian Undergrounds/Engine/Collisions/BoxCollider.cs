@@ -40,6 +40,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
             canIgnoreTraps = ignoreTraps;
             isAggroArea = false;
             this.ignoreAggroArea = ignoreAggroArea;
+
         }
 
         public void RegisterSelf()

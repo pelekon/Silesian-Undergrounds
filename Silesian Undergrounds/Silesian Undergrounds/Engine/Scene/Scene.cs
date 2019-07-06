@@ -147,7 +147,7 @@ namespace Silesian_Undergrounds.Engine.Scene
             {
                 obj.RemoveAllComponents();
                 gameObjects.Remove(obj);
-            }  
+            }
 
             objectsToDelete.Clear();
         }
@@ -223,19 +223,6 @@ namespace Silesian_Undergrounds.Engine.Scene
                 }
             }, transformMatrix: camera.Transform);
 
-            Drawer.Shaders.DrawBrightShader((spritebatch, gametime) =>
-            {
-                foreach (var obj in gameObjects)
-                {
-                    if (obj.layer == (int)LayerEnum.ShopPickables)
-                    {
-                        obj.Draw(spritebatch);
-                    }
-
-                }
-
-            }, transformMatrix: camera.Transform);
-
             if (player != null)
             {
                 Drawer.Shaders.DrawShadowEffect((spriteBatch, gameTime) =>
@@ -285,8 +272,12 @@ namespace Silesian_Undergrounds.Engine.Scene
                 }, transformMatrix: camera.Transform);
             }
 
-
-
+            Drawer.Shaders.DrawShopNeonShader((spritebatch, gametime) =>
+            {
+               foreach (var obj in gameObjects)
+                  if (obj.layer == (int)LayerEnum.ShopPickables)
+                       obj.Draw(spritebatch);
+            }, transformMatrix: camera.Transform);
         }
 
         private void DetectPlayerOnTransition()

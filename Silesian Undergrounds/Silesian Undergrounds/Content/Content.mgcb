@@ -1407,6 +1407,12 @@
 /processorParam:DebugMode=Auto
 /build:ShadowShader.fx
 
+#begin ShopNeonShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:ShopNeonShader.fx
+
 #begin test.png
 /importer:TextureImporter
 /processor:TextureProcessor

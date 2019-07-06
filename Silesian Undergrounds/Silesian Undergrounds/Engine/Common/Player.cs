@@ -92,11 +92,12 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 HandleHungerDecrasing(deltaTime);
             }
-
+        
             sDirection *= speed;
             sDirection *= deltaTime;
 
             collider.Move(sDirection);
+
 
             base.Update(gameTime);
         }
@@ -139,7 +140,6 @@ namespace Silesian_Undergrounds.Engine.Common
 
             return true;
         }
-
 
         public void RefilLive(int liveValueToRefil)
         {
