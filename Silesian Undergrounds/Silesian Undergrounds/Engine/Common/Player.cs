@@ -92,10 +92,11 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 HandleHungerDecrasing(deltaTime);
             }
-             sDirection *= speed;
-             sDirection *= deltaTime;
+        
+            sDirection *= speed;
+            sDirection *= deltaTime;
 
-             collider.Move(sDirection);
+            collider.Move(sDirection);
 
 
             base.Update(gameTime);
