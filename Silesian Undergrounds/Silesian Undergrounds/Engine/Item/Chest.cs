@@ -39,6 +39,8 @@ namespace Silesian_Undergrounds.Engine.Item
                 if (!WasPicked && plr.KeyAmount > 0)
                 {
                     WasPicked = true;
+                    // play yhe opening sound effect
+                    AudioPlayerMgr.Instance.AddSoundEffect("Music/chest/chest_opening");
                     plr.RemoveKey(1);
 
                     Animator.OnAnimationEnd += (sender, name) =>
