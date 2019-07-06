@@ -95,11 +95,13 @@
     <Compile Include="Engine\Traps\Spike.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
     <Compile Include="Engine\UI\UIShaderedBackgroundArea.cs" />
+    <Compile Include="Engine\Utils\AudioPlayerMgr.cs" />
     <Compile Include="Engine\Utils\EnemyFactory.cs" />
     <Compile Include="Engine\Utils\FontMgr.cs" />
     <Compile Include="Engine\Utils\GameObjectFactory.cs" />
     <Compile Include="Engine\Utils\GroundTextureFactory.cs" />
     <Compile Include="Engine\Utils\Input.cs" />
+    <Compile Include="Engine\Utils\SoundMgr.cs" />
     <Compile Include="Engine\Utils\TextureMgr.cs" />
     <Compile Include="Engine\Enum\FoodEnum.cs" />
     <Compile Include="Engine\Enum\OreEnum.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="Engine\Scene\Drawer.cs" />
     <Compile Include="Engine\Utils\TimedEvent.cs" />
     <Compile Include="Engine\Utils\TimedEventsScheduler.cs" />
+    <Compile Include="Engine\Utils\TrueRng.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Engine\Utils\ResolutionMgr.cs" />
     <Compile Include="Program.cs" />

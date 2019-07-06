@@ -17,9 +17,9 @@ namespace Silesian_Undergrounds.Engine.Utils
         {
             List<GameObject> list = new List<GameObject>();
 
-            Random rng = new Random();
+            Random rng = TrueRng.GetInstance().GetRandom();
 
-            foreach(var pos in positionSource)
+            foreach (var pos in positionSource)
             {
                int chance = rng.Next(0, 100);
                if (chance <= 30)
@@ -31,6 +31,19 @@ namespace Silesian_Undergrounds.Engine.Utils
             }
 
             return list;
+        }
+
+        public static GameObject GetRandomEnemy(Vector2 position)
+        {
+            Random rng = TrueRng.GetInstance().GetRandom();
+            int chance = rng.Next(0, 100);
+
+            if (chance >= 70)
+                return MinotaurFactory(position);
+            else if (chance >= 45)
+                return RatFactory(position);
+
+            return WormFactory(position);
         }
 
         public static GameObject MinotaurFactory(Vector2 position)

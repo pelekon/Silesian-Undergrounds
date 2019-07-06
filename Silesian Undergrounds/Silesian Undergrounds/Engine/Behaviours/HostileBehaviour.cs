@@ -470,7 +470,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 if (attack.MaxRange < dist)
                     return;
 
-                Random rng = new Random();
+                Random rng = TrueRng.GetInstance().GetRandom();
                 int dmgValue = rng.Next(attack.MinDamage, attack.MaxDamage);
 
                 if (attack.type == AttackType.ATTACK_TYPE_RANGED && attack.particleTextureName != null)
@@ -484,7 +484,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 }
                 else
                 {
-                    Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
+                    Player plr = enemy as Player; // TODO: Change it to more flex(ible) code via some kind of system
+                    AudioPlayerMgr.Instance.AddSoundEffect("Music/monster/damage_sound");
                     plr.DecreaseLiveValue(dmgValue);
                 }
 
@@ -516,6 +517,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             {
                 if (data.obj == enemy)
                 {
+                    AudioPlayerMgr.Instance.AddSoundEffect("Music/monster/damage_sound");
                     Player plr = enemy as Player;
                     plr.DecreaseLiveValue(dmg);
                 }

@@ -91,6 +91,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                     maxRandValue += 20;
 
             int randed = random.Next(0, maxRandValue);
+
             if (randed <= 40)
                 return PickableEnum.None;
             else if (randed > 40 && randed <= 50)
@@ -110,7 +111,7 @@ namespace Silesian_Undergrounds.Engine.Utils
         // renders traps int the random way
         public static List<PickableItem> SceneTrapsFactory(List<GameObject> positionSources, Scene.Scene scene)
         {
-            Random random = new Random();
+            Random random = TrueRng.GetInstance().GetRandom();
             List<PickableItem> list = new List<PickableItem>();
             bool trapPossibility = random.NextDouble() <= trapPropability;
 
@@ -129,9 +130,9 @@ namespace Silesian_Undergrounds.Engine.Utils
         public static List<SpecialItem> SceneSpecialItemsFactory(List<GameObject> specialItemsPositions, Scene.Scene scene, PlayerStatistic playerStatistic = null)
         {
             List<SpecialItem> specialItems = new List<SpecialItem>();
-            Random random = new Random();
+            Random random = TrueRng.GetInstance().GetRandom();
 
-            foreach(var obj in specialItemsPositions)
+            foreach (var obj in specialItemsPositions)
             {
                 SpecialItemEnum itemType = RandSpecialItem(random, playerStatistic);
 
@@ -146,7 +147,7 @@ namespace Silesian_Undergrounds.Engine.Utils
         public static List<PickableItem> SceneShopPickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene)
         {
             List<PickableItem> list = new List<PickableItem>();
-            Random random = new Random();
+            Random random = TrueRng.GetInstance().GetRandom();
             if (positionSources.Count != NUMBER_OF_SHOP_ITEMS_TYPES)
                 return list;
 
@@ -175,7 +176,7 @@ namespace Silesian_Undergrounds.Engine.Utils
         public static List<PickableItem> ScenePickableItemsFactory(List<GameObject> positionSources, Scene.Scene scene, PlayerStatistic playerStatistic = null, bool generateChest = true)
         {
             List<PickableItem> list = new List<PickableItem>();
-            Random random = new Random();
+            Random random = TrueRng.GetInstance().GetRandom();
 
             foreach (var source in positionSources)
             {
@@ -231,6 +232,35 @@ namespace Silesian_Undergrounds.Engine.Utils
                 default:
                     return new ChestsDropBooster(TextureMgr.Instance.GetTexture("Items/Special/chest-droop-booster"), position, size, (int)LayerEnum.SpecialItems, scene);
             }
+        }
+
+        public static GameObject GetRandomPickableItem(Vector2 position, Scene.Scene scene)
+        {
+            Random rng = TrueRng.GetInstance().GetRandom();
+            int chance = rng.Next(0, 100);
+            Vector2 size = new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize);
+
+
+            if (chance <= 44)
+            {
+                PickableEnum type = RandItem(rng);
+                switch(type)
+                {
+                    case PickableEnum.Ore:
+                        return OreFactory(rng, position, size, scene);
+                    case PickableEnum.Chest:
+                        return ChestFactory(position, size, scene);
+                    case PickableEnum.Food:
+                        return FoodFactory(rng, position, size, scene);
+                    case PickableEnum.Hearth:
+                        return HeartFactory(position, size, scene);
+                    case PickableEnum.Key:
+                    default:
+                        return KeyFactory(position, size, scene);
+                }
+            }
+
+            return null;
         }
 
         public static Ore OreFactory(Random rng, Vector2 position, Vector2 size, Scene.Scene scene)
