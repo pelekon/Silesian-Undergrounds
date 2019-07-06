@@ -166,7 +166,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             }
 
             // Call helpers if object is moving on path
-            if (isMovingOnPath)
+            if (isMovingOnPath && data.source != aggroArea)
             {
                 UpdateComparisonSide(data.collisionSides);
                 PathMovementCollisionHelper(data.collisionSides);
