@@ -144,7 +144,7 @@ Podczas swojej wędrówki gracz będzie musiał walczyć z różnymi przeciwnika
 ### Spis użytych ścieżek dzwiękowych:
 | Nazwa pliku w folderze Content  | Autor/Źródło |
 | ------------- | ------------- |
-| background_game.mp3  | [opengameart](https://opengameart.org/content/enchanted-tiki-86) | CC0 |
+| background_game.mp3 | [opengameart](https://opengameart.org/content/enchanted-tiki-86) | CC0 |
 | chest_opening.wav | [opengameart](https://opengameart.org/content/open-chest) | CC3 [spookymodem](https://opengameart.org/users/spookymodem) |
 | eating_sound.mp3 | [FreeSound](https://freesound.org/people/Ondruska/sounds/360686/) | CC0 |
 | item_picking.mp3 | [FreeSound](https://freesound.org/people/niamhd00145229/sounds/422709/) | CC0 |
