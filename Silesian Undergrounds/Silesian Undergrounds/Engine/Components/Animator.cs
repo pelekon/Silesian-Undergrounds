@@ -31,6 +31,8 @@ namespace Silesian_Undergrounds.Engine.Components
     private Texture2D orginalTexture;
     private Texture2D textureToDraw;
 
+    public bool isPlaying { get; private set; }
+
     public event EventHandler<string> OnAnimationEnd = delegate { };
 
     public Animator(GameObject parent)
@@ -66,6 +68,20 @@ namespace Silesian_Undergrounds.Engine.Components
       batch.Draw(texture: textureToDraw, destinationRectangle: Parent.Rectangle, sourceRectangle: textureToDraw.Bounds, scale: Parent.scale, color: Parent.color, layerDepth: layer);
     }
 
+    public void AddAndPlayAnimation(string name, List<Texture2D> textures, int animDuration, bool repeatable = false, bool useFirstFrameAsTexture = false, bool isPermanent = false)
+    {
+      this.AddAnimation(name, textures, animDuration, repeatable, useFirstFrameAsTexture, isPermanent);
+      this.PlayAnimation(name);
+    }
+
+    public void AddAndPlayAnimation(AnimationConfig animationConfig)
+    {
+      this.AddAnimation(animationConfig.Name, animationConfig.Textures, animationConfig.AnimDuration, animationConfig.Repeatable, animationConfig.UseFirstFrameAsTexture, animationConfig.IsPermanent);
+      this.PlayAnimation(animationConfig.Name);
+    }
+
+    public void AddAnimation(AnimationConfig animationConfig) =>
+      this.AddAnimation(animationConfig.Name, animationConfig.Textures, animationConfig.AnimDuration, animationConfig.Repeatable, animationConfig.UseFirstFrameAsTexture, animationConfig.IsPermanent);
     public void AddAnimation(string name, List<Texture2D> textures, int animDuration, bool repeatable = false, bool useFirstFrameAsTexture = false, bool isPermanent = false)
     {
       if (animations.ContainsKey(name))
@@ -141,6 +157,7 @@ namespace Silesian_Undergrounds.Engine.Components
       currentAnimation = animations[name];
       int max = currentAnimation.textures.Count;
       int time = 0;
+      this.isPlaying = true;
 
       // Schedule events to chage texture to draw based on animation frames
       for (int i = 0; i < max; ++i)
@@ -171,8 +188,8 @@ namespace Silesian_Undergrounds.Engine.Components
     // Stop playing current animation if there is any
     public void StopAnimation()
     {
+      isPlaying = false;
       eventsScheduler.ClearAll();
-      textureToDraw = orginalTexture;
       currentAnimation = new AnimationData();
     }
 
@@ -187,9 +204,8 @@ namespace Silesian_Undergrounds.Engine.Components
     {
       if (currentAnimation.setFirstFrameAsTexture && !currentAnimation.isRepeatable)
         textureToDraw = currentAnimation.textures[0];
-      else
-        textureToDraw = orginalTexture;
 
+      this.isPlaying = false;
       OnAnimationEnd.Invoke(this, currentAnimation.animationName);
 
       if (currentAnimation.isRepeatable)

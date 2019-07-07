@@ -19,6 +19,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
     ON_MOVE_LEFT,
     ON_HIT_LEFT,
     ON_HIT_RIGHT,
+    ON_PARTICLE_HIT,
+    ON_STAND,
   }
   internal static class AnimNames
   {
@@ -28,6 +30,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
     internal const string ON_MOVE_LEFT = "MoveLeft";
     internal const string ON_HIT_LEFT = "OnHitLeft";
     internal const string ON_HIT_RIGHT = "OnHitRight";
+    internal const string ON_PARTICLE_HIT = "OnHitByElement";
+    internal const string ON_STAND = "OnStand";
   }
 
   public class HostileBehaviour : IComponent
@@ -71,6 +75,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
     private Vector2 lastMoveForce;
     private PosComparisionSide posComparisionSide;
 
+    public AnimationConfig OnParticleHitAnimationConfig;
+
     public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, int moneyRew, float bonusMoveSpeed = 0.0f, float minDist = 1)
     {
       Parent = parent;
@@ -110,20 +116,30 @@ namespace Silesian_Undergrounds.Engine.Behaviours
       lastMoveForce = new Vector2();
     }
 
-    public void AddAnimation(AnimType animType, List<Texture2D> textures, int animDuration, bool repeatable = false, bool useFirstFrameAsTexture = false, bool isPermanent = false) => this.Animator.AddAnimation(this.animTypeToSting(animType), textures, animDuration, repeatable, useFirstFrameAsTexture, isPermanent);
-
-    private string animTypeToSting(AnimType animType)
+    public void AddAnimation(AnimType animType, List<Texture2D> textures, int animDuration, bool repeatable = false, bool useFirstFrameAsTexture = false, bool isPermanent = false)
     {
+      string animName = "";
       switch (animType)
       {
-        case AnimType.ON_ATTACK: return AnimNames.ON_ATTACK;
-        case AnimType.ON_DEATH: return AnimNames.ON_DEATH;
-        case AnimType.ON_MOVE_RIGHT: return AnimNames.ON_MOVE_RIGHT;
-        case AnimType.ON_MOVE_LEFT: return AnimNames.ON_MOVE_LEFT;
-        case AnimType.ON_HIT_LEFT: return AnimNames.ON_HIT_LEFT;
-        case AnimType.ON_HIT_RIGHT: return AnimNames.ON_HIT_RIGHT;
-        default: return "";
+        case AnimType.ON_ATTACK: { animName = AnimNames.ON_ATTACK; break; }
+        case AnimType.ON_DEATH: { animName = AnimNames.ON_DEATH; break; }
+        case AnimType.ON_MOVE_RIGHT: { animName = AnimNames.ON_MOVE_RIGHT; break; }
+        case AnimType.ON_MOVE_LEFT: { animName = AnimNames.ON_MOVE_LEFT; break; }
+        case AnimType.ON_HIT_LEFT: { animName = AnimNames.ON_HIT_LEFT; break; }
+        case AnimType.ON_HIT_RIGHT: { animName = AnimNames.ON_HIT_RIGHT; break; }
+        case AnimType.ON_PARTICLE_HIT:
+          {
+            this.OnParticleHitAnimationConfig = new AnimationConfig("OnHit", textures, animDuration, repeatable: false, useFirstFrameAsTexture: false, isPermanent: true);
+            return;
+          }
+        case AnimType.ON_STAND:
+          {
+            Animator.AddAndPlayAnimation(AnimNames.ON_STAND, textures, animDuration, repeatable: true, useFirstFrameAsTexture: true, isPermanent: false);
+            return;
+          }
+        default: { animName = ""; break; }
       }
+      this.Animator.AddAnimation(animName, textures, animDuration, repeatable, useFirstFrameAsTexture, isPermanent);
     }
 
     public void CleanUp()
@@ -156,6 +172,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
     {
       switch (animName)
       {
+        // case AnimNames.ON_HIT_LEFT:
+        // case AnimNames.ON_HIT_RIGHT:
         case AnimNames.ON_ATTACK:
           isMovementLockedByAnim = false;
           break;
@@ -184,10 +202,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
       }
       else if (this.currentDirection == MovementDirectionEnum.DIRECTION_LEFT || this.currentDirection == MovementDirectionEnum.DIRECTION_DOWN)
       {
+        // isMovementLockedByAnim = true; // set to true if the enemy should stop on a hit
         Animator.PlayAnimation(AnimNames.ON_HIT_LEFT);
       }
-      else if (this.currentDirection == MovementDirectionEnum.DIRECTION_RIGHT || this.currentDirection == MovementDirectionEnum.DIRECTION_UP)
+      else
       {
+        // isMovementLockedByAnim = true;
         Animator.PlayAnimation(AnimNames.ON_HIT_RIGHT);
       }
     }
