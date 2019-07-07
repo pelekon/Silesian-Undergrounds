@@ -54,6 +54,7 @@
     <Compile Include="Engine\Collisions\CollisionSystem.cs" />
     <Compile Include="Engine\Collisions\ICollider.cs" />
     <Compile Include="Engine\Collisions\RectCollisionSides.cs" />
+    <Compile Include="Engine\Common\AnimationConfig.cs" />
     <Compile Include="Engine\Common\GameObject.cs" />
     <Compile Include="Engine\Common\PickableItem.cs" />
     <Compile Include="Engine\Common\PlayerStatistic.cs" />
