@@ -163,8 +163,16 @@ namespace Silesian_Undergrounds.Engine.Utils
         //     define amount of spacing pixels between two separate textures in row
         //   spacingY:
         //     define amount of spacing pixels between two separate textures in column
-        public void LoadSingleTextureFromSpritescheet(string fileName, string name, int spritesheetRows, int spritesheetColumns, int row, int column, int spacingX = 0, int spacingY = 0)
-        {
+        public void LoadSingleTextureFromSpritescheet(
+            string fileName,
+            string name,
+            int spritesheetRows, 
+            int spritesheetColumns, 
+            int row, 
+            int column, 
+            int spacingX = 0, 
+            int spacingY = 0
+        ) {
             if (textures.ContainsKey(name))
                 return;
 

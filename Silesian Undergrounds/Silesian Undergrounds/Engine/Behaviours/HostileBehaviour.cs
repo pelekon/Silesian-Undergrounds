@@ -142,8 +142,9 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 Player plr = enemy as Player;
                 plr.AddMoney(moneyReward);
                 DropCombat();
+                bool isPlayingDeathAnimation = !Animator.PlayAnimation("Death");
 
-                if (!Animator.PlayAnimation("Death"))
+                if (isPlayingDeathAnimation)
                     Scene.SceneManager.GetCurrentScene().DeleteObject(Parent);
             }
         }
