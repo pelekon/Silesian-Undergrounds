@@ -87,6 +87,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private Vector2 lastMoveForce;
         private PosComparisionSide posComparisionSide;
         private LastPlayerSide lastPlayerSide;
+        private float playerDistOnPathStart;
 
         public AnimationConfig OnParticleHitAnimationConfig;
 
@@ -127,6 +128,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             waypath = null;
             collisionDerivedMoveForce = new Vector2();
             lastMoveForce = new Vector2();
+            playerDistOnPathStart = 0;
         }
 
         public void AddAnimation(AnimType animType, List<Texture2D> textures, int animDuration, bool repeatable = false, bool useFirstFrameAsTexture = false, bool isPermanent = false)
@@ -255,19 +257,54 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             IsInCombat = true;
             enemy = obj;
             enemyCollider = enemy.GetComponent<BoxCollider>();
+            lastPlayerSide = GetPlayerSide();
             CheckDistanceToEnemy();
             events.ScheduleEvent(time: 50, repeat: true, func: UpdateMovement);
             PrepareAttackEvents();
         }
 
-        private void SetPlayerSide()
+        private LastPlayerSide GetPlayerSide()
         {
+            LastPlayerSide side = new LastPlayerSide();
 
+            if (enemy.position.X < Parent.position.X)
+                side = LastPlayerSide.SIDE_WEST;
+            else
+                side = LastPlayerSide.SIDE_WEST;
+
+            if (enemy.position.Y < Parent.position.Y)
+            {
+                if (side == LastPlayerSide.SIDE_EAST)
+                    side = LastPlayerSide.SIDE_NORTH_EAST;
+                else
+                    side = LastPlayerSide.SIDE_NORTH_WEST;
+            }
+            else
+            {
+                if (side == LastPlayerSide.SIDE_EAST)
+                    side = LastPlayerSide.SIDE_SOUTH_EAST;
+                else
+                    side = LastPlayerSide.SIDE_SOUTH_WEST;
+            }
+
+            return side;
         }
 
         private void CheckUpdateOfWaypath()
         {
+            LastPlayerSide currentSide = GetPlayerSide();
 
+            if (lastPlayerSide != currentSide)
+            {
+                lastPlayerSide = currentSide;
+                OnWaypathEnd();
+             }
+            else
+            {
+                float dist = GetDistToEnemy();
+                if (playerDistOnPathStart < dist)
+                    OnWaypathEnd();
+            }
         }
 
         private void UpdateMovement()
@@ -279,9 +316,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 MoveWithoutPath();
             else
             {
+                CheckUpdateOfWaypath();
+
                 if (!isMovingOnPath)
                 {
                     isMovingOnPath = true;
+                    playerDistOnPathStart = GetDistToEnemy();
                     Pathfinding.PathfindingSystem.GetInstance().GetPathWithCallback(Parent.position, enemy.position, OnPathFound);
                 }
                 else
