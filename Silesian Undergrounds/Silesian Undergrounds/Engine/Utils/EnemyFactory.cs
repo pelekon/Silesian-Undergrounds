@@ -45,18 +45,23 @@ namespace Silesian_Undergrounds.Engine.Utils
           spacingX: 0,
           spacingY: 0
       );
-      Texture2D texture = TextureMgr.Instance.GetTexture("Monsters/Ghost");
-
-
-      GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
-      AttackPattern attackPattern = new AttackPattern();
-      AttackData attackData = new AttackData(true, 15, 30, 3000, AttackType.ATTACK_TYPE_MELEE, 5, 30);
+      var attackPattern = new AttackPattern();
+      var attackData = new AttackData(
+        isRepeatable: true,
+        minDamage: 15,
+        maxDamage: 30,
+        attackTimer: 3000,
+        type: AttackType.ATTACK_TYPE_MELEE,
+        minRange: 5,
+        maxRange: 30
+      );
       attackPattern.AddAttack(attackData);
 
+      Texture2D texture = TextureMgr.Instance.GetTexture("Monsters/Ghost");
+      var textureSize = new Vector2(48, 48);
+      var obj = new GameObject(texture, position, textureSize, layer: 6);
       obj.speed = 4.0f;
-
-      HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 150, 10);
-
+      
       TextureMgr.Instance.LoadAnimationFromSpritesheet(
         fileName: "Monsters/ghost",
         animName: "Monsters/Ghost_MoveRight",
@@ -110,14 +115,16 @@ namespace Silesian_Undergrounds.Engine.Utils
         loadByColumn: false
     );
 
-      behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Ghost_MoveRight"), 1000);
-      behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Ghost_MoveRight"), 1000);
 
-      behaviour.Animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("Monsters/Ghost_MoveLeft"), 1000);
-      behaviour.Animator.AddAnimation("MoveLeft", TextureMgr.Instance.GetAnimation("Monsters/Ghost_MoveLeft"), 1000);
+      var behaviour = new HostileBehaviour(obj, attackPattern, 150, 10);
+      behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Ghost_MoveRight"), animDuration: 1000);
+      behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Ghost_MoveRight"), animDuration: 1000);
 
-      behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Ghost_Attack"), 1000);
-      behaviour.Animator.AddAnimation("Death", TextureMgr.Instance.GetAnimation("Monsters/Ghost_dead"), 1000);
+      behaviour.Animator.AddAnimation("MoveDown", TextureMgr.Instance.GetAnimation("Monsters/Ghost_MoveLeft"), animDuration: 1000);
+      behaviour.Animator.AddAnimation("MoveLeft", TextureMgr.Instance.GetAnimation("Monsters/Ghost_MoveLeft"), animDuration: 1000);
+
+      behaviour.Animator.AddAnimation("Attack", TextureMgr.Instance.GetAnimation("Monsters/Ghost_Attack"), animDuration: 1000);
+      behaviour.Animator.AddAnimation("Death", TextureMgr.Instance.GetAnimation("Monsters/Ghost_dead"), animDuration: 1000);
 
       obj.AddComponent(behaviour);
       return obj;
@@ -125,11 +132,19 @@ namespace Silesian_Undergrounds.Engine.Utils
 
     public static GameObject RatFactory(Vector2 position)
     {
+      TextureMgr.Instance.LoadSingleTextureFromSpritescheet(
+          fileName: "Monsters/rat",
+          name: "Monsters/Rat",
+          spritesheetRows: 1,
+          spritesheetColumns: 52,
+          row: 0,
+          column: 0,
+          spacingX: 0,
+          spacingY: 0
+      );
+      Texture2D baseTexture = TextureMgr.Instance.GetTexture("Monsters/Rat");
 
-      TextureMgr.Instance.LoadSingleTextureFromSpritescheet("Monsters/rat", "Monsters/Rat", 1, 52, 0, 0, 0, 0);
-      Texture2D texture = TextureMgr.Instance.GetTexture("Monsters/Rat");
-
-      GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
+      GameObject obj = new GameObject(baseTexture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
       AttackPattern attackPattern = new AttackPattern();
       AttackData attackData = new AttackData(true, 8, 13, 2000, AttackType.ATTACK_TYPE_MELEE, 5, 20);
       attackPattern.AddAttack(attackData);
@@ -202,7 +217,16 @@ namespace Silesian_Undergrounds.Engine.Utils
 
     public static GameObject WormFactory(Vector2 position)
     {
-      TextureMgr.Instance.LoadSingleTextureFromSpritescheet("Monsters/48x48Worm_FullSheet", "Monsters/Worm", 4, 8, 0, 0, 0, 5);
+      TextureMgr.Instance.LoadSingleTextureFromSpritescheet(
+          fileName: "Monsters/48x48Worm_FullSheet",
+          name: "Monsters/Worm",
+          spritesheetRows: 4,
+          spritesheetColumns: 8,
+          row: 0,
+          column: 0,
+          spacingX: 0,
+          spacingY: 5
+      );
       Texture2D texture = TextureMgr.Instance.GetTexture("Monsters/Worm");
 
       GameObject obj = new GameObject(texture, position, new Vector2(ResolutionMgr.TileSize, ResolutionMgr.TileSize), 6);
@@ -215,10 +239,46 @@ namespace Silesian_Undergrounds.Engine.Utils
       HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 40, 1);
 
 
-      TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/worm_obrocony", "Monsters/Worm_MoveRight", 5, 8, 1, 6, 0, 5, false);
-      TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/worm_obrocony", "Monsters/Worm_Attack", 5, 8, 3, 6, 0, 5, false);
-      TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/worm_obrocony", "Monsters/Worm_MoveLeft", 5, 8, 4, 6, 0, 5, false);
-      TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/worm_obrocony", "Monsters/Worm_dead", 5, 8, 2, 6, 0, 5, false);
+      TextureMgr.Instance.LoadAnimationFromSpritesheet(fileName: "Monsters/worm_obrocony",
+         animName: "Monsters/Worm_MoveRight",
+         spritesheetRows: 5,
+         spritesheetColumns: 8,
+         index: 1,
+         amount: 6,
+         spacingX: 0,
+         spacingY: 5,
+         canAddToExisting: false
+      );
+      TextureMgr.Instance.LoadAnimationFromSpritesheet(fileName: "Monsters/worm_obrocony",
+         animName: "Monsters/Worm_Attack",
+         spritesheetRows: 5,
+         spritesheetColumns: 8,
+         index: 3,
+         amount: 6,
+         spacingX: 0,
+         spacingY: 5,
+         canAddToExisting: false
+      );
+      TextureMgr.Instance.LoadAnimationFromSpritesheet(fileName: "Monsters/worm_obrocony",
+          animName: "Monsters/Worm_MoveLeft",
+          spritesheetRows: 5,
+          spritesheetColumns: 8,
+          index: 4,
+          amount: 6,
+          spacingX: 0,
+          spacingY: 5,
+          canAddToExisting: false
+      );
+      TextureMgr.Instance.LoadAnimationFromSpritesheet(fileName: "Monsters/worm_obrocony",
+         animName: "Monsters/Worm_dead",
+         spritesheetRows: 5,
+         spritesheetColumns: 8,
+         index: 2,
+         amount: 8,
+         spacingX: 0,
+         spacingY: 5,
+         canAddToExisting: false
+      );
 
       behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Worm_MoveRight"), 1000);
       behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Worm_MoveRight"), 1000);
