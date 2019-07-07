@@ -586,6 +586,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
       {
         if (data.obj == enemy)
         {
+          AudioPlayerMgr.Instance.AddSoundEffect("Music/monster/damage_sound");
           Player plr = enemy as Player;
           plr.DecreaseLiveValue(dmg);
         }

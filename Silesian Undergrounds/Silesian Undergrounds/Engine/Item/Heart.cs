@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Config;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Item {
     public class Heart : PickableItem {
@@ -19,6 +20,7 @@ namespace Silesian_Undergrounds.Engine.Item {
             if (!(obj is Player) || isBuyable) return;
             var pl = (Player)obj;
             if (pl.MaxLiveValue <= pl.LiveValue) return;
+            AudioPlayerMgr.Instance.AddSoundEffect("Music/items/item_picking");
             pl.RefilLive(pl.PlayerStatistic.PickupDouble ? ConfigMgr.HeartConfig.LiveRegenerationValue  * 2 : ConfigMgr.HeartConfig.LiveRegenerationValue);
             this.scene.DeleteObject(this);
         }

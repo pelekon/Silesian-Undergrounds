@@ -9,7 +9,7 @@ using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.UI.Controls
 {
-    class Image : UIElement
+    public class Image : UIElement
     {
         public Image(float x, float y, float w, float h, Texture2D texture, UIElement parent) : base(x, y, w, h, texture, parent) { }
 

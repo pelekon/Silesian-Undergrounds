@@ -25,8 +25,10 @@ namespace Silesian_Undergrounds.Engine.Collisions
         public bool triggerOnly { get; private set; }
         public bool isAggroArea { get; private set; }
         public bool ignoreAggroArea { get; private set; }
+        private bool isPlayerCollider;
 
-        public BoxCollider(GameObject owner, float w, float h, float offsetX, float offsetY, bool trigger, bool ignoreTraps = false, bool ignoreAggroArea = true)
+        public BoxCollider(GameObject owner, float w, float h, float offsetX, float offsetY, bool trigger, bool ignoreTraps = false, bool ignoreAggroArea = true,
+            bool isPlayerCollider = false)
         {
             Parent = owner;
             triggerOnly = trigger;
@@ -40,6 +42,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
             canIgnoreTraps = ignoreTraps;
             isAggroArea = false;
             this.ignoreAggroArea = ignoreAggroArea;
+            this.isPlayerCollider = isPlayerCollider;
         }
 
         public void RegisterSelf()
@@ -158,7 +161,7 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
         private bool CheckConditions(ICollider collider)
         {
-            if (collider.isAggroArea && ignoreAggroArea)
+            if (collider.isAggroArea && ignoreAggroArea && !isPlayerCollider) // big hackfix :/
                 return true;
 
             if (canIgnoreTraps && collider.Parent is Traps.Spike)

@@ -33,6 +33,19 @@ namespace Silesian_Undergrounds.Engine.Utils
       return list;
     }
 
+    public static GameObject GetRandomEnemy(Vector2 position)
+    {
+      Random rng = TrueRng.GetInstance().GetRandom();
+      int chance = rng.Next(0, 100);
+
+      if (chance >= 70)
+        return GhotsFactory(position);
+      else if (chance >= 45)
+        return RatFactory(position);
+
+      return WormFactory(position);
+    }
+
     public static GameObject GhotsFactory(Vector2 position)
     {
       TextureMgr.Instance.LoadSingleTextureFromSpritescheet(
@@ -310,8 +323,8 @@ namespace Silesian_Undergrounds.Engine.Utils
       );
 
       behaviour.AddAnimation(AnimType.ON_STAND, TextureMgr.Instance.GetAnimation("Monsters/Rat_Stand"), animDuration: 1000);
-      
-      
+
+
       behaviour.AddAnimation(AnimType.ON_MOVE_RIGHT, TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveRight"), animDuration: 1000);
 
       behaviour.AddAnimation(AnimType.ON_MOVE_LEFT, TextureMgr.Instance.GetAnimation("Monsters/Rat_MoveLeft"), animDuration: 1000);

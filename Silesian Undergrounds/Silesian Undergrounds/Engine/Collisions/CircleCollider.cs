@@ -75,6 +75,32 @@ namespace Silesian_Undergrounds.Engine.Collisions
             CollisionSystem.RemoveColliderFromSystem(this);
         }
 
+        public void CheckCollisions()
+        {
+            RectCollisionSides collisionSides = new RectCollisionSides();
+            Vector2 moveForce = new Vector2(0, 0);
+
+            foreach (var collider in CollisionSystem.Colliders)
+            {
+                // ignore self and other colliders of parent object
+                if (collider == this || Parent == collider.Parent)
+                    continue;
+
+                bool isColliding = false;
+
+                if (collider is BoxCollider)
+                    isColliding = IsCollidingWith(collider as BoxCollider, ref collisionSides, moveForce);
+                else
+                    isColliding = IsCollidingWith(collider as CircleCollider);
+
+                if (isColliding)
+                {
+                    collider.Parent.NotifyCollision(Parent, collider, new RectCollisionSides());
+                    Parent.NotifyCollision(collider.Parent, this, collisionSides);
+                }
+            }
+        }
+
         public bool IsCollidingWith(CircleCollider collider)
         {
             if (CheckConditions(collider))

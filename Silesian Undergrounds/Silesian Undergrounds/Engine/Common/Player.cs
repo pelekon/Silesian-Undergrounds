@@ -42,7 +42,8 @@ namespace Silesian_Undergrounds.Engine.Common
             TextureMgr.Instance.LoadSingleTextureFromSpritescheet("minerCharacter", "PlayerTexture", 13, 6, 0, 4, textureSpacingX, textureSpacingY);
             texture = TextureMgr.Instance.GetTexture("PlayerTexture");
 
-            collider = new BoxCollider(this, ConfigMgr.PlayerConfig.PlayerColliderBoxWidth, ConfigMgr.PlayerConfig.PlayerColliderBoxHeight, -2, -4, false);
+            collider = new BoxCollider(this, ConfigMgr.PlayerConfig.PlayerColliderBoxWidth, ConfigMgr.PlayerConfig.PlayerColliderBoxHeight, -2, -4, false,
+                false, true, true);
             AddComponent(collider);
             statistics = globalPlayerStatistic;
             behaviour = new PlayerBehaviour(this);
@@ -92,11 +93,12 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 HandleHungerDecrasing(deltaTime);
             }
-
+        
             sDirection *= speed;
             sDirection *= deltaTime;
 
             collider.Move(sDirection);
+
 
             base.Update(gameTime);
         }
@@ -139,7 +141,6 @@ namespace Silesian_Undergrounds.Engine.Common
 
             return true;
         }
-
 
         public void RefilLive(int liveValueToRefil)
         {

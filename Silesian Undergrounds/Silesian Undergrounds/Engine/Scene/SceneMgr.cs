@@ -196,7 +196,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
                 foreach (var room in roomGenerator.result)
                 {
-                    var list = room.BuildGameObjectsList();
+                    var list = room.BuildGameObjectsList(scene);
                     foreach (var obj in list)
                         scene.AddObject(obj);
 
