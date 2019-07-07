@@ -21,10 +21,12 @@ namespace Silesian_Undergrounds.Engine.Collisions
         private float Height;
         public float OffsetX { get; private set; }
         public float OffsetY { get; private set; }
+        public bool canIgnoreTraps { get; private set; }
+        public bool triggerOnly { get; private set; }
+        public bool isAggroArea { get; private set; }
+        public bool ignoreAggroArea { get; private set; }
 
-        private bool triggerOnly;
-
-        public BoxCollider(GameObject owner, float w, float h, float offsetX, float offsetY, bool trigger)
+        public BoxCollider(GameObject owner, float w, float h, float offsetX, float offsetY, bool trigger, bool ignoreTraps = false, bool ignoreAggroArea = true)
         {
             Parent = owner;
             triggerOnly = trigger;
@@ -34,6 +36,10 @@ namespace Silesian_Undergrounds.Engine.Collisions
             OffsetY = offsetY;
             CalculatePosition();
             boxTexture = TextureMgr.Instance.GetTexture("debug_box");
+
+            canIgnoreTraps = ignoreTraps;
+            isAggroArea = false;
+            this.ignoreAggroArea = ignoreAggroArea;
         }
 
         public void RegisterSelf()
@@ -50,6 +56,11 @@ namespace Silesian_Undergrounds.Engine.Collisions
         {
             Parent = null;
             boxTexture = null;
+        }
+
+        public void MarkAsAggroArea()
+        {
+            isAggroArea = true;
         }
 
         public void Update(GameTime gameTime) { }
@@ -70,14 +81,14 @@ namespace Silesian_Undergrounds.Engine.Collisions
                 bool isColliding = false;
 
                 if (collider is BoxCollider)
-                    isColliding = IsCollidingWith(collider as BoxCollider, ref collisionSides);
+                    isColliding = IsCollidingWith(collider as BoxCollider, ref collisionSides, moveForce);
                 else
                     isColliding = IsCollidingWith(collider as CircleCollider);
 
                 if (isColliding)
                 {
-                    collider.Parent.NotifyCollision(Parent, collider);
-                    Parent.NotifyCollision(collider.Parent, this);
+                    collider.Parent.NotifyCollision(Parent, collider, new RectCollisionSides());
+                    Parent.NotifyCollision(collider.Parent, this, collisionSides);
                 }
             }
 
@@ -87,6 +98,9 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
         public bool IsCollidingWith(CircleCollider collider)
         {
+            if (CheckConditions(collider))
+                return false;
+
             // look for closest point in rectangle of collider
             float posX = MathHelper.Clamp(collider.Position.X, Rect.Left, Rect.Right);
             float posY = MathHelper.Clamp(collider.Position.Y, Rect.Top, Rect.Bottom);
@@ -100,35 +114,14 @@ namespace Silesian_Undergrounds.Engine.Collisions
             return false;
         }
 
-        public bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides collisionSides)
+        public bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides collisionSides, Vector2 moveForce)
         {
+            if (CheckConditions(collider))
+                return false;
+
             bool isColliding = false;
 
-            if (TouchingBottom(collider) && Rect.Intersects(collider.Rect))
-            {
-                isColliding = true;
-
-                if (!collider.triggerOnly)
-                    collisionSides = collisionSides | RectCollisionSides.SIDE_BOTTOM;
-            }
-
-            if (TouchingLeftSide(collider) && Rect.Intersects(collider.Rect))
-            {
-                isColliding = true;
-
-                if (!collider.triggerOnly)
-                    collisionSides = collisionSides | RectCollisionSides.SIDE_LEFT;
-            }
-
-            if (TouchingRightSide(collider) && Rect.Intersects(collider.Rect))
-            {
-                isColliding = true;
-
-                if (!collider.triggerOnly)
-                    collisionSides = collisionSides | RectCollisionSides.SIDE_RIGHT;
-            }
-
-            if (TouchingTop(collider) && Rect.Intersects(collider.Rect))
+            if (TouchingBottom(collider, moveForce))
             {
                 isColliding = true;
 
@@ -136,36 +129,71 @@ namespace Silesian_Undergrounds.Engine.Collisions
                     collisionSides = collisionSides | RectCollisionSides.SIDE_UP;
             }
 
+            if (TouchingLeftSide(collider, moveForce))
+            {
+                isColliding = true;
+
+                if (!collider.triggerOnly)
+                    collisionSides = collisionSides | RectCollisionSides.SIDE_RIGHT;
+            }
+
+            if (TouchingRightSide(collider, moveForce))
+            {
+                isColliding = true;
+
+                if (!collider.triggerOnly)
+                    collisionSides = collisionSides | RectCollisionSides.SIDE_LEFT;
+            }
+
+            if (TouchingTop(collider, moveForce))
+            {
+                isColliding = true;
+
+                if (!collider.triggerOnly)
+                    collisionSides = collisionSides | RectCollisionSides.SIDE_BOTTOM;
+            }
+
             return isColliding;
         }
 
-        private bool TouchingLeftSide(BoxCollider collider)
+        private bool CheckConditions(ICollider collider)
         {
-            return Rect.Right > collider.Rect.Left &&
+            if (collider.isAggroArea && ignoreAggroArea)
+                return true;
+
+            if (canIgnoreTraps && collider.Parent is Traps.Spike)
+                return true;
+
+            return false;
+        }
+
+        private bool TouchingLeftSide(BoxCollider collider, Vector2 moveForce)
+        {
+            return Rect.Right + moveForce.X > collider.Rect.Left &&
               Rect.Left < collider.Rect.Left &&
               Rect.Bottom > collider.Rect.Top &&
               Rect.Top < collider.Rect.Bottom;
         }
 
-        private bool TouchingRightSide(BoxCollider collider)
+        private bool TouchingRightSide(BoxCollider collider, Vector2 moveForce)
         {
-            return Rect.Left < collider.Rect.Right &&
+            return Rect.Left + moveForce.X < collider.Rect.Right &&
               Rect.Right > collider.Rect.Right &&
               Rect.Bottom > collider.Rect.Top &&
               Rect.Top < collider.Rect.Bottom;
         }
 
-        private bool TouchingTop(BoxCollider collider)
+        private bool TouchingTop(BoxCollider collider, Vector2 moveForce)
         {
-            return Rect.Bottom > collider.Rect.Top &&
+            return Rect.Bottom + moveForce.Y > collider.Rect.Top &&
               Rect.Top < collider.Rect.Top &&
               Rect.Right > collider.Rect.Left &&
               Rect.Left < collider.Rect.Right;
         }
 
-        private bool TouchingBottom(BoxCollider collider)
+        private bool TouchingBottom(BoxCollider collider, Vector2 moveForce)
         {
-            return Rect.Top < collider.Rect.Bottom &&
+            return Rect.Top + moveForce.Y < collider.Rect.Bottom &&
               Rect.Bottom > collider.Rect.Bottom &&
               Rect.Right > collider.Rect.Left &&
               Rect.Left < collider.Rect.Right;
@@ -173,14 +201,14 @@ namespace Silesian_Undergrounds.Engine.Collisions
 
         private void AdjustMoveForceAndMoveParent(Vector2 force, RectCollisionSides collisionSides)
         {
-            if (force.X < 0 && ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0))
+            if (force.X > 0 && ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0))
                 force.X = 0;
-            else if (force.X > 0 && ((collisionSides & RectCollisionSides.SIDE_LEFT) != 0))
+            else if (force.X < 0 && ((collisionSides & RectCollisionSides.SIDE_LEFT) != 0))
                 force.X = 0;
 
-            if (force.Y < 0 && ((collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0))
+            if (force.Y > 0 && ((collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0))
                 force.Y = 0;
-            else if (force.Y > 0 && ((collisionSides & RectCollisionSides.SIDE_UP) != 0))
+            else if (force.Y < 0 && ((collisionSides & RectCollisionSides.SIDE_UP) != 0))
                 force.Y = 0;
 
             Parent.position += force;

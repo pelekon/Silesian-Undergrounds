@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Enum;
-using Silesian_Undergrounds.Engine.Item;
+using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Config;
 
 namespace Silesian_Undergrounds.Engine.Utils
@@ -48,7 +48,7 @@ namespace Silesian_Undergrounds.Engine.Utils
                 default:
                     #if DEBUG
                     Console.WriteLine("Not registered GroundTexture Type in GroundTextureFactory!");
-#endif
+                    #endif
                     return null;
             }
 

@@ -185,7 +185,11 @@ namespace Silesian_Undergrounds.Engine.Components
             OnAnimationEnd.Invoke(this, currentAnimation.animationName);
 
             if (currentAnimation.isRepeatable)
-                PlayAnimation(currentAnimation.animationName);
+            {
+                string animName = currentAnimation.animationName;
+                currentAnimation = new AnimationData();
+                PlayAnimation(animName);
+            }
             else
                 currentAnimation = new AnimationData();
         }

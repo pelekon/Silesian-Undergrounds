@@ -77,8 +77,7 @@ namespace Silesian_Undergrounds.Engine.Config
         [JsonProperty("range-of-spawn")]
         public int RangeOfSpawn { get; set; } = 1;
     }
-    public class PickableConfig
-    {
+    public class PickableConfig {
         [JsonProperty("heart")]
         public HeartConfig Heart { get; set; } = new HeartConfig();
         [JsonProperty("attack-booster")]
@@ -90,7 +89,9 @@ namespace Silesian_Undergrounds.Engine.Config
         [JsonProperty("movement-booster")]
         public MovementBoosterConfig MovementBoosterConfig { get; set; } = new MovementBoosterConfig();
         [JsonProperty("ore")]
-        public OreConfig OreConfig{ get; set; } = new OreConfig();
+        public OreConfig OreConfig { get; set; } = new OreConfig();
+        [JsonProperty("food")]
+        public FoodConfig FoodConfig { get; set; } = new FoodConfig();
     }
 
     public class HeartConfig
@@ -136,5 +137,13 @@ namespace Silesian_Undergrounds.Engine.Config
 
         [JsonProperty("gold-occurrence-percentage")]
         public int GoldOccurrencePercentage { get; set; } = 10;
+    }
+    public class FoodConfig
+    {
+        [JsonProperty("meat-occurrence-percentage")]
+        public int CoalOccurrencePercentage { get; set; } = 65;
+
+        [JsonProperty("steak-occurrence-percentage")]
+        public int SilverOccurrencePercentage { get; set; } = 35;
     }
 }

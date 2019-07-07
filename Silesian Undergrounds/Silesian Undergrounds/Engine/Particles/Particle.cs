@@ -35,7 +35,7 @@ namespace Silesian_Undergrounds.Engine.Particles
             this.emiter = emiter;
             startingPos = new Vector2(startPos.X, startPos.Y);
 
-            collider = new BoxCollider(this, size.X, size.Y, 0, 0, true);
+            collider = new BoxCollider(this, size.X, size.Y, 0, 0, true, true);
             AddComponent(collider);
 
             isWaitingForDelete = false;
@@ -72,12 +72,12 @@ namespace Silesian_Undergrounds.Engine.Particles
             }
         }
 
-        public override void NotifyCollision(GameObject gameobject, ICollider source)
+        public override void NotifyCollision(GameObject gameobject, ICollider source, RectCollisionSides collisionSides)
         {
             if (gameobject == emiter || isWaitingForDelete)
                 return;
             Animator.PlayAnimation("OnHit");
-            OnParticleHit.Invoke(this, new CollisionNotifyData(gameobject, source));
+            OnParticleHit.Invoke(this, new CollisionNotifyData(gameobject, source, collisionSides));
             OnParticleTravelEnd.Invoke(this, null);
             ScheduleDelete();
         }

@@ -84,7 +84,6 @@ namespace Silesian_Undergrounds.Engine.Common
         public override void Update(GameTime gameTime)
         {
             sDirection = Vector2.Zero;
-
             HandleInput(Keyboard.GetState());
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -230,6 +229,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public void IncreaseAttackValueBy(float attackValueToIncrease)
         {
             this.statistics.AttackSpeed += attackValueToIncrease;
+            behaviour.ChangeAttackSpeed(this.statistics.AttackSpeed);
         }
 
         public int MaxHungerValue
