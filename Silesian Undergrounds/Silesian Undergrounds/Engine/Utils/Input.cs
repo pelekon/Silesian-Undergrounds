@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
-namespace Silesian_Undergrounds.Engine.Utils {
-    public static class Input {
+namespace Silesian_Undergrounds.Engine.Utils
+{
+    public static class Input
+    {
 
         private static KeyboardState keyboardState = Keyboard.GetState();
         private static KeyboardState lastKeyboardState;

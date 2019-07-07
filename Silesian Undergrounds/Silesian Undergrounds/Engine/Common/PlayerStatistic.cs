@@ -1,7 +1,9 @@
 ﻿using Silesian_Undergrounds.Engine.Config;
 
-namespace Silesian_Undergrounds.Engine.Common {
-    public class PlayerStatistic : StatisticHolder {
+namespace Silesian_Undergrounds.Engine.Common
+{
+    public class PlayerStatistic : StatisticHolder
+    {
         public PlayerStatistic(PlayerConfig playerConfig) : base(health: playerConfig.Health, maxHealth: playerConfig.MaxHealth, movementSpeed: playerConfig.MovementSpeed, attackSpeed: playerConfig.AttackSpeed, baseDamage: playerConfig.Damage)
         {
             Money = playerConfig.MoneyAmount;
