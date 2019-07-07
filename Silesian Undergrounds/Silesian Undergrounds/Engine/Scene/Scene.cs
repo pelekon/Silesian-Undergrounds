@@ -33,7 +33,7 @@ namespace Silesian_Undergrounds.Engine.Scene
         public bool isEnd { get; private set; }
         public bool lastScene { get; private set; }
         private bool isBoosterPicked;
-        private const float shaderDelayInSeconds = 50;
+        private const float shaderDelayInSeconds = 5;
         private float remainingShaderDelayInSeconds = shaderDelayInSeconds;
         private readonly bool canUnPause;
 

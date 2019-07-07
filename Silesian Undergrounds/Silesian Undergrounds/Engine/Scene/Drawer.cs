@@ -67,7 +67,7 @@ namespace Silesian_Undergrounds.Engine.Scene
 
             public static void DrawBoosterPickupShader(Action<SpriteBatch, GameTime> drawer, Matrix? transformMatrix = null)
             {
-                _boosterPickupShader.Parameters["gameTime"].SetValue(_gameTime.TotalGameTime.Seconds);
+                _boosterPickupShader.Parameters["gameTime"].SetValue(_gameTime.TotalGameTime.Milliseconds);
                 _boosterPickupShader.Parameters["rainbow"].SetValue(_rainbow);
                 _spriteBatch.Begin(transformMatrix: transformMatrix, effect: _boosterPickupShader);
                 drawer.Invoke(_spriteBatch, _gameTime);
