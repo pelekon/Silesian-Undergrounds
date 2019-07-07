@@ -117,12 +117,25 @@ namespace Silesian_Undergrounds.Engine.Utils
 
     TextureMgr.Instance.LoadAnimationFromSpritesheet(
         fileName: "Monsters/ghost",
-        animName: "Monsters/Ghost_hit",
+        animName: "Monsters/Ghost_hitRight",
         spritesheetRows: 1,
         spritesheetColumns: 90,
         index: 0,
         amount: 4,
         skip: 39,
+        spacingX: 0,
+        spacingY: 4,
+        canAddToExisting: false,
+        loadByColumn: false
+    );
+    TextureMgr.Instance.LoadAnimationFromSpritesheet(
+        fileName: "Monsters/ghost",
+        animName: "Monsters/Ghost_hitLeft",
+        spritesheetRows: 1,
+        spritesheetColumns: 90,
+        index: 0,
+        amount: 4,
+        skip: 70,
         spacingX: 0,
         spacingY: 4,
         canAddToExisting: false,
@@ -138,8 +151,8 @@ namespace Silesian_Undergrounds.Engine.Utils
       behaviour.AddAnimation(AnimType.ON_DEATH, TextureMgr.Instance.GetAnimation("Monsters/Ghost_Attack"), animDuration: 1000);
       behaviour.AddAnimation(AnimType.ON_DEATH, TextureMgr.Instance.GetAnimation("Monsters/Ghost_dead"), animDuration: 1000);
       
-      behaviour.AddAnimation(AnimType.ON_HIT_LEFT, TextureMgr.Instance.GetAnimation("Monsters/Ghost_hit"), animDuration: 500, isPermanent: true);
-      behaviour.AddAnimation(AnimType.ON_HIT_RIGHT, TextureMgr.Instance.GetAnimation("Monsters/Ghost_hit"), animDuration: 500, isPermanent: true);
+      behaviour.AddAnimation(AnimType.ON_HIT_LEFT, TextureMgr.Instance.GetAnimation("Monsters/Ghost_hitLeft"), animDuration: 500, isPermanent: true);
+      behaviour.AddAnimation(AnimType.ON_HIT_RIGHT, TextureMgr.Instance.GetAnimation("Monsters/Ghost_hitRight"), animDuration: 500, isPermanent: true);
 
       obj.AddComponent(behaviour);
       return obj;
@@ -218,11 +231,23 @@ namespace Silesian_Undergrounds.Engine.Utils
       );
       TextureMgr.Instance.LoadAnimationFromSpritesheet(
           fileName: "Monsters/rat",
-          animName: "Monsters/Rat_OnHit",
+          animName: "Monsters/Rat_OnHitRight",
           spritesheetRows: 1,
           spritesheetColumns: 52,
           index: 0, amount: 2,
           skip: 14,
+          spacingX: 0,
+          spacingY: 0,
+          canAddToExisting: false,
+          loadByColumn: false
+      );
+      TextureMgr.Instance.LoadAnimationFromSpritesheet(
+          fileName: "Monsters/rat",
+          animName: "Monsters/Rat_OnHitLeft",
+          spritesheetRows: 1,
+          spritesheetColumns: 52,
+          index: 0, amount: 2,
+          skip: 40,
           spacingX: 0,
           spacingY: 0,
           canAddToExisting: false,
@@ -236,7 +261,8 @@ namespace Silesian_Undergrounds.Engine.Utils
       behaviour.AddAnimation(AnimType.ON_ATTACK, TextureMgr.Instance.GetAnimation("Monsters/Rat_Attack"), animDuration: 1000);
       behaviour.AddAnimation(AnimType.ON_DEATH, TextureMgr.Instance.GetAnimation("Monsters/Rat_dead"), animDuration: 1000);
      
-      behaviour.AddAnimation(AnimType.ON_HIT_LEFT, TextureMgr.Instance.GetAnimation("Monsters/Rat_OnHit"), animDuration: 500, isPermanent: true);
+      behaviour.AddAnimation(AnimType.ON_HIT_LEFT, TextureMgr.Instance.GetAnimation("Monsters/Rat_OnHitLeft"), animDuration: 500, isPermanent: true);
+      behaviour.AddAnimation(AnimType.ON_HIT_RIGHT, TextureMgr.Instance.GetAnimation("Monsters/Rat_OnHitRight"), animDuration: 500, isPermanent: true);
 
       obj.AddComponent(behaviour);
       return obj;
