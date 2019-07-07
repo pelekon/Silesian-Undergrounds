@@ -14,12 +14,20 @@ namespace Silesian_Undergrounds.Engine.Behaviours
   public enum AnimType
   {
     ON_DEATH,
-    ON_MOVE_RIGHT,
-    ON_MOVE_UP,
-    ON_MOVE_DOWN,
-    ON_MOVE_LEFT,
     ON_ATTACK,
-    ON_HIT,
+    ON_MOVE_RIGHT,
+    ON_MOVE_LEFT,
+    ON_HIT_LEFT,
+    ON_HIT_RIGHT,
+  }
+  internal static class AnimNames
+  {
+    internal const string ON_DEATH = "Death";
+    internal const string ON_ATTACK = "Attack";
+    internal const string ON_MOVE_RIGHT = "MoveRight";
+    internal const string ON_MOVE_LEFT = "MoveLeft";
+    internal const string ON_HIT_LEFT = "OnHitLeft";
+    internal const string ON_HIT_RIGHT = "OnHitRight";
   }
 
   public class HostileBehaviour : IComponent
@@ -108,13 +116,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
     {
       switch (animType)
       {
-        case AnimType.ON_ATTACK: return "Attack";
-        case AnimType.ON_DEATH: return "Death";
-        case AnimType.ON_MOVE_RIGHT: return "MoveRight";
-        case AnimType.ON_MOVE_UP: return "MoveUp";
-        case AnimType.ON_MOVE_DOWN: return "MoveDown";
-        case AnimType.ON_MOVE_LEFT: return "MoveLeft";
-        case AnimType.ON_HIT: return "OnHit";
+        case AnimType.ON_ATTACK: return AnimNames.ON_ATTACK;
+        case AnimType.ON_DEATH: return AnimNames.ON_DEATH;
+        case AnimType.ON_MOVE_RIGHT: return AnimNames.ON_MOVE_RIGHT;
+        case AnimType.ON_MOVE_LEFT: return AnimNames.ON_MOVE_LEFT;
+        case AnimType.ON_HIT_LEFT: return AnimNames.ON_HIT_LEFT;
+        case AnimType.ON_HIT_RIGHT: return AnimNames.ON_HIT_RIGHT;
         default: return "";
       }
     }
@@ -149,10 +156,10 @@ namespace Silesian_Undergrounds.Engine.Behaviours
     {
       switch (animName)
       {
-        case "Attack":
+        case AnimNames.ON_ATTACK:
           isMovementLockedByAnim = false;
           break;
-        case "Death":
+        case AnimNames.ON_DEATH:
           Scene.SceneManager.GetCurrentScene().DeleteObject(Parent);
           break;
       }
@@ -170,12 +177,19 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         Player plr = enemy as Player;
         plr.AddMoney(moneyReward);
         DropCombat();
-        bool isPlayingDeathAnimation = !Animator.PlayAnimation("Death");
+        bool isPlayingDeathAnimation = !Animator.PlayAnimation(AnimNames.ON_DEATH);
 
         if (isPlayingDeathAnimation)
           Scene.SceneManager.GetCurrentScene().DeleteObject(Parent);
       }
-      else Animator.PlayAnimation("OnHit");
+      else if (this.currentDirection == MovementDirectionEnum.DIRECTION_LEFT || this.currentDirection == MovementDirectionEnum.DIRECTION_DOWN)
+      {
+        Animator.PlayAnimation(AnimNames.ON_HIT_LEFT);
+      }
+      else if (this.currentDirection == MovementDirectionEnum.DIRECTION_RIGHT || this.currentDirection == MovementDirectionEnum.DIRECTION_UP)
+      {
+        Animator.PlayAnimation(AnimNames.ON_HIT_RIGHT);
+      }
     }
 
     private void DropCombat()
@@ -437,25 +451,25 @@ namespace Silesian_Undergrounds.Engine.Behaviours
     {
       if (moveForce.X == -1) // LEFT anim
       {
-        Animator.PlayAnimation("MoveLeft");
+        Animator.PlayAnimation(AnimNames.ON_MOVE_LEFT);
         previousDirection = currentDirection;
         currentDirection = MovementDirectionEnum.DIRECTION_LEFT;
       }
       else if (moveForce.X == 1) // RIGHT anim
       {
-        Animator.PlayAnimation("MoveRight");
+        Animator.PlayAnimation(AnimNames.ON_MOVE_RIGHT);
         previousDirection = currentDirection;
         currentDirection = MovementDirectionEnum.DIRECTION_RIGHT;
       }
       else if (moveForce.Y == -1) // UP anim
       {
-        Animator.PlayAnimation("MoveUp");
+        Animator.PlayAnimation(AnimNames.ON_MOVE_RIGHT);
         previousDirection = currentDirection;
         currentDirection = MovementDirectionEnum.DIRECTION_UP;
       }
       else if (moveForce.Y == 1) // DOWN anim
       {
-        Animator.PlayAnimation("MoveDown");
+        Animator.PlayAnimation(AnimNames.ON_MOVE_LEFT);
         previousDirection = currentDirection;
         currentDirection = MovementDirectionEnum.DIRECTION_DOWN;
       }
@@ -524,7 +538,7 @@ namespace Silesian_Undergrounds.Engine.Behaviours
           plr.DecreaseLiveValue(dmgValue);
         }
 
-        if (attack.type == AttackType.ATTACK_TYPE_MELEE && Animator.PlayAnimation("Attack"))
+        if (attack.type == AttackType.ATTACK_TYPE_MELEE && Animator.PlayAnimation(AnimNames.ON_ATTACK))
           isMovementLockedByAnim = true;
       });
     }
