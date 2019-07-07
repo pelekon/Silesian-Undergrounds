@@ -51,10 +51,58 @@ namespace Silesian_Undergrounds.Engine.Utils
 
       HostileBehaviour behaviour = new HostileBehaviour(obj, attackPattern, 150, 10);
 
-      TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_MoveRight", 7, 8, 1, 8, 0, 0, false);
-      TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_Attack", 7, 8, 3, 8, 0, 0, false);
-      TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_MoveLeft", 7, 8, 6, 8, 0, 0, false);
-      TextureMgr.Instance.LoadAnimationFromSpritesheet("Monsters/minotaur_obrocony", "Monsters/Minotaur_dead", 7, 8, 5, 3, 0, 0, false);
+      TextureMgr.Instance.LoadAnimationFromSpritesheet(
+        fileName: "Monsters/minotaur_obrocony",
+        animName: "Monsters/Minotaur_MoveRight",
+        spritesheetRows: 7,
+        spritesheetColumns: 8,
+        index: 1,
+        amount: 8,
+        skip: 0,
+        spacingX: 0,
+        spacingY: 0,
+        canAddToExisting: false,
+        loadByColumn: false
+      );
+      TextureMgr.Instance.LoadAnimationFromSpritesheet(
+        fileName: "Monsters/minotaur_obrocony",
+        animName: "Monsters/Minotaur_Attack",
+        spritesheetRows: 7,
+        spritesheetColumns: 8,
+        index: 3,
+        amount: 8,
+        skip: 0,
+        spacingX: 0,
+        spacingY: 0,
+        canAddToExisting: false,
+        loadByColumn: false
+      );
+      TextureMgr.Instance.LoadAnimationFromSpritesheet(
+        fileName: "Monsters/minotaur_obrocony",
+        animName: "Monsters/Minotaur_MoveLeft",
+        spritesheetRows: 7,
+        spritesheetColumns: 8,
+        index: 6,
+        amount: 8,
+        skip: 0,
+        spacingX: 0,
+        spacingY: 0,
+        canAddToExisting: false,
+        loadByColumn: false
+    );
+      TextureMgr.Instance.LoadAnimationFromSpritesheet(
+        fileName: "Monsters/minotaur_obrocony",
+        animName: "Monsters/Minotaur_dead",
+        spritesheetRows: 7,
+        spritesheetColumns: 8,
+        index: 5,
+        amount: 3,
+        skip: 0,
+        spacingX: 0,
+        spacingY: 0,
+        canAddToExisting: false,
+        loadByColumn: false
+    );
 
       behaviour.Animator.AddAnimation("MoveRight", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
       behaviour.Animator.AddAnimation("MoveUp", TextureMgr.Instance.GetAnimation("Monsters/Minotaur_MoveRight"), 1000);
