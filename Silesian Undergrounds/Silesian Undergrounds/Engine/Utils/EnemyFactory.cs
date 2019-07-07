@@ -133,7 +133,7 @@ namespace Silesian_Undergrounds.Engine.Utils
         spritesheetRows: 1,
         spritesheetColumns: 90,
         index: 0,
-        amount: 6,
+        amount: 7,
         skip: 24,
         spacingX: 0,
         spacingY: 0,
@@ -189,7 +189,6 @@ namespace Silesian_Undergrounds.Engine.Utils
 
       behaviour.AddAnimation(AnimType.ON_MOVE_LEFT, TextureMgr.Instance.GetAnimation("Monsters/Ghost_MoveLeft"), animDuration: 1000);
 
-      behaviour.AddAnimation(AnimType.ON_DEATH, TextureMgr.Instance.GetAnimation("Monsters/Ghost_Attack"), animDuration: 1000);
       behaviour.AddAnimation(AnimType.ON_DEATH, TextureMgr.Instance.GetAnimation("Monsters/Ghost_dead"), animDuration: 1000);
 
       behaviour.AddAnimation(AnimType.ON_HIT_LEFT, TextureMgr.Instance.GetAnimation("Monsters/Ghost_hitLeft"), animDuration: 500, isPermanent: true);
