@@ -61,7 +61,7 @@ Podczas swojej wędrówki gracz będzie musiał walczyć z różnymi przeciwnika
 ### Spis użytych grafik:
 
 | Nazwa pliku w folderze Content  | Autor/Źródło | Licencja/Autor |
-| ------------- | ------------- |
+| ------------- | ------------- | ------------- |
 | background.png  | [opengameart](https://opengameart.org/content/pixelart-menu-naturery-hand-shooting-some-green-stuff) | CC0 |
 | bottom-left.png  | Kamil Klyta  | - |
 | bottom-right.png  | Kamil Klyta  | - |
@@ -140,10 +140,11 @@ Podczas swojej wędrówki gracz będzie musiał walczyć z różnymi przeciwnika
 | ghost.png | 8bit games assets from Humble Bumble | - |
 | rat.png | 8bit games assets from Humble Bumble | - |
 | worm_obrocony.png | 8bit games assets from Humble Bumble | - |
+| minotaur_obrocony.png | 8bit games assets from Humble Bumble | - |
 
 ### Spis użytych ścieżek dzwiękowych:
 | Nazwa pliku w folderze Content  | Autor/Źródło |
-| ------------- | ------------- |
+| ------------- | ------------- | ------------- |
 | background_game.mp3 | [opengameart](https://opengameart.org/content/enchanted-tiki-86) | CC0 |
 | chest_opening.wav | [opengameart](https://opengameart.org/content/open-chest) | CC3 [spookymodem](https://opengameart.org/users/spookymodem) |
 | eating_sound.mp3 | [FreeSound](https://freesound.org/people/Ondruska/sounds/360686/) | CC0 |
