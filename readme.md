@@ -1,12 +1,16 @@
+About:
+Silesian Undergrounds is game written in C# with help of Monogame framework. Project was created in order to pass university laboratories from subject "Basics of programming of 2d games" in group of 4 people(all authors mentioned in "Autorzy" section).
+All assets downloaded from internet and used in game are listed in "Spis użytych grafik" and "Spis użytych ścieżek dzwiękowych" sections of this file.
+
 # Game Design Document
 
 ## Tytuł: Silesian undergrounds
 
 ## Autorzy:
-- Bartłomiej Bukowiecki
-- Kamil Klyta
-- Tomasz Kot
-- Bartłomiej Wloczyk
+- Bartłomiej Bukowiecki (me)
+- Kamil Klyta (https://github.com/gonuit)
+- Tomasz Kot (https://github.com/TomaszKot11)
+- Bartłomiej Wloczyk (https://github.com/Paxon96)
 
 ## High concept
 
