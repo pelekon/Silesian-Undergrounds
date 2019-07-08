@@ -7,7 +7,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E8652A93-3D09-4CD4-89AC-F630F61A9E20}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Silesian_Undergrounds</RootNamespace>
     <AssemblyName>Silesian Undergrounds</AssemblyName>
@@ -54,25 +54,28 @@
     <Compile Include="Engine\Collisions\CollisionSystem.cs" />
     <Compile Include="Engine\Collisions\ICollider.cs" />
     <Compile Include="Engine\Collisions\RectCollisionSides.cs" />
-    <Compile Include="Engine\Common\AnimatedGameObject.cs" />
+    <Compile Include="Engine\Common\AnimationConfig.cs" />
     <Compile Include="Engine\Common\GameObject.cs" />
     <Compile Include="Engine\Common\PickableItem.cs" />
     <Compile Include="Engine\Common\PlayerStatistic.cs" />
     <Compile Include="Engine\Common\PropertyChangedArgs.cs" />
     <Compile Include="Engine\Common\SpecialItem.cs" />
     <Compile Include="Engine\Common\StatisticHolder.cs" />
-    <Compile Include="Engine\Common\Unit.cs" />
     <Compile Include="Engine\Collisions\CollisionNotifyData.cs" />
     <Compile Include="Engine\Components\Animator.cs" />
     <Compile Include="Engine\Components\IComponent.cs" />
+    <Compile Include="Engine\Config\Config.cs" />
+    <Compile Include="Engine\Config\ConfigMgr.cs" />
+    <Compile Include="Engine\Config\Constants.cs" />
     <Compile Include="Engine\Enum\EndGameEnum.cs" />
     <Compile Include="Engine\Enum\ItemPricesEnum.cs" />
     <Compile Include="Engine\Enum\GroundEnum.cs" />
     <Compile Include="Engine\Enum\LayerEnum.cs" />
     <Compile Include="Engine\Enum\MovementDirectionEnum.cs" />
+    <Compile Include="Engine\Enum\SceneStatusEnum.cs" />
     <Compile Include="Engine\Enum\SpecialItemEnum.cs" />
     <Compile Include="Engine\Enum\TrapsDamageEnum.cs" />
-    <Compile Include="Engine\Item\Ground.cs" />
+    <Compile Include="Engine\Scene\Ground.cs" />
     <Compile Include="Engine\Item\Heart.cs" />
     <Compile Include="Engine\Item\Specials\AttackBooster.cs" />
     <Compile Include="Engine\Item\Specials\ChestsDropBooster.cs" />
@@ -82,6 +85,9 @@
     <Compile Include="Engine\Item\Specials\MovementBooster.cs" />
     <Compile Include="Engine\Item\Specials\PickupDouble.cs" />
     <Compile Include="Engine\Particles\Particle.cs" />
+    <Compile Include="Engine\Pathfinding\PathfindingSystem.cs" />
+    <Compile Include="Engine\Pathfinding\SceneGridCornerPivots.cs" />
+    <Compile Include="Engine\Pathfinding\SceneGridCornersWorker.cs" />
     <Compile Include="Engine\Scene\RandomRooms\GeneratedRoom.cs" />
     <Compile Include="Engine\Scene\RandomRooms\RoomEntryPassage.cs" />
     <Compile Include="Engine\Scene\RandomRooms\RoomGenerator.cs" />
@@ -89,10 +95,14 @@
     <Compile Include="Engine\Scene\RandomRooms\RoomSplitSide.cs" />
     <Compile Include="Engine\Traps\Spike.cs" />
     <Compile Include="Engine\UI\Controls\Label.cs" />
+    <Compile Include="Engine\UI\UIShaderedBackgroundArea.cs" />
+    <Compile Include="Engine\Utils\AudioPlayerMgr.cs" />
     <Compile Include="Engine\Utils\EnemyFactory.cs" />
     <Compile Include="Engine\Utils\FontMgr.cs" />
     <Compile Include="Engine\Utils\GameObjectFactory.cs" />
     <Compile Include="Engine\Utils\GroundTextureFactory.cs" />
+    <Compile Include="Engine\Utils\Input.cs" />
+    <Compile Include="Engine\Utils\SoundMgr.cs" />
     <Compile Include="Engine\Utils\TextureMgr.cs" />
     <Compile Include="Engine\Enum\FoodEnum.cs" />
     <Compile Include="Engine\Enum\OreEnum.cs" />
@@ -115,15 +125,19 @@
     <Compile Include="Engine\Scene\Drawer.cs" />
     <Compile Include="Engine\Utils\TimedEvent.cs" />
     <Compile Include="Engine\Utils\TimedEventsScheduler.cs" />
+    <Compile Include="Engine\Utils\TrueRng.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Engine\Utils\ResolutionMgr.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\ControlsDisplayView.cs" />
+    <Compile Include="Views\LoadingView.cs" />
     <Compile Include="Views\PauseView.cs" />
     <Compile Include="Views\PlayerDieView.cs" />
     <Compile Include="Views\InGameUI.cs" />
     <Compile Include="Views\MainMenuView.cs" />
     <Compile Include="Views\PlayerWinView.cs" />
+    <Compile Include="Views\StartView.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic.Compatibility" />
@@ -191,12 +205,18 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
+      <Version>12.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="RoyT.AStar">
+      <Version>2.1.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\camera.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Data\drop2.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

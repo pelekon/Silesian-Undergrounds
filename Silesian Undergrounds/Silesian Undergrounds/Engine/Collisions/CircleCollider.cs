@@ -24,7 +24,12 @@ namespace Silesian_Undergrounds.Engine.Collisions
         public float Radius { get; private set; }
         private Texture2D circleTexture;
 
-        public CircleCollider(GameObject parent, float r, float offsetX, float offsetY)
+        public bool triggerOnly { get; private set; }
+        public bool canIgnoreTraps { get; private set; }
+        public bool isAggroArea { get; private set; }
+        public bool ignoreAggroArea { get; private set; }
+
+        public CircleCollider(GameObject parent, float r, float offsetX, float offsetY, bool trigger, bool ignoreTraps = true, bool ignoreAggroArea = true)
         {
             Parent = parent;
             OffsetX = offsetX;
@@ -32,11 +37,21 @@ namespace Silesian_Undergrounds.Engine.Collisions
             Radius = r;
             CalculatePosition();
             circleTexture = TextureMgr.Instance.GetTexture("debug_circle");
+
+            triggerOnly = trigger;
+            canIgnoreTraps = ignoreTraps;
+            isAggroArea = false;
+            this.ignoreAggroArea = ignoreAggroArea;
         }
 
         public void CleanUp()
         {
             Parent = null;
+        }
+
+        public void MarkAsAggroArea()
+        {
+            isAggroArea = true;
         }
 
         public void Draw(SpriteBatch batch)
@@ -60,8 +75,37 @@ namespace Silesian_Undergrounds.Engine.Collisions
             CollisionSystem.RemoveColliderFromSystem(this);
         }
 
+        public void CheckCollisions()
+        {
+            RectCollisionSides collisionSides = new RectCollisionSides();
+            Vector2 moveForce = new Vector2(0, 0);
+
+            foreach (var collider in CollisionSystem.Colliders)
+            {
+                // ignore self and other colliders of parent object
+                if (collider == this || Parent == collider.Parent)
+                    continue;
+
+                bool isColliding = false;
+
+                if (collider is BoxCollider)
+                    isColliding = IsCollidingWith(collider as BoxCollider, ref collisionSides, moveForce);
+                else
+                    isColliding = IsCollidingWith(collider as CircleCollider);
+
+                if (isColliding)
+                {
+                    collider.Parent.NotifyCollision(Parent, collider, new RectCollisionSides());
+                    Parent.NotifyCollision(collider.Parent, this, collisionSides);
+                }
+            }
+        }
+
         public bool IsCollidingWith(CircleCollider collider)
         {
+            if (CheckConditions(collider))
+                return false;
+
             float totalRadius = Radius + collider.Radius;
             float totalDiff = Vector2.Distance(Position, collider.Position);
 
@@ -71,8 +115,11 @@ namespace Silesian_Undergrounds.Engine.Collisions
             return false;
         }
 
-        public bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides sides)
+        public bool IsCollidingWith(BoxCollider collider, ref RectCollisionSides sides, Vector2 moveForce)
         {
+            if (CheckConditions(collider))
+                return false;
+
             // look for closest point in rectangle of collider
             float posX = MathHelper.Clamp(Position.X, collider.Rect.Left, collider.Rect.Right);
             float posY = MathHelper.Clamp(Position.Y, collider.Rect.Top, collider.Rect.Bottom);
@@ -81,6 +128,17 @@ namespace Silesian_Undergrounds.Engine.Collisions
             float dist = Vector2.Distance(Position, pointOnRect);
 
             if (dist <= Radius)
+                return true;
+
+            return false;
+        }
+
+        private bool CheckConditions(ICollider collider)
+        {
+            if (collider.isAggroArea && ignoreAggroArea)
+                return true;
+
+            if (canIgnoreTraps && collider.Parent is Traps.Spike)
                 return true;
 
             return false;

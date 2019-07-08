@@ -6,8 +6,9 @@ using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Enum;
 
-namespace Silesian_Undergrounds.Engine.Scene {
-    class Tile : GameObject
+namespace Silesian_Undergrounds.Engine.Scene
+{
+    public class Tile : GameObject
     {
         public Tile(Texture2D texture2D, Vector2 position, Vector2 size, int layer) : base(texture2D, position, size, layer)
         {

@@ -7,11 +7,55 @@ using Silesian_Undergrounds.Engine.Components;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Utils;
 using Silesian_Undergrounds.Engine.Enum;
+using Silesian_Undergrounds.Engine.Particles;
 
 namespace Silesian_Undergrounds.Engine.Behaviours
 {
+    public enum AnimType
+    {
+        ON_DEATH,
+        ON_ATTACK,
+        ON_MOVE_RIGHT,
+        ON_MOVE_LEFT,
+        ON_HIT_LEFT,
+        ON_HIT_RIGHT,
+        ON_PARTICLE_HIT,
+        ON_STAND,
+    }
+    internal static class AnimNames
+    {
+        internal const string ON_DEATH = "Death";
+        internal const string ON_ATTACK = "Attack";
+        internal const string ON_MOVE_RIGHT = "MoveRight";
+        internal const string ON_MOVE_LEFT = "MoveLeft";
+        internal const string ON_HIT_LEFT = "OnHitLeft";
+        internal const string ON_HIT_RIGHT = "OnHitRight";
+        internal const string ON_PARTICLE_HIT = "OnHitByElement";
+        internal const string ON_STAND = "OnStand";
+    }
+
     public class HostileBehaviour : IComponent
     {
+        private enum PosComparisionSide
+        {
+            CORNER_LEFT,
+            CORNER_RIGHT,
+            CORNER_BOTTOM_LEFT,
+            CORNER_BOTTOM_RIGHT,
+        }
+
+        private enum LastPlayerSide
+        {
+            SIDE_NORTH,
+            SIDE_NORTH_WEST,
+            SIDE_NORTH_EAST,
+            SIDE_WEST,
+            SIDE_EAST,
+            SIDE_SOUTH,
+            SIDE_SOUTH_WEST,
+            SIDE_SOUTH_EAST,
+        }
+
         // Component inherited
         public Vector2 Position { get; set; }
         public Rectangle Rect { get; set; }
@@ -32,11 +76,20 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         private int health;
         private int maxHealth;
         private int moneyReward;
-        public Animator Animator { get; private set; }
+        private Animator Animator { get; set; }
         private MovementDirectionEnum currentDirection;
         private MovementDirectionEnum previousDirection;
-        private bool needStandAnimUpdate;
         private bool isMovementLockedByAnim;
+        private bool isMovingOnPath;
+        private int currentPathNode;
+        private List<Vector2> waypath;
+        private Vector2 collisionDerivedMoveForce;
+        private Vector2 lastMoveForce;
+        private PosComparisionSide posComparisionSide;
+        private LastPlayerSide lastPlayerSide;
+        private float playerDistOnPathStart;
+
+        public AnimationConfig OnParticleHitAnimationConfig;
 
         public HostileBehaviour(GameObject parent, AttackPattern pattern, int health, int moneyRew, float bonusMoveSpeed = 0.0f, float minDist = 1)
         {
@@ -50,7 +103,8 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             MinDistToEnemy = minDist;
             BonusMoveSpeed = bonusMoveSpeed;
 
-            aggroArea = new CircleCollider(Parent, 70, 0, 0);
+            aggroArea = new CircleCollider(Parent, 70, 0, 0, true);
+            aggroArea.MarkAsAggroArea();
             collider = new BoxCollider(Parent, 70, 70, 0, 0, false);
             Parent.AddComponent(collider);
             Parent.AddComponent(aggroArea);
@@ -66,10 +120,41 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             Animator = new Animator(Parent);
             Parent.AddComponent(Animator);
             Animator.OnAnimationEnd += OnAnimationEnd;
-            
+
             Parent.ChangeDrawAbility(false);
-            needStandAnimUpdate = false;
             isMovementLockedByAnim = false;
+            isMovingOnPath = false;
+            currentPathNode = 0;
+            waypath = null;
+            collisionDerivedMoveForce = new Vector2();
+            lastMoveForce = new Vector2();
+            playerDistOnPathStart = 0;
+        }
+
+        public void AddAnimation(AnimType animType, List<Texture2D> textures, int animDuration, bool repeatable = false, bool useFirstFrameAsTexture = false, bool isPermanent = false)
+        {
+            string animName = "";
+            switch (animType)
+            {
+                case AnimType.ON_ATTACK: { animName = AnimNames.ON_ATTACK; break; }
+                case AnimType.ON_DEATH: { animName = AnimNames.ON_DEATH; break; }
+                case AnimType.ON_MOVE_RIGHT: { animName = AnimNames.ON_MOVE_RIGHT; break; }
+                case AnimType.ON_MOVE_LEFT: { animName = AnimNames.ON_MOVE_LEFT; break; }
+                case AnimType.ON_HIT_LEFT: { animName = AnimNames.ON_HIT_LEFT; break; }
+                case AnimType.ON_HIT_RIGHT: { animName = AnimNames.ON_HIT_RIGHT; break; }
+                case AnimType.ON_PARTICLE_HIT:
+                {
+                    this.OnParticleHitAnimationConfig = new AnimationConfig("OnHit", textures, animDuration, repeatable: false, useFirstFrameAsTexture: false, isPermanent: true);
+                    return;
+                }
+                case AnimType.ON_STAND:
+                {
+                    Animator.AddAndPlayAnimation(AnimNames.ON_STAND, textures, animDuration, repeatable: true, useFirstFrameAsTexture: true, isPermanent: false);
+                    return;
+                }
+                default: { animName = ""; break; }
+            }
+            this.Animator.AddAnimation(animName, textures, animDuration, repeatable, useFirstFrameAsTexture, isPermanent);
         }
 
         public void CleanUp()
@@ -102,10 +187,12 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         {
             switch (animName)
             {
-                case "Attack":
+                // case AnimNames.ON_HIT_LEFT:
+                // case AnimNames.ON_HIT_RIGHT:
+                case AnimNames.ON_ATTACK:
                     isMovementLockedByAnim = false;
                     break;
-                case "Death":
+                case AnimNames.ON_DEATH:
                     Scene.SceneManager.GetCurrentScene().DeleteObject(Parent);
                     break;
             }
@@ -123,9 +210,20 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 Player plr = enemy as Player;
                 plr.AddMoney(moneyReward);
                 DropCombat();
+                bool isPlayingDeathAnimation = !Animator.PlayAnimation(AnimNames.ON_DEATH);
 
-                if (!Animator.PlayAnimation("Death"))
+                if (isPlayingDeathAnimation)
                     Scene.SceneManager.GetCurrentScene().DeleteObject(Parent);
+            }
+            else if (this.currentDirection == MovementDirectionEnum.DIRECTION_LEFT || this.currentDirection == MovementDirectionEnum.DIRECTION_DOWN)
+            {
+                // isMovementLockedByAnim = true; // set to true if the enemy should stop on a hit
+                Animator.PlayAnimation(AnimNames.ON_HIT_LEFT);
+            }
+            else
+            {
+                // isMovementLockedByAnim = true;
+                Animator.PlayAnimation(AnimNames.ON_HIT_RIGHT);
             }
         }
 
@@ -145,6 +243,13 @@ namespace Silesian_Undergrounds.Engine.Behaviours
                 if (data.obj is Player)
                     StartCombatWith(data.obj);
             }
+
+            // Call helpers if object is moving on path
+            if (isMovingOnPath)
+            {
+                UpdateComparisonSide(data.collisionSides);
+                PathMovementCollisionHelper(data.collisionSides);
+            }
         }
 
         public void StartCombatWith(GameObject obj)
@@ -152,9 +257,54 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             IsInCombat = true;
             enemy = obj;
             enemyCollider = enemy.GetComponent<BoxCollider>();
+            lastPlayerSide = GetPlayerSide();
             CheckDistanceToEnemy();
-            events.ScheduleEvent(50, true, UpdateMovement);
+            events.ScheduleEvent(time: 50, repeat: true, func: UpdateMovement);
             PrepareAttackEvents();
+        }
+
+        private LastPlayerSide GetPlayerSide()
+        {
+            LastPlayerSide side = new LastPlayerSide();
+
+            if (enemy.position.X < Parent.position.X)
+                side = LastPlayerSide.SIDE_WEST;
+            else
+                side = LastPlayerSide.SIDE_WEST;
+
+            if (enemy.position.Y < Parent.position.Y)
+            {
+                if (side == LastPlayerSide.SIDE_EAST)
+                    side = LastPlayerSide.SIDE_NORTH_EAST;
+                else
+                    side = LastPlayerSide.SIDE_NORTH_WEST;
+            }
+            else
+            {
+                if (side == LastPlayerSide.SIDE_EAST)
+                    side = LastPlayerSide.SIDE_SOUTH_EAST;
+                else
+                    side = LastPlayerSide.SIDE_SOUTH_WEST;
+            }
+
+            return side;
+        }
+
+        private void CheckUpdateOfWaypath()
+        {
+            LastPlayerSide currentSide = GetPlayerSide();
+
+            if (lastPlayerSide != currentSide)
+            {
+                lastPlayerSide = currentSide;
+                OnWaypathEnd();
+             }
+            else
+            {
+                float dist = GetDistToEnemy();
+                if (playerDistOnPathStart < dist)
+                    OnWaypathEnd();
+            }
         }
 
         private void UpdateMovement()
@@ -162,50 +312,249 @@ namespace Silesian_Undergrounds.Engine.Behaviours
             if (!IsMoveNeeded || isMovementLockedByAnim)
                 return;
 
-            Vector2 moveForce = new Vector2(0, 0);
-
-            if (enemy.position.X < Parent.position.X)
-                moveForce.X = -1;
+            if (!isMovingOnPath && !CheckMovePathCond())
+                MoveWithoutPath();
             else
+            {
+                CheckUpdateOfWaypath();
+
+                if (!isMovingOnPath)
+                {
+                    isMovingOnPath = true;
+                    playerDistOnPathStart = GetDistToEnemy();
+                    Pathfinding.PathfindingSystem.GetInstance().GetPathWithCallback(Parent.position, enemy.position, OnPathFound);
+                }
+                else
+                    MoveOnPath();
+            }
+        }
+
+        private bool CheckMovePathCond()
+        {
+            double dist = Vector2.Distance(Parent.position, enemy.position);
+
+            if (dist > ResolutionMgr.TileSize)
+                return true;
+
+            return false;
+        }
+
+        private void MoveWithoutPath()
+        {
+            Vector2 moveForce = new Vector2(0, 0);
+            float distanceX = Math.Abs(enemy.position.X - Parent.position.X);
+            float distanceY = Math.Abs(enemy.position.Y - Parent.position.Y);
+            if (distanceX <= 1)
+                Parent.position.X = enemy.position.X;
+            else if (enemy.position.X < Parent.position.X)
+                moveForce.X = -1;
+            else if (enemy.position.X > Parent.position.X)
+                moveForce.X = 1;
+            else moveForce.X = 0;
+
+            if (distanceY <= 1)
+                Parent.position.Y = enemy.position.Y;
+            else if (enemy.position.Y < Parent.position.Y)
+                moveForce.Y = -1;
+            else if (enemy.position.Y > Parent.position.Y)
+                moveForce.Y = 1;
+            else
+                moveForce.Y = 0;
+
+            DoMovementByForce(moveForce);
+        }
+
+        private void MoveOnPath()
+        {
+            if (waypath == null)
+                return;
+
+            Vector2 currentNode = waypath[currentPathNode];
+            Vector2 moveForce = new Vector2(0, 0);
+            Vector2 sourcePos = GetSourcePosByComparisionSide();
+
+            if (currentNode.X + 1 < sourcePos.X)
+                moveForce.X = -1;
+            else if (currentNode.X - 1 > sourcePos.X)
                 moveForce.X = 1;
 
-            if (enemy.position.Y < Parent.position.Y)
+            if (currentNode.Y + 1 < sourcePos.Y)
                 moveForce.Y = -1;
-            else
+            else if (currentNode.Y - 1 > sourcePos.Y)
                 moveForce.Y = 1;
 
+            if (Parent.Rectangle.Contains(currentNode))
+            {
+                moveForce.X = 0;
+                moveForce.Y = 0;
+            }
+
+            if (collisionDerivedMoveForce.X != 0 || collisionDerivedMoveForce.Y != 0)
+            {
+                moveForce.X = collisionDerivedMoveForce.X;
+                moveForce.Y = collisionDerivedMoveForce.Y;
+
+                collisionDerivedMoveForce.X = 0;
+                collisionDerivedMoveForce.Y = 0;
+            }
+
+            if (moveForce.X == 0 && moveForce.Y == 0)
+            {
+                ++currentPathNode;
+
+                if (currentPathNode == waypath.Count)
+                {
+                    OnWaypathEnd();
+                    return;
+                }
+            }
+
+            lastMoveForce.X = moveForce.X;
+            lastMoveForce.Y = moveForce.Y;
+
+            DoMovementByForce(moveForce);
+        }
+
+        private void DoMovementByForce(Vector2 moveForce)
+        {
             SelectMovementAnimation(moveForce);
 
             moveForce *= (Parent.speed + BonusMoveSpeed);
             collider.Move(moveForce);
         }
 
+        // Callback function executed by Pathfinding System after found path during async task
+        // and forward path to object which scheduled job of finding path
+        private void OnPathFound(List<Vector2> path)
+        {
+            waypath = path;
+            OnWaypathStart();
+        }
+
+        private void OnWaypathStart()
+        {
+
+        }
+
+        private void OnWaypathEnd()
+        {
+            isMovingOnPath = false;
+            currentPathNode = 0;
+            waypath = null;
+            posComparisionSide = PosComparisionSide.CORNER_LEFT;
+        }
+
+        // Function to add additional force while object is moving on path
+        // this is one of 2 methods to prevent object get stuck on corner tile.
+        // It use movementForce used during previous movement update(saved in lastMoveForce variable)
+        // to deduct amount of additional force
+        private void PathMovementCollisionHelper(RectCollisionSides collisionSides)
+        {
+            if ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0 ||
+                (collisionSides & RectCollisionSides.SIDE_LEFT) != 0)
+            {
+                if (lastMoveForce.Y > 0.0f)
+                    collisionDerivedMoveForce.Y = 0.8f;
+                else if (lastMoveForce.Y <= 0.0f)
+                    collisionDerivedMoveForce.Y = -0.8f;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_UP) != 0 ||
+                (collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0)
+            {
+                if (lastMoveForce.X > 0.0f)
+                    collisionDerivedMoveForce.X = 0.8f;
+                else if (lastMoveForce.X <= 0.0f)
+                    collisionDerivedMoveForce.X = -0.8f;
+            }
+        }
+
+        // Function called on collision while object is moving on path.
+        // It use last movement force to deduct which corner of object rectangle
+        // should get used in order to calculate movement force in current movement update
+        private void UpdateComparisonSide(RectCollisionSides collisionSides)
+        {
+            if ((collisionSides & RectCollisionSides.SIDE_RIGHT) != 0)
+            {
+                if (lastMoveForce.Y < 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_RIGHT;
+                else if (lastMoveForce.Y > 0 && posComparisionSide != PosComparisionSide.CORNER_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_RIGHT;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_LEFT) != 0)
+            {
+                if (lastMoveForce.Y < 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_LEFT;
+                else if (lastMoveForce.Y > 0 && posComparisionSide != PosComparisionSide.CORNER_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_LEFT;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_UP) != 0)
+            {
+                if (lastMoveForce.X < 0 && posComparisionSide != PosComparisionSide.CORNER_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_RIGHT;
+                else if (lastMoveForce.X > 0 && posComparisionSide != PosComparisionSide.CORNER_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_LEFT;
+            }
+
+            if ((collisionSides & RectCollisionSides.SIDE_BOTTOM) != 0)
+            {
+                if (lastMoveForce.X < 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_RIGHT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_RIGHT;
+                else if (lastMoveForce.X > 0 && posComparisionSide != PosComparisionSide.CORNER_BOTTOM_LEFT)
+                    posComparisionSide = PosComparisionSide.CORNER_BOTTOM_LEFT;
+            }
+        }
+
+        // Returns point used to calculate movement force based on currently
+        // currently set state of posComparisionSide variable
+        private Vector2 GetSourcePosByComparisionSide()
+        {
+            Vector2 pos = new Vector2(Parent.position.X, Parent.position.Y);
+
+            switch (posComparisionSide)
+            {
+                case PosComparisionSide.CORNER_RIGHT:
+                    pos.X += Parent.Rectangle.Width;
+                    break;
+                case PosComparisionSide.CORNER_BOTTOM_LEFT:
+                    pos.Y += Parent.Rectangle.Height;
+                    break;
+                case PosComparisionSide.CORNER_BOTTOM_RIGHT:
+                    pos.X += Parent.Rectangle.Width;
+                    pos.Y += Parent.Rectangle.Height;
+                    break;
+            }
+
+            return pos;
+        }
+
         private void SelectMovementAnimation(Vector2 moveForce)
         {
-            if (moveForce.Y == -1) // UP anim
+            if (moveForce.X == -1) // LEFT anim
             {
-                Animator.PlayAnimation("MoveUp");
-                previousDirection = currentDirection;
-                currentDirection = MovementDirectionEnum.DIRECTION_UP;
-
-            }
-            else if (moveForce.Y == 1) // DOWN anim
-            {
-                Animator.PlayAnimation("MoveDown");
-                previousDirection = currentDirection;
-                currentDirection = MovementDirectionEnum.DIRECTION_DOWN;
-            }
-            else if (moveForce.X == -1) // LEFT anim
-            {
-                Animator.PlayAnimation("MoveLeft");
+                Animator.PlayAnimation(AnimNames.ON_MOVE_LEFT);
                 previousDirection = currentDirection;
                 currentDirection = MovementDirectionEnum.DIRECTION_LEFT;
             }
             else if (moveForce.X == 1) // RIGHT anim
             {
-                Animator.PlayAnimation("MoveRight");
+                Animator.PlayAnimation(AnimNames.ON_MOVE_RIGHT);
                 previousDirection = currentDirection;
                 currentDirection = MovementDirectionEnum.DIRECTION_RIGHT;
+            }
+            else if (moveForce.Y == -1) // UP anim
+            {
+                Animator.PlayAnimation(AnimNames.ON_MOVE_RIGHT);
+                previousDirection = currentDirection;
+                currentDirection = MovementDirectionEnum.DIRECTION_UP;
+            }
+            else if (moveForce.Y == 1) // DOWN anim
+            {
+                Animator.PlayAnimation(AnimNames.ON_MOVE_LEFT);
+                previousDirection = currentDirection;
+                currentDirection = MovementDirectionEnum.DIRECTION_DOWN;
             }
         }
 
@@ -242,30 +591,69 @@ namespace Silesian_Undergrounds.Engine.Behaviours
         {
             events.ScheduleEvent(attack.AttackTimer, attack.IsRepeatable, () =>
             {
-                // Additional check just for safety
-                if (enemy == null)
+          // Additional check just for safety
+          if (enemy == null)
                     return;
 
-                // Do not handle melee attack while unit is during movement to enemy
-                if (attack.type == AttackType.ATTACK_TYPE_MELEE && IsMoveNeeded)
-                    return;
-
-                // Check distance between unit and enemy in order to validate attack with its data
-                float dist = GetDistToEnemy();
-                // validate attack
-                if (attack.MinRange > 0.0f && dist < attack.MinRange)
+          // Check distance between unit and enemy in order to validate attack with its data
+          float dist = GetDistToEnemy();
+          // validate attack
+          if (attack.MinRange > 0.0f && dist < attack.MinRange)
                     return;
                 if (attack.MaxRange < dist)
                     return;
 
                 Random rng = new Random();
                 int dmgValue = rng.Next(attack.MinDamage, attack.MaxDamage);
-                Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
-                plr.DecreaseLiveValue(dmgValue);
 
-                if (attack.type == AttackType.ATTACK_TYPE_MELEE && Animator.PlayAnimation("Attack"))
+                if (attack.type == AttackType.ATTACK_TYPE_RANGED && attack.particleTextureName != null)
+                {
+                    Particle particle = new Particle(attack.particleTextureName, 0.5f, 0.5f, collider.Position, CalculateParticleForce(), 1.5f, 20.0f, Parent);
+                    if (attack.particleAnim != null)
+                        particle.Animator.AddAnimation("OnHit", attack.particleAnim, animDuration: 1000);
+
+                    SetRangedAttackDmg(dmgValue, particle);
+                    particle.Launch();
+                }
+                else
+                {
+                    Player plr = enemy as Player; // TODO: Change it to more flex code via some kind of system
+              plr.DecreaseLiveValue(dmgValue);
+                }
+
+                if (attack.type == AttackType.ATTACK_TYPE_MELEE && Animator.PlayAnimation(AnimNames.ON_ATTACK))
                     isMovementLockedByAnim = true;
             });
+        }
+
+        private Vector2 CalculateParticleForce()
+        {
+            Vector2 vector = new Vector2();
+
+            if (enemy.position.X > Parent.position.X)
+                vector.X = 1;
+            else if (enemy.position.X < Parent.position.X)
+                vector.X = -1;
+
+            if (enemy.position.Y > Parent.position.Y)
+                vector.Y = 1;
+            else if (enemy.position.Y < Parent.position.Y)
+                vector.Y = -1;
+
+            return vector;
+        }
+
+        private void SetRangedAttackDmg(int dmg, Particle particle)
+        {
+            particle.OnParticleHit += (sender, data) =>
+            {
+                if (data.obj == enemy)
+                {
+                    AudioPlayerMgr.Instance.AddSoundEffect("Music/monster/damage_sound");
+                    Player plr = enemy as Player;
+                    plr.DecreaseLiveValue(dmg);
+                }
+            };
         }
     }
 }

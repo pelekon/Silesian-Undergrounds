@@ -67,6 +67,7 @@ namespace Silesian_Undergrounds.Engine.UI.Controls
 
             if (IsMouseButtonClicked())
             {
+                AudioPlayerMgr.Instance.AddSoundEffect("Music/menu/mouse_click");
                 OnMouseClick.Invoke();
             }
             if (IsMouseHovering() && !isHovering)

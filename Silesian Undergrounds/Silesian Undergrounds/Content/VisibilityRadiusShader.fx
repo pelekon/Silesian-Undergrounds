@@ -33,24 +33,14 @@ float getDistance(float2 point1, float2 point2)
     return sqrt(pow(point2.x - point1.x, 2) + pow(point2.y - point1.y, 2));
 }
 
-
-float2 getXY(float2 point1, float2 point2, float segment)
-{
-    float2 fisrt = point1;
-    float2 second = point2;
-    if (point1.x > point2.x)
-    {
-        fisrt = point2;
-        second = point1;
-    }
-    float distance = getDistance(point1, point2);
-    float ratio = segment / distance;
-    float x3 = ratio * point2.x + (1 - ratio) * point1.x;
-    float y3 = ratio * point2.y + (1 - ratio) * point1.y;
-    return float2(x3, y3);
-}
-
-
+// float4 blur(sampler2D image, float2 uv, float2 resolution, float2 direction) {
+//   float4 color = float4(0.0);
+//   float2 off1 = float2(1.3333333333333333) * direction;
+//   color += texture2D(image, uv) * 0.29411764705882354;
+//   color += texture2D(image, uv + (off1 / resolution)) * 0.35294117647058826;
+//   color += texture2D(image, uv - (off1 / resolution)) * 0.35294117647058826;
+//   return color; 
+// }
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
     float4 currentFragmentColor = tex2D(s0, input.TextureCoordinates);
@@ -78,6 +68,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
         currentFragmentColor.rgba = 0;
     }
     return currentFragmentColor;
+    // return blur(s0, input.TextureCoordinate.xy, input.TextureCoordinates.xy, float2(0,0.5))
 }
 
 technique SpriteDrawing

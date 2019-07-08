@@ -2,12 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Common;
 using Silesian_Undergrounds.Engine.Collisions;
+using Silesian_Undergrounds.Engine.Config;
 
 namespace Silesian_Undergrounds.Engine.Item.Specials
 {
     class MovementBooster : SpecialItem {
-
-        private const float PLAYER_MOVEMENT_INCREASE_BY = 1.0f;
 
         public MovementBooster(Texture2D texture, Vector2 position, Vector2 size, int layer, Scene.Scene scene) : base(texture, position, size, layer, scene)
         {
@@ -15,14 +14,14 @@ namespace Silesian_Undergrounds.Engine.Item.Specials
             AddComponent(collider);
         }
 
-        public override void NotifyCollision(GameObject obj, ICollider source)
+        public override void NotifyCollision(GameObject obj, ICollider source, RectCollisionSides collisionSides)
         {
-            base.NotifyCollision(obj, source);
+            base.NotifyCollision(obj, source, collisionSides);
 
             if (obj is Player)
             {
                 Player pl = (Player)obj;
-                pl.IncreaseMovementSpped(PLAYER_MOVEMENT_INCREASE_BY);
+                pl.IncreaseMovementSpped(ConfigMgr.MovementBoosterConfig.PlayerMovementIncreaseBy);
                 this.scene.DeleteObject(this);
             }
         }

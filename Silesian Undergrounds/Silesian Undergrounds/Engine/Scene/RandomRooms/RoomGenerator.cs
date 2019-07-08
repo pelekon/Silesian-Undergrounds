@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Silesian_Undergrounds.Engine.Utils;
 
 namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
 {
@@ -198,7 +199,7 @@ namespace Silesian_Undergrounds.Engine.Scene.RandomRooms
                     continue;
 
                 // build matrix to start process of building room from group
-                Random rng = new Random();
+                Random rng = TrueRng.GetInstance().GetRandom();
                 RoomGroupMatrix roomMatrix = PrepareMatrixFromRoom(group.Value, rng);
                 List<RoomGroupMatrix> rooms = SplitMatrixForFewRooms(ref roomMatrix, group.Value, rng);
                 foreach (var room in rooms)

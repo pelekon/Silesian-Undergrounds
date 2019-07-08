@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Silesian_Undergrounds.Engine.Scene;
 using Silesian_Undergrounds.Engine.Collisions;
 using Silesian_Undergrounds.Engine.Behaviours;
+using Silesian_Undergrounds.Engine.Config;
 using Silesian_Undergrounds.Engine.Components;
 using Silesian_Undergrounds.Engine.Enum;
 using Silesian_Undergrounds.Engine.Utils;
@@ -23,11 +24,6 @@ namespace Silesian_Undergrounds.Engine.Common
         public event EventHandler<PropertyChangedArgs<int>> LiveMaxValueChangeEvent = delegate { };
 
         private Func<bool> OnPlayeDeath;
-        
-        private int HUNGER_DECREASE_VALUE = 5;
-        private const int LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO = 20;
-        private const int PLAYER_COLLIDER_BOX_WIDTH = 60;
-        private const int PLAYER_COLLIDER_BOX_HEIGHT = 60;
 
         private float timeSinceHungerFall;
 
@@ -46,7 +42,8 @@ namespace Silesian_Undergrounds.Engine.Common
             TextureMgr.Instance.LoadSingleTextureFromSpritescheet("minerCharacter", "PlayerTexture", 13, 6, 0, 4, textureSpacingX, textureSpacingY);
             texture = TextureMgr.Instance.GetTexture("PlayerTexture");
 
-            collider = new BoxCollider(this, PLAYER_COLLIDER_BOX_WIDTH, PLAYER_COLLIDER_BOX_HEIGHT, -2, -4, false);
+            collider = new BoxCollider(this, ConfigMgr.PlayerConfig.PlayerColliderBoxWidth, ConfigMgr.PlayerConfig.PlayerColliderBoxHeight, -2, -4, false,
+                false, true, true);
             AddComponent(collider);
             statistics = globalPlayerStatistic;
             behaviour = new PlayerBehaviour(this);
@@ -57,7 +54,7 @@ namespace Silesian_Undergrounds.Engine.Common
             LoadAndSetUpAnimations();
             speed = 50f;
             #if DEBUG
-            statistics.MovementSpeed = 2.0f;
+            statistics.MovementSpeed = 6.0f;
             #endif
             ChangeDrawAbility(false);
         }
@@ -88,7 +85,6 @@ namespace Silesian_Undergrounds.Engine.Common
         public override void Update(GameTime gameTime)
         {
             sDirection = Vector2.Zero;
-
             HandleInput(Keyboard.GetState());
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -97,11 +93,12 @@ namespace Silesian_Undergrounds.Engine.Common
             {
                 HandleHungerDecrasing(deltaTime);
             }
-
+        
             sDirection *= speed;
             sDirection *= deltaTime;
 
             collider.Move(sDirection);
+
 
             base.Update(gameTime);
         }
@@ -145,7 +142,6 @@ namespace Silesian_Undergrounds.Engine.Common
             return true;
         }
 
-
         public void RefilLive(int liveValueToRefil)
         {
             if (statistics.Health + liveValueToRefil > statistics.MaxHealth)
@@ -181,7 +177,7 @@ namespace Silesian_Undergrounds.Engine.Common
             }
             else
             {
-                DecreaseLiveValue(LIVE_DECREASE_VALUE_WHEN_HUNGER_IS_ZERO);
+                DecreaseLiveValue(ConfigMgr.PlayerConfig.LiveDecreaseValueWhenHungerIsZero);
             }
         }
 
@@ -234,6 +230,7 @@ namespace Silesian_Undergrounds.Engine.Common
         public void IncreaseAttackValueBy(float attackValueToIncrease)
         {
             this.statistics.AttackSpeed += attackValueToIncrease;
+            behaviour.ChangeAttackSpeed(this.statistics.AttackSpeed);
         }
 
         public int MaxHungerValue
@@ -317,7 +314,7 @@ namespace Silesian_Undergrounds.Engine.Common
 
             if (timeSinceHungerFall >= this.statistics.HungerDecreaseInterval)
             {
-                DecreaseHungerValue(HUNGER_DECREASE_VALUE);
+                DecreaseHungerValue(ConfigMgr.PlayerConfig.HungerDecreaseValue);
                 timeSinceHungerFall = 0;
             }
         }
