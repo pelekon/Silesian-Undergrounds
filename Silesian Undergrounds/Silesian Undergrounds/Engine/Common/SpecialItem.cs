@@ -7,8 +7,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Silesian_Undergrounds.Engine.Collisions;
 
-namespace Silesian_Undergrounds.Engine.Common {
-    public class SpecialItem : GameObject {
+namespace Silesian_Undergrounds.Engine.Common
+{
+    public class SpecialItem : GameObject
+    {
 
         public Scene.Scene scene;
 
